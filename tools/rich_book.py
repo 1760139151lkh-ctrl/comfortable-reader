@@ -140,6 +140,7 @@ def export_rich_book(root: Path, spec: dict, output: Path):
     with zipfile.ZipFile(output, 'w') as archive:
         def put(name, raw, method):
             info = zipfile.ZipInfo(name, date_time=(1980, 1, 1, 0, 0, 0))
+            info.create_system = 3
             info.compress_type = method
             info.external_attr = 0o644 << 16
             archive.writestr(info, raw)

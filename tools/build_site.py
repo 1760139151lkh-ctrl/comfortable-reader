@@ -27,7 +27,7 @@ PRIVATE=re.compile(rb'(?i)(?:[A-Za-z]:[\\/]Users[\\/]|(?<![A-Za-z0-9~])/home/[^/
 
 def write_json(path: Path, value: object):
     path.parent.mkdir(parents=True,exist_ok=True)
-    path.write_text(json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8')
+    path.write_text(json.dumps(value,ensure_ascii=False,sort_keys=True,separators=(',',':'))+'\n',encoding='utf-8',newline='\n')
 
 
 def ensure_release_rights() -> dict:
@@ -164,7 +164,7 @@ def main():
         if relative=='index.html' or relative.startswith('assets/'):shell_files.append('./'+relative)
     shell_hash=hashlib.sha256(b''.join((output/p.removeprefix('./')).read_bytes() for p in sorted(shell_files))).hexdigest()[:16]
     worker=(WEB/'sw.js').read_text(encoding='utf-8').replace('__SHELL_VERSION__',shell_hash).replace('__SHELL_FILES__',json.dumps(['./']+shell_files+['./catalog.json']))
-    (output/'sw.js').write_text(worker,encoding='utf-8');written.append(output/'sw.js')
+    (output/'sw.js').write_text(worker,encoding='utf-8',newline='\n');written.append(output/'sw.js')
     # Retain component notices with the JavaScript distribution, without
     # fetching them during ordinary reading or copying personal build state.
     notices=['<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>组件来源与许可 · 舒适阅读书库</title><style>body{max-width:70ch;margin:3rem auto;padding:0 1.5rem;background:#faf8f1;color:#292c29;font:16px/1.8 system-ui}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.6 monospace}summary{cursor:pointer}a{color:#875b35}</style><h1>组件来源与许可</h1><p>阅读器使用的第三方组件保留各自的许可。这里列出网页依赖，书籍内容另按各自来源使用。</p>']
@@ -175,7 +175,7 @@ def main():
         for name in dependency['notice_files']:notices.append('<pre>'+html.escape((READER/name).read_text(encoding='utf-8',errors='replace'))+'</pre>')
         notices.append('</details>')
     notices.append('<p>PDF.js、OpenJPEG 与标准字体的许可随静态文件保留在 vendor/pdfjs 中。</p></html>')
-    legal=output/'third-party.html';legal.write_text(''.join(notices),encoding='utf-8');written.append(legal)
+    legal=output/'third-party.html';legal.write_text(''.join(notices),encoding='utf-8',newline='\n');written.append(legal)
     if approval:
         shutil.copyfile(ROOT/'LICENSE',output/'LICENSE');shutil.copyfile(ROOT/'BOOK-LICENSE',output/'BOOK-LICENSE');written.extend([output/'LICENSE',output/'BOOK-LICENSE'])
     # Last positive-output scan. Do not print matched values or include logs.

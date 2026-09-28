@@ -4,6 +4,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,7 +27,10 @@ class SemanticBookSource(unittest.TestCase):
         spec,_=validate_book(source,source.name)
         with tempfile.TemporaryDirectory() as temporary:
             first=Path(temporary)/'a.epub';second=Path(temporary)/'b.epub'
-            export_book(source,first);export_book(source,second)
+            with patch('zipfile.sys.platform','win32'):
+                export_book(source,first)
+            with patch('zipfile.sys.platform','linux'):
+                export_book(source,second)
             self.assertEqual(first.read_bytes(),second.read_bytes())
             with zipfile.ZipFile(first) as archive:
                 self.assertGreater(sum(archive.read(name).count(b'<math') for name in archive.namelist() if name.endswith('.xhtml')),500)

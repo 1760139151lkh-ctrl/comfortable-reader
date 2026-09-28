@@ -111,6 +111,7 @@ def export_book(root: Path, output: Path):
     with zipfile.ZipFile(output,'w') as archive:
         def put(name,data,compression):
             info=zipfile.ZipInfo(name,date_time=(1980,1,1,0,0,0))
+            info.create_system=3
             info.compress_type=compression;info.external_attr=0o644<<16
             archive.writestr(info,data)
         put('mimetype',b'application/epub+zip',zipfile.ZIP_STORED)
