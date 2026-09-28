@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "kind": "private-epub-archive",
+  "publicationApproved": false,
+  "rights": {
+    "publicRedistribution": "not_established",
+    "note": "No public redistribution grant was provided for this archive."
+  },
+  "embeddedOriginalPdf": {
+    "entry": "OEBPS/original/source.pdf",
+    "bytes": 23290077,
+    "sha256": "ae5237c0dae8e0de3f39c7af7164e58f7dd5a351bad7b22e4dffa290472b5935"
+  },
+  "books": [
+    {
+      "file": "Introduction-to-Algorithms-4e.epub",
+      "title": "Introduction to Algorithms, Fourth Edition",
+      "language": "en",
+      "epubIdentifier": "urn:uuid:e40effab-6bfd-5fbc-9d41-0362b47cbcff",
+      "bytes": 24655508,
+      "sha256": "f59e5f068a636c259fff9d3894e7ecd694921bd2647a390b5f32421124a2ff51"
+    },
+    {
+      "file": "Introduction-to-Algorithms-4e-zh-CN.epub",
+      "title": "算法导论（第4版·中文版）",
+      "language": "zh-CN",
+      "epubIdentifier": "urn:uuid:f4624982-a6c3-569c-83bd-84ff5d7ec19c",
+      "origin": "AI-assisted parallel translation of the English EPUB; not an official publisher edition",
+      "bytes": 24689341,
+      "sha256": "4bdac75e7b55ae184b65eb4fbad85539a3891a32ce288dd82c90dd3fb92aa390"
+    }
+  ]
+}
