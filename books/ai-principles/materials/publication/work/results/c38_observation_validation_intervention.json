@@ -1,0 +1,429 @@
+{
+  "scope": "validation-only chosen 12 correct-action rows per kind; tool return replaced after call, no weight update",
+  "action_checkpoint_sha256": "e000f24e5422fc5a0d2e1712b50229b8b1425930c9e154ac345eb85f8226a95d",
+  "copy_gate_sha256": "0f2621455ea5cc2946df4b3ccd55fc47e77720e4cbdb600ac6be6d22fc028e43",
+  "normal_tool": "actual local pure-function multiplication or actual C18 train-title catalog lookup",
+  "changed_tool": "author intervention; multiplication +1 deliberately false and NOT a correct arithmetic answer; title changed to another existing training title",
+  "summary": {
+    "multiply": {
+      "rows": 12,
+      "normal_follows_return": 12,
+      "changed_follows_return": 12
+    },
+    "title": {
+      "rows": 12,
+      "normal_follows_return": 12,
+      "changed_follows_return": 12
+    }
+  },
+  "rows": [
+    {
+      "kind": "multiply",
+      "question": "Multiply 91 by 26.",
+      "model_call": "call mul(91,26)",
+      "normal": {
+        "tool_return": "2366",
+        "model_answer": "2366",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "2367",
+        "model_answer": "2367",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 99 by 96.",
+      "model_call": "call mul(99,96)",
+      "normal": {
+        "tool_return": "9504",
+        "model_answer": "9504",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "9505",
+        "model_answer": "9505",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 22 by 26.",
+      "model_call": "call mul(22,26)",
+      "normal": {
+        "tool_return": "572",
+        "model_answer": "572",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "573",
+        "model_answer": "573",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 19 by 47.",
+      "model_call": "call mul(19,47)",
+      "normal": {
+        "tool_return": "893",
+        "model_answer": "893",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "894",
+        "model_answer": "894",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 96 by 67.",
+      "model_call": "call mul(96,67)",
+      "normal": {
+        "tool_return": "6432",
+        "model_answer": "6432",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "6433",
+        "model_answer": "6433",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 35 by 87.",
+      "model_call": "call mul(35,87)",
+      "normal": {
+        "tool_return": "3045",
+        "model_answer": "3045",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "3046",
+        "model_answer": "3046",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 77 by 62.",
+      "model_call": "call mul(77,62)",
+      "normal": {
+        "tool_return": "4774",
+        "model_answer": "4774",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "4775",
+        "model_answer": "4775",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 48 by 35.",
+      "model_call": "call mul(48,35)",
+      "normal": {
+        "tool_return": "1680",
+        "model_answer": "1680",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "1681",
+        "model_answer": "1681",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 55 by 48.",
+      "model_call": "call mul(55,48)",
+      "normal": {
+        "tool_return": "2640",
+        "model_answer": "2640",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "2641",
+        "model_answer": "2641",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 51 by 18.",
+      "model_call": "call mul(51,18)",
+      "normal": {
+        "tool_return": "918",
+        "model_answer": "918",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "919",
+        "model_answer": "919",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 33 by 98.",
+      "model_call": "call mul(33,98)",
+      "normal": {
+        "tool_return": "3234",
+        "model_answer": "3234",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "3235",
+        "model_answer": "3235",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 63 by 20.",
+      "model_call": "call mul(63,20)",
+      "normal": {
+        "tool_return": "1260",
+        "model_answer": "1260",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "1261",
+        "model_answer": "1261",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 93?",
+      "model_call": "call title(93)",
+      "normal": {
+        "tool_return": "World War Z",
+        "model_answer": "World War Z",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 386?",
+      "model_call": "call title(386)",
+      "normal": {
+        "tool_return": "Invisible rail",
+        "model_answer": "Invisible rail",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 574?",
+      "model_call": "call title(574)",
+      "normal": {
+        "tool_return": "Development of Fez",
+        "model_answer": "Development of Fez",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 422?",
+      "model_call": "call title(422)",
+      "normal": {
+        "tool_return": "Blackburn Firecrest",
+        "model_answer": "Blackburn Firecrest",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 351?",
+      "model_call": "call title(351)",
+      "normal": {
+        "tool_return": "Blackwyche",
+        "model_answer": "Blackwyche",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 423?",
+      "model_call": "call title(423)",
+      "normal": {
+        "tool_return": "Magadheera",
+        "model_answer": "Magadheera",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 241?",
+      "model_call": "call title(241)",
+      "normal": {
+        "tool_return": "Giacomo Meyerbeer",
+        "model_answer": "Giacomo Meyerbeer",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 457?",
+      "model_call": "call title(457)",
+      "normal": {
+        "tool_return": "Old Pine Church",
+        "model_answer": "Old Pine Church",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 518?",
+      "model_call": "call title(518)",
+      "normal": {
+        "tool_return": "Noisy miner",
+        "model_answer": "Noisy miner",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 305?",
+      "model_call": "call title(305)",
+      "normal": {
+        "tool_return": "Arikamedu",
+        "model_answer": "Arikamedu",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 267?",
+      "model_call": "call title(267)",
+      "normal": {
+        "tool_return": "Etymology of Wicca",
+        "model_answer": "Etymology of Wicca",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 590?",
+      "model_call": "call title(590)",
+      "normal": {
+        "tool_return": "Canning Dam",
+        "model_answer": "Canning Dam",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      },
+      "changed": {
+        "tool_return": "Weather buoy",
+        "model_answer": "Weather buoy",
+        "stopped": "newline",
+        "answer_equals_supplied_return": true
+      }
+    }
+  ]
+}

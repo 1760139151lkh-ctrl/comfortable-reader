@@ -1,0 +1,34 @@
+{
+  "source": "https://archive.ics.uci.edu/static/public/2/adult.zip",
+  "uci_page": "https://archive.ics.uci.edu/dataset/2/adult",
+  "uci_doi": "10.24432/C5XW20",
+  "archive_bytes": 620237,
+  "archive_sha256": "7537312dd56c2b98035880805ce99e68183a30ee468aa5329d6df0fbb3cc21bb",
+  "files_kept": [
+    {
+      "name": "adult.data",
+      "bytes": 3974305,
+      "sha256": "5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d",
+      "nonempty_lines": 32561
+    },
+    {
+      "name": "adult.test",
+      "bytes": 2003153,
+      "sha256": "a2a9044bc167a35b2361efbabec64e89d69ce82d9790d2980119aac5fd7e9c05",
+      "nonempty_lines": 16282
+    },
+    {
+      "name": "adult.names",
+      "bytes": 5229,
+      "sha256": "c248284c0b5de30c9e1958d6cdd168a34a654758b620e68f46aefa83fc0a576a",
+      "nonempty_lines": 107
+    }
+  ],
+  "other_archive_members": [
+    "Index",
+    "old.adult.names"
+  ],
+  "official_split": "adult.data 32561; adult.test has one header plus 16281 rows; original names says MLC++ random 2/3-1/3 from 1994 census extraction",
+  "license_page_claim": "UCI dataset page states CC BY 4.0 with attribution; legal/privacy suitability of any downstream use not decided by this script",
+  "privacy": "Local research; no individual census row is printed or uploaded by this program."
+}

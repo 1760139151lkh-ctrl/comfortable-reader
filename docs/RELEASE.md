@@ -1,0 +1,38 @@
+# 发行与持续维护
+
+项目在一个 GitHub 仓库维护共享阅读器、书源、技能和工具。Pages 提供逐章阅读，Release 提供 Windows 安装包、源码包、书籍 EPUB 与四份较大的参考检查点。读者不必克隆仓库；大资源只在明确选择时取得。
+
+当前公开授权记录在 `release-rights.json`，正式书目在 `books/publication-list.json`，源码的正向清单在 `release-files.json`。软件/技能 MIT，原创教材 CC BY 4.0；第三方例外逐项见各书 RIGHTS.md。新的书或素材不能继承上一批的审核结果。
+
+## 构建与审核
+
+```text
+npm ci --ignore-scripts --prefix desktop
+python tools/prepare_release_assets.py
+python tools/prepare_release_assets.py --download
+python tools/build_site.py --release --out site-dist
+python tools/audit_release.py --report ../release-audit.json
+```
+
+第一个资源命令只列计划，第二个才下载。已存在文件必须匹配固定字节数与 SHA-256，差异文件保留并停止；命令不会载入模型或执行教材代码。构建器检查每本书的权利状态、修订与许可登记，从明确列出的源文件生成内容。`--preview --books-dir` 可预览自己的私有书源，不能绕过公共发行登记。
+
+独立 EPUB 与流式章节来自同一次导出；每项网络资源、分块与清单均绑定哈希。修改正文或材料后提高书的修订号，更新来源与许可，再重新构建。不要用相同 URL 的新字节静默替换已经发布的参考依赖。
+
+## 发布到 GitHub
+
+1. 只暂存 `release-files.json` 中的文件；大检查点由 `release-assets.json` 声明，从源码历史排除。审查本次提交以及要推送的历史、标签和附件，不上传本机审计目录。
+2. 为实际内容建立版本标签。上传这一版的安装包、明确选择的 EPUB、源发行 ZIP、技能 ZIP、校验清单，以及已经核验的大资源；不要使用工作目录通配符。
+3. Pages 工作流只接受主分支的手工触发，先读取固定 Release 输入，再做无执行权的构建检查。CI 不执行投稿者的书籍代码。部署 job 才具有 Pages 与 OIDC 权限，不向 fork PR 提供密钥。
+4. 实际打开公网地址，验证书目、同一本书的两种阅读方式、当前章请求、选择性取得、来源、媒体与离线恢复。确认 Release 附件能下载并匹配校验值。工作流绿色、浏览器预览和安装版实测分别记录。
+
+Windows 安装包目前未签名。其他系统尚未提供原生安装验收；不要将 Web 可读写成所有平台都能原生执行。已安装的同一应用身份保持书籍记录，用户数据不随发行包携带。
+
+## 容量、镜像与权限
+
+当前静态站点约 243 MB，按章和资源请求，不在进入首页时预取全站。[GitHub Pages 限制](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) 列出 1 GB 站点上限与每月 100 GB 软带宽限制；维护者需要随实际使用复核，不能把免费托管理解成无限流量。
+
+目录内资源使用安全相对路径。迁移镜像时复制同一版静态产物，修改入口基地址，保持 UUID、修订与哈希；不把任意外部链接伪装成本项目已验证文件。Release 检查点用固定版本 URL 和 SHA-256；将来更换主机时更新下一修订的获取登记，不改旧版含义。
+
+`audit_release.py` 检查正向源、UTF-8/UTF-16 本机路径与凭据模式以及嵌套归档，不能代替每件材料的许可审查，也不能保证发现所有秘密。报告保持在公开目录之外。发现有效凭据应处理失效或轮换，删除当前文字不能消除历史暴露。
+
+撤回或修订通过公开 issue 与版本记录处理，不承诺远程删除读者的学习记录、合法历史副本或第三方 fork。站点关闭不改变既已授出的开放许可条款。

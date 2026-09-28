@@ -1,0 +1,109 @@
+{
+  "scope": "Q1 fitting prefix and later Q1 validation, no Q2 loaded",
+  "q1": {
+    "quarter": 1,
+    "bjd_reference": 2454833.0,
+    "time_system": "TDB",
+    "rows_all": 1639,
+    "rows_finite": 1624,
+    "rows_quality_nonzero": 205,
+    "file_sha256": "37faa7dc82fa5d9ec6d794369d93def0d78a49c91e61cf19bb4cafe571bb8f6c"
+  },
+  "source": ".\\work\\data\\c45_kepler_hatp7\\kplr010666592-2009166043257_llc.fits",
+  "code_sha256": "8a1648a53870bf232afc021c6c98842609887c262fc42b93132243c736adcce9",
+  "pretest_decision": "work/verification/C45_kepler_pretest_decision.md",
+  "split_bkjd": 154.94198141500092,
+  "normalization_train_median_e_per_s": 1034155.21875,
+  "fit": {
+    "n": 1056,
+    "predicted_transit_n": 67,
+    "other_n": 989,
+    "observed_mean_transit": 0.9938933911253668,
+    "observed_mean_other": 1.0000204803733528,
+    "rmse": {
+      "constant": 0.00153390958526939,
+      "sinusoid": 0.0014166867861490266,
+      "box": 0.00034945655741973575
+    },
+    "rmse_predicted_transit": {
+      "constant": 0.005791571751002374,
+      "sinusoid": 0.004976391877369093,
+      "box": 0.0007992833190887429
+    },
+    "rmse_other": {
+      "constant": 0.0004898416966542096,
+      "sinusoid": 0.0006821230399726818,
+      "box": 0.00029515020407578534
+    }
+  },
+  "validation": {
+    "n": 378,
+    "predicted_transit_n": 17,
+    "other_n": 361,
+    "observed_mean_transit": 0.9937765113088122,
+    "observed_mean_other": 1.0000144266620952,
+    "rmse": {
+      "constant": 0.0013557847468656445,
+      "sinusoid": 0.0012945476838304173,
+      "box": 0.000395755150670561
+    },
+    "rmse_predicted_transit": {
+      "constant": 0.005878714707336394,
+      "sinusoid": 0.005057677734494177,
+      "box": 0.0005611156456931272
+    },
+    "rmse_other": {
+      "constant": 0.0005452227413459683,
+      "sinusoid": 0.0007417336352742547,
+      "box": 0.0003862265263121238
+    }
+  },
+  "models": {
+    "constant": {
+      "baseline": 0.9996295439934365
+    },
+    "sinusoid": {
+      "period_days": 1.1023209658746345,
+      "coefficients": [
+        0.9996235864913071,
+        -0.00045916010286926065,
+        -0.000699995394409011
+      ],
+      "train_search_power": 0.1489783578204687
+    },
+    "box": {
+      "period_days": 2.205021325331333,
+      "duration_days": 0.14,
+      "epoch_bkjd": 132.38205364937778,
+      "baseline": 1.0000205716258894,
+      "depth": 0.00612763109020753,
+      "coarse_period_days": 2.205301325331333,
+      "train_search_power": 1941587.6684378928
+    }
+  },
+  "time_ranges_bkjd": {
+    "fit": [
+      131.51205364937778,
+      154.92975142563228
+    ],
+    "validation": [
+      154.95018566544604,
+      164.9833790288394
+    ]
+  },
+  "train_search": {
+    "period_range_days": [
+      1,
+      5
+    ],
+    "coarse_points": 4000,
+    "fine_points": 2001,
+    "durations_days": [
+      0.1,
+      0.14,
+      0.18,
+      0.22
+    ],
+    "ls_frequency_points": 4000
+  }
+}

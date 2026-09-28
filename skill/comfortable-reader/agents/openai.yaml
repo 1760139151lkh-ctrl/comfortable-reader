@@ -1,0 +1,7 @@
+interface:
+  display_name: "Comfortable Reader"
+  short_description: "从源项目创作可迁移书籍，或保真导入私人阅读库"
+  default_prompt: "请使用 $comfortable-reader，先判断我是新建可持续维护的书籍源项目，还是把已有材料保真导入私人书库；完成相应构建和验证。"
+
+policy:
+  allow_implicit_invocation: true

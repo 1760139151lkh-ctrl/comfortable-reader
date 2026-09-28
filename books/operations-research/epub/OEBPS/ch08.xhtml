@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>八、第七步：验证模型、算法和结果</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="八第七步验证模型算法和结果">八、第七步：验证模型、算法和结果</h1>
+<p>求解器给出一个数字，不意味着建模任务完成。</p>
+<p>必须区分三种“正确”。</p>
+<h2 id="1-算法算对了吗">1. 算法算对了吗？</h2>
+<p>检查：</p>
+<ul>
+<li>程序有没有 bug；</li>
+<li>约束有没有漏写；</li>
+<li>单位是否一致；</li>
+<li>求解器是否真正收敛；</li>
+<li>整数解是否满足整数要求；</li>
+<li>随机种子变化是否影响结果；</li>
+<li>精度容差是否合理。</li>
+</ul>
+<p>这是<strong>计算正确性</strong>。</p>
+<hr/>
+<h2 id="2-模型内部合理吗">2. 模型内部合理吗？</h2>
+<p>检查：</p>
+<ul>
+<li>极端情况下模型是否给出荒谬结果；</li>
+<li>变量边界是否完整；</li>
+<li>守恒关系是否成立；</li>
+<li>目标函数是否会诱导作弊行为；</li>
+<li>约束之间是否矛盾；</li>
+<li>是否存在无界或不可行现象。</li>
+</ul>
+<p>这是<strong>数学结构正确性</strong>。</p>
+<p>例如，若利润模型没有生产能力约束，就可能出现：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>max</mo><mtext>利润</mtext><mo>=</mo><mo>+</mo><mo>∞</mo><mo>.</mo></mrow></math></div>
+<p>这不是求解器坏了，而是模型漏掉了现实限制。</p>
+<hr/>
+<h2 id="3-模型符合现实吗">3. 模型符合现实吗？</h2>
+<p>检查：</p>
+<ul>
+<li>历史数据能否被模型复现；</li>
+<li>预测在未见数据上是否仍有效；</li>
+<li>结果是否符合常识；</li>
+<li>专家是否认为方案可执行；</li>
+<li>模型遗漏的因素是否会改变结论；</li>
+<li>现实中是否存在隐含规则。</li>
+</ul>
+<p>这是<strong>外部有效性</strong>。</p>
+<hr/>
+<h2 id="4-与基线比较">4. 与基线比较</h2>
+<p>必须有一个简单方案作为参照。</p>
+<p>例如：</p>
+<ul>
+<li>不采取任何行动；</li>
+<li>沿用原有方案；</li>
+<li>均匀分配；</li>
+<li>最近邻规则；</li>
+<li>简单平均预测；</li>
+<li>人工经验方案。</li>
+</ul>
+<p>如果一个复杂模型连简单基线都无法稳定超过，那它的复杂性没有意义。</p>
+<hr/>
+<h2 id="5-灵敏度分析">5. 灵敏度分析</h2>
+<p>改变参数，观察结果：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>θ</mi><mi>⟶</mi><msup><mi>x</mi><mo>*</mo></msup><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>关注：</p>
+<ul>
+<li>哪些参数变化会导致方案突变；</li>
+<li>哪些参数几乎不影响结果；</li>
+<li>最优值对资源变化有多敏感；</li>
+<li>哪些约束真正限制系统。</li>
+</ul>
+<p>线性规划中的影子价格，本质上就在回答：</p>
+<blockquote>
+<p>某项资源增加一个单位，最优目标大约能改善多少？</p>
+</blockquote>
+<hr/>
+<h2 id="6-鲁棒性分析">6. 鲁棒性分析</h2>
+<p>灵敏度分析通常是逐个改变参数；鲁棒性分析则更加关注：</p>
+<blockquote>
+<p>当现实同时出现多种误差或扰动时，方案还能不能工作？</p>
+</blockquote>
+<p>可以检查：</p>
+<ul>
+<li>数据噪声；</li>
+<li>预测偏差；</li>
+<li>参数区间；</li>
+<li>极端情景；</li>
+<li>随机种子；</li>
+<li>模型假设改变。</li>
+</ul>
+<hr/>
+<h2 id="7-仿真与回测">7. 仿真与回测</h2>
+<p>对于动态、随机或复杂系统，可把求出的方案放进仿真环境运行。</p>
+<p>例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>优化方案</mtext><mo>→</mo><mtext>随机需求仿真</mtext><mo>→</mo><mtext>实际成本分布</mtext><mo>.</mo></mrow></math></div>
+<p>不要只汇报平均成本，还应考虑：</p>
+<ul>
+<li>方差；</li>
+<li>分位数；</li>
+<li>最坏情景；</li>
+<li>失败概率；</li>
+<li>约束违反概率。</li>
+</ul>
+<p>到这里才能区分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>在模型中最优</mtext></mrow></menclose></mrow></math></div>
+<p>和</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>在现实中可靠</mtext></mrow></menclose></mrow></math></div>
+<p>这两个完全不同的概念。</p>
+<hr/>
+</body></html>

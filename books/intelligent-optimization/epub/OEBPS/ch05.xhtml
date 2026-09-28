@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>5. 它和传统优化算法有什么区别？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="5-它和传统优化算法有什么区别">5. 它和传统优化算法有什么区别？</h2>
+<p>传统优化方法通常主动利用问题的数学结构。例如梯度下降：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>k</mi></msub><mo>−</mo><mi>η</mi><mo>∇</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></math></div>
+<p>利用梯度给出的局部下降方向。线性规划、凸优化、动态规划和分支定界还会利用更强的结构，从而可能获得收敛速度、误差界或最优性证明。</p>
+<p>智能优化算法往往不需要梯度，只需要能够计算：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mi>⟼</mi><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>哪怕不知道函数内部长什么样，只要输入一个方案后能返回分数，算法就能搜索。这种“黑箱”能力特别适合不可导、离散、仿真驱动或结构复杂的问题。</p>
+<p>但“不需要结构”不等于“结构没有价值”。实践中常让智能优化负责全局探索，再用局部搜索或精确方法细化。</p>
+<hr/>
+</body></html>

@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>11. 秩和比法：用名次获得稳健而粗粒度的评价</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="11-秩和比法用名次获得稳健而粗粒度的评价">11. 秩和比法：用名次获得稳健而粗粒度的评价</h2>
+<p>秩和比法，简称 RSR，先把每一列数据转换成秩，再综合各列秩次。它牺牲了部分数值差距，换来对量纲和极端值更稳健的排序。</p>
+<h3 id="111-从原始值到秩">11.1 从原始值到秩</h3>
+<p>对效益型指标，最好对象取较大秩；对成本型指标，最好对象也应在同向处理后取较大秩。设 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∈</mo><mo stretchy="false">{</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>m</mi><mo stretchy="false">}</mo></mrow></math></span> 为对象 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 在指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi></mrow></math></span> 上的秩，最好为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>m</mi></mrow></math></span>。有并列值时通常取平均秩。</p>
+<p>等权秩和比为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>S</mi><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>m</mi><mi>n</mi></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>R</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>加权形式为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>S</mi><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>m</mi></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>w</mi><mi>j</mi></msub><msub><mi>R</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>因为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>/</mo><mi>m</mi><mo>∈</mo><mo stretchy="false">[</mo><mn>1</mn><mo>/</mo><mi>m</mi><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow></math></span>，所以 RSR 越大通常表示综合表现越好。</p>
+<h3 id="112-为什么还要做-probit-变换">11.2 为什么还要做 Probit 变换？</h3>
+<p>RSR 常用于分档。先按 RSR 排序，计算累计频率 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow></math></span>，再转换为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>Probit</mo><mi>i</mi></msub><mo>=</mo><mn>5</mn><mo>+</mo><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow></math></span> 是标准正态分布的分位数函数。接着拟合：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mi>S</mi><msub><mi>R</mi><mi>i</mi></msub><mo>=</mo><mi>a</mi><mo>+</mo><mi>b</mi><msub><mo>Probit</mo><mi>i</mi></msub><mo>,</mo></mrow></math></div>
+<p>并按预设 Probit 临界值划分等级。</p>
+<p>这套步骤利用秩分布建立分档尺度。端点 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>=</mo><mn>1</mn></mrow></math></span> 时 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>Φ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mo>+</mo><mo>∞</mo></mrow></math></span>，实际中通常采用修正累计频率，例如 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">(</mo><mi>r</mi><mo>−</mo><mn>0.5</mn><mo stretchy="false">)</mo><mo>/</mo><mi>m</mi></mrow></math></span> 或对最后一项做近似处理，不能直接把无穷大送入回归。</p>
+<h3 id="113-秩的代价">11.3 秩的代价</h3>
+<p>原始值 80 与 81、80 与 180，在没有并列时都可能只差一个秩。秩变换保留顺序，却丢失幅度。于是 RSR 适合数据分布不稳、异常值影响较大或强调分级的场景；若数值距离具有重要现实意义，TOPSIS 等方法通常能保留更多信息。</p>
+<hr/>
+</body></html>

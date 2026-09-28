@@ -1,0 +1,47 @@
+{
+  "scope": "Author-defined two scalar recurrences; no trained S4/Mamba/long-context benchmark",
+  "fixed_input": [
+    1.0,
+    2.0,
+    0.0,
+    -1.0
+  ],
+  "a": 0.8,
+  "fixed_kernel": [
+    1.0,
+    0.8,
+    0.6400000000000001,
+    0.5120000000000001
+  ],
+  "fixed_recurrence": [
+    1.0,
+    2.8,
+    2.2399999999999998,
+    0.7919999999999998
+  ],
+  "fixed_convolution": [
+    1.0,
+    2.8,
+    2.24,
+    0.7920000000000003
+  ],
+  "fixed_max_absolute_difference": 4.440892098500626e-16,
+  "selection_rule": "keep=0.9 on zero input, else 0.1; add current input",
+  "first": [
+    1.0,
+    0.0
+  ],
+  "second": [
+    0.0,
+    2.0
+  ],
+  "selected_first_plus_selected_second": [
+    1.0,
+    2.9
+  ],
+  "selected_joint": [
+    1.0,
+    2.1
+  ],
+  "selected_superposition_defect_last": -0.7999999999999998
+}

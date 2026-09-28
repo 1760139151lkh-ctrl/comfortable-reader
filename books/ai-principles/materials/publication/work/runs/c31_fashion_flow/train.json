@@ -1,0 +1,383 @@
+{
+  "scope": "official fashion real pixels and documented existing split, no class labels or official test; linear independent noise/data pair and approximate numerical ODE",
+  "source_identity": {
+    "dataset": "official Fashion grayscale with C13 old class-stratified 50k/10k indices; labels not read by this program",
+    "official_manifest_sha256": "0e99922a3f8f8e173e6c8cd9b35c71f8b7456f866353e865bb8f0df4d6421060",
+    "train_images_sha256": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+    "c13_split_sha256": "ac870595933df8a373507f0728aa2d275645e05ac53a052556995c49fe43ea9b",
+    "labels_loaded": false,
+    "pixel_transform": "official uint8/127.5 -1"
+  },
+  "dataset": "fashion",
+  "channels": 1,
+  "side": 28,
+  "target": "independent z~N(0,I), real x1, t~U[0,1], x_t=(1-t)z+t*x1, velocity target=x1-z",
+  "model": "continuous Fourier time-conditioned small U-Net",
+  "epochs_planned": 15,
+  "batch_size": 128,
+  "optimizer": "AdamW lr0.0003 weight_decay1e-4 gradient_clip1",
+  "initial_validation": {
+    "velocity_mse_per_coordinate": 2.0479815751314163,
+    "early_middle_late_mse": [
+      2.0563090249074376,
+      2.0218445502387152,
+      2.0651535838417856
+    ],
+    "early_middle_late_counts": [
+      671,
+      675,
+      702
+    ],
+    "validation_images": 2048
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_online_velocity_mse": 0.41211287571907046,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.3032796587795019,
+        "early_middle_late_mse": [
+          0.2912334209049867,
+          0.23627417387785735,
+          0.3792222585433569
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 2,
+      "train_online_velocity_mse": 0.2913007746219635,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2795336227864027,
+        "early_middle_late_mse": [
+          0.27182653230988324,
+          0.21302138081303348,
+          0.35085445116048525
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 3,
+      "train_online_velocity_mse": 0.27517387246131897,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2638249481096864,
+        "early_middle_late_mse": [
+          0.2671834772283381,
+          0.20116620240388094,
+          0.32086353492193415
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 4,
+      "train_online_velocity_mse": 0.26516956875801084,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.25822742469608784,
+        "early_middle_late_mse": [
+          0.2608132099430181,
+          0.1975488203543204,
+          0.3141006390932958
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 5,
+      "train_online_velocity_mse": 0.2590451117610931,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.252553042024374,
+        "early_middle_late_mse": [
+          0.25921337082204804,
+          0.19072986673425746,
+          0.3056321945625153
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 6,
+      "train_online_velocity_mse": 0.2544067815876007,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.24916540924459696,
+        "early_middle_late_mse": [
+          0.25987537571641267,
+          0.18757058249579536,
+          0.29815419786676045
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 7,
+      "train_online_velocity_mse": 0.2512661555290222,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.24821403715759516,
+        "early_middle_late_mse": [
+          0.257063271569424,
+          0.18635208695023148,
+          0.2992382239752006
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 8,
+      "train_online_velocity_mse": 0.24888287488937377,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.24418953619897366,
+        "early_middle_late_mse": [
+          0.2576915283316827,
+          0.18345949384901258,
+          0.2896780492233755
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 9,
+      "train_online_velocity_mse": 0.24629562833786012,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2431789254769683,
+        "early_middle_late_mse": [
+          0.2577523900926024,
+          0.18093928372418439,
+          0.2890948243969866
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 10,
+      "train_online_velocity_mse": 0.24445192860603332,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.24036097060889006,
+        "early_middle_late_mse": [
+          0.25584401672181356,
+          0.1795172260425709,
+          0.2840652384309687
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 11,
+      "train_online_velocity_mse": 0.2438914216184616,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.23871828522533178,
+        "early_middle_late_mse": [
+          0.2533522391283743,
+          0.17789003937332717,
+          0.283219257311264
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 12,
+      "train_online_velocity_mse": 0.24221534591674804,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.23900559823960066,
+        "early_middle_late_mse": [
+          0.2540371791083482,
+          0.17825171223393194,
+          0.28305500185387766
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 13,
+      "train_online_velocity_mse": 0.24105181292533875,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.23730197362601757,
+        "early_middle_late_mse": [
+          0.25253793557248067,
+          0.17623668670654297,
+          0.28145544481413315
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 14,
+      "train_online_velocity_mse": 0.23976197822093964,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.23758718091994524,
+        "early_middle_late_mse": [
+          0.2545932593537514,
+          0.17736256917317708,
+          0.27924037115526334
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 15,
+      "train_online_velocity_mse": 0.2383533576822281,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2346996320411563,
+        "early_middle_late_mse": [
+          0.25295334601366753,
+          0.174914168605098,
+          0.2747380135745404
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    }
+  ],
+  "selection": "minimum fixed-pair/time velocity MSE on first2048 validation images; no image quality or official test used",
+  "selected_epoch": 15,
+  "checkpoint": "work/runs/c31_fashion_flow/best.pt",
+  "checkpoint_sha256": "053f4fb90ab190ef59b64e07de7586fbbdcd69a4daa89af5d356d387a54af347",
+  "samplers": [
+    {
+      "name": "euler_4",
+      "method": "euler",
+      "steps": 4,
+      "network_evaluations": 4,
+      "path": "work/runs/c31_fashion_flow/samples_euler_4.npy",
+      "sha256": "19bfc69a86f1eceb66886d88b6696bad6a2d9e71b204c4828fdc80434f3eebe7",
+      "raw_before_display_clip_min_max": [
+        -1.10511314868927,
+        1.023158311843872
+      ]
+    },
+    {
+      "name": "euler_16",
+      "method": "euler",
+      "steps": 16,
+      "network_evaluations": 16,
+      "path": "work/runs/c31_fashion_flow/samples_euler_16.npy",
+      "sha256": "1629436eb6fdd22238e5dbf053215bc0e83f21c1aea319a0396b5b5f20d0621c",
+      "raw_before_display_clip_min_max": [
+        -1.0712807178497314,
+        1.0919108390808105
+      ]
+    },
+    {
+      "name": "euler_64",
+      "method": "euler",
+      "steps": 64,
+      "network_evaluations": 64,
+      "path": "work/runs/c31_fashion_flow/samples_euler_64.npy",
+      "sha256": "d6534e435062bf516358141e34d1a745a4499436027aba67576958ce7f982fac",
+      "raw_before_display_clip_min_max": [
+        -1.080081820487976,
+        1.1670560836791992
+      ]
+    },
+    {
+      "name": "heun_16",
+      "method": "heun",
+      "steps": 16,
+      "network_evaluations": 32,
+      "path": "work/runs/c31_fashion_flow/samples_heun_16.npy",
+      "sha256": "5feab0548d6c4c65024422092747166fc7103eff115aa221867314274726e869",
+      "raw_before_display_clip_min_max": [
+        -1.134986162185669,
+        1.1840057373046875
+      ]
+    },
+    {
+      "name": "heun_64",
+      "method": "heun",
+      "steps": 64,
+      "network_evaluations": 128,
+      "path": "work/runs/c31_fashion_flow/samples_heun_64.npy",
+      "sha256": "c8d1bd931e086a93ffcbe404bbf30534242b76f2cb21007f24c53e2f99317f4b",
+      "raw_before_display_clip_min_max": [
+        -1.0879329442977905,
+        1.1927826404571533
+      ]
+    }
+  ],
+  "fixed_noise_seed": 20269924,
+  "raw_output_rmse_vs_heun64": {
+    "euler_4": 0.33629822731018066,
+    "euler_16": 0.12061309814453125,
+    "euler_64": 0.02818155474960804,
+    "heun_16": 0.04260881245136261
+  },
+  "real_validation_16_path": "work/runs/c31_fashion_flow/real_validation_16.npy",
+  "real_validation_16_sha256": "d398c6b2b2b93b431ec89d5fb004ac29142fc83344c8c28c45d989e88a538dee",
+  "peak_gpu_allocated_bytes": 679811584,
+  "official_test_opened": false,
+  "boundary": "independent straight pairs are training targets, learned vector field only sees current state/time; not the paper's full OT/positive-endpoint-variance or reflow setup"
+}

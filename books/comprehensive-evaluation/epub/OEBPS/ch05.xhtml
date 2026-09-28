@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>5. 层次分析法：把偏好变成可检验的权重</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="5-层次分析法把偏好变成可检验的权重">5. 层次分析法：把偏好变成可检验的权重</h2>
+<p>层次分析法，简称 AHP，适合结构清楚但难以直接给出精确权重的问题。它的思路不是让专家一次写出 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">(</mo><mn>0.4</mn><mo>,</mo><mn>0.3</mn><mo>,</mo><mn>0.2</mn><mo>,</mo><mn>0.1</mn><mo stretchy="false">)</mo></mrow></math></span>，而是逐对比较：“指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 比指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi></mrow></math></span> 重要多少？”</p>
+<h3 id="51-建立层次结构">5.1 建立层次结构</h3>
+<p>典型结构分为：</p>
+<ul>
+<li>目标层：综合水平；</li>
+<li>准则层：质量、创新、覆盖、成本；</li>
+<li>指标层或方案层：更细指标与待评价对象。</li>
+</ul>
+<p>层次结构本身就是模型假设。若把两个高度重叠的指标分别放入不同准则，它们不会因为用了 AHP 就自动变得独立。</p>
+<h3 id="52-构造判断矩阵">5.2 构造判断矩阵</h3>
+<p>规定 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 表示“指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 相对于指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi></mrow></math></span> 的重要程度”，则判断矩阵满足：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></msub><mo>,</mo><msub><mi>a</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>=</mo><mn>1</mn><mo>,</mo><msub><mi>a</mi><mrow><mi>j</mi><mi>i</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>Saaty 的 1—9 标度常解释为：1 表示同等重要，3 表示稍重要，5 表示明显重要，7 表示强烈重要，9 表示极端重要，2、4、6、8 为中间程度。</p>
+<p>例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>=</mo><mo>[</mo><mtable><mtr><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>3</mn></mtd><mtd><mn>5</mn></mtd></mtr><mtr><mtd><mn>1</mn><mo>/</mo><mn>2</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd><mtd><mn>3</mn></mtd></mtr><mtr><mtd><mn>1</mn><mo>/</mo><mn>3</mn></mtd><mtd><mn>1</mn><mo>/</mo><mn>2</mn></mtd><mtd><mn>1</mn></mtd><mtd><mn>2</mn></mtd></mtr><mtr><mtd><mn>1</mn><mo>/</mo><mn>5</mn></mtd><mtd><mn>1</mn><mo>/</mo><mn>3</mn></mtd><mtd><mn>1</mn><mo>/</mo><mn>2</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>矩阵方向必须从头到尾一致。若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>a</mi><mrow><mn>12</mn></mrow></msub><mo>=</mo><mn>2</mn></mrow></math></span> 表示指标 1 比指标 2 重要两倍，就不能在别处把同一个数解释成相反方向。</p>
+<h3 id="53-从判断矩阵求权重">5.3 从判断矩阵求权重</h3>
+<p>理想的一致矩阵满足：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>w</mi><mi>i</mi></msub></mrow><mrow><msub><mi>w</mi><mi>j</mi></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>于是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>w</mi><mo>=</mo><mi>n</mi><mi>w</mi><mo>.</mo></mrow></math></div>
+<p>现实判断通常略有矛盾，所以取最大特征值 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>λ</mi><mrow><mo>max</mo></mrow></msub></mrow></math></span> 对应的正特征向量，并归一化：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>w</mi><mo>=</mo><msub><mi>λ</mi><mrow><mo>max</mo></mrow></msub><mi>w</mi><mo>,</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>上例计算得：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>λ</mi><mrow><mo>max</mo></mrow></msub><mo>≈</mo><mn>4.0145</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>w</mi><mo>≈</mo><mo stretchy="false">(</mo><mn>0.4829</mn><mo>,</mo><mtext> </mtext><mn>0.2720</mn><mo>,</mo><mtext> </mtext><mn>0.1570</mn><mo>,</mo><mtext> </mtext><mn>0.0882</mn><msup><mo stretchy="false">)</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>.</mo></mrow></math></div>
+<p>也可以使用行几何平均法：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><msup><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mrow><mn>1</mn><mo>/</mo><mi>n</mi></mrow></msup><mo>,</mo><msub><mi>w</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>g</mi><mi>i</mi></msub></mrow><mrow><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>g</mi><mi>k</mi></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>对上例得到的结果约为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">(</mo><mn>0.4832</mn><mo>,</mo><mn>0.2717</mn><mo>,</mo><mn>0.1569</mn><mo>,</mo><mn>0.0882</mn><mo stretchy="false">)</mo></mrow></math></span>，与特征向量法很接近。</p>
+<h3 id="54-一致性检验究竟在检验什么">5.4 一致性检验究竟在检验什么？</h3>
+<p>若专家认为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span> 比 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 重要 2 倍，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 比 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>C</mi></mrow></math></span> 重要 3 倍，那么完全一致时，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span> 应比 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>C</mi></mrow></math></span> 重要 6 倍。人类判断往往做不到严格传递，因此需要检验矛盾是否过大。</p>
+<p>一致性指标为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>I</mi><mo>=</mo><mfrac><mrow><msub><mi>λ</mi><mrow><mo>max</mo></mrow></msub><mo>−</mo><mi>n</mi></mrow><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>再除以相同阶数随机互反矩阵的平均一致性指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>R</mi><mi>I</mi></mrow></math></span>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>R</mi><mo>=</mo><mfrac><mrow><mi>C</mi><mi>I</mi></mrow><mrow><mi>R</mi><mi>I</mi></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>上例 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo>=</mo><mn>4</mn></mrow></math></span>，常用 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>R</mi><mi>I</mi><mo>=</mo><mn>0.90</mn></mrow></math></span>，于是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>C</mi><mi>I</mi><mo>≈</mo><mn>0.00484</mn><mo>,</mo><mi>C</mi><mi>R</mi><mo>≈</mo><mn>0.00538</mn><mo>&lt;</mo><mn>0.10</mn><mo>.</mo></mrow></math></div>
+<p>这说明判断矩阵内部矛盾很小。</p>
+<p>但要特别注意：<strong>一致性不是正确性。</strong> 一个人可以非常一致地坚持一组并不合理的偏好。<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>C</mi><mi>R</mi><mo>&lt;</mo><mn>0.1</mn></mrow></math></span> 只说明成对判断大致自洽，并不证明指标体系、专家构成或价值取向正确。</p>
+<h3 id="55-群体-ahp-与常见风险">5.5 群体 AHP 与常见风险</h3>
+<p>多位专家参与时，可以先对相同位置的判断取几何平均：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mover><mi>a</mi><mo stretchy="true">¯</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msup><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mo>∏</mo><mrow><mi>q</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>Q</mi></mrow></msubsup><msubsup><mi>a</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>q</mi><mo stretchy="false">)</mo></mrow></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mrow><mn>1</mn><mo>/</mo><mi>Q</mi></mrow></msup><mo>,</mo></mrow></math></div>
+<p>再求权重。也可以先计算每位专家的权重，再按专家可信度合成。两种方案含义不同，应事先确定。</p>
+<p>AHP 的主要风险包括：</p>
+<ul>
+<li>指标多时需要比较 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo stretchy="false">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>/</mo><mn>2</mn></mrow></math></span> 次，认知负担迅速增加；</li>
+<li>1—9 标度是建模约定，不是自然定律；</li>
+<li>专家偏好会受措辞、顺序和群体压力影响；</li>
+<li>层级或备选对象改变时可能出现排序反转；</li>
+<li>高一致性不能消除系统性偏见。</li>
+</ul>
+<p>因此，AHP 最适合表达和审计偏好，而不应被包装成“完全客观的科学权重”。</p>
+<hr/>
+</body></html>

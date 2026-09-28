@@ -1,0 +1,48 @@
+{
+  "scene": "delivery_area_1s",
+  "source_manifest_sha256": "45966798e12fe85074836a1e3f369b2ccc4de8c8800b4b4e240abd667b74873d",
+  "input_sha256": {
+    "left": "3fa446b84934096075944771cc508c848a20391dc415434f5452f259931d4b58",
+    "right": "fe25098df6637410d4a438892c4f693b9ec5a30f80c1982b1effa3fc651e8769",
+    "calib": "d598abc61b9bfbe9a508cb09f8e4c25fe4481e9ef16a2dc0fd33ce8c69ac90e2",
+    "disparity_gt": "a27bc3bd1d65173768e23b35932c061b8fd6b10540a15573bf492b68b0c1283d",
+    "mask": "42f29598d957bbbe6e39273b85e85f64fff6c3aa243a1cb7268169795ac85f6c"
+  },
+  "shape_hw": [
+    435,
+    711
+  ],
+  "camera": {
+    "fx_pixels": 711.415,
+    "fy_pixels": 711.415,
+    "cx_pixels": 376.739,
+    "cy_pixels": 222.302,
+    "baseline_as_calib": 59.9701,
+    "doffs_pixels": 0.0
+  },
+  "ground_truth": {
+    "double_visible_valid_count": 203005,
+    "valid_any_count": 214454,
+    "mask_counts": {
+      "0": 94831,
+      "128": 11449,
+      "255": 203005
+    },
+    "disparity_pixels": {
+      "min": 1.584635853767395,
+      "p10": 5.0611677169799805,
+      "median": 9.591935157775879,
+      "p90": 21.234031677246094,
+      "max": 23.280170440673828
+    },
+    "depth_in_baseline_units": {
+      "min": 1832.6166812318722,
+      "p10": 2009.2099955391875,
+      "median": 4447.864585168088,
+      "p90": 8429.601679980624,
+      "max": 26923.301394493436
+    }
+  },
+  "figure_sha256": "bc204c4d096f8bed5fb203e348b0dce32961fef90fdbd8b6109c47c455f55dda",
+  "limits": "Reference disparity is from registered laser scans and masked; no stereo algorithm trained by this inspection. Calibration baseline unit is left as documented in calib; camera pose/absolute scale need separate verification."
+}

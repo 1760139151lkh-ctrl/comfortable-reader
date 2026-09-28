@@ -1,0 +1,28 @@
+{
+  "identity": "第三章同一九参数 XOR 网络；CPU float64；batch_size=2；顺序固定；SGD lr=0.05 momentum=0.9",
+  "full_batches": 400,
+  "first_process_batches": 100,
+  "resumed_process_batches": 300,
+  "all_batch_records_exactly_match": true,
+  "final_parameter_gap_full_vs_restored": 0.0,
+  "momentum_norm_at_checkpoint": 0.24806385797922967,
+  "momentum_norm_after_loading_both_states": 0.24806385797922967,
+  "momentum_norm_after_loading_weights_only": 0.0,
+  "weights_only_first_resumed_batch_loss_gap": 0.0,
+  "weights_only_second_resumed_batch_loss_gap": 0.0024388832464045662,
+  "first_step_parameter_l2_gap_from_missing_momentum": 0.011162873609065352,
+  "first_step_predicted_l2_gap": 0.011162873609065337,
+  "weights_only_final_parameter_gap": 0.0224692044767123,
+  "full_training_set_evaluation": {
+    "scores": [
+      -0.9999952746747629,
+      0.9999951629786272,
+      0.9999959712175812,
+      -0.9999987202247131
+    ],
+    "mean_square_loss": 7.94929836497187e-12,
+    "classification_errors": 0
+  },
+  "checkpoint_path": "work/results/tiny_mlp_epoch50.pt",
+  "scope": "Only a whole-epoch checkpoint in this CPU process/data order; no shuffle, workers, random layers or mid-batch recovery."
+}

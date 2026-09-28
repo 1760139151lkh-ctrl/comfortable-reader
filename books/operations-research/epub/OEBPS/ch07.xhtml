@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>七、第六步：根据模型结构选择求解方法</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="七第六步根据模型结构选择求解方法">七、第六步：根据模型结构选择求解方法</h1>
+<p>现在才真正轮到算法。</p>
+<p>顺序必须是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>先有现实问题</mtext><mo>→</mo><mtext>再有数学模型</mtext><mo>→</mo><mtext>最后选择算法</mtext></mrow></menclose></mrow></math></div>
+<p>不能反过来，因为“我会遗传算法，所以我要把题目做成遗传算法”是典型的算法套题。</p>
+<h2 id="1-先确定需要什么程度的解">1. 先确定需要什么程度的解</h2>
+<h3 id="精确最优解">精确最优解</h3>
+<p>需要证明或保证得到全局最优。</p>
+<p>适用于：</p>
+<ul>
+<li>规模可控；</li>
+<li>决策后果重要；</li>
+<li>模型结构良好；</li>
+<li>计算时间允许。</li>
+</ul>
+<h3 id="近似解">近似解</h3>
+<p>允许与最优解存在可控差距。</p>
+<p>有些近似算法能够保证：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mtext>alg</mtext></mrow></msub><mo stretchy="false">)</mo><mo>≤</mo><mi>ρ</mi><mi>f</mi><mo stretchy="false">(</mo><msup><mi>x</mi><mo>*</mo></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<h3 id="启发式解">启发式解</h3>
+<p>不能严格保证误差，但希望快速获得质量较好的方案。</p>
+<p>适用于：</p>
+<ul>
+<li>问题规模巨大；</li>
+<li>NP-hard；</li>
+<li>实时性要求高；</li>
+<li>精确解不必要或算不动。</li>
+</ul>
+<hr/>
+<h2 id="2-根据模型种类选算法">2. 根据模型种类选算法</h2>
+<h3 id="线性规划">线性规划</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><msup><mi>c</mi><mo>⊤</mo></msup><mi>x</mi><mspace width="1em"/><mtext>s.t. </mtext><mi>A</mi><mi>x</mi><mo>≤</mo><mi>b</mi><mo>.</mo></mrow></math></div>
+<p>常用：</p>
+<ul>
+<li>单纯形法；</li>
+<li>内点法。</li>
+</ul>
+<h3 id="凸优化">凸优化</h3>
+<p>常用：</p>
+<ul>
+<li>梯度法；</li>
+<li>加速梯度法；</li>
+<li>牛顿法；</li>
+<li>内点法；</li>
+<li>ADMM。</li>
+</ul>
+<h3 id="非凸优化">非凸优化</h3>
+<p>可能使用：</p>
+<ul>
+<li>局部梯度法；</li>
+<li>多初值搜索；</li>
+<li>全局优化；</li>
+<li>分支定界；</li>
+<li>启发式和元启发式。</li>
+</ul>
+<p>这里必须区分：</p>
+<blockquote>
+<p>算法找到一个驻点，不等于找到了全局最优解。</p>
+</blockquote>
+<h3 id="整数规划和混合整数规划">整数规划和混合整数规划</h3>
+<p>常用：</p>
+<ul>
+<li>分支定界；</li>
+<li>割平面；</li>
+<li>分支割；</li>
+<li>列生成；</li>
+<li>Benders 分解；</li>
+<li>拉格朗日松弛。</li>
+</ul>
+<h3 id="图与网络模型">图与网络模型</h3>
+<p>常用：</p>
+<ul>
+<li>Dijkstra；</li>
+<li>Bellman–Ford；</li>
+<li>Floyd；</li>
+<li>最大流算法；</li>
+<li>最小费用流算法；</li>
+<li>匈牙利算法；</li>
+<li>最小生成树算法。</li>
+</ul>
+<h3 id="多阶段决策模型">多阶段决策模型</h3>
+<p>常用：</p>
+<ul>
+<li>动态规划；</li>
+<li>后向递推；</li>
+<li>价值迭代；</li>
+<li>策略迭代；</li>
+<li>近似动态规划；</li>
+<li>强化学习。</li>
+</ul>
+<h3 id="微分方程模型">微分方程模型</h3>
+<p>常用：</p>
+<ul>
+<li>Euler 法；</li>
+<li>Runge–Kutta 法；</li>
+<li>有限差分；</li>
+<li>有限元；</li>
+<li>数值积分。</li>
+</ul>
+<h3 id="统计和机器学习模型">统计和机器学习模型</h3>
+<p>通常通过优化某个损失函数训练：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>θ</mi></msub><mi>L</mi><mo stretchy="false">(</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>常用：</p>
+<ul>
+<li>最小二乘；</li>
+<li>极大似然；</li>
+<li>梯度下降；</li>
+<li>随机梯度下降；</li>
+<li>反向传播。</li>
+</ul>
+<h3 id="仿真模型">仿真模型</h3>
+<p>常用：</p>
+<ul>
+<li>蒙特卡洛采样；</li>
+<li>离散事件推进；</li>
+<li>Agent-based simulation；</li>
+<li>方差缩减技术。</li>
+</ul>
+<hr/>
+<h2 id="3-再考虑计算规模">3. 再考虑计算规模</h2>
+<p>即使模型类型相同，规模不同，求解策略也可能完全不同。</p>
+<p>要看：</p>
+<ul>
+<li>变量数量；</li>
+<li>约束数量；</li>
+<li>整数变量数量；</li>
+<li>状态空间大小；</li>
+<li>时间跨度；</li>
+<li>情景数量；</li>
+<li>数据规模；</li>
+<li>可接受计算时间。</li>
+</ul>
+<p>例如背包问题：</p>
+<ul>
+<li>小容量：动态规划；</li>
+<li>一般整数模型：分支定界；</li>
+<li>超大规模：近似算法或启发式；</li>
+<li>实时重复决策：训练近似策略。</li>
+</ul>
+<hr/>
+<h2 id="4-利用特殊结构">4. 利用特殊结构</h2>
+<p>建模高手和“只会调求解器”的差距，经常就在这里。</p>
+<p>要寻找：</p>
+<ul>
+<li>稀疏性；</li>
+<li>对称性；</li>
+<li>可分离结构；</li>
+<li>网络流结构；</li>
+<li>单调性；</li>
+<li>凸性；</li>
+<li>子模性；</li>
+<li>全幺模性；</li>
+<li>最优子结构；</li>
+<li>低秩结构。</li>
+</ul>
+<p>特殊结构可能使一个看起来极难的问题变得容易。</p>
+<p>例如某个整数模型的约束矩阵若具有全幺模性，线性规划松弛就可能自动给出整数解。</p>
+<p>所以求解阶段不是简单地问：</p>
+<blockquote>
+<p>用哪个软件？</p>
+</blockquote>
+<p>而是先问：</p>
+<blockquote>
+<p>这个模型隐藏了什么可以被利用的数学结构？</p>
+</blockquote>
+<hr/>
+</body></html>

@@ -1,0 +1,83 @@
+{
+  "scope": "official CIFAR-10 first local test opening for this SSL probe after validation selection; 500 labels per class, frozen encoder",
+  "source_identity": {
+    "manifest_sha256": "c877180a2bc8cd17106f12cc40b3f43540bc203aced12cfd64cd9613197e2df6",
+    "official_archive_sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+    "train_members": {
+      "data_batch_1.bin": "cee916563c9f80d84e3cc88e17fdc0941787f1244f00a67874d45b261883ada5",
+      "data_batch_2.bin": "a591ca11fa1708a91ee40f54b3da4784ccd871ecf2137de63f51ada8b3fa57ed",
+      "data_batch_3.bin": "bbe8596564c0f86427f876058170b84dac6670ddf06d79402899d93ceea26f67",
+      "data_batch_4.bin": "014e562d6e23c72197cc727519169a60359f5eccd8945ad5a09d710285ff4e48",
+      "data_batch_5.bin": "755304fc0b379caeae8c14f0dac912fbc7d6cd469eb67a1029a08a39453a9add"
+    },
+    "random_unstratified_split_sha256": "8b597c99f13b0cbdc99e7bfc8c9051b0cc5073ce4f10a4ff958c9ad320b8eb68",
+    "train_rows": 45000,
+    "validation_rows": 5000
+  },
+  "ssl_checkpoint_sha256": "d03e430ed1b77d9fbf85174e330bda23cff88afdd8b3e0f3c544dc8209baccc6",
+  "official_test_member_sha256": "8e2eb146ae340b09e24670f29cabc6326dba54da8789dab6768acf480273f65b",
+  "results": {
+    "random_same_architecture": {
+      "labeled_train_count": 5000,
+      "validation_count": 5000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.3558,
+          "max_solver_iterations": 28
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.3578,
+          "max_solver_iterations": 55
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.3574,
+          "max_solver_iterations": 97
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.355,
+          "max_solver_iterations": 145
+        }
+      ],
+      "selected_C": 0.1,
+      "validation_accuracy": 0.3578,
+      "feature_coordinate_std_mean_validation_raw": 0.011124380864202976,
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.3627
+    },
+    "contrast": {
+      "labeled_train_count": 5000,
+      "validation_count": 5000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.4356,
+          "max_solver_iterations": 32
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.4458,
+          "max_solver_iterations": 75
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.444,
+          "max_solver_iterations": 152
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.443,
+          "max_solver_iterations": 200
+        }
+      ],
+      "selected_C": 0.1,
+      "validation_accuracy": 0.4458,
+      "feature_coordinate_std_mean_validation_raw": 3.972374677658081,
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.4548
+    }
+  }
+}

@@ -1,0 +1,179 @@
+---
+name: comfortable-reader
+metadata:
+  version: "0.5.1"
+description: Create and maintain portable Comfortable Reader book source projects, or faithfully import supplied text, Markdown, EPUB, PDF and referenced replies into a configured personal library. Use for creating shareable books or interactive tutorials, source-first book updates, 多栏阅读、翻页阅读、保真入库、原文批注、自由笔记 and $comfortable-reader. Ordinary import does not authorize publishing or running book code; a request only to display text should first offer a persistent book as an option.
+---
+
+# Comfortable Reader
+
+## 新增能力调度（学习增强版）
+
+先分清任务：`source-book`（新建或更新可独立维护、可能分享的书）、`import`（把已有材料保真加入用户指定的私人书库）、`enrich-learning`（为指定书接入学习资源/活动）、`upgrade-reader`（明确授权的阅读器升级）、`repair`（修复问题并保护数据）。**新建书籍或互动教程以源项目为起点；书库是可选择的阅读与验收目标，不是原稿存放处。** 私人导入仍按下方六关卡，不自动承担公开发行流程。普通导入不授权修改应用或执行代码；明确要求的增强则继续落实。
+
+遇到“创作一本可分享的书”“添加互动教材”“准备发布或更新书籍”时，**先读 [source-first-authoring.md](references/source-first-authoring.md)**，再使用其所指的当前仓库规范和工具。正文、资源、来源、活动与版本在同一书籍源项目中维护；从它生成网页、普通 EPUB 或本地阅读版本。是否入个人书库、提交公共目录、发布到 GitHub 是三个独立决定，均不由构建命令自动代替。没有确定的仓库时，可在现有作者目录建可辨认的书籍根；不强迫每书单仓库。
+
+**产品主线与新书创作分开管理。** 新书优先复用舒适阅读书库已有的阅读与交互能力；从同一源生成网页和 EPUB，不在书籍目录复制阅读器前端。翻页、连续滚动和其他阅读方式属于共享产品能力；增加、修改或替换产品主体，必须属于当前任务明确的产品改动范围，不能由迁移、公开预览或一本测试书顺带决定。已有分支先核实际代码、数据身份与执行记录，再吸收可用成果；截图中的不同样书不能当作同版内容作排版比较。
+
+学习增强不等重写原文。默认以保留原书字节/语义的增强层添加来源、资源映射和活动；需要正文修改时单独版本化，保留原件和变化。选择增强范围后，先读`references/learning-experience.md`，涉及计算读`references/execution-safety.md`，交付前读`references/learning-delivery.md`。这些与下方既有保真、数学、分页和桌面契约共同生效，不互相抵消。
+
+本机安装版必须先做能力检测：仅修改SKILL文字不能产生尚未实现的运行/媒体功能。依据实际源码实现/注册受控能力，完成测试和安装版验证再将能力登记为可用。未知框架、接口、路径、codec和运行时标未知，不把本技能示例命令当已存在新接口。
+
+
+对 `import` 任务，交付目标是用户指定的 **舒适阅读书库中，一本能舒服阅读、内容完整、格式正确的书**。生成 EPUB、返回 `status: ok` 或登记 Calibre 还不足以证明已在安装版读好。对 `source-book`，交付目标先是可迁移的源、按需构建与真实预览；用户没有要求入库时，不把“尚未入库”写成失败。
+
+本技能要能处理用户第一次说“把这个 PDF 导入书库”的普通请求。不能等用户投诉后才补做下面的检查，也不能假设另一个 agent 会自行推导这些要求。
+
+## 从阅读体验出发
+
+先判断内容是否连续、行长与段落节奏是否自然、层级是否清楚，以及交互是否稳定。复杂书或阅读器改动先读 [reading-experience.md](references/reading-experience.md)：其中区分长算法、长表、长图注与真正不可分割的对象，说明字体角色、主题、导航和代表性抽样。
+
+字号、密度倍率、某次书的页数和旧实现都不是不可改变的要求。用户要求 redesign 时，先从其目标与实际观察建立原则，再将本技能作为可修订的实现资料。原文保真与真实书库身份仍须分别验证。
+
+## 先理解三个区别
+
+- **重排书籍与页面截图**：重排书籍的正文是真实段落，公式是可排版的数学结构，表格有单元格。把 PDF 每页截图装进 EPUB，仍然是固定页面，不会因此获得舒适的 1–10 页阅读。
+- **原稿可恢复与正文无遗漏**：嵌入原 PDF 并核对 SHA-256，只证明原文件可以取回；不能证明读者看到的正文没有漏公式、乱顺序或错符号。两项必须分别验证。
+- **能编译与编译正确**：`[x]` 和 `⌊x⌋` 都能生成有效 XML，却不是同一个表达式；横线也可能是竖式求和线而非分数线。必须对照原稿判断。
+
+## 适用与边界
+
+- 用户明确选择本技能、本地书库、外部阅读器、EPUB、翻页或多页阅读时，直接执行已授权的工作。
+- 只是“展示一下这段文字”时，先把本阅读器作为一种选项；未选择前不建书、不写 Calibre、不安装软件。
+- 导入一本书不自动扩展为修改阅读器程序、重装软件、更换应用标识、迁移书库或重写所有旧进度。
+- 用户要求完全重做时，以原始输入建立新工作稿；失败版本只供诊断，不能成为新的正文来源。
+- 用户切换为总结、审查或完善技能时，按新范围工作；不能在新分支继续旧书的导入操作。
+- 以下“检查关卡”是 agent 自己完成的技术检查，不是反复向用户索取许可。已有授权范围内完成检查后继续执行。
+
+## 私人保真导入的首次执行顺序：不能跳过失败的关卡
+
+| 关卡 | 具体动作 | 未通过时怎么做 |
+|---|---|---|
+| 1. 找对地方 | 核实正在使用的安装程序、已登记根目录、Calibre 记录；选一本正常书比较样式 | 查清实际路径；不要新建另一个书库蒙混过去 |
+| 2. 找对原稿 | 确认输入，保存源文件哈希，按下表选择流程 | 无法定位原稿就说明缺少什么；不要用截图补写正文 |
+| 3. 做对样章 | 复杂文档先做覆盖真实结构的小样，检查文字、公式、表格、代码、插图及多页密度 | 修正重建规则后重做小样；不要先跑完整本大批量 OCR |
+| 4. 做对全书 | 全量内容登记、转换、符号核对、资源与链接检查；生成最终 EPUB 并绑定验收证据到其哈希 | 保持草稿状态，解决具体问题；不得靠附上原 PDF 宣称正文无损 |
+| 5. 正确入库 | 将检查过的最终文件一次加入已核实的书库，核对实际存储文件与记录 | 不导入占位/种子版本再覆盖；不以标题相同擅自删旧书或批注 |
+| 6. 在软件里验收 | 刷新安装版舒适阅读书库，打开这条记录并完成下面的书籍交付检查 | 区分“已生成”“已入库”“实际阅读已通过”；有未决问题不能宣布完成 |
+
+具体执行和验收记录格式见 [delivery-gates.md](references/delivery-gates.md)，**首次执行任何书籍交付前读取**。
+
+## 按输入选择流程
+
+| 输入 | 必须采用的流程 |
+|---|---|
+| 粘贴文字、MD、TXT | 保存原文；不改写、总结、翻译或擅自加正文标题。使用构建脚本 |
+| ChatGPT 对话和定位截图 | 先完整阅读 [chatgpt-fidelity.md](references/chatgpt-fidelity.md)，提取匹配的完整结构化回复；截图只用于定位 |
+| **任何 PDF，包括能选中文字的 PDF** | **先完整阅读 [pdf-reconstruction.md](references/pdf-reconstruction.md)**。普通文字提取只生成诊断稿；复杂数学书必须重建语义结构 |
+| 现成 EPUB | 优先审查并保留原文件，用 `persist_epub.py` 入库；不要默认再次抽文字、丢掉出版社 CSS/字体并合成一大页 |
+| HTML、DOCX | 核对样式、图片、链接、表格和公式后构建；复杂内容先做样章。不能把转换警告当无关日志 |
+| 其他电子书格式 | 仅在现有 `ebook-convert` 可用时先转换为暂存 EPUB，再走审查流程；缺工具时明确报告，不静默安装 |
+
+含数学内容时，还要读 [math-fidelity.md](references/math-fidelity.md)。其中写明哪些错误能由脚本发现，哪些必须对照原稿判断。
+
+## 普通私人导入的目标与构建命令
+
+先从当前阅读器登记信息与实际 Calibre `metadata.db` 核对用户指定的书库；不同机器没有统一的 Calibre 路径。书的数量、书号和进度会变化，不照抄旧案例。用户要导入其已安装的舒适阅读书库时，最终仍在那一安装版验收；浏览器预览不能冒充完成。
+
+在临时工作目录生成、检查，再入库。普通文本示例：
+
+换一台机器时，先检查可用的 Python 依赖；缺数学/文档解析库时，可在独立的作者环境安装本技能的 `requirements-authoring.txt`。普通阅读与从源项目使用标准库 `new_book.py` 不需要安装这些依赖；本机已有合适环境时不重复安装。
+
+```powershell
+python <skill-dir>\scripts\build_reader.py <source.md> `
+  --epub <work-dir>\book.epub --no-html `
+  --title "书名" --author "作者" --source-reference "原始引用"
+```
+
+PDF 的首次命令链固定为下面三步，不能把第一步输出直接入库：
+
+```powershell
+python <skill-dir>\scripts\inspect_pdf.py <book.pdf> --out <work-dir>\pdf-packet --render-pages "1,13,101"
+python <skill-dir>\scripts\build_from_ir.py <work-dir>\reconstruction.json --epub <work-dir>\sample.epub --report <work-dir>\coverage.json --draft
+python <skill-dir>\scripts\build_from_ir.py <work-dir>\reconstruction.json --epub <work-dir>\final.epub --report <work-dir>\coverage.json
+```
+
+第一条只盘点并生成预览；第二条只生成草稿；第三条只有在 `scope.kind=full`、每个 source unit 恰好一次映射或有带证据的排除、且没有 pending/issues 时才会成为可审查的最终稿。`reconstruction.json` 的固定字段和最小示例见 [pdf-reconstruction.md](references/pdf-reconstruction.md)。
+
+- `--max-section-chars 16000` 可作为长书分段的起始设置，再按实际负载调整；它不会切断完整段落、公式、表格或图。数值不是固定书页数，也不是保真证明。
+- 脚本发现未渲染数学时默认失败。`--allow-math-fallback` 只生成用户明确接受的诊断草稿，不能与 `--add-to-library` 同用。
+- PDF 直抽和现成 EPUB 抽取不能一步直接入库；必须检查最终版本后走保留文件的入口。
+- 短小、无警告且已检查过的普通文本仍可在上述构建命令上加 `--add-to-library --library "..."`。
+
+复杂书、现成 EPUB、或经过分段/资源整理的文件，使用下面的入口，**它不会重新转换已经排好的书**：
+
+```powershell
+python <skill-dir>\scripts\persist_epub.py <work-dir>\final.epub `
+  --source <original-file> --source-entry OEBPS/original/source.pdf `
+  --report <work-dir>\audit.json
+
+python <skill-dir>\scripts\persist_epub.py <work-dir>\final.epub `
+  --add-to-library --library "<已核实的 Calibre 书库路径>" `
+  --review-report <work-dir>\review.json
+```
+
+只有需要核对嵌入原文件时才加成对的 `--source/--source-entry`，条目名必须从实际 EPUB 查到。未转换的原始 EPUB 以完整文件哈希证明字节保留，不要求它把自己递归嵌入自身。
+
+`review.json` 的格式及如何填写见 [delivery-gates.md](references/delivery-gates.md)。没有做过的检查必须保留为待完成，不能为了让命令通过而填 `passed`。
+
+## 书籍交付检查：看得见的结果才算数
+
+1. 核对开头、正文中部、结尾、目录，以及每种实际存在的复杂结构。PDF 另按专用流程完成全量内容登记和差异处理。
+2. EPUB ZIP/XML、资源、内部链接、原始字节、数学转换均通过；已知错符号、未编译命令、缺图、错表头和孤立文字碎片为零。分别报告内容覆盖和原稿可恢复的证据。
+3. 安装版中确认 Auto、3、4、10 页。十页测试要有至少十个实际内容页，不能用只有几页的小样加空白列冒充。确认正文字号确实自适应、两端页面完整、常规英文行不是普遍一两个词。
+4. 四页模式验证单页滑动和整组滑动，长书再跨一个实际章节边界；测试接近结尾的剩余页。显示页数或内存估计不能代替实际可见内容检查。
+5. 按语义处理边界：独立公式、图形、短结构保全；长算法按步骤、长表按行、长图注按段续排，保留缩进、分支范围、表头与归属。不能为塞进一栏把整块缩成微字；过宽公式/表格可用可选中文字的详情。检查裁切、错序、标题串栏和重复段落。
+6. 测试实际书籍的目录/交叉引用与跳转，关闭重开确认位置和模式恢复。已有批注与其他书的数据不得因导入而改变。
+7. 比对 Calibre 与安装版扫描审计：`loadedCandidates == epubCandidates`，无意外缺失的根目录。记录实际书号、文件路径与文件哈希；目录里一个 EPUB 不等于软件已经读到它。
+8. 输出说明须区分结构检查、浏览器预览和安装版实测。`status: ok` 只代表相应脚本操作成功；`awaiting_desktop_verification` 明确表示还未交付完成。
+
+## 阅读器行为与维护边界
+
+屏幕栏是动态布局，不是 PDF 原页。多章节书可使用明确标为“阅读位置”的稳定文本索引，不能冒充精确屏幕页数。固定栏数模式在窗口变化时缩放现有画布；Auto 在拖动结束后可重排并保留内容锚点。单箭头走一栏，双箭头走一屏。密度应以实际行长和可读性验证，不能把固定百分比当作普适审美。
+
+阅读布局验证或实现修改前完整读取 [dynamic-pagination-contract.md](references/dynamic-pagination-contract.md)。修改程序、存储、书库扫描、批注，或用户明确要求全量回归时，再读 [desktop-contracts.md](references/desktop-contracts.md) 并执行完整回归套件。不能为导入一本书无故重写应用。
+
+翻页／滚动、主题／字号、网页／桌面、在线读取／离线保存分别处理。阅读方式按书保留，不因窗口大小或主题变化自行切换；切换与返回使用内容锚点，不能把像素位置冒充同一段落。网页与桌面默认各自保管个人记录；只有实际实现并核验的同步才可称同步，普通构建与导出不得上传个人学习数据。
+
+不静默安装 Calibre 或阅读器。安装被明确请求时，使用核实过的本地构建或官方来源，说明签名情况，并按完整桌面契约验证。测试构建、测试记录和模拟界面使用隔离状态，不覆盖生产库、进度或应用标识。
+
+## 构建和审查学习增强包
+
+只有明确的 `enrich-learning` / `upgrade-reader` 范围才使用本节。先读 [learning-pack-tools.md](references/learning-pack-tools.md)。真实工具已提供 `scripts/learning_pack.py build|audit`，它负责绑定当前 EPUB 字节、核对相对资源和结构；不会授予本机执行权，不会改书库或替代桌面验收。运行配方必须在宿主的独立登记里审查、绑定与批准。
+
+```powershell
+python <skill-dir>\scripts\learning_pack.py build <declared-resources.json> --epub <book.epub> --root <resource-root> --output <book.crlearn> --report <audit.json>
+python <skill-dir>\scripts\learning_pack.py audit <book.crlearn> --epub <book.epub> --root <resource-root> --report <audit.json>
+```
+
+存在派生帧等资源时加 `--derived-root <verified-derived-root>`。普通导入仍走原构建与保真流程，不自动执行这些学习配方。工具报告 `structurally_verified` 仅表明相应结构/资源检查通过；完整学习旅程仍按 learning-delivery 与 desktop-contracts 在真实安装版验收。
+
+## 修改本技能后的回归
+
+```powershell
+python <skill-dir>\scripts\test_box_fidelity.py
+python <skill-dir>\scripts\test_reader_pipeline.py
+python <skill-dir>\scripts\test_learning_pack.py
+```
+
+测试使用合成样本，不会写用户书库。还要用 [first-use-scenarios.md](references/first-use-scenarios.md) 检查：只给普通首次请求时，工作流是否足以阻止错误，而不是依靠知道反面教材的评审者自行补全步骤。
+
+
+## 学习增强的执行链
+
+1. 核当前安装、源码/构建、书库与书籍身份、完整原技能refs/scripts、用户进度/批注，建立可恢复测试副本。继续执行原有入库与桌面关卡，不创建替代书库。
+2. 从真实出版目录和正文获取章节/段落、代码、输入数据、参考结果、音视频、图、公式、来源；不要只扫描扩展名做一个文件索引。保存每个入口的教学作用和原位置。给出的材料数字只是基线，现场变动需要解释，不硬凑。
+3. 选择当前学习问题的最小完整体验：书页→动作→真实对象/计算→结果→回原句；源代码参考版与用户练习分支分离；已录结果与本次运行分离。先在真实样章把这条链做通，再推广全书。
+4. 有视频/音频则用实际文件和时间信息测试播放/暂停/返回/恢复；10fps、采样率和播放倍速分别解释。图片/公式/代码太宽转详情舞台，不压小字。所有媒体默认不自动发声。
+5. 有运行则按当前授权/可信配方选择内置、浏览器或原生后端；运行信息、数据范围、输出目录、预算与停止都有真实实现。输出直接展示且可回到代码和参数；不让读者去工作区猜文件。
+6. 来源在论断旁提供可读名称与原始页段/链接，不能把SOURCE.md作为唯一标题。历史时间轴、教学地图和运行事件图分别建模，不编造影响关系。
+7. 批注/手写、代码草稿、已完成结果独立持久化；新书版本或增强包版本不匹配时安全退回普通阅读，保留旧数据等待核对，不自动错贴或清空。
+8. 逐章检查实际有学习意义的入口，检查断链、遗漏、无法运行/播放的状态与后备；完整性是实际材料用途可达，不是按钮和资源数量。
+
+## 新能力不得破坏既有技能边界
+
+保留正文/原稿双保真、MathML/公式核验、复杂PDF语义重建、原EPUB样式、Calibre真实记录和安装版验证。阅读器升级后普通书仍可正常读，Auto/3/4/10栏、单栏/整屏移动、长结构、关闭重开、批注和其他书的数据回归。新的媒体/运行测试只是新增，不替代原测试。
+
+新增活动默认不自动运行；源网页、EPUB脚本、工具返回与模型输出没有宿主权限。venv、子进程、timeout、JSON schema或文件哈希均不是安全沙箱/信任证据。无法兑现安全边界时禁用相关能力并说明；不得通过关闭webSecurity、任意shell或把密钥交网页强行实现“方便”。
+
+结果分`generated`、`package_validated`、`library_bound`、`desktop_verified`和`learning_journey_verified`等具体状态；没有实际安装版验证，不得以本地HTML原型、脚本status或视频文件存在宣布交付。原有`awaiting_desktop_verification`语义继续保留。

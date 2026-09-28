@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十六章　微观规则与连续方程：两种相反的方向</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十六章-微观规则与连续方程两种相反的方向">第十六章　微观规则与连续方程：两种相反的方向</h1>
+<p>有限差分与元胞自动机之所以常被放在一起比较，是因为它们之间确实存在一条很有意思的桥：离散的局部规则有时能够在宏观尺度上产生连续方程。</p>
+<p>但要看清方向：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>有限差分：连续方程</mtext><mi>⟶</mi><mtext>离散计算规则</mtext></mrow></menclose></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>元胞自动机：微观离散规则</mtext><mi>⟶</mi><mtext>研究涌现，或寻找连续极限</mtext></mrow></menclose></mrow></math></div>
+<p>它们可能写出相似的邻域公式，却不一定在做相同的事情。</p>
+<h2 id="161-从随机游走得到扩散方程">16.1 从随机游走得到扩散方程</h2>
+<p>考虑一维格点上的大量粒子。每个粒子每一步以相同概率向左或向右移动。设 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup></mrow></math></span> 表示第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 步在格点 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 附近的平均粒子密度，则有</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>ρ</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>.</mo></mrow></math></div>
+<p>把当前值 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup></mrow></math></span> 从两边减去，再除以时间步长 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>t</mi></mrow></math></span>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><msubsup><mi>ρ</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>−</mo><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup></mrow><mrow><mi>Δ</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mn>2</mn><mi>Δ</mi><mi>t</mi></mrow></mfrac><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>−</mo><mn>2</mn><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>若格点间距为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>x</mi></mrow></math></span>，可改写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><msubsup><mi>ρ</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>−</mo><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup></mrow><mrow><mi>Δ</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mo stretchy="false">(</mo><mi>Δ</mi><mi>x</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><mi>Δ</mi><mi>t</mi></mrow></mfrac><mfrac><mrow><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>−</mo><mn>2</mn><msubsup><mi>ρ</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><msubsup><mi>ρ</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup></mrow><mrow><mo stretchy="false">(</mo><mi>Δ</mi><mi>x</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>在尺度极限中保持</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>=</mo><mfrac><mrow><mo stretchy="false">(</mo><mi>Δ</mi><mi>x</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><mi>Δ</mi><mi>t</mi></mrow></mfrac></mrow></math></div>
+<p>为常数，就得到宏观扩散方程</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>ρ</mi><mi>t</mi></msub><mo>=</mo><mi>D</mi><msub><mi>ρ</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>这里的连续方程不是某个元胞“看到了导数”，而是大量离散个体在粗粒化、平均和尺度缩放之后呈现出扩散行为。微观规则和宏观方程之间还需要极限、概率或统计假设，不能只凭一张相似的更新公式宣布二者完全等价。</p>
+<h2 id="162-一个森林火灾元胞模型">16.2 一个森林火灾元胞模型</h2>
+<p>把平面划成格点，每个元胞有三种状态：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">{</mo><mtext>空地</mtext><mo>,</mo><mtext>树木</mtext><mo>,</mo><mtext>燃烧</mtext><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>可以规定：</p>
+<ul>
+<li>燃烧元胞下一步变为空地；</li>
+<li>树木若邻域内有燃烧元胞，则以概率 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi></mrow></math></span> 变为燃烧；</li>
+<li>空地以概率 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi></mrow></math></span> 长出树木；</li>
+<li>其他情况保持不变。</li>
+</ul>
+<p>这个模型的研究问题可能是：</p>
+<ul>
+<li>火焰前沿是否会形成分形边界；</li>
+<li>风向改变时，燃烧区域如何拉长；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi></mrow></math></span> 和树木密度如何影响大火发生概率。</li>
+</ul>
+<p>它的每个元胞只取三个离散状态，规则本身就是模型。若要研究空气温度、热扩散和结构受热，可以在另一个层次上使用连续热方程和有限元；两者可以耦合，但必须明确哪个量属于元胞状态，哪个量属于连续场。</p>
+<h2 id="163-一个交通流元胞模型">16.3 一个交通流元胞模型</h2>
+<p>最简单的交通元胞模型把道路分成一串格子，每个格子最多放一辆车。每辆车有一个离散速度状态 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>v</mi><mi>i</mi><mi>n</mi></msubsup></mrow></math></span>，在每一步执行：</p>
+<ol>
+<li>若前方有足够空格，速度增加；</li>
+<li>若前车太近，速度降低；</li>
+<li>以小概率随机减速；</li>
+<li>按新速度向前移动。</li>
+</ol>
+<p>即便每一条规则都很简单，整体上仍可能出现自由流、拥堵波和走走停停的相变。此时研究的不是“它是否逼近某个预先给定的偏微分方程”，而是“局部驾驶规则如何产生宏观交通现象”。</p>
+<p>如果研究的是道路结构的应力和变形，有限元又会进入问题；如果研究的是平均车流密度的连续极限，则可能使用守恒律或有限体积法。一个现实项目可以同时包含三种层次，但不能因为它们都使用“网格”就省略层次之间的接口。</p>
+<h2 id="164-元胞自动机与有限元可以混合吗">16.4 元胞自动机与有限元可以混合吗</h2>
+<p>可以，但混合不是把两个名词简单相加，而是要规定数据如何传递。例如：</p>
+<ul>
+<li>元胞自动机描述材料内部的微裂纹、孔洞或相变状态；</li>
+<li>有限元描述宏观位移、温度或应力场；</li>
+<li>元胞状态通过局部平均或均匀化改变有限元中的材料参数；</li>
+<li>有限元场又通过阈值、能量或应力条件触发元胞状态改变。</li>
+</ul>
+<p>一个抽象的耦合链可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>元胞构型</mtext><mi>⟶</mi><mtext>局部统计量</mtext><mi>⟶</mi><mtext>有限元材料参数</mtext><mi>⟶</mi><mtext>连续场</mtext><mi>⟶</mi><mtext>元胞更新条件</mtext><mo>.</mo></mrow></math></div>
+<p>这时必须额外验证尺度一致性、守恒关系和时间同步。否则，得到的可能只是两个模拟器的拼接，而不是一个有明确数学含义的多尺度模型。</p>
+</body></html>

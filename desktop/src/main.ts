@@ -1,0 +1,4173 @@
+import { invoke, getCurrentWindow, open, isDesktop } from "./platform";
+import { preparePortableBook, portableRequest, readerPackageUrl, rewritePortableResources, portableBooks, type CatalogRecord } from './portable-books';
+import {initCatalogue,showCatalogue,openWebLink} from './catalogue';
+import ePub, {
+  Book as EpubBook,
+  Contents as EpubContents,
+  Location as EpubLocation,
+  Rendition,
+} from "epubjs";
+import "./styles.css";
+import { readingMetricLabel } from './reading-progress';
+import { initLearning, prepareLearning, wireLearningDocument, refreshLearningButton, learningIsOpen, learningReadingProgress, learningCfiFromBodyPosition, flushLearningBeforeClose, closeLearning, holdLearning } from "./learning";
+
+type ThemeName = "paper" | "light" | "night" | "contrast";
+let readerReady = false;
+type AnnotationTool = "read" | "text" | "pen" | "eraser";
+
+interface AnnotationTextStyle {
+  color: string;
+  fontFamily: string;
+  fontSize: number;
+  highlight: boolean;
+  bold: boolean;
+  underline: boolean;
+  wave: boolean;
+  box: boolean;
+}
+
+interface TextAnnotation extends AnnotationTextStyle {
+  id: string;
+  kind: "text-mark";
+  cfiRange: string;
+  selectedText: string;
+  comment: string;
+  createdAt: number;
+}
+
+interface FreeTextAnnotation extends AnnotationTextStyle {
+  contentPlacement?: {mode:'paged'|'scroll';anchorX:number;anchorY:number;width:number;height:number};
+  id: string;
+  kind: "free-text";
+  anchorCfi: string | null;
+  progression: number;
+  anchorVersion?: number;
+  x: number;
+  y: number;
+  text: string;
+  createdAt: number;
+}
+
+interface DrawingPoint {
+  x: number;
+  y: number;
+}
+
+interface DrawingAnnotation {
+  contentPlacement?: FreeTextAnnotation['contentPlacement'];
+  id: string;
+  kind: "drawing";
+  anchorCfi: string | null;
+  progression: number;
+  anchorVersion?: number;
+  color: string;
+  strokeWidth: number;
+  points: DrawingPoint[];
+  inkGeometry?: { columnWidth: number; pageHeight: number; group: string; basis: "creation" | "legacy-current-layout" };
+  createdAt: number;
+}
+
+type ReaderAnnotation = TextAnnotation | FreeTextAnnotation | DrawingAnnotation;
+
+interface PendingSelection {
+  cfiRange: string;
+  text: string;
+  contents: EpubContents;
+}
+
+interface BookRecord {
+  modifiedAt?:number|null;
+  available?:boolean|null;
+  bookUuid?: string | null;
+  catalogSource?: CatalogRecord['catalogSource'] | null;
+  id: string;
+  title: string;
+  author: string;
+  path: string;
+  addedAt: number;
+  lazyPages?: number | null;
+}
+
+interface BookProgress {
+  bookUuid?:string|null;
+  contentDigest?: string | null;
+  readingMode?: 'paged' | 'scroll' | null;
+  readingMetric?: import('./reading-progress').ReadingMetric | null;
+  sourceSha256?: string | null;
+  cfi: string | null;
+  page: number;
+  totalPages: number;
+  percent: number;
+  updatedAt: number;
+  /** 0 = automatic, 1..10 = fixed visible page count. */
+  pageMode: number;
+  /** Persistent text marks, free notes, and doodles belonging to this book. */
+  annotations: ReaderAnnotation[];
+}
+
+interface ReaderSession {
+  lineHeight?: number | null;
+  contentWidth?: number | null;
+  paneCount: number;
+  paneBookIds: Array<string | null>;
+  activePane: number;
+  theme: ThemeName;
+  fontScale: number;
+  readerFont: "serif" | "sans" | "publisher";
+}
+
+interface ScanIssue {
+  path: string;
+  message: string;
+}
+
+interface ScanReport {
+  rootsScanned: number;
+  missingRoots: number;
+  filesSeen: number;
+  epubCandidates: number;
+  loadedCandidates: number;
+  booksLoaded: number;
+  added: number;
+  updated: number;
+  duplicates: number;
+  unreadable: number;
+  otherBookFiles: number;
+  ignoredTrees: number;
+  issues: ScanIssue[];
+}
+
+interface AppSnapshot {
+  books: BookRecord[];
+  progress: Record<string, BookProgress>;
+  session: ReaderSession;
+  libraryRoots: string[];
+  storagePath: string;
+  scan: ScanReport;
+}
+
+interface PaneRuntime {
+  openedSourceKey?:string|null;
+  readingMode: 'paged' | 'scroll';
+  opening: Promise<void> | null;
+  finishOpening: (()=>void) | null;
+  bookId: string | null;
+  book: EpubBook | null;
+  rendition: Rendition | null;
+  resizeObserver: ResizeObserver | null;
+  resizeTimer: number | null;
+  resizeFrame: number | null;
+  resizeActive: boolean;
+  resizeAnchorCfi: string | null;
+  /** Intentional content target; repeated layout changes must not round it again. */
+  layoutAnchorCfi: string | null;
+  pendingStageWidth: number;
+  pendingStageHeight: number;
+  generation: number;
+  currentPage: number;
+  endPage: number;
+  totalPages: number;
+  percent: number;
+  cfi: string | null;
+  pageMode: number;
+  actualPageCount: number;
+  effectiveFontScale: number;
+  layoutWidth: number;
+  layoutHeight: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  viewportScale: number;
+  restoringLocation: boolean;
+  paginationGeneration: number;
+  paginationTimer: number | null;
+  atomicFitFrame: number | null;
+  lazyPageCount: number;
+  lazyPageUrls: Map<number, string>;
+  lazyPageLoading: Map<number, Promise<string>>;
+  lazyPageGeneration: number;
+}
+
+interface DrawingDraft {
+  paneIndex: number;
+  pointerId: number;
+  annotation: DrawingAnnotation;
+}
+
+interface NoteDragState {
+  paneIndex: number;
+  annotationId: string;
+  pointerId: number;
+  offsetX: number;
+  offsetY: number;
+}
+
+interface InternalLayout {
+  name: string;
+  settings: { direction?: string };
+  width: number;
+  height: number;
+  spreadWidth: number;
+  pageWidth: number;
+  delta: number;
+  columnWidth: number;
+  gap: number;
+  divisor: number;
+  props: Record<string, string | number | boolean>;
+  calculate: (width: number, height: number, gap?: number) => void;
+  count: (totalLength: number, pageLength?: number) => { spreads: number; pages: number };
+  update: (props: Record<string, string | number | boolean>) => void;
+}
+
+type InternalRendition = Rendition & {
+  _layout: InternalLayout;
+  manager: {
+    updateLayout: () => void;
+    container?: HTMLElement;
+    views?: {
+      last: () => { section?: { next: () => unknown } } | undefined;
+    };
+  };
+};
+
+type InternalSpine = EpubBook["spine"] & {
+  spineItems: Array<{ linear?: boolean }>;
+};
+
+const MAX_PANES = 4;
+function requireElement<T extends Element>(root: ParentNode, selector: string): T {
+  const element = root.querySelector<T>(selector);
+  if (!element) throw new Error(`界面元素不存在：${selector}`);
+  return element;
+}
+const app = requireElement<HTMLElement>(document, "#app");
+
+const icons: Record<string, string> = {
+  library:
+    '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V4H6.5A2.5 2.5 0 0 0 4 6.5v13Z"/><path d="M8 7h8M8 10h6M6.5 17A2.5 2.5 0 0 0 4 19.5 2.5 2.5 0 0 0 6.5 22H20v-5Z"/></svg>',
+  back: '<svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>',
+  forward: '<svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg>',
+  groupBack:
+    '<svg viewBox="0 0 24 24"><path d="m12 18-6-6 6-6"/><path d="m18 18-6-6 6-6"/></svg>',
+  groupForward:
+    '<svg viewBox="0 0 24 24"><path d="m6 18 6-6-6-6"/><path d="m12 18 6-6-6-6"/></svg>',
+  jump:
+    '<svg viewBox="0 0 24 24"><path d="M4 5h16v14H4z"/><path d="M8 9h8M8 12h5M8 15h8"/><path d="m17 12 3 3-3 3"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  folder:
+    '<svg viewBox="0 0 24 24"><path d="M3 6.5h6l2 2h10v9.5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6.5Z"/></svg>',
+  refresh:
+    '<svg viewBox="0 0 24 24"><path d="M20 6v5h-5"/><path d="M18.2 16.4A8 8 0 1 1 19.5 9L20 11"/></svg>',
+  close: '<svg viewBox="0 0 24 24"><path d="m7 7 10 10M17 7 7 17"/></svg>',
+  moon:
+    '<svg viewBox="0 0 24 24"><path d="M20.5 14.7A8.5 8.5 0 0 1 9.3 3.5 8.5 8.5 0 1 0 20.5 14.7Z"/></svg>',
+  search:
+    '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>',
+  book:
+    '<svg viewBox="0 0 24 24"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5v-17Z"/><path d="M5 21.5A2.5 2.5 0 0 1 7.5 19H20v3H7.5A2.5 2.5 0 0 1 5 19.5"/></svg>',
+  check:
+    '<svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg>',
+  fullscreen:
+    '<svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M3 16v5h5"/></svg>',
+  note:
+    '<svg viewBox="0 0 24 24"><path d="M4 19.5V5.8A1.8 1.8 0 0 1 5.8 4h8.8L20 9.4v10.1a.5.5 0 0 1-.5.5h-14a1.5 1.5 0 0 1-1.5-1.5Z"/><path d="M14 4v6h6M8 14h8M8 17h5"/></svg>',
+  pen:
+    '<svg viewBox="0 0 24 24"><path d="m4 20 4.8-1.1L19 8.7a2.4 2.4 0 0 0-3.4-3.4L5.4 15.5 4 20Z"/><path d="m13.8 7.1 3.1 3.1"/></svg>',
+  undo:
+    '<svg viewBox="0 0 24 24"><path d="M9 7 4 12l5 5"/><path d="M5 12h8a6 6 0 0 1 6 6"/></svg>',
+  trash:
+    '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>',
+};
+
+app.innerHTML = `
+  <div class="app-shell" data-theme="paper">
+
+    <div class="top-hover-zone" aria-hidden="true"></div>
+    <header class="top-toolbar visible" aria-label="阅读工具栏">
+      <button class="icon-button library-toggle" type="button" title="书库（Ctrl+L）" aria-label="打开书库" aria-expanded="false">${icons.library}</button>
+      <button class="icon-button contents-toggle" type="button" title="本书目录（Ctrl+T）" aria-label="打开本书目录" aria-expanded="false">${icons.jump}</button>
+      <button class="icon-button book-search-toggle" type="button" title="书内搜索（Ctrl+F）" aria-label="搜索本书">${icons.search}</button>
+      <button class="icon-button reading-back" type="button" title="返回跳转前的位置（Alt+←）" aria-label="返回跳转前的位置" disabled>${icons.undo}</button>
+      <span class="toolbar-separator"></span>
+      <button class="icon-button nav-back" type="button" title="上一栏（←）" aria-label="上一页">${icons.back}</button>
+      <button class="icon-button nav-forward" type="button" title="下一栏（→）" aria-label="下一页">${icons.forward}</button>
+      <button class="icon-button nav-group-back" type="button" title="上一屏（PageUp）" aria-label="上一屏">${icons.groupBack}</button>
+      <button class="icon-button nav-group-forward" type="button" title="下一屏（PageDown）" aria-label="下一屏">${icons.groupForward}</button>
+      <div class="active-book-title">尚未打开书籍</div>
+      <button class="text-button reading-settings-toggle" type="button" title="字体与阅读设置" aria-label="打开阅读设置" aria-expanded="false">Aa</button>
+      <button class="icon-button theme-cycle" type="button" title="切换阅读主题" aria-label="切换阅读主题">${icons.moon}</button>
+      <button class="icon-button annotation-toggle" type="button" title="笔记与原文标记（Ctrl+N）" aria-label="打开笔记与标记工具" aria-expanded="false">${icons.note}</button>
+      <button class="icon-button fullscreen-toggle" type="button" title="全屏（F11）" aria-label="切换全屏">${icons.fullscreen}</button>
+    </header>
+    <section class="reading-settings floating-panel" aria-label="阅读设置" aria-hidden="true" inert>
+      <header><strong>阅读设置</strong><button type="button" class="icon-button settings-close" aria-label="关闭阅读设置">${icons.close}</button></header>
+      <label class="setting-row"><span>这本书怎样读</span><select class="reading-mode" aria-label="阅读方式"><option value="paged">翻页 · 可选多栏</option><option value="scroll">连续滚动</option></select></label>
+      <label class="setting-row"><span>正文字体</span><select class="reader-font" aria-label="正文字体"><option value="serif">衬线 · 书籍</option><option value="sans">无衬线 · 清晰</option><option value="publisher">书籍原有字体</option></select></label>
+      <div class="setting-row"><span>阅读字号</span><div class="font-controls"><button type="button" class="text-button font-down" title="缩小字号">A−</button><span class="font-scale-label">100%</span><button type="button" class="text-button font-up" title="放大字号">A+</button></div></div>
+      <label class="setting-row"><span>行距</span><input class="reader-line-height" type="range" min="1.35" max="2.15" step="0.05" aria-label="正文行距"/></label>
+      <label class="setting-row"><span>连续阅读宽度</span><select class="reader-content-width" aria-label="连续阅读宽度"><option value="34">紧凑</option><option value="44">标准</option><option value="56">舒展</option></select></label>
+      <div class="setting-row"><span>并排读书</span><div class="pane-switch" aria-label="并排阅读数量">${[1,2,3,4].map(count=>`<button type="button" data-pane-count="${count}" title="同时显示 ${count} 本书">${count}</button>`).join("")}</div></div>
+      <p class="settings-help">每本书的同屏栏数在书名右侧选择。自动布局适合连续阅读；更多栏数适合概览。左右键移动一栏，PageUp / PageDown 移动一屏。</p>
+      <button class="text-action jump-toggle" type="button">跳转到阅读位置…</button>
+    </section>
+    <aside class="book-navigation floating-panel" aria-label="本书导航" aria-hidden="true" inert>
+      <header><strong class="navigation-heading">本书目录</strong><button type="button" class="icon-button navigation-close" aria-label="收起本书导航">${icons.close}</button></header>
+      <div class="navigation-tabs"><button type="button" data-navigation-tab="contents">目录</button><button type="button" data-navigation-tab="search">搜索</button></div>
+      <form class="book-search-form" hidden><label><span class="sr-only">搜索本书内容</span><input type="search" class="book-search-input" placeholder="输入词语或短句" autocomplete="off" /></label><button type="submit">搜索</button></form>
+      <p class="navigation-status" role="status"></p>
+      <nav class="chapter-list" aria-label="章节目录"></nav>
+      <div class="book-search-results" hidden></div>
+    </aside>
+
+    <section class="annotation-panel" aria-label="笔记与原文标记工具" aria-hidden="true">
+      <header class="annotation-panel-header">
+        <div>
+          <strong>笔记与标记</strong>
+          <span class="annotation-book-title">请先打开一本书</span>
+        </div>
+        <button class="icon-button annotation-close" type="button" title="收起笔记工具" aria-label="收起笔记工具">${icons.close}</button>
+      </header>
+      <div class="annotation-selection">
+        <span class="selection-status">在原文中拖选文字，再设置格式</span>
+        <textarea class="selection-comment" rows="2" placeholder="给这段原文写旁注（可选）"></textarea>
+      </div>
+      <div class="annotation-style-row" aria-label="批注样式">
+        <label class="annotation-color" title="颜色"><input type="color" value="#d8913d" aria-label="批注颜色" /></label>
+        <select class="annotation-font" title="字体" aria-label="批注字体">
+          <option value="inherit" selected>跟随原文</option>
+          <option value="serif">宋体</option>
+          <option value="sans-serif">黑体</option>
+          <option value="cursive">手写体</option>
+          <option value="monospace">等宽体</option>
+        </select>
+        <select class="annotation-size" title="字号" aria-label="批注字号">
+          <option value="85">小</option>
+          <option value="100" selected>标准</option>
+          <option value="120">大</option>
+          <option value="150">特大</option>
+        </select>
+      </div>
+      <div class="annotation-format-row" aria-label="原文格式">
+        <button type="button" class="format-toggle selected" data-format="highlight" title="荧光标记">荧光</button>
+        <button type="button" class="format-toggle" data-format="bold" title="加粗">B</button>
+        <button type="button" class="format-toggle" data-format="underline" title="下划线"><u>U</u></button>
+        <button type="button" class="format-toggle" data-format="wave" title="波浪线">﹏</button>
+        <button type="button" class="format-toggle" data-format="box" title="加框">□</button>
+        <button type="button" class="apply-text-mark">应用到选中文本</button>
+      </div>
+      <div class="annotation-tool-row" aria-label="自由笔记工具">
+        <button type="button" class="annotation-tool selected" data-tool="read" title="阅读、拖选原文">阅读</button>
+        <button type="button" class="annotation-tool" data-tool="text" title="点击页面添加自由文字">文字</button>
+        <button type="button" class="annotation-tool" data-tool="pen" title="在页面上自由涂鸦">画笔</button>
+        <button type="button" class="annotation-tool" data-tool="eraser" title="点击自由文字或涂鸦删除">橡皮</button>
+        <label class="pen-width" title="画笔粗细"><span>粗细</span><input type="range" min="1" max="10" value="3" /></label>
+        <button type="button" class="icon-button annotation-undo" title="撤销这本书最后一条笔记" aria-label="撤销最后一条笔记">${icons.undo}</button>
+      </div>
+      <div class="annotation-help">阅读模式可拖选原文；文字/画笔模式下点击页面；自由文字可直接编辑，拖动左上角手柄可移动。</div>
+      <div class="annotation-list" aria-label="本书笔记清单"></div>
+    </section>
+
+    <button class="left-library-handle" type="button" aria-label="点击打开本地书库" aria-expanded="false" title="点击打开书库">
+      <span>书库</span>${icons.forward}
+    </button>
+    <aside class="library-drawer" aria-label="本地书库" aria-hidden="true" inert>
+      <div class="drawer-header">
+        <div>
+          <p class="eyebrow">LOCAL LIBRARY</p>
+          <h1>我的书库 <span class="book-count">0</span></h1>
+        </div>
+        <button class="icon-button drawer-close" type="button" title="收起书库" aria-label="收起书库">${icons.close}</button>
+      </div>
+      <label class="search-box">
+        ${icons.search}
+        <input type="search" placeholder="搜索书名或作者" autocomplete="off" />
+      </label>
+      <div class="library-actions">
+        <button class="primary-action add-books" type="button">${icons.plus}<span>添加 EPUB</span></button>
+        <button class="secondary-action add-folder" type="button" title="加入一个本地书库文件夹">${icons.folder}</button>
+        <button class="secondary-action refresh-library" type="button" title="刷新本地书库">${icons.refresh}</button>
+      </div>
+      <div class="library-audit" role="status" aria-live="polite">
+        <strong>正在核对全部书籍…</strong>
+        <span>将递归扫描所有已登记书库</span>
+      </div>
+      <div class="library-list" role="list"></div>
+      <div class="drawer-footer">
+        <span class="status-dot"></span>
+        <span>本地保存 · 自动记忆位置</span>
+      </div>
+    </aside>
+
+    <section class="reader-grid panes-1" aria-label="多书阅读区"></section>
+    <div class="toast" role="status"></div>
+    <div class="jump-dialog" aria-hidden="true">
+      <form class="jump-card">
+        <div class="jump-card-header">
+          <div>
+            <strong>跳转到页</strong>
+            <span class="jump-book-title">当前书籍</span>
+          </div>
+          <button class="icon-button jump-close" type="button" title="取消跳转" aria-label="取消跳转">${icons.close}</button>
+        </div>
+        <label class="jump-page-field">
+          <span>页码</span>
+          <input class="jump-page-input" type="number" min="1" step="1" inputmode="numeric" />
+          <em>/ <span class="jump-page-total">—</span></em>
+        </label>
+        <div class="jump-card-actions">
+          <button class="secondary-action jump-cancel" type="button">取消</button>
+          <button class="primary-action jump-submit" type="submit">跳转</button>
+        </div>
+      </form>
+    </div>
+    <div class="boot-screen">
+      <div class="boot-mark">${icons.book}</div>
+      <strong>正在整理本地书库</strong>
+      <span>书籍和阅读位置都只保存在这台电脑</span>
+    </div>
+  </div>
+`;
+
+const shell = requireElement<HTMLElement>(app, ".app-shell");
+
+const drawer = requireElement<HTMLElement>(app, ".library-drawer");
+const libraryHandle = requireElement<HTMLButtonElement>(app, ".left-library-handle");
+const readerGrid = requireElement<HTMLElement>(app, ".reader-grid");
+const libraryList = requireElement<HTMLElement>(app, ".library-list");
+const libraryAudit = requireElement<HTMLElement>(app, ".library-audit");
+const activeTitle = requireElement<HTMLElement>(app, ".active-book-title");
+const fontScaleLabel = requireElement<HTMLElement>(app, ".font-scale-label");
+const themeCycleButton = requireElement<HTMLButtonElement>(app, ".theme-cycle");
+const toast = requireElement<HTMLElement>(app, ".toast");
+const bootScreen = requireElement<HTMLElement>(app, ".boot-screen");
+const searchInput = requireElement<HTMLInputElement>(app, ".search-box input");
+const annotationPanel = requireElement<HTMLElement>(app, ".annotation-panel");
+const annotationToggle = requireElement<HTMLButtonElement>(app, ".annotation-toggle");
+const annotationBookTitle = requireElement<HTMLElement>(app, ".annotation-book-title");
+const selectionStatus = requireElement<HTMLElement>(app, ".selection-status");
+const selectionComment = requireElement<HTMLTextAreaElement>(app, ".selection-comment");
+const annotationColorInput = requireElement<HTMLInputElement>(app, ".annotation-color input");
+const annotationFontSelect = requireElement<HTMLSelectElement>(app, ".annotation-font");
+const annotationSizeSelect = requireElement<HTMLSelectElement>(app, ".annotation-size");
+const penWidthInput = requireElement<HTMLInputElement>(app, ".pen-width input");
+const annotationList = requireElement<HTMLElement>(app, ".annotation-list");
+const jumpDialog = requireElement<HTMLElement>(app, ".jump-dialog");
+const jumpForm = requireElement<HTMLFormElement>(app, ".jump-card");
+const jumpInput = requireElement<HTMLInputElement>(app, ".jump-page-input");
+const jumpTotal = requireElement<HTMLElement>(app, ".jump-page-total");
+const jumpBookTitle = requireElement<HTMLElement>(app, ".jump-book-title");
+
+const runtimes: PaneRuntime[] = Array.from({ length: MAX_PANES }, () => ({
+  readingMode: 'paged',
+  opening: null,
+  finishOpening: null,
+  bookId: null,
+  book: null,
+  rendition: null,
+  resizeObserver: null,
+  resizeTimer: null,
+  resizeFrame: null,
+  resizeActive: false,
+  resizeAnchorCfi: null,
+  layoutAnchorCfi: null,
+  pendingStageWidth: 0,
+  pendingStageHeight: 0,
+  generation: 0,
+  currentPage: 0,
+  endPage: 0,
+  totalPages: 0,
+  percent: 0,
+  cfi: null,
+  pageMode: 0,
+  actualPageCount: 1,
+  effectiveFontScale: 100,
+  layoutWidth: 0,
+  layoutHeight: 0,
+  viewportWidth: 0,
+  viewportHeight: 0,
+  viewportScale: 1,
+  restoringLocation: false,
+  paginationGeneration: 0,
+  paginationTimer: null,
+  atomicFitFrame: null,
+  lazyPageCount: 0,
+  lazyPageUrls: new Map<number, string>(),
+  lazyPageLoading: new Map<number, Promise<string>>(),
+  lazyPageGeneration: 0,
+}));
+
+const sourceDigests=new Map<string,string>();
+const contentDigests=new Map<string,string>();
+const sourceMismatches=new Set<string>();
+function editionHeld(bookId:string|null):boolean{return Boolean(bookId&&sourceMismatches.has(bookId));}
+function annotationEditionAvailable(bookId:string|null):boolean{
+  if(!editionHeld(bookId))return true;
+  showToast("书文件已换版。旧批注完整保留，待核对后才能修改或定位；可恢复原 EPUB 后重新打开。","error");return false;
+}
+
+let snapshot: AppSnapshot = {
+  books: [],
+  progress: {},
+  session: {
+    paneCount: 1,
+    paneBookIds: [null, null, null, null],
+    activePane: 0,
+    theme: "paper",
+    fontScale: 100,
+    readerFont: "serif",
+  },
+  libraryRoots: [],
+  storagePath: "",
+  scan: {
+    rootsScanned: 0,
+    missingRoots: 0,
+    filesSeen: 0,
+    epubCandidates: 0,
+    loadedCandidates: 0,
+    booksLoaded: 0,
+    added: 0,
+    updated: 0,
+    duplicates: 0,
+    unreadable: 0,
+    otherBookFiles: 0,
+    ignoredTrees: 0,
+    issues: [],
+  },
+};
+let toastTimer: number | null = null;
+let sessionSaveTimer: number | null = null;
+const progressSaveTimers: Array<number | null> = [null, null, null, null];
+const progressWrites:Array<Promise<void>>=Array.from({length:MAX_PANES},()=>Promise.resolve());
+const bookOpenSequence=Array.from({length:MAX_PANES},()=>0);
+const pendingSelections: Array<PendingSelection | null> = [null, null, null, null];
+const activeFormats = new Set<keyof AnnotationTextStyle>(["highlight"]);
+let annotationTool: AnnotationTool = "read";
+let drawingDraft: DrawingDraft | null = null;
+let noteDragState: NoteDragState | null = null;
+let drawingFrame: number | null = null;
+
+function escapeHtml(value: string): string {
+  return value.replace(
+    /[&<>"]/g,
+    (character) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[
+        character
+      ] ?? character,
+  );
+}
+
+function getBook(bookId: string | null): BookRecord | undefined {
+  return snapshot.books.find((book) => book.id === bookId);
+}
+
+function normalizeSession(session: ReaderSession): ReaderSession {
+  const paneBookIds = [...(session.paneBookIds ?? [])];
+  while (paneBookIds.length < MAX_PANES) paneBookIds.push(null);
+  return {
+    paneCount: Math.min(MAX_PANES, Math.max(1, Number(session.paneCount) || 1)),
+    paneBookIds: paneBookIds.slice(0, MAX_PANES),
+    activePane: Math.min(
+      Math.max(0, Number(session.activePane) || 0),
+      Math.min(MAX_PANES, Math.max(1, Number(session.paneCount) || 1)) - 1,
+    ),
+    theme: ["paper", "light", "night", "contrast"].includes(session.theme)
+      ? session.theme
+      : "paper",
+    fontScale: Math.min(180, Math.max(70, Number(session.fontScale) || 100)),
+    readerFont: ["serif", "sans", "publisher"].includes(session.readerFont) ? session.readerFont : "serif",
+    lineHeight: session.lineHeight?Math.min(2.15,Math.max(1.35,Number(session.lineHeight))):null,
+    contentWidth: [34,44,56].includes(Number(session.contentWidth))?Number(session.contentWidth):44,
+  };
+}
+
+const ALLOWED_ANNOTATION_FONTS = new Set(["inherit", "serif", "sans-serif", "cursive", "monospace"]);
+
+function safeAnnotationColor(value: unknown): string {
+  return typeof value === "string" && /^#[0-9a-f]{6}$/i.test(value) ? value : "#d8913d";
+}
+
+function safeAnnotationFont(value: unknown): string {
+  return typeof value === "string" && ALLOWED_ANNOTATION_FONTS.has(value) ? value : "inherit";
+}
+
+function clampNumber(value: unknown, minimum: number, maximum: number, fallback: number): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? Math.min(maximum, Math.max(minimum, parsed)) : fallback;
+}
+
+function textStyleFromRecord(record: Record<string, unknown>): AnnotationTextStyle {
+  return {
+    color: safeAnnotationColor(record.color),
+    fontFamily: safeAnnotationFont(record.fontFamily),
+    fontSize: clampNumber(record.fontSize, 70, 220, 100),
+    highlight: Boolean(record.highlight),
+    bold: Boolean(record.bold),
+    underline: Boolean(record.underline),
+    wave: Boolean(record.wave),
+    box: Boolean(record.box),
+  };
+}
+
+function normalizeAnnotations(raw: unknown): ReaderAnnotation[] {
+  if (!Array.isArray(raw)) return [];
+  const normalized: ReaderAnnotation[] = [];
+  for (const entry of raw) {
+    if (!entry || typeof entry !== "object") continue;
+    const record = entry as Record<string, unknown>;
+    const id = typeof record.id === "string" && record.id.length <= 120
+      ? record.id
+      : crypto.randomUUID();
+    const createdAt = clampNumber(record.createdAt, 0, Number.MAX_SAFE_INTEGER, Date.now());
+    if (record.kind === "text-mark" && typeof record.cfiRange === "string") {
+      normalized.push({
+        ...record,
+        ...textStyleFromRecord(record),
+        id,
+        kind: "text-mark",
+        cfiRange: record.cfiRange,
+        selectedText: typeof record.selectedText === "string" ? record.selectedText.slice(0, 12000) : "",
+        comment: typeof record.comment === "string" ? record.comment.slice(0, 12000) : "",
+        createdAt,
+      });
+      continue;
+    }
+    if (record.kind === "free-text") {
+      normalized.push({
+        ...record,
+        ...textStyleFromRecord(record),
+        id,
+        kind: "free-text",
+        anchorCfi: typeof record.anchorCfi === "string" ? record.anchorCfi : null,
+        anchorVersion: record.anchorVersion === 2 ? 2 : undefined,
+        progression: clampNumber(record.progression, 0, 1, 0),
+        x: clampNumber(record.x, -1, 2, 0.1),
+        y: clampNumber(record.y, 0, 1, 0.12),
+        text: typeof record.text === "string" ? record.text.slice(0, 24000) : "",
+        createdAt,
+      });
+      continue;
+    }
+    if (record.kind === "drawing" && Array.isArray(record.points)) {
+      const points = record.points
+        .slice(0, 8000)
+        .flatMap((point): DrawingPoint[] => {
+          if (!point || typeof point !== "object") return [];
+          const item = point as Record<string, unknown>;
+          return [{
+            x: clampNumber(item.x, -2, 3, 0),
+            y: clampNumber(item.y, -1, 2, 0),
+          }];
+        });
+      if (points.length < 2) continue;
+      normalized.push({
+        ...record,
+        id,
+        kind: "drawing",
+        anchorCfi: typeof record.anchorCfi === "string" ? record.anchorCfi : null,
+        anchorVersion: record.anchorVersion === 2 ? 2 : undefined,
+        progression: clampNumber(record.progression, 0, 1, 0),
+        color: safeAnnotationColor(record.color),
+        strokeWidth: clampNumber(record.strokeWidth, 1, 20, 3),
+        points,
+        createdAt,
+      });
+    }
+  }
+  return normalized;
+}
+
+function normalizeProgress(progress: Record<string, BookProgress>): Record<string, BookProgress> {
+  for (const entry of Object.values(progress)) {
+    entry.pageMode = Math.min(10, Math.max(0, Number(entry.pageMode) || 0));
+    entry.annotations = normalizeAnnotations(entry.annotations);
+  }
+  return progress;
+}
+
+function annotationsForBook(bookId: string | null): ReaderAnnotation[] {
+  if (!bookId) return [];
+  const progress = snapshot.progress[bookId];
+  if (!progress) return [];
+  if (!Array.isArray(progress.annotations)) progress.annotations = [];
+  return progress.annotations;
+}
+
+function currentAnnotationStyle(): AnnotationTextStyle {
+  return {
+    color: safeAnnotationColor(annotationColorInput.value),
+    fontFamily: safeAnnotationFont(annotationFontSelect.value),
+    fontSize: clampNumber(annotationSizeSelect.value, 70, 220, 100),
+    highlight: activeFormats.has("highlight"),
+    bold: activeFormats.has("bold"),
+    underline: activeFormats.has("underline"),
+    wave: activeFormats.has("wave"),
+    box: activeFormats.has("box"),
+  };
+}
+
+function pageModeForBook(bookId: string | null): number {
+  if (!bookId) return 0;
+  return Math.min(10, Math.max(0, Number(snapshot.progress[bookId]?.pageMode) || 0));
+}
+
+function showToast(message: string, kind: "normal" | "error" = "normal"): void {
+  toast.textContent = message;
+  toast.dataset.kind = kind;
+  toast.classList.add("visible");
+  if (toastTimer !== null) window.clearTimeout(toastTimer);
+  toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 2600);
+}
+
+
+
+function openDrawer(): void {
+  closeBookNavigation();
+  setReadingSettings(false);
+  drawer.inert = false;
+  drawer.setAttribute("aria-hidden", "false");
+  app.querySelector(".library-toggle")?.setAttribute("aria-expanded", "true");
+  drawer.classList.add("visible");
+  shell.classList.add("drawer-open");
+  libraryHandle.setAttribute("aria-expanded", "true");
+}
+
+function closeDrawer(): void {
+  drawer.inert = true;
+  drawer.setAttribute("aria-hidden", "true");
+  app.querySelector(".library-toggle")?.setAttribute("aria-expanded", "false");
+  drawer.classList.remove("visible");
+  shell.classList.remove("drawer-open");
+  libraryHandle.setAttribute("aria-expanded", "false");
+}
+
+function closeJumpDialog(): void {
+  jumpDialog.classList.remove("visible");
+  jumpDialog.setAttribute("aria-hidden", "true");
+}
+
+function openJumpDialog(index = snapshot.session.activePane): void {
+  const runtime = runtimes[index];
+  const book = getBook(runtime.bookId);
+  if (!book || (!runtime.rendition && runtime.lazyPageCount <= 0)) {
+    showToast("请先打开一本书", "error");
+    return;
+  }
+  setActivePane(index);
+  jumpBookTitle.textContent = book.title;
+  const stableLocations = runtime.readingMode==='scroll' || runtime.book && linearSectionCount(runtime.book) > 1;
+  requireElement<HTMLElement>(jumpDialog, ".jump-card-header strong").textContent = stableLocations ? "跳转到阅读位置" : "跳转到页";
+  requireElement<HTMLElement>(jumpDialog, ".jump-page-field > span").textContent = stableLocations ? "位置" : "页码";
+  jumpTotal.textContent = runtime.totalPages > 0 ? String(runtime.totalPages) : "正在生成";
+  jumpInput.max = runtime.totalPages > 0 ? String(runtime.totalPages) : "";
+  jumpInput.value = runtime.currentPage > 0 ? String(runtime.currentPage) : "1";
+  const bodyPosition = runtime.bookId ? learningReadingProgress(runtime.bookId, runtime.book, runtime.cfi) : null;
+  if (bodyPosition) {
+    requireElement<HTMLElement>(jumpDialog, ".jump-card-header strong").textContent = "跳转到正文位置";
+    jumpTotal.textContent = String(bodyPosition.total);
+    jumpInput.max = String(bodyPosition.total);
+    jumpInput.value = String(bodyPosition.position);
+  }
+  jumpDialog.classList.add("visible");
+  jumpDialog.setAttribute("aria-hidden", "false");
+  window.requestAnimationFrame(() => {
+    jumpInput.focus();
+    jumpInput.select();
+  });
+}
+
+function buildPaneShells(): void {
+  readerGrid.innerHTML = Array.from({ length: MAX_PANES }, (_, index) => `
+    <article class="reader-pane" data-pane-index="${index}">
+      <header class="pane-header">
+        <span class="pane-number">${index + 1}</span>
+        <div class="pane-book-meta">
+          <strong>空白阅读窗格</strong>
+          <span>从左侧书库选择一本书</span>
+        </div>
+        <label class="pane-reading-mode"><span class="sr-only">阅读方式</span><select aria-label="这本书的阅读方式"><option value="paged">翻页</option><option value="scroll">连续滚动</option></select></label>
+        <label class="pane-page-mode" title="这本书同屏显示的页数">
+          <span>同屏</span>
+          <select aria-label="这本书的同屏页数">
+            <option value="0">自动</option>
+            ${Array.from({ length: 10 }, (_, pageIndex) => `<option value="${pageIndex + 1}">${pageIndex + 1} 页</option>`).join("")}
+          </select>
+        </label>
+        <button class="icon-button pane-close" type="button" title="关闭这本书" aria-label="关闭这本书">${icons.close}</button>
+      </header>
+      <div class="pane-stage">
+        <div class="empty-pane">
+          <div class="empty-mark">${icons.book}</div>
+          <strong>把一本书放到这里</strong>
+          <span>点击工具栏中的书库按钮</span>
+          <button type="button" class="empty-library-button">浏览本地书库</button>
+        </div>
+        <div class="pane-loading"><span></span><em>正在排版…</em></div>
+        <div class="pane-load-failure" role="status"><strong>这次未能打开内容</strong><p>原书籍、位置和个人记录仍在。检查连接或文件后可以重试。</p><button class="retry-book" type="button">重试打开</button><button class="empty-library-button" type="button">回到书库</button></div>
+        <div class="epub-host" id="epub-host-${index}"></div>
+        <div class="annotation-layer" data-pane-index="${index}" aria-label="自由笔记与涂鸦画布">
+          <svg class="drawing-layer" aria-hidden="true"></svg>
+          <div class="free-note-layer"></div>
+        </div>
+        <button class="page-hotspot page-hotspot-prev" type="button" aria-label="上一页">${icons.back}</button>
+        <button class="page-hotspot page-hotspot-group-prev" type="button" title="连翻 N 页（按这本书当前的同屏页数）" aria-label="连翻 N 页，按这本书当前的同屏页数后退一组">${icons.groupBack}<span class="hotspot-count">1</span></button>
+        <button class="page-hotspot page-hotspot-next" type="button" aria-label="下一页">${icons.forward}</button>
+        <button class="page-hotspot page-hotspot-group-next" type="button" title="连翻 N 页（按这本书当前的同屏页数）" aria-label="连翻 N 页，按这本书当前的同屏页数前进一组">${icons.groupForward}<span class="hotspot-count">1</span></button>
+      </div>
+      <footer class="pane-footer">
+        <button class="page-label page-jump-button" type="button" title="点击跳转（G）">尚未打开</button>
+        <div class="progress-track"><span></span></div>
+        <div class="percent-label">0%</div>
+      </footer>
+    </article>
+  `).join("");
+}
+
+function paneElement(index: number): HTMLElement {
+  const element = readerGrid.querySelector<HTMLElement>(
+    `.reader-pane[data-pane-index="${index}"]`,
+  );
+  if (!element) throw new Error(`阅读窗格 ${index + 1} 不存在`);
+  return element;
+}
+
+function destroyRuntime(index: number, preserveBookId = true, savePosition=true): void {
+  const runtime = runtimes[index];
+  if(progressSaveTimers[index]!==null){clearTimeout(progressSaveTimers[index]!);progressSaveTimers[index]=null;}
+  const last=savePosition?makePaneProgress(index):null;if(last)void writePaneProgress(index,last).catch(error=>showToast(String(error),'error'));
+  runtime.finishOpening?.();runtime.opening=null;runtime.finishOpening=null;
+  runtime.generation += 1;
+  runtime.resizeObserver?.disconnect();
+  runtime.resizeObserver = null;
+  if (runtime.resizeTimer !== null) window.clearTimeout(runtime.resizeTimer);
+  runtime.resizeTimer = null;
+  if (runtime.resizeFrame !== null) window.cancelAnimationFrame(runtime.resizeFrame);
+  runtime.resizeFrame = null;
+  runtime.resizeActive = false;
+  runtime.resizeAnchorCfi = null;
+  runtime.layoutAnchorCfi = null;
+  runtime.pendingStageWidth = 0;
+  runtime.pendingStageHeight = 0;
+  runtime.paginationGeneration += 1;
+  if (runtime.paginationTimer !== null) window.clearTimeout(runtime.paginationTimer);
+  runtime.paginationTimer = null;
+  if (runtime.atomicFitFrame !== null) window.cancelAnimationFrame(runtime.atomicFitFrame);
+  runtime.atomicFitFrame = null;
+  runtime.rendition?.destroy();
+  runtime.book?.destroy();
+  runtime.rendition = null;
+  runtime.book = null;
+  runtime.currentPage = 0;
+  runtime.endPage = 0;
+  runtime.totalPages = 0;
+  runtime.lazyPageCount = 0;
+  runtime.percent = 0;
+  runtime.cfi = null;
+  runtime.pageMode = 0;
+  runtime.readingMode = 'paged';
+  runtime.actualPageCount = 1;
+  runtime.effectiveFontScale = 100;
+  runtime.layoutWidth = 0;
+  runtime.layoutHeight = 0;
+  runtime.viewportWidth = 0;
+  runtime.viewportHeight = 0;
+  runtime.viewportScale = 1;
+  runtime.restoringLocation = false;
+  pendingSelections[index] = null;
+  if (!preserveBookId) runtime.bookId = null;
+  const host = paneElement(index).querySelector<HTMLElement>(".epub-host");
+  if (host) host.replaceChildren();
+  const overlay = annotationOverlay(index);
+  overlay?.querySelector(".drawing-layer")?.replaceChildren();
+  overlay?.querySelector(".free-note-layer")?.replaceChildren();
+}
+
+function updatePaneHeader(index: number): void {
+  const pane = paneElement(index);
+  const runtime = runtimes[index];
+  const book = getBook(runtime.bookId);
+  const title = pane.querySelector<HTMLElement>(".pane-book-meta strong");
+  const subtitle = pane.querySelector<HTMLElement>(".pane-book-meta span");
+  const pageSelect = pane.querySelector<HTMLSelectElement>(".pane-page-mode select");
+  pane.dataset.readingMode = runtime.readingMode;
+  const modeSelect=pane.querySelector<HTMLSelectElement>('.pane-reading-mode select');
+  if(modeSelect){modeSelect.value=runtime.readingMode;modeSelect.disabled=!book||Boolean(book.lazyPages);}
+  const groupPrev = pane.querySelector<HTMLButtonElement>(".page-hotspot-group-prev");
+  const groupNext = pane.querySelector<HTMLButtonElement>(".page-hotspot-group-next");
+  if (title) title.textContent = book?.title ?? "空白阅读窗格";
+  if (subtitle)
+    subtitle.textContent = book
+      ? editionHeld(book.id) ? "版本已变化 · 原位置与批注待核对" : `${book.author} · ${book.catalogSource ? /^https?:\/\//.test(book.path)?"按章取得内容":"本机正文 · 资料按需取得" : book.lazyPages ? "按需加载 EPUB" : "本机书籍"}`
+      : "从左侧书库选择一本书";
+  if (pageSelect) {
+    const mode = pageModeForBook(book?.id ?? null);
+    runtime.pageMode = mode;
+    pageSelect.value = String(mode);
+    pageSelect.disabled = !book || runtime.readingMode === 'scroll';
+    const autoOption = pageSelect.querySelector<HTMLOptionElement>('option[value="0"]');
+    if (autoOption) autoOption.textContent = `自动 · ${runtime.actualPageCount} 页`;
+    pageSelect.title = mode === 0
+      ? `当前由窗口宽度自动显示 ${runtime.actualPageCount} 页，排版字号 ${Math.round(runtime.effectiveFontScale)}%`
+      : `固定同屏显示 ${mode} 页；排版字号 ${Math.round(runtime.effectiveFontScale)}%，窗口画布等比缩放 ${Math.round(runtime.viewportScale * 100)}%，拖动窗口不重新分页`;
+  }
+  const groupSize = Math.max(1, runtime.actualPageCount);
+  if (groupPrev) {
+    groupPrev.title = `连翻 ${groupSize} 页`;
+    groupPrev.setAttribute("aria-label", `连翻 ${groupSize} 页，后退一个完整页组`);
+    const count = groupPrev.querySelector<HTMLElement>(".hotspot-count");
+    if (count) count.textContent = String(groupSize);
+  }
+  if (groupNext) {
+    groupNext.title = `连翻 ${groupSize} 页`;
+    groupNext.setAttribute("aria-label", `连翻 ${groupSize} 页，前进一个完整页组`);
+    const count = groupNext.querySelector<HTMLElement>(".hotspot-count");
+    if (count) count.textContent = String(groupSize);
+  }
+  pane.classList.toggle("has-book", Boolean(book));
+  pane.classList.toggle("active", index === snapshot.session.activePane);
+  pane.classList.toggle("hidden-pane", index >= snapshot.session.paneCount);
+}
+
+function updatePaneProgress(index: number): void {
+  const pane = paneElement(index);
+  const runtime = runtimes[index];
+  const pageLabel = pane.querySelector<HTMLElement>(".page-label");
+  const percentLabel = pane.querySelector<HTMLElement>(".percent-label");
+  const progressBar = pane.querySelector<HTMLElement>(".progress-track span");
+  const percent = Math.min(1, Math.max(0, runtime.percent || 0));
+  if (pageLabel) {
+    pageLabel.textContent = runtime.bookId
+      ? runtime.totalPages > 0
+        ? runtime.endPage > runtime.currentPage
+          ? `第 ${Math.max(1, runtime.currentPage)}–${runtime.endPage} / ${runtime.totalPages} 页`
+          : `第 ${Math.max(1, runtime.currentPage)} / ${runtime.totalPages} 页`
+        : "正在生成页码…"
+      : "尚未打开";
+    if (runtime.book && (runtime.readingMode==='scroll'||linearSectionCount(runtime.book) > 1)) {
+      pageLabel.textContent = runtime.book.locations.length() > 0
+        ? `阅读位置 ${Math.max(1, runtime.currentPage)} / ${runtime.totalPages}`
+        : "正在建立全书位置索引…";
+    }
+  }
+  if (percentLabel) percentLabel.textContent = `${(percent * 100).toFixed(1)}%`;
+  if (progressBar) progressBar.style.width = `${percent * 100}%`;
+  const studyPosition = runtime.bookId ? learningReadingProgress(runtime.bookId, runtime.book, runtime.cfi) : null;
+  if (studyPosition) {
+    if (pageLabel) pageLabel.textContent = studyPosition.text;
+    if (percentLabel) percentLabel.textContent = studyPosition.percent === null ? studyPosition.kind==='reference'?"资料阅读":"已保存位置" : `${(studyPosition.percent * 100).toFixed(1)}%`;
+    if (progressBar) progressBar.style.width = studyPosition.percent === null ? "0%" : `${studyPosition.percent * 100}%`;
+  }
+}
+
+function updateActiveUi(): void {
+  refreshLearningButton();
+  const activeBookId = snapshot.session.paneBookIds[snapshot.session.activePane] ?? null;
+  activeTitle.textContent = getBook(activeBookId)?.title ?? "尚未打开书籍";
+  activeTitle.title = getBook(activeBookId)?.path ?? "当前选中的阅读窗格";
+  readerGrid
+    .querySelectorAll<HTMLElement>(".reader-pane")
+    .forEach((pane, index) => pane.classList.toggle("active", index === snapshot.session.activePane));
+  if (annotationPanel.classList.contains("visible")) renderAnnotationPanel();
+}
+
+function updateLayoutUi(): void {
+  readerGrid.className = `reader-grid panes-${snapshot.session.paneCount}`;
+  readerGrid.dataset.panes = String(snapshot.session.paneCount);
+  for (let index = 0; index < MAX_PANES; index += 1) updatePaneHeader(index);
+  app.querySelectorAll<HTMLButtonElement>("[data-pane-count]").forEach((button) => {
+    button.classList.toggle(
+      "selected",
+      Number(button.dataset.paneCount) === snapshot.session.paneCount,
+    );
+  });
+  updateActiveUi();
+}
+
+function sessionPayload(): ReaderSession {
+  return {
+    ...snapshot.session,
+    paneBookIds: snapshot.session.paneBookIds.slice(0, MAX_PANES),
+  };
+}
+
+function persistSession(): void {
+  if (sessionSaveTimer !== null) window.clearTimeout(sessionSaveTimer);
+  sessionSaveTimer = window.setTimeout(() => {
+    void invoke("save_session", { session: sessionPayload() }).catch((error) =>
+      showToast(String(error), "error"),
+    );
+  }, 180);
+}
+
+function makePaneProgress(index:number):{bookId:string;progress:BookProgress}|null{
+  const runtime = runtimes[index];
+  if(!runtime.bookId||editionHeld(runtime.bookId)||runtime.restoringLocation||(!runtime.cfi&&!runtime.lazyPageCount))return null;
+    const existing = snapshot.progress[runtime.bookId];
+    const bodyMetric = learningReadingProgress(runtime.bookId, runtime.book, runtime.cfi);
+    const readingMetric: import('./reading-progress').ReadingMetric | null = bodyMetric
+      ? {kind: bodyMetric.kind, position: bodyMetric.position, total: bodyMetric.total, percent: bodyMetric.percent}
+      : runtime.book && linearSectionCount(runtime.book) > 1 && runtime.book.locations.length() === 0
+        ? existing?.readingMetric ?? null
+        : runtime.totalPages > 0 ? {
+          kind: runtime.lazyPageCount > 0 || runtime.readingMode==='paged' && (runtime.book?.spine as InternalSpine)?.spineItems?.length === 1 ? 'page' : 'position',
+          position: runtime.currentPage, total: runtime.totalPages, percent: runtime.percent,
+        } : existing?.readingMetric ?? null;
+    const progress: BookProgress = {
+      ...existing,
+      readingMode: runtime.readingMode,
+      readingMetric,
+      sourceSha256:sourceDigests.get(runtime.bookId)??existing?.sourceSha256??null,
+      cfi: runtime.lazyPageCount > 0 ? null : runtime.cfi ?? existing?.cfi ?? null,
+      page: runtime.currentPage || existing?.page || 0,
+      totalPages: runtime.totalPages || existing?.totalPages || 0,
+      percent: runtime.lazyPageCount > 0
+        ? runtime.percent
+        : runtime.cfi
+          ? runtime.percent
+          : existing?.percent ?? 0,
+      updatedAt: Math.floor(Date.now() / 1000),
+      pageMode: runtime.pageMode,
+      annotations: existing?.annotations ?? [],
+    };
+    return {bookId:runtime.bookId,progress:structuredClone(progress)};
+}
+function writePaneProgress(index:number,value:{bookId:string;progress:BookProgress}):Promise<void>{
+    snapshot.progress[value.bookId] = value.progress;
+    renderLibrary(searchInput.value);
+    const write=progressWrites[index].catch(()=>{}).then(()=>invoke<void>('save_progress',value));progressWrites[index]=write;return write;
+}
+function savePaneProgress(index:number,delay=240):void{
+  if(progressSaveTimers[index]!==null)clearTimeout(progressSaveTimers[index]!);
+  const generation=runtimes[index].generation;
+  progressSaveTimers[index]=window.setTimeout(()=>{progressSaveTimers[index]=null;if(generation!==runtimes[index].generation)return;const value=makePaneProgress(index);if(value)void writePaneProgress(index,value).catch(error=>showToast(String(error),'error'));},delay);
+}
+
+function themeRules(theme: ThemeName): Record<string, Record<string, string>> {
+  const palette = {
+    paper: {
+      background: "#f8f3e9",
+      text: "#2d2923",
+      muted: "#766d61",
+      accent: "#a85d3b",
+      surface: "#f0e8dc",
+      border: "#cfc2b0",
+      rule: "#d7cbbb",
+    },
+    light: {
+      background: "#ffffff",
+      text: "#20242a",
+      muted: "#66707b",
+      accent: "#476e91",
+      surface: "#f3f6f8",
+      border: "#cbd3da",
+      rule: "#d8dee4",
+    },
+    night: {
+      background: "#1b1e23",
+      text: "#d8d2c9",
+      muted: "#aaa49b",
+      accent: "#e0a077",
+      surface: "#23272e",
+      border: "#4a5059",
+      rule: "#353a42",
+    },
+    contrast: { background:"#08090b", text:"#ffffff", muted:"#e0e0e0", accent:"#ffe29a", surface:"#16191f", border:"#929292", rule:"#aaaaaa" },
+  }[theme];
+  const rules: Record<string, Record<string, string>> = {
+    html: {
+      "background-color": `${palette.background} !important`,
+      color: `${palette.text} !important`,
+      "color-scheme": `${(theme === "night" || theme === "contrast") ? "dark" : "light"} !important`,
+    },
+    body: {
+      "background-color": `${palette.background} !important`,
+      color: `${palette.text} !important`,
+      "font-family": `${readingFontFamily()} !important`,
+      "--reader-font-body": readingFontFamily(),
+      "line-height": `${snapshot.session.lineHeight??1.72} !important`,
+      "padding-left": "1em !important",
+      "padding-right": "1em !important",
+      "box-sizing": "border-box !important",
+      "column-rule": `1px solid ${palette.rule} !important`,
+    },
+    "h1, h2, h3, h4, h5, h6": {
+      color: `${palette.text} !important`,
+      "line-height": "1.3 !important",
+      "break-after": "avoid-column !important",
+      "page-break-after": "avoid !important",
+    },
+    blockquote: {
+      color: `${palette.muted} !important`,
+      "background-color": `${palette.surface} !important`,
+      "border-left-color": `${palette.accent} !important`,
+    },
+    figcaption: { color: `${palette.muted} !important` },
+    "a, a:visited": { color: "inherit !important", "text-decoration-color": `${palette.accent} !important` },
+    "pre, code": {
+      "white-space": "pre-wrap !important",
+      "overflow-wrap": "anywhere !important",
+      color: `${palette.text} !important`,
+      "background-color": `${palette.surface} !important`,
+      "border-color": `${palette.border} !important`,
+    },
+    "menclose.comfortable-math-box, menclose[notation~='box']": {
+      display: "inline-block !important",
+      border: ".075em solid currentColor !important",
+      padding: ".12em .3em !important",
+      "box-sizing": "border-box !important",
+    },
+    "img, svg, video": {
+      "max-width": "100% !important",
+      height: "auto !important",
+      "break-inside": "avoid-column !important",
+      "page-break-inside": "avoid !important",
+    },
+    "figure, table, pre, .math-block, .math-display, .MathJax_Display, .katex-display, math[display='block']": {
+      "break-inside": "avoid-column !important",
+      "page-break-inside": "avoid !important",
+    },
+    "table, tr, thead, tbody": {
+      "break-inside": "avoid-column !important",
+      "page-break-inside": "avoid !important",
+    },
+    table: {
+      "max-width": "100% !important",
+      "border-collapse": "collapse !important",
+      "background-color": "transparent !important",
+      "border-color": `${palette.border} !important`,
+    },
+    "th, td": {
+      color: `${palette.text} !important`,
+      "border-color": `${palette.border} !important`,
+    },
+    th: {
+      "background-color": `${palette.surface} !important`,
+    },
+    hr: {
+      color: `${palette.rule} !important`,
+      "border-color": `${palette.rule} !important`,
+    },
+    ".reader-annotation": {
+      display: "inline !important",
+      margin: "0 !important",
+      padding: "0 !important",
+      "box-decoration-break": "clone !important",
+      "-webkit-box-decoration-break": "clone !important",
+    },
+  };
+  if (theme === "night" || theme === "contrast") {
+    rules["main, article, section, header, footer, nav, aside, div:not(.reader-annotation)"] = {
+      color: `${palette.text} !important`,
+      "background-color": "transparent !important",
+      "border-color": `${palette.border} !important`,
+    };
+    rules["p, li, dt, dd, span:not(.reader-annotation)"] = {
+      color: `${palette.text} !important`,
+      "border-color": `${palette.border} !important`,
+    };
+    rules["mark:not(.reader-annotation)"] = {
+      color: `${palette.text} !important`,
+      "background-color": "rgba(224, 160, 119, 0.2) !important",
+    };
+  }
+
+  if (snapshot.session.readerFont !== "publisher") {
+    rules["p, li, blockquote, h1, h2, h3, h4, h5, h6, td, th, figcaption, .algorithm"] = {
+      ...(rules["p, li, blockquote, h1, h2, h3, h4, h5, h6, td, th, figcaption, .algorithm"] ?? {}),
+      "font-family": `${readingFontFamily()} !important`,
+    };
+  } else { delete rules.body["font-family"]; delete rules.body["--reader-font-body"]; }
+  rules["body:lang(en)"] = { "line-height": `${snapshot.session.lineHeight??1.62} !important`, "hyphens": "auto" };
+  rules["p, li"] = { "orphans": "2", "widows": "2", "word-break": "normal", "overflow-wrap": "break-word" };
+  rules["p:lang(en), li:lang(en)"] = { "text-align": "start !important" };
+  rules["h1, h2, h3, h4, h5, h6"] = { ...rules["h1, h2, h3, h4, h5, h6"], "border-color": `${palette.accent} !important`, "overflow-wrap": "anywhere !important" };
+  rules["h1 a, h2 a, h3 a, h4 a, h5 a, h6 a"] = { "text-decoration": "none !important" };
+  rules["ul, ol"] = { "margin": ".5em 0 !important", "padding-inline-start": "1.25em !important" };
+  rules[".math-inline"] = { "display": "inline !important", "vertical-align": "baseline !important" };
+  rules[".math-inline math"] = { "display": "inline math !important" };
+  rules[".reader-algorithm, .algorithm-cost"] = { "table-layout": "auto !important" };
+  rules["math, math *"] = { "font-family": '"Cambria Math", "STIX Two Math", math !important' };
+  rules["pre, code, kbd, samp"] = { ...rules["pre, code"], "font-family": '"Cascadia Code", Consolas, "Noto Sans SC", monospace !important' };
+  rules[".algorithm, .reader-algorithm"] = { "background-color": `${palette.surface} !important`, "border-color": `${palette.border} !important`, "line-height": "1.4 !important", "break-inside": "auto !important", "page-break-inside": "auto !important" };
+  rules[".algorithm tbody, .reader-algorithm tbody"] = { "break-inside": "auto !important", "page-break-inside": "auto !important" };
+  rules[".algorithm td, .reader-algorithm td"] = { "font-family": 'Cambria, "Noto Serif SC", serif !important', "line-height": "1.4 !important", "vertical-align": "baseline !important", "border": "none !important", "padding-top": ".12em !important", "padding-bottom": ".12em !important", "padding-right": ".3em !important", "overflow-wrap": "break-word !important" };
+  rules[".algorithm td:first-child, .reader-algorithm td:first-child"] = { "width": "2em !important", "min-width": "2em !important", "text-align": "right !important", "padding-left": ".2em !important", "padding-right": ".6em !important", "color": `${palette.muted} !important`, "font-size": ".85em !important" };
+  rules[".algorithm td:last-child, .reader-algorithm td:last-child"] = { "width": "auto !important" };
+  rules[".reader-algorithm .algorithm-title td"] = { "padding": ".55em .3em .4em !important", "text-align": "left !important", "font-weight": "600 !important", "font-size": "1em !important", "color": `${palette.text} !important` };
+  rules[".reader-algorithm .algorithm-comment, .reader-algorithm .algorithm-comment *"] = { "color": `${palette.muted} !important` };
+  rules[".algorithm-cost td:first-child, .algorithm-cost th:first-child"] = { "width": "2em !important", "text-align": "right !important" };
+  rules[".algorithm-cost td:nth-child(3), .algorithm-cost th:nth-child(3)"] = { "width": "3em !important", "text-align": "center !important" };
+  rules[".algorithm-cost td:nth-child(4), .algorithm-cost th:nth-child(4)"] = { "width": "5em !important", "text-align": "center !important" };
+  rules[".algorithm-cost, .algorithm-cost tbody"] = { "break-inside": "auto !important", "page-break-inside": "auto !important" };
+  rules[".algorithm-cost td, .algorithm-cost th"] = { "padding": ".2em .3em !important", "line-height": "1.4 !important" };
+  rules[".algorithm-title"] = { "break-after": "avoid-column !important" };
+  rules[".math-block"] = { "overflow": "visible !important" };
+  rules[".reader-expandable"] = { "cursor": "zoom-in !important" };
+  rules["figcaption"] = { ...rules.figcaption, "font-size": ".88em !important", "line-height": "1.5 !important" };
+  rules[".reader-algorithm .algorithm-case-group"] = { "break-inside": "avoid-column !important", "page-break-inside": "avoid !important" };
+  rules[".reader-algorithm td.algorithm-case"] = { "width": "3.5em !important", "min-width": "3.5em !important", "vertical-align": "middle !important", "padding": ".1em .3em !important", "border-inline-start": `.08em solid ${palette.accent} !important` };
+  rules[".reader-algorithm .algorithm-case math *"] = { "color": `${palette.accent} !important` };
+  rules[".reader-algorithm td.algorithm-case-empty"] = { "width": "3.5em !important" };
+  rules["figure.reader-flow-figure, figure.reader-flow-figure figcaption, figure.reader-flow-figure figcaption p"] = { "break-inside": "auto !important", "page-break-inside": "auto !important" };
+  rules["figure.reader-flow-figure img"] = { "break-after": "avoid-column !important", "object-fit": "contain !important" };
+  rules["figure.reader-flow-figure figcaption"] = { "break-before": "avoid-column !important" };
+  rules[".algorithm tr:first-child, .reader-algorithm tr:first-child"] = { "break-after": "avoid-column !important" };
+  rules["figure"] = { "margin": ".8em 0 !important" };
+  rules["figure img"] = { "background": "#faf8f2", "border": `.45em solid ${theme === "night" ? "#c9c3b8" : "#f3ede3"}`, "box-sizing": "border-box", "cursor": "zoom-in" };
+  return rules;
+}
+
+function applyTheme(): void {
+  const theme = snapshot.session.theme;
+  document.documentElement.dataset.theme = theme;
+  document.body.dataset.theme = theme;
+  window.dispatchEvent(new Event('reader-theme-change'));
+  document.documentElement.style.colorScheme = (theme === "night" || theme === "contrast") ? "dark" : "light";
+  shell.dataset.theme = theme;
+  const labels: Record<ThemeName, string> = {
+    paper: "纸张",
+    light: "明亮",
+    night: "夜间",
+    contrast: "高对比",
+  };
+  const order: ThemeName[] = ["paper", "light", "night", "contrast"];
+  const nextTheme = order[(order.indexOf(theme) + 1) % order.length];
+  themeCycleButton.classList.toggle("selected", theme === "night");
+  themeCycleButton.dataset.currentTheme = theme;
+  themeCycleButton.title = `当前：${labels[theme]}；点击切换到${labels[nextTheme]}模式`;
+  themeCycleButton.setAttribute(
+    "aria-label",
+    `当前为${labels[theme]}模式，切换到${labels[nextTheme]}模式`,
+  );
+  for (const runtime of runtimes) {
+    if (!runtime.rendition) continue;
+    for (const contents of visibleContents(runtime.rendition)) applyReadingTheme(contents);
+  }
+}
+
+function applyFontScale(): void {
+  fontScaleLabel.textContent = `${snapshot.session.fontScale}%`;
+  runtimes.forEach((runtime, index) => {
+    if (runtime.rendition || runtime.lazyPageCount > 0) void reflowPane(index, true);
+  });
+}
+
+function rawResponseToBuffer(raw: ArrayBuffer | number[]): ArrayBuffer {
+  if (raw instanceof ArrayBuffer) return raw;
+  if (Array.isArray(raw)) return new Uint8Array(raw).buffer;
+  throw new Error("书籍数据格式无效");
+}
+
+const PAGE_CANVAS_INSET = 2;
+const LIVE_RESIZE_IDLE_MS = 240;
+const PAGE_INFORMATION_GAIN = 1.2;
+
+function availableStageSizeFromDimensions(
+  width: number,
+  height: number,
+): { width: number; height: number } {
+  return {
+    width: Math.max(50, width - PAGE_CANVAS_INSET * 2),
+    height: Math.max(50, height - PAGE_CANVAS_INSET * 2),
+  };
+}
+
+function availableStageSize(stage: HTMLElement): { width: number; height: number } {
+  return availableStageSizeFromDimensions(stage.clientWidth, stage.clientHeight);
+}
+
+function lazyPageEntry(page: number): string {
+  return `OEBPS/images/page-${String(page).padStart(4, "0")}.svg`;
+}
+
+async function loadLazyPage(index: number, page: number): Promise<string> {
+  const runtime = runtimes[index];
+  const cached = runtime.lazyPageUrls.get(page);
+  if (cached) return cached;
+  const pending = runtime.lazyPageLoading.get(page);
+  if (pending) return pending;
+  if (!runtime.bookId || runtime.lazyPageCount <= 0) return "";
+  const generation = runtime.generation;
+  const request = invoke<ArrayBuffer | number[]>("load_book_entry", {
+    bookId: runtime.bookId,
+    entry: lazyPageEntry(page),
+  })
+    .then((raw) => {
+      if (generation !== runtime.generation || runtime.lazyPageCount <= 0) return "";
+      const bytes = rawResponseToBuffer(raw);
+      const url = URL.createObjectURL(new Blob([bytes], { type: "image/svg+xml" }));
+      runtime.lazyPageUrls.set(page, url);
+      return url;
+    })
+    .catch((error) => {
+      showToast(`第 ${page} 页加载失败：${String(error)}`, "error");
+      return "";
+    });
+  runtime.lazyPageLoading.set(page, request);
+  try {
+    return await request;
+  } finally {
+    if (runtime.lazyPageLoading.get(page) === request) runtime.lazyPageLoading.delete(page);
+  }
+}
+
+function evictLazyPages(runtime: PaneRuntime, startPage: number, visibleCount: number): void {
+  const radius = Math.max(4, visibleCount * 2);
+  const first = Math.max(1, startPage - radius);
+  const last = Math.min(runtime.lazyPageCount, startPage + visibleCount - 1 + radius);
+  for (const [page, url] of runtime.lazyPageUrls) {
+    if (page < first || page > last) {
+      URL.revokeObjectURL(url);
+      runtime.lazyPageUrls.delete(page);
+    }
+  }
+}
+
+async function renderLazyPageWindow(index: number, requestedStart: number): Promise<void> {
+  const runtime = runtimes[index];
+  if (runtime.lazyPageCount <= 0) return;
+  const pane = paneElement(index);
+  const host = pane.querySelector<HTMLElement>(".epub-host");
+  const canvas = host?.querySelector<HTMLElement>(".lazy-page-canvas");
+  if (!host || !canvas) return;
+
+  const visibleCount = Math.max(1, runtime.actualPageCount);
+  const startPage = Math.min(runtime.lazyPageCount, Math.max(1, Math.round(requestedStart)));
+  const renderGeneration = ++runtime.lazyPageGeneration;
+  runtime.currentPage = startPage;
+  runtime.endPage = Math.min(runtime.lazyPageCount, startPage + visibleCount - 1);
+  runtime.totalPages = runtime.lazyPageCount;
+  runtime.percent = runtime.lazyPageCount > 1
+    ? (startPage - 1) / (runtime.lazyPageCount - 1)
+    : 0;
+  updatePaneProgress(index);
+
+  const pageWidth = runtime.layoutWidth / visibleCount;
+  canvas.style.setProperty("--lazy-page-width", `${pageWidth}px`);
+  canvas.replaceChildren();
+  const slots: Array<{ page: number; slot: HTMLElement; image: HTMLImageElement }> = [];
+  for (let offset = 0; offset < visibleCount; offset += 1) {
+    const page = startPage + offset;
+    const slot = document.createElement("div");
+    slot.className = "lazy-page-slot";
+    slot.dataset.page = String(page);
+    const image = document.createElement("img");
+    image.alt = page <= runtime.lazyPageCount ? `第 ${page} 页` : "空白页";
+    if (page <= runtime.lazyPageCount) {
+      slot.append(image);
+      slots.push({ page, slot, image });
+    }
+    canvas.append(slot);
+  }
+
+  const prefetchRadius = Math.max(4, visibleCount * 2);
+  const prefetchFirst = Math.max(1, startPage - prefetchRadius);
+  const prefetchLast = Math.min(
+    runtime.lazyPageCount,
+    startPage + visibleCount - 1 + prefetchRadius,
+  );
+  const pages = Array.from({ length: prefetchLast - prefetchFirst + 1 }, (_, offset) =>
+    prefetchFirst + offset,
+  );
+  await Promise.all(pages.map((page) => loadLazyPage(index, page)));
+  if (renderGeneration !== runtime.lazyPageGeneration || runtime.generation <= 0) return;
+  for (const entry of slots) {
+    const url = runtime.lazyPageUrls.get(entry.page);
+    if (url) entry.image.src = url;
+    else entry.slot.classList.add("lazy-page-error");
+  }
+  evictLazyPages(runtime, startPage, visibleCount);
+  pane.classList.remove("loading");
+  updatePaneProgress(index);
+  savePaneProgress(index, 0);
+  renderOverlayAnnotations(index);
+}
+
+async function openLazyPageBook(
+  index: number,
+  generation: number,
+  pageCount: number,
+  saved: BookProgress | undefined,
+  stage: HTMLElement,
+  host: HTMLElement,
+): Promise<void> {
+  const runtime = runtimes[index];
+  await waitForStableStage(stage);
+  if (generation !== runtime.generation) return;
+  runtime.lazyPageCount = pageCount;
+  runtime.rendition = null;
+  runtime.book = null;
+  runtime.cfi = null;
+  runtime.pageMode = pageModeForBook(runtime.bookId);
+  const available = availableStageSize(stage);
+  runtime.actualPageCount = runtime.pageMode > 0
+    ? runtime.pageMode
+    : automaticPageCountForWidth(available.width);
+  runtime.layoutWidth = available.width;
+  runtime.layoutHeight = available.height;
+  host.replaceChildren();
+  const canvas = document.createElement("div");
+  canvas.className = "lazy-page-canvas";
+  host.append(canvas);
+  positionRenditionCanvas(index);
+  updatePaneHeader(index);
+  const savedPage = Math.max(1, Number(saved?.page) || 1);
+  await renderLazyPageWindow(index, savedPage);
+  if (generation !== runtime.generation) return;
+  paneElement(index).classList.remove("loading");
+  runtime.resizeObserver = new ResizeObserver((entries) => {
+    const rect = entries[0]?.contentRect;
+    scheduleLiveViewportScale(
+      index,
+      rect?.width ?? stage.clientWidth,
+      rect?.height ?? stage.clientHeight,
+    );
+  });
+  runtime.resizeObserver.observe(stage);
+  updatePaneProgress(index);
+}
+
+async function waitForStableStage(stage: HTMLElement, quietMs = 360, maxMs = 2600): Promise<void> {
+  const started = performance.now();
+  let stableSince = started;
+  let lastWidth = stage.clientWidth;
+  let lastHeight = stage.clientHeight;
+  while (performance.now() - started < maxMs) {
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 80));
+    const width = stage.clientWidth;
+    const height = stage.clientHeight;
+    if (Math.abs(width - lastWidth) > 1 || Math.abs(height - lastHeight) > 1) {
+      lastWidth = width;
+      lastHeight = height;
+      stableSince = performance.now();
+      continue;
+    }
+    if (width >= 50 && height >= 50 && performance.now() - stableSince >= quietMs) return;
+  }
+}
+
+function automaticPageCountForWidth(width: number): number {
+  const idealPageWidth = 400 * Math.pow(snapshot.session.fontScale / 100, 0.35);
+  return Math.min(10, Math.max(1, Math.floor((width + 18) / (idealPageWidth + 18))));
+}
+
+function automaticPageCount(host: HTMLElement): number {
+  return automaticPageCountForWidth(host.clientWidth);
+}
+
+function densityPreservingFontScale(runtime: PaneRuntime, host: HTMLElement): number {
+  if(runtime.readingMode==='scroll')return snapshot.session.fontScale;
+  const referencePageCount = automaticPageCount(host);
+  const selectedPageCount = Math.max(1, runtime.actualPageCount);
+  // Page capacity is approximately area / fontSize². Scaling by the square
+  // root of the page-area ratio keeps capacity stable across 1–10 pages. The
+  // additional 1/sqrt(1.2) factor adds about 20% more information to every
+  // logical page without making 10-page mode disproportionately sparse.
+  const densityFactor = Math.sqrt(
+    referencePageCount / (selectedPageCount * PAGE_INFORMATION_GAIN),
+  );
+  return Math.min(220, Math.max(16, snapshot.session.fontScale * densityFactor));
+}
+
+function applyAdaptiveFontScale(index: number, host: HTMLElement): void {
+  const runtime = runtimes[index];
+  if (!runtime.rendition) return;
+  runtime.effectiveFontScale = densityPreservingFontScale(runtime, host);
+  // Absolute CSS pixels avoid Chromium clamping small percentage fonts to its
+  // minimum logical font size; the density contract uses a 16px reference.
+  runtime.rendition.themes.fontSize(`${18 * runtime.effectiveFontScale / 100}px`);
+}
+
+function positionRenditionCanvas(
+  index: number,
+  measuredStage?: { width: number; height: number },
+): void {
+  const runtime = runtimes[index];
+  const pane = paneElement(index);
+  const stage = pane.querySelector<HTMLElement>(".pane-stage");
+  const host = pane.querySelector<HTMLElement>(".epub-host");
+  const annotationLayer = pane.querySelector<HTMLElement>(".annotation-layer");
+  if (!stage || !host || !annotationLayer || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) return;
+
+  const stageWidth = measuredStage?.width ?? stage.clientWidth;
+  const stageHeight = measuredStage?.height ?? stage.clientHeight;
+  const available = availableStageSizeFromDimensions(stageWidth, stageHeight);
+  // Native window dragging never changes EPUB geometry. Every mode temporarily
+  // keeps its logical canvas and uses a compositor-only uniform transform, so
+  // the leftmost page anchor cannot move and no edge page can be cut in half.
+  const scale = Math.min(
+    available.width / runtime.layoutWidth,
+    available.height / runtime.layoutHeight,
+  );
+  const safeScale = Math.max(0.05, scale);
+  // Pin the first page to a constant top-left safe inset. Re-centering on every
+  // resize frame makes text move vertically and horizontally while it scales,
+  // which feels like trembling when the left window border is dragged.
+  const offsetX = PAGE_CANVAS_INSET;
+  const offsetY = PAGE_CANVAS_INSET;
+  const logicalWidth = `${runtime.layoutWidth}px`;
+  const logicalHeight = `${runtime.layoutHeight}px`;
+  const transform = `translate3d(${offsetX}px, ${offsetY}px, 0) scale(${safeScale})`;
+
+  // Avoid redundant layout writes in the ResizeObserver hot path. Width and
+  // height change only on an intentional repagination; live dragging updates
+  // one composited transform property per animation frame.
+  for (const canvas of [host, annotationLayer]) {
+    if (canvas.style.width !== logicalWidth) canvas.style.width = logicalWidth;
+    if (canvas.style.height !== logicalHeight) canvas.style.height = logicalHeight;
+    if (canvas.style.left !== "0px") canvas.style.left = "0px";
+    if (canvas.style.top !== "0px") canvas.style.top = "0px";
+    if (canvas.style.right !== "auto") canvas.style.right = "auto";
+    if (canvas.style.bottom !== "auto") canvas.style.bottom = "auto";
+    if (canvas.style.transformOrigin !== "top left") canvas.style.transformOrigin = "top left";
+    if (canvas.style.transform !== transform) canvas.style.transform = transform;
+  }
+
+  runtime.viewportWidth = available.width;
+  runtime.viewportHeight = available.height;
+  runtime.viewportScale = safeScale;
+}
+
+function scheduleLiveViewportScale(
+  index: number,
+  width: number,
+  height: number,
+): void {
+  const runtime = runtimes[index];
+  if (!runtime.rendition && runtime.lazyPageCount <= 0) return;
+  const pane = paneElement(index);
+  if (!runtime.resizeActive) {
+    runtime.resizeActive = true;
+    runtime.resizeAnchorCfi = runtime.readingMode==='scroll' ? firstVisibleContentCfi(index)??runtime.cfi : runtime.pageMode===0 ? runtime.layoutAnchorCfi??runtime.cfi : runtime.cfi;
+    pane.classList.add("live-resizing");
+  }
+  runtime.pendingStageWidth = width;
+  runtime.pendingStageHeight = height;
+
+  if (runtime.resizeFrame === null) {
+    runtime.resizeFrame = window.requestAnimationFrame(() => {
+      runtime.resizeFrame = null;
+      positionRenditionCanvas(index, {
+        width: runtime.pendingStageWidth,
+        height: runtime.pendingStageHeight,
+      });
+    });
+  }
+
+  if (runtime.resizeTimer !== null) window.clearTimeout(runtime.resizeTimer);
+  runtime.resizeTimer = window.setTimeout(() => {
+    runtime.resizeTimer = null;
+    if (runtime.resizeFrame !== null) {
+      window.cancelAnimationFrame(runtime.resizeFrame);
+      runtime.resizeFrame = null;
+      positionRenditionCanvas(index, {
+        width: runtime.pendingStageWidth,
+        height: runtime.pendingStageHeight,
+      });
+    }
+    const preservedAnchor = runtime.resizeAnchorCfi;
+    runtime.resizeActive = false;
+    if (preservedAnchor) runtime.cfi = preservedAnchor;
+    runtime.resizeAnchorCfi = null;
+    pane.classList.remove("live-resizing");
+    updatePaneHeader(index);
+    // Live dragging scales the existing canvas. Automatic mode adapts only
+    // once the resize settles, restoring the text anchor through the reflow.
+    if ((runtime.readingMode==='scroll'||runtime.pageMode === 0) && (Math.abs(runtime.layoutWidth - runtime.viewportWidth) > 2 || Math.abs(runtime.layoutHeight - runtime.viewportHeight) > 2)) {
+      if(runtime.readingMode==='scroll')runtime.layoutAnchorCfi=preservedAnchor;
+      void reflowPane(index, true);
+    }
+  }, LIVE_RESIZE_IDLE_MS);
+}
+
+const ATOMIC_BLOCK_SELECTOR = [
+  "figure",
+  "table",
+  "pre",
+  ".math-block",
+  ".math-display",
+  ".MathJax_Display",
+  ".katex-display",
+  "math[display='block']",
+  "img",
+  "svg",
+  "video",
+].join(", ");
+
+function visibleContents(rendition: Rendition): EpubContents[] {
+  const contents = rendition.getContents() as unknown as EpubContents | EpubContents[];
+  return Array.isArray(contents) ? contents : contents ? [contents] : [];
+}
+
+function ensureBookProgress(bookId: string, paneIndex: number): BookProgress {
+  const runtime = runtimes[paneIndex];
+  const existing = snapshot.progress[bookId];
+  if (existing) {
+    if (!Array.isArray(existing.annotations)) existing.annotations = [];
+    return existing;
+  }
+  const created: BookProgress = {
+    cfi: runtime.cfi,
+    page: runtime.currentPage,
+    totalPages: runtime.totalPages,
+    percent: runtime.percent,
+    updatedAt: Math.floor(Date.now() / 1000),
+    pageMode: runtime.pageMode,
+    annotations: [],
+  };
+  snapshot.progress[bookId] = created;
+  return created;
+}
+
+function annotationPage(runtime: PaneRuntime, progression: number): number {
+  const total = Math.max(1, runtime.totalPages);
+  return total > 1 ? 1 + Math.round(clampNumber(progression, 0, 1, 0) * (total - 1)) : 1;
+}
+
+function progressionForSlot(runtime: PaneRuntime, slot: number): number {
+  const total = Math.max(1, runtime.totalPages);
+  const page = Math.min(total, Math.max(1, (runtime.currentPage || 1) + slot));
+  return total > 1 ? (page - 1) / (total - 1) : runtime.percent;
+}
+
+function hexToRgba(hex: string, alpha: number): string {
+  const safe = safeAnnotationColor(hex).slice(1);
+  const red = Number.parseInt(safe.slice(0, 2), 16);
+  const green = Number.parseInt(safe.slice(2, 4), 16);
+  const blue = Number.parseInt(safe.slice(4, 6), 16);
+  return `rgba(${red}, ${green}, ${blue}, ${alpha})`;
+}
+
+function setTextAnnotationStyle(span: HTMLSpanElement, annotation: TextAnnotation): void {
+  span.style.fontFamily = annotation.fontFamily;
+  span.style.fontSize = `${annotation.fontSize / 100}em`;
+  if (annotation.highlight) span.style.backgroundColor = hexToRgba(annotation.color, 0.3);
+  if (annotation.bold) span.style.fontWeight = "750";
+  if (annotation.wave || annotation.underline) {
+    span.style.textDecorationLine = "underline";
+    span.style.textDecorationStyle = annotation.wave ? "wavy" : "solid";
+    span.style.textDecorationColor = annotation.color;
+    span.style.textDecorationThickness = annotation.wave ? "1.5px" : "1.2px";
+    span.style.textUnderlineOffset = "0.16em";
+  }
+  if (annotation.box) {
+    span.style.outline = `1.5px solid ${annotation.color}`;
+    span.style.outlineOffset = "1px";
+    span.style.borderRadius = "2px";
+  }
+  span.title = annotation.comment || annotation.selectedText;
+}
+
+function wrapTextRange(range: Range, annotation: TextAnnotation): void {
+  const document = range.startContainer.ownerDocument;
+  if (!document || range.collapsed) return;
+  const common = range.commonAncestorContainer;
+  const root = common.nodeType === Node.TEXT_NODE ? common.parentElement : common as Element;
+  if (!root) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes: Text[] = [];
+  let current = walker.nextNode();
+  while (current) {
+    const textNode = current as Text;
+    try {
+      if (textNode.data.length > 0 && range.intersectsNode(textNode)) nodes.push(textNode);
+    } catch {
+      // Detached nodes can disappear while epub.js rotates continuous views.
+    }
+    current = walker.nextNode();
+  }
+
+  for (const node of nodes) {
+    if (node.parentElement?.closest(`[data-reader-annotation="${CSS.escape(annotation.id)}"]`)) continue;
+    let start = node === range.startContainer ? range.startOffset : 0;
+    let end = node === range.endContainer ? range.endOffset : node.data.length;
+    start = Math.max(0, Math.min(start, node.data.length));
+    end = Math.max(start, Math.min(end, node.data.length));
+    if (end <= start) continue;
+    if (end < node.data.length) node.splitText(end);
+    const selectedNode = start > 0 ? node.splitText(start) : node;
+    const parent = selectedNode.parentNode;
+    if (!parent) continue;
+    const span = document.createElement("span");
+    span.className = "reader-annotation";
+    span.dataset.readerAnnotation = annotation.id;
+    setTextAnnotationStyle(span, annotation);
+    parent.insertBefore(span, selectedNode);
+    span.appendChild(selectedNode);
+  }
+}
+
+function applyTextAnnotations(index: number): void {
+  const runtime = runtimes[index];
+  const rendition = runtime.rendition;
+  if (!rendition || !runtime.bookId||editionHeld(runtime.bookId)) return;
+  const marks = annotationsForBook(runtime.bookId).filter(
+    (annotation): annotation is TextAnnotation => annotation.kind === "text-mark",
+  );
+  for (const annotation of marks) {
+    const alreadyApplied = visibleContents(rendition).some((contents) =>
+      Array.from(contents.document.querySelectorAll<HTMLElement>("[data-reader-annotation]"))
+        .some((element) => element.dataset.readerAnnotation === annotation.id),
+    );
+    if (alreadyApplied) continue;
+    try {
+      const range = rendition.getRange(annotation.cfiRange, "reader-annotation");
+      if (range) { wrapTextRange(range, annotation); if(range.startContainer.ownerDocument)singleSectionPageCounts.delete(range.startContainer.ownerDocument); }
+    } catch {
+      // A CFI outside the currently mounted section is applied when that view renders.
+    }
+  }
+}
+
+function removeVisibleTextAnnotation(index: number, annotationId: string): void {
+  const rendition = runtimes[index].rendition;
+  if (!rendition) return;
+  for (const contents of visibleContents(rendition)) {
+    const spans = Array.from(contents.document.querySelectorAll<HTMLSpanElement>("[data-reader-annotation]"))
+      .filter((span) => span.dataset.readerAnnotation === annotationId);
+    for (const span of spans) {
+      const parent = span.parentNode;
+      if (!parent) continue;
+      while (span.firstChild) parent.insertBefore(span.firstChild, span);
+      span.remove();
+      parent.normalize();
+    }
+  }
+}
+
+
+function pageAnnotationAnchor(index: number, slot: number): { anchorCfi: string | null; progression: number; anchorVersion?: number } {
+  const runtime = runtimes[index];
+  const anchorCfi = firstVisibleContentCfi(index, slot);
+  let progression = progressionForSlot(runtime, slot);
+  if (anchorCfi && runtime.book && runtime.book.locations.length() > 0) {
+    const located = runtime.book.locations.percentageFromCfi(anchorCfi);
+    if (typeof located === "number" && Number.isFinite(located)) progression = located;
+  }
+  return { anchorCfi: anchorCfi ?? runtime.cfi, progression, anchorVersion: anchorCfi ? 2 : undefined };
+}
+
+// New notes use a CFI captured from their own page, even while the global page
+// index is still loading. Older records retain their original progression rule.
+function annotationAnchorPoint(index:number,annotation:FreeTextAnnotation|DrawingAnnotation):{x:number;y:number}|null{
+  const runtime=runtimes[index];if(!annotation.anchorCfi||!runtime.rendition)return null;
+  const host=paneElement(index).querySelector<HTMLElement>('.epub-host')!;const hostRect=host.getBoundingClientRect();
+  for(const contents of visibleContents(runtime.rendition)){
+    try{
+      if(runtime.book?.spine.get(annotation.anchorCfi)?.index!==contents.sectionIndex)continue;
+      const range=contents.range(annotation.anchorCfi,'reader-annotation');const node=range.startContainer;
+      if(range.collapsed&&node.nodeType===Node.TEXT_NODE&&range.startOffset<(node.textContent?.length??0))range.setEnd(node,range.startOffset+1);
+      else if(range.collapsed&&node.childNodes[range.startOffset])range.selectNode(node.childNodes[range.startOffset]);
+      const rect=range.getBoundingClientRect();const frame=contents.window.frameElement as HTMLIFrameElement;
+      if(!frame?.clientWidth||(!rect.width&&!rect.height))continue;
+      const fr=frame.getBoundingClientRect(),scale=fr.width/frame.clientWidth,logical=Math.max(.001,runtime.viewportScale);
+      return{x:(fr.left+rect.left*scale-hostRect.left)/logical,y:(fr.top+rect.top*scale-hostRect.top)/logical};
+    }catch{continue;}
+  }return null;
+}
+function captureAnnotationPlacement(index:number,annotation:FreeTextAnnotation|DrawingAnnotation):void{
+  const runtime=runtimes[index],point=annotationAnchorPoint(index,annotation);if(!point)return;
+  const width=runtime.layoutWidth/Math.max(1,runtime.actualPageCount),slot=Math.floor((point.x+.5)/width);
+  annotation.contentPlacement={mode:runtime.readingMode,anchorX:point.x-slot*width,anchorY:point.y,width,height:runtime.layoutHeight};
+}
+function visibleAnnotationSlot(index: number, annotation: FreeTextAnnotation | DrawingAnnotation): number | null {
+  const runtime = runtimes[index];
+  if(runtime.readingMode==='scroll')return annotationAnchorPoint(index,annotation)?0:null;
+  if (annotation.anchorVersion !== 2 || !annotation.anchorCfi || !runtime.book || !runtime.rendition) {
+    return annotationPage(runtime, annotation.progression) - Math.max(1, runtime.currentPage || 1);
+  }
+  const section = runtime.book.spine.get(annotation.anchorCfi);
+  const host = paneElement(index).querySelector<HTMLElement>(".epub-host");
+  if (!section || !host) return null;
+  const hostRect = host.getBoundingClientRect();
+  const pageWidth = hostRect.width / Math.max(1, runtime.actualPageCount);
+  for (const contents of visibleContents(runtime.rendition)) {
+    if (contents.sectionIndex !== section.index) continue;
+    try {
+      const frame = contents.window.frameElement as HTMLIFrameElement | null;
+      if (!frame || !frame.clientWidth) continue;
+      const range = contents.range(annotation.anchorCfi, "reader-annotation");
+      const node = range.startContainer;
+      if (range.collapsed && node.nodeType === Node.TEXT_NODE && range.startOffset < (node.textContent?.length ?? 0)) range.setEnd(node, range.startOffset + 1);
+      else if (range.collapsed && node.nodeType === Node.ELEMENT_NODE && node.childNodes[range.startOffset]) range.selectNode(node.childNodes[range.startOffset]);
+      let rect = range.getBoundingClientRect();
+      if (rect.width < 0.1 && rect.height < 0.1) {
+        const parent = node.nodeType === Node.ELEMENT_NODE ? node as Element : node.parentElement;
+        const image = parent?.matches("img,svg,video") ? parent : parent?.querySelector("img,svg,video");
+        if (image) { range.selectNode(image); rect = range.getBoundingClientRect(); }
+      }
+      const frameRect = frame.getBoundingClientRect();
+      const screenX = frameRect.left + rect.left * frameRect.width / frame.clientWidth;
+      return Math.floor((screenX - hostRect.left + 0.5) / pageWidth);
+    } catch { continue; }
+  }
+  return null;
+}
+
+function annotationOverlay(index: number): HTMLElement | null {
+  return paneElement(index).querySelector<HTMLElement>(".annotation-layer");
+}
+
+function renderOverlayAnnotations(index: number): void {
+  const runtime = runtimes[index];
+  const overlay = annotationOverlay(index);
+  if (!overlay) return;
+  const drawingLayer = overlay.querySelector<SVGSVGElement>(".drawing-layer");
+  const noteLayer = overlay.querySelector<HTMLElement>(".free-note-layer");
+  if (!drawingLayer || !noteLayer || !runtime.bookId || runtime.layoutWidth < 50||editionHeld(runtime.bookId)) {
+    overlay.classList.remove("interactive");overlay.dataset.tool="read";
+    drawingLayer?.replaceChildren();
+    noteLayer?.replaceChildren();
+    return;
+  }
+
+  const pageCount = Math.max(1, runtime.actualPageCount);
+  const pageWidth = runtime.layoutWidth / pageCount;
+  drawingLayer.setAttribute("viewBox", `0 0 ${runtime.layoutWidth} ${runtime.layoutHeight}`);
+  drawingLayer.setAttribute("preserveAspectRatio", "none");
+
+  const drawingMarkup: string[] = [];
+  const noteMarkup: string[] = [];
+  const annotations=annotationsForBook(runtime.bookId);
+  let migratedGeometry=false;
+  const bounds=new Map<string,{minX:number;maxX:number;minY:number;maxY:number}>();
+  for(const annotation of annotations){
+    if(annotation.kind!=="drawing")continue;
+    const geometry=annotation.inkGeometry;
+    if(!geometry||!Number.isFinite(geometry.columnWidth)||geometry.columnWidth<=0||!Number.isFinite(geometry.pageHeight)||geometry.pageHeight<=0){
+      annotation.inkGeometry={columnWidth:pageWidth,pageHeight:runtime.layoutHeight,group:`legacy-${annotation.anchorCfi??annotation.progression}`,basis:"legacy-current-layout"};
+      migratedGeometry=true;
+    }
+    const key=annotation.inkGeometry!.group;const box=bounds.get(key)??{minX:Infinity,maxX:-Infinity,minY:Infinity,maxY:-Infinity};
+    for(const point of annotation.points){box.minX=Math.min(box.minX,point.x);box.maxX=Math.max(box.maxX,point.x);box.minY=Math.min(box.minY,point.y);box.maxY=Math.max(box.maxY,point.y);}bounds.set(key,box);
+  }
+  for (const annotation of annotations) {
+    if (annotation.kind === "text-mark") continue;
+    const slot = visibleAnnotationSlot(index, annotation);
+    if (slot === null || slot < 0 || slot >= pageCount) continue;
+    const placement=annotation.contentPlacement;
+    const followsContent=runtime.readingMode==='scroll'||placement?.mode==='scroll';
+    const anchor=followsContent?annotationAnchorPoint(index,annotation):null;
+    const positionScale=placement?Math.min(pageWidth/placement.width,runtime.layoutHeight/placement.height):1;
+    const contentX=anchor&&placement?anchor.x-placement.anchorX*positionScale:slot*pageWidth;
+    const contentY=anchor?anchor.y-(placement?.anchorY??0)*positionScale:0;
+    if (annotation.kind === "drawing") {
+      const geometry=annotation.inkGeometry!;const box=bounds.get(geometry.group)!;
+      const centerX=(box.minX+box.maxX)/2,centerY=(box.minY+box.maxY)/2;
+      const inkScale=Math.min(pageWidth/geometry.columnWidth,runtime.layoutHeight/geometry.pageHeight);
+      const path = annotation.points
+        .map((point, pointIndex) => {
+          const x = followsContent?contentX+point.x*geometry.columnWidth*inkScale:slot * pageWidth + centerX*pageWidth+(point.x-centerX)*geometry.columnWidth*inkScale;
+          const y = followsContent?contentY+point.y*geometry.pageHeight*inkScale:centerY*runtime.layoutHeight+(point.y-centerY)*geometry.pageHeight*inkScale;
+          return `${pointIndex === 0 ? "M" : "L"}${x.toFixed(2)} ${y.toFixed(2)}`;
+        })
+        .join(" ");
+      drawingMarkup.push(
+        `<path class="saved-drawing" data-annotation-id="${escapeHtml(annotation.id)}" d="${path}" stroke="${annotation.color}" stroke-width="${Math.max(.65,annotation.strokeWidth*inkScale)}" vector-effect="non-scaling-stroke" fill="none" stroke-linecap="round" stroke-linejoin="round" />`,
+      );
+      continue;
+    }
+    const left = followsContent?contentX+annotation.x*(placement?.width??pageWidth)*positionScale:slot * pageWidth + annotation.x * pageWidth;
+    const top = followsContent?contentY+annotation.y*(placement?.height??runtime.layoutHeight)*positionScale:annotation.y * runtime.layoutHeight;
+    if(runtime.readingMode==='scroll'&&(top>=runtime.layoutHeight||top < -runtime.layoutHeight))continue;
+    const classes = [
+      "free-note",
+      annotation.bold ? "note-bold" : "",
+      annotation.underline ? "note-underline" : "",
+      annotation.wave ? "note-wave" : "",
+      annotation.box ? "note-box" : "",
+    ].filter(Boolean).join(" ");
+    noteMarkup.push(`
+      <article class="${classes}" data-annotation-id="${escapeHtml(annotation.id)}"
+        style="left:${left}px;top:${top}px;--note-color:${annotation.color};--note-background:${hexToRgba(annotation.color, annotation.highlight ? 0.22 : 0.09)};font-family:${annotation.fontFamily};font-size:${(14 * annotation.fontSize / 100).toFixed(2)}px;max-width:${Math.min(runtime.layoutWidth-16,Math.max(180, pageWidth * 0.76)).toFixed(1)}px;max-height:${Math.max(80,runtime.layoutHeight-16)}px;overflow:auto">
+        <button class="free-note-drag" type="button" title="拖动笔记" aria-label="拖动笔记">⋮⋮</button>
+        <div class="free-note-content" contenteditable="true" spellcheck="false" data-placeholder="在这里写笔记">${escapeHtml(annotation.text)}</div>
+        <button class="free-note-delete" type="button" title="删除笔记" aria-label="删除笔记">×</button>
+      </article>`);
+  }
+  drawingLayer.innerHTML = drawingMarkup.join("");
+  noteLayer.innerHTML = noteMarkup.join("");
+  for(const note of Array.from(noteLayer.querySelectorAll<HTMLElement>(".free-note"))){
+    note.style.left=`${Math.max(4,Math.min(parseFloat(note.style.left),runtime.layoutWidth-note.offsetWidth-8))}px`;
+    if(runtime.readingMode!=='scroll')note.style.top=`${Math.max(4,Math.min(parseFloat(note.style.top),runtime.layoutHeight-note.offsetHeight-8))}px`;
+  }
+  if(migratedGeometry)savePaneProgress(index);
+  overlay.dataset.tool = annotationTool;
+  overlay.classList.toggle("interactive", annotationTool !== "read");
+}
+
+function renderAnnotationPanel(): void {
+  const index = snapshot.session.activePane;
+  const runtime = runtimes[index];
+  const book = getBook(runtime.bookId);
+  annotationBookTitle.textContent = (book?.title ?? "请先打开一本书")+(editionHeld(runtime.bookId)?" · 旧版批注待核对":"");
+  const pending = pendingSelections[index];
+  selectionStatus.textContent = editionHeld(runtime.bookId)?"原位置、文字与笔迹完整保留；恢复原 EPUB 后重开，或核对新版的段落对应关系。":pending
+    ? `已选 ${pending.text.length} 字：${pending.text.slice(0, 46)}${pending.text.length > 46 ? "…" : ""}`
+    : "在原文中拖选文字，再设置格式";
+  const annotations = annotationsForBook(runtime.bookId);
+  if (!book) {
+    annotationList.innerHTML = '<div class="annotation-list-empty">当前窗格还没有打开书</div>';
+    return;
+  }
+  if (annotations.length === 0) {
+    annotationList.innerHTML = '<div class="annotation-list-empty">本书还没有笔记或标记</div>';
+    return;
+  }
+  annotationList.innerHTML = annotations
+    .slice()
+    .sort((left, right) => right.createdAt - left.createdAt)
+    .map((annotation) => {
+      const label = annotation.kind === "text-mark" ? "原文" : annotation.kind === "free-text" ? "文字" : "涂鸦";
+      const preview = annotation.kind === "text-mark"
+        ? annotation.comment || annotation.selectedText
+        : annotation.kind === "free-text"
+          ? annotation.text || "空白文字笔记"
+          : `自由涂鸦 · ${annotation.points.length} 个笔迹点`;
+      return `<article class="annotation-list-item" data-annotation-id="${escapeHtml(annotation.id)}">
+        <button class="annotation-jump" type="button" title="跳到这条笔记"><span style="--item-color:${annotation.color}">${label}</span><strong>${escapeHtml(preview.slice(0, 80))}</strong></button>
+        <button class="annotation-delete" type="button" title="删除这条笔记" aria-label="删除这条笔记">${icons.trash}</button>
+      </article>`;
+    })
+    .join("");
+}
+
+function setAnnotationPanelVisible(visible: boolean): void {
+  annotationPanel.classList.toggle("visible", visible);
+  annotationPanel.setAttribute("aria-hidden", String(!visible));
+  annotationToggle.classList.toggle("selected", visible);
+  annotationToggle.setAttribute("aria-expanded", String(visible));
+  if (visible) renderAnnotationPanel();
+}
+
+function setAnnotationTool(tool: AnnotationTool): void {
+  if(tool==="pen"&&annotationTool!=="pen")inkSession=crypto.randomUUID();
+  annotationTool = tool;
+  app.querySelectorAll<HTMLButtonElement>(".annotation-tool").forEach((button) => {
+    button.classList.toggle("selected", button.dataset.tool === tool);
+  });
+  runtimes.forEach((runtime, index) => {
+    if (runtime.bookId) renderOverlayAnnotations(index);
+  });
+}
+
+function persistBookAnnotations(bookId: string, delay = 0): void {
+  const paneIndex = runtimes.findIndex((runtime) => runtime.bookId === bookId);
+  if (paneIndex >= 0) savePaneProgress(paneIndex, delay);
+  if (delay === 0) renderLibrary(searchInput.value);
+}
+
+function syncBookAnnotations(bookId: string): void {
+  runtimes.forEach((runtime, index) => {
+    if (runtime.bookId !== bookId) return;
+    applyTextAnnotations(index);
+    renderOverlayAnnotations(index);
+  });
+  renderAnnotationPanel();
+  persistBookAnnotations(bookId);
+}
+
+function addBookAnnotation(index: number, annotation: ReaderAnnotation): void {
+  const runtime = runtimes[index];
+  if(!annotationEditionAvailable(runtime.bookId))return;
+  if (!runtime.bookId) return;
+  ensureBookProgress(runtime.bookId, index).annotations.push(annotation);
+  syncBookAnnotations(runtime.bookId);
+}
+
+function deleteBookAnnotation(bookId: string, annotationId: string): void {
+  if(!annotationEditionAvailable(bookId))return;
+  const annotations = annotationsForBook(bookId);
+  const position = annotations.findIndex((annotation) => annotation.id === annotationId);
+  if (position < 0) return;
+  runtimes.forEach((runtime, index) => {
+    if (runtime.bookId === bookId) removeVisibleTextAnnotation(index, annotationId);
+  });
+  annotations.splice(position, 1);
+  syncBookAnnotations(bookId);
+}
+
+function undoLastAnnotation(): void {
+  const runtime = runtimes[snapshot.session.activePane];
+  if(!annotationEditionAvailable(runtime.bookId))return;
+  if (!runtime.bookId) return;
+  const latest = annotationsForBook(runtime.bookId)
+    .slice()
+    .sort((left, right) => right.createdAt - left.createdAt)[0];
+  if (!latest) {
+    showToast("这本书还没有可撤销的笔记");
+    return;
+  }
+  deleteBookAnnotation(runtime.bookId, latest.id);
+  showToast("已撤销最后一条笔记");
+}
+
+function handleTextSelection(index: number, cfiRange: string, contents: EpubContents): void {
+  const selection = contents.window.getSelection();
+  const text = selection?.toString().trim() ?? "";
+  if (!text) return;
+  let stableCfi = cfiRange;
+  try {
+    if (selection && selection.rangeCount > 0) {
+      stableCfi = contents.cfiFromRange(selection.getRangeAt(0), "reader-annotation");
+    }
+  } catch {
+    // The cfiRange emitted by epub.js is still a valid fallback.
+  }
+  pendingSelections[index] = { cfiRange: stableCfi, text, contents };
+  setActivePane(index);
+  // Selecting text must remain a quiet reading action. Keep the selection so
+  // the user can explicitly open Notes later, but never reveal either overlay
+  // just because epub.js emitted a selection event.
+  if (annotationPanel.classList.contains("visible")) renderAnnotationPanel();
+}
+
+function applyPendingTextMark(): void {
+  const index = snapshot.session.activePane;
+  const runtime = runtimes[index];
+  if(!annotationEditionAvailable(runtime.bookId))return;
+  const pending = pendingSelections[index];
+  if (!runtime.bookId || !pending) {
+    showToast("请先在原文中拖选一段文字", "error");
+    return;
+  }
+  const style = currentAnnotationStyle();
+  if (!style.highlight && !style.bold && !style.underline && !style.wave && !style.box) {
+    showToast("请至少选择一种原文格式", "error");
+    return;
+  }
+  const annotation: TextAnnotation = {
+    ...style,
+    id: crypto.randomUUID(),
+    kind: "text-mark",
+    cfiRange: pending.cfiRange,
+    selectedText: pending.text,
+    comment: selectionComment.value.trim(),
+    createdAt: Date.now(),
+  };
+  pending.contents.window.getSelection()?.removeAllRanges();
+  pendingSelections[index] = null;
+  selectionComment.value = "";
+  addBookAnnotation(index, annotation);
+  showToast("原文标记已保存到这本书");
+}
+
+function jumpToAnnotation(annotationId: string): void {
+  const runtime = runtimes[snapshot.session.activePane];
+  if(!annotationEditionAvailable(runtime.bookId))return;
+  if (!runtime.bookId || !runtime.rendition) return;
+  const annotation = annotationsForBook(runtime.bookId).find((item) => item.id === annotationId);
+  if (!annotation) return;
+  const target = annotation.kind === "text-mark" ? annotation.cfiRange : annotation.anchorCfi;
+  if (!target) return;
+  void jumpToBookTarget(target);
+}
+
+function pointOnAnnotationLayer(event: PointerEvent, index: number): {
+  slot: number;
+  x: number;
+  y: number;
+  logicalX: number;
+  logicalY: number;
+} | null {
+  const runtime = runtimes[index];
+  const overlay = annotationOverlay(index);
+  if (!overlay || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) return null;
+  const rect = overlay.getBoundingClientRect();
+  if (rect.width < 1 || rect.height < 1) return null;
+  const logicalX = (event.clientX - rect.left) / rect.width * runtime.layoutWidth;
+  const logicalY = (event.clientY - rect.top) / rect.height * runtime.layoutHeight;
+  const pageWidth = runtime.layoutWidth / Math.max(1, runtime.actualPageCount);
+  const slot = Math.min(
+    Math.max(1, runtime.actualPageCount) - 1,
+    Math.max(0, Math.floor(logicalX / pageWidth)),
+  );
+  return {
+    slot,
+    x: (logicalX - slot * pageWidth) / pageWidth,
+    y: logicalY / runtime.layoutHeight,
+    logicalX,
+    logicalY,
+  };
+}
+
+function addFreeTextAt(index: number, point: { slot: number; x: number; y: number }): void {
+  const runtime = runtimes[index];
+  if (!runtime.bookId) return;
+  const style = currentAnnotationStyle();
+  const annotation: FreeTextAnnotation = {
+    ...style,
+    id: crypto.randomUUID(),
+    kind: "free-text",
+    ...pageAnnotationAnchor(index, point.slot),
+    x: Math.min(0.92, Math.max(0, point.x)),
+    y: Math.min(0.94, Math.max(0, point.y)),
+    text: "新笔记",
+    createdAt: Date.now(),
+  };
+  captureAnnotationPlacement(index,annotation);
+  addBookAnnotation(index, annotation);
+  window.requestAnimationFrame(() => {
+    const content = paneElement(index).querySelector<HTMLElement>(
+      `.free-note[data-annotation-id="${CSS.escape(annotation.id)}"] .free-note-content`,
+    );
+    if (!content) return;
+    content.focus();
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(content);
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+  });
+}
+
+let inkSession=crypto.randomUUID();
+function inkGroupFor(index:number,slot:number):string{
+  const runtime=runtimes[index];const anchor=pageAnnotationAnchor(index,slot).anchorCfi??String(slot);
+  return `${inkSession}|${runtime.bookId}|${anchor}|${runtime.layoutWidth/runtime.actualPageCount}|${runtime.layoutHeight}`;
+}
+
+function beginDrawing(index: number, event: PointerEvent): void {
+  const runtime = runtimes[index];
+  if(!annotationEditionAvailable(runtime.bookId))return;
+  const point = pointOnAnnotationLayer(event, index);
+  const overlay = annotationOverlay(index);
+  if (!runtime.bookId || !point || !overlay) return;
+  const annotation: DrawingAnnotation = {
+    id: crypto.randomUUID(),
+    kind: "drawing",
+    ...pageAnnotationAnchor(index, point.slot),
+    color: safeAnnotationColor(annotationColorInput.value),
+    strokeWidth: clampNumber(penWidthInput.value, 1, 10, 3),
+    points: [{ x: point.x, y: point.y }, { x: point.x, y: point.y }],
+    inkGeometry: { columnWidth:runtime.layoutWidth/Math.max(1,runtime.actualPageCount),pageHeight:runtime.layoutHeight,group:inkGroupFor(index,point.slot),basis:"creation" },
+    createdAt: Date.now(),
+  };
+  captureAnnotationPlacement(index,annotation);
+  ensureBookProgress(runtime.bookId, index).annotations.push(annotation);
+  drawingDraft = { paneIndex: index, pointerId: event.pointerId, annotation };
+  overlay.setPointerCapture(event.pointerId);
+  renderOverlayAnnotations(index);
+}
+
+function extendDrawing(event: PointerEvent): void {
+  const draft = drawingDraft;
+  if (!draft || event.pointerId !== draft.pointerId) return;
+  const runtime = runtimes[draft.paneIndex];
+  const point = pointOnAnnotationLayer(event, draft.paneIndex);
+  if (!point) return;
+  const slot = visibleAnnotationSlot(draft.paneIndex, draft.annotation) ?? 0;
+  const relativeX = point.x + point.slot - slot;
+  const previous = draft.annotation.points[draft.annotation.points.length - 1];
+  const pageWidth = runtime.layoutWidth / Math.max(1, runtime.actualPageCount);
+  const distance = Math.hypot(
+    (relativeX - previous.x) * pageWidth,
+    (point.y - previous.y) * runtime.layoutHeight,
+  );
+  if (distance < 1.5) return;
+  draft.annotation.points.push({ x: relativeX, y: point.y });
+  if (draft.annotation.points.length > 8000) draft.annotation.points.shift();
+  if (drawingFrame !== null) return;
+  drawingFrame = window.requestAnimationFrame(() => {
+    drawingFrame = null;
+    renderOverlayAnnotations(draft.paneIndex);
+  });
+}
+
+function finishDrawing(event: PointerEvent): void {
+  const draft = drawingDraft;
+  if (!draft || event.pointerId !== draft.pointerId) return;
+  const runtime = runtimes[draft.paneIndex];
+  annotationOverlay(draft.paneIndex)?.releasePointerCapture(event.pointerId);
+  drawingDraft = null;
+  if (drawingFrame !== null) {
+    window.cancelAnimationFrame(drawingFrame);
+    drawingFrame = null;
+  }
+  if (runtime.bookId) syncBookAnnotations(runtime.bookId);
+}
+
+function beginNoteDrag(index: number, annotationId: string, event: PointerEvent): void {
+  const runtime = runtimes[index];
+  const point = pointOnAnnotationLayer(event, index);
+  const annotation = annotationsForBook(runtime.bookId).find(
+    (item): item is FreeTextAnnotation => item.id === annotationId && item.kind === "free-text",
+  );
+  if (!point || !annotation) return;
+  const pageWidth = runtime.layoutWidth / Math.max(1, runtime.actualPageCount);
+  const slot = visibleAnnotationSlot(index, annotation) ?? 0;
+  const element=paneElement(index).querySelector<HTMLElement>(`.free-note[data-annotation-id="${CSS.escape(annotationId)}"]`);
+  noteDragState = {
+    paneIndex: index,
+    annotationId,
+    pointerId: event.pointerId,
+    offsetX: point.logicalX - (element?parseFloat(element.style.left):slot * pageWidth + annotation.x * pageWidth),
+    offsetY: point.logicalY - (element?parseFloat(element.style.top):annotation.y * runtime.layoutHeight),
+  };
+}
+
+function moveNote(event: PointerEvent): void {
+  const drag = noteDragState;
+  if (!drag || event.pointerId !== drag.pointerId) return;
+  const runtime = runtimes[drag.paneIndex];
+  const point = pointOnAnnotationLayer(event, drag.paneIndex);
+  const annotation = annotationsForBook(runtime.bookId).find(
+    (item): item is FreeTextAnnotation => item.id === drag.annotationId && item.kind === "free-text",
+  );
+  if (!point || !annotation) return;
+  const pageCount = Math.max(1, runtime.actualPageCount);
+  const pageWidth = runtime.layoutWidth / pageCount;
+  const left = Math.min(runtime.layoutWidth - 24, Math.max(0, point.logicalX - drag.offsetX));
+  const top = Math.min(runtime.layoutHeight - 24, Math.max(0, point.logicalY - drag.offsetY));
+  const slot = Math.min(pageCount - 1, Math.max(0, Math.floor(left / pageWidth)));
+  if (annotation.anchorVersion !== 2 || visibleAnnotationSlot(drag.paneIndex, annotation) !== slot) {
+    Object.assign(annotation, pageAnnotationAnchor(drag.paneIndex, slot));
+  }
+  annotation.x = (left - slot * pageWidth) / pageWidth;
+  annotation.y = top / runtime.layoutHeight;
+  if(runtime.readingMode==='scroll'){Object.assign(annotation,pageAnnotationAnchor(drag.paneIndex,slot));captureAnnotationPlacement(drag.paneIndex,annotation);}
+  if (drawingFrame !== null) return;
+  drawingFrame = window.requestAnimationFrame(() => {
+    drawingFrame = null;
+    renderOverlayAnnotations(drag.paneIndex);
+  });
+}
+
+function finishNoteDrag(event: PointerEvent): void {
+  const drag = noteDragState;
+  if (!drag || event.pointerId !== drag.pointerId) return;
+  const runtime = runtimes[drag.paneIndex];
+  noteDragState = null;
+  if (drawingFrame !== null) {
+    window.cancelAnimationFrame(drawingFrame);
+    drawingFrame = null;
+    renderOverlayAnnotations(drag.paneIndex);
+  }
+  if (runtime.bookId) syncBookAnnotations(runtime.bookId);
+}
+
+function handleAnnotationPointerDown(event: PointerEvent): void {
+  const target = event.target as Element;
+  const overlay = target.closest<HTMLElement>(".annotation-layer");
+  if (!overlay) return;
+  const index = Number(overlay.dataset.paneIndex);
+  if (!Number.isFinite(index)) return;
+  const runtime = runtimes[index];
+  if (!runtime.bookId) return;
+  setActivePane(index);
+
+  const annotationElement = target.closest<HTMLElement>("[data-annotation-id]");
+  const annotationId = annotationElement?.dataset.annotationId;
+  if (target.closest(".free-note-delete") && annotationId) {
+    event.preventDefault();
+    event.stopPropagation();
+    deleteBookAnnotation(runtime.bookId, annotationId);
+    return;
+  }
+  if (target.closest(".free-note-drag") && annotationId) {
+    event.preventDefault();
+    event.stopPropagation();
+    beginNoteDrag(index, annotationId, event);
+    return;
+  }
+  if (annotationTool === "eraser" && annotationId) {
+    event.preventDefault();
+    event.stopPropagation();
+    deleteBookAnnotation(runtime.bookId, annotationId);
+    return;
+  }
+  if (target.closest(".free-note-content")) return;
+  const point = pointOnAnnotationLayer(event, index);
+  if (!point) return;
+  if (annotationTool === "text") {
+    event.preventDefault();
+    addFreeTextAt(index, point);
+    return;
+  }
+  if (annotationTool === "pen") {
+    event.preventDefault();
+    beginDrawing(index, event);
+  }
+}
+
+function updateFreeTextFromEditor(editor: HTMLElement): void {
+  const item = editor.closest<HTMLElement>(".free-note");
+  const pane = editor.closest<HTMLElement>(".reader-pane");
+  const index = Number(pane?.dataset.paneIndex);
+  const annotationId = item?.dataset.annotationId;
+  const runtime = runtimes[index];
+  if (!Number.isFinite(index) || !annotationId || !runtime?.bookId) return;
+  const annotation = annotationsForBook(runtime.bookId).find(
+    (entry): entry is FreeTextAnnotation => entry.id === annotationId && entry.kind === "free-text",
+  );
+  if (!annotation) return;
+  annotation.text = (editor.innerText || "").slice(0, 24000);
+  persistBookAnnotations(runtime.bookId, 320);
+  renderAnnotationPanel();
+}
+
+function fitAtomicBlocks(index: number): void {
+  const runtime = runtimes[index];
+  if(runtime.readingMode==='scroll')return;
+  const rendition = runtime.rendition;
+  if (!rendition) return;
+  const layout = (rendition as InternalRendition)._layout;
+  const usableHeight = Math.max(80, layout.height - 44);
+  const usableWidth = Math.max(24, layout.columnWidth - 8);
+  const fitKey = [
+    Math.round(usableWidth * 10) / 10,
+    Math.round(usableHeight),
+    Math.round(runtime.effectiveFontScale * 10) / 10,
+    runtime.actualPageCount,
+    snapshot.session.readerFont,
+  ].join(":");
+
+  for (const contents of visibleContents(rendition)) {
+    const documentElement = contents.document.documentElement as HTMLElement;
+    documentElement.style.setProperty("--comfortable-page-height", `${usableHeight}px`);
+    const elements = contents.document.querySelectorAll<HTMLElement>(ATOMIC_BLOCK_SELECTOR);
+    for (const element of elements) {
+      // Algorithms retain row numbers and indentation across columns; shrinking
+      // a 60-line procedure to fit one page makes the procedure unreadable.
+      if (element.matches(".algorithm, .reader-algorithm, .algorithm-cost")) { fitAlgorithmPreview(element, fitKey, usableWidth, layout.columnWidth); continue; }
+      // A figure owns its image; fitting both would shrink the same visual twice.
+      const owner = element.parentElement?.closest(ATOMIC_BLOCK_SELECTOR);
+      if (owner && !(owner.matches("figure.reader-flow-figure") && !element.matches("img, svg, video"))) continue;
+      if (element.dataset.comfortableFitKey === fitKey) continue;
+
+      element.style.removeProperty("zoom");
+      element.style.removeProperty("max-height");
+      element.style.removeProperty("object-fit");
+      element.style.removeProperty("transform-origin");
+      element.style.removeProperty("margin-left");
+      element.style.removeProperty("margin-right");
+      element.dataset.comfortableFitKey = fitKey;
+
+      if (element.matches("figure") && element.querySelector("figcaption")?.textContent?.trim()) {
+        element.classList.remove("reader-flow-figure");
+        for (const picture of Array.from(element.querySelectorAll<HTMLElement>("img"))) picture.style.removeProperty("max-height");
+        const fragments = Array.from(element.getClientRects());
+        if (fragments.length > 1 || fragments.some(fragment => fragment.height > usableHeight)) {
+          element.classList.add("reader-flow-figure");
+          for (const picture of Array.from(element.querySelectorAll<HTMLElement>("img"))) {
+            picture.style.setProperty("max-height", `${Math.max(70, usableHeight * 0.66)}px`, "important");
+          }
+          continue;
+        }
+      }
+      const rect = element.getBoundingClientRect();
+      const childRects = Array.from(element.querySelectorAll("math, math mtable, math mtd, math mtext, math mi, math mn, math mo, img, svg")).map(child => child.getBoundingClientRect());
+      // Centered MathML can overflow to both sides; scrollWidth counts only
+      // the right side. Include the actual child bounds before fitting.
+      const left = Math.min(rect.left, ...childRects.map(child => child.left));
+      const right = Math.max(rect.right, ...childRects.map(child => child.right));
+      const top = Math.min(rect.top, ...childRects.map(child => child.top));
+      const bottom = Math.max(rect.bottom, ...childRects.map(child => child.bottom));
+      const naturalHeight = Math.max(bottom - top, element.scrollHeight);
+      const naturalWidth = Math.max(right - left, element.scrollWidth);
+      if (naturalHeight <= usableHeight && naturalWidth <= usableWidth) continue;
+
+      const scale = Math.min(
+        1,
+        usableHeight / Math.max(1, naturalHeight),
+        usableWidth / Math.max(1, naturalWidth),
+      );
+      if (scale < 0.88 && element.matches("table, .math-block, .math-display, math[display='block']")) {
+        element.dataset.readerDetail = "true";
+        element.classList.add("reader-expandable");
+        element.tabIndex = 0;
+        element.title = element.matches("table") ? "点按放大阅读表格" : "点按放大阅读公式";
+      }
+      if (scale >= 0.995) continue;
+
+      if (element.matches("img, svg, video")) {
+        element.style.setProperty("max-height", `${usableHeight}px`, "important");
+        element.style.setProperty("object-fit", "contain", "important");
+      } else {
+        // Chromium/WebView2 zoom changes both painting and layout dimensions,
+        // unlike transform, so the following column starts after the scaled block.
+        element.style.setProperty("zoom", String(Math.max(0.05, scale)));
+        element.style.setProperty("transform-origin", "top left");
+        element.style.setProperty("margin-left", "auto");
+        element.style.setProperty("margin-right", "auto");
+      }
+    }
+  }
+}
+
+function scheduleAtomicFit(index: number): void {
+  const runtime = runtimes[index];
+  if (runtime.atomicFitFrame !== null) window.cancelAnimationFrame(runtime.atomicFitFrame);
+  runtime.atomicFitFrame = window.requestAnimationFrame(() => {
+    runtime.atomicFitFrame = window.requestAnimationFrame(() => {
+      runtime.atomicFitFrame = null;
+      fitAtomicBlocks(index);
+      void runtime.rendition?.reportLocation();
+    });
+  });
+}
+
+function linearSectionCount(book: EpubBook): number {
+  const sections = (book.spine as InternalSpine).spineItems ?? [];
+  return sections.filter((section) => section.linear !== false).length;
+}
+
+function scheduleDynamicPageMap(index: number, delay = 260, force = false): void {
+  const runtime = runtimes[index];
+  if (!runtime.book || !runtime.rendition) return;
+  // The source build measured these CFIs against the exact streamed XHTML.
+  // Generating locations here would fetch unselected chapters.
+  if(runtime.bookId&&portableBooks.has(runtime.bookId)){void runtime.rendition.reportLocation();return;}
+  // Single-section books have exact local page counts. Multi-section books
+  // use stable text locations, never a guessed total number of screen pages.
+  if (runtime.readingMode!=='scroll' && linearSectionCount(runtime.book) === 1 && !force) {
+    void runtime.rendition.reportLocation();
+    return;
+  }
+  if (indexingBooks.has(runtime.book) || (!force && runtime.book.locations.length() > 0)) return;
+  runtime.paginationGeneration += 1;
+  const generation = runtime.paginationGeneration;
+  if (runtime.paginationTimer !== null) window.clearTimeout(runtime.paginationTimer);
+  runtime.paginationTimer = window.setTimeout(() => {
+    runtime.paginationTimer = null;
+    const book = runtime.book;
+    const rendition = runtime.rendition;
+    if (!book || !rendition || generation !== runtime.paginationGeneration) return;
+    const LocationsConstructor = book.locations.constructor as unknown as new (
+      spine: EpubBook["spine"],
+      request: EpubBook["load"],
+      pause?: number,
+    ) => EpubBook["locations"];
+    const locations = new LocationsConstructor(book.spine, book.load.bind(book), 1);
+    indexingBooks.add(book);
+    void locations
+      .generate(1000)
+      .then(() => {
+        if (
+          generation !== runtime.paginationGeneration ||
+          runtime.book !== book ||
+          runtime.rendition !== rendition
+        ) {
+          locations.destroy();
+          return;
+        }
+        const previousLocations = book.locations;
+        book.locations = locations;
+        previousLocations?.destroy();
+        const hash=runtime.bookId?sourceDigests.get(runtime.bookId):null;
+        if(hash&&isDesktop)void invoke('save_location_index',{sourceSha256:hash,locations:locations.save()}).catch(()=>{});
+        void rendition.reportLocation();
+      })
+      .catch(() => {
+        locations.destroy();
+        const title = getBook(runtime.bookId)?.title ?? "当前书籍";
+        showToast(`“${title}”阅读位置索引生成失败，仍可正常翻阅`, "error");
+      }).finally(() => indexingBooks.delete(book));
+  }, delay);
+}
+
+function updateGroupTail(rendition: Rendition, runtime: PaneRuntime): void {
+  const internal = rendition as InternalRendition;
+  const container = internal.manager.container;
+  if (!container) return;
+  if(runtime.readingMode==='scroll'){container.classList.remove('comfortable-group-tail');container.style.removeProperty('--comfortable-group-tail-width');return;}
+  const lastView = internal.manager.views?.last();
+  const atBookEnd = Boolean(lastView?.section && !lastView.section.next());
+  const tailWidth = atBookEnd
+    ? Math.max(0, runtime.actualPageCount - 1) * internal._layout.pageWidth
+    : 0;
+  container.classList.add("comfortable-group-tail");
+  container.style.setProperty("--comfortable-group-tail-width", `${tailWidth}px`);
+}
+
+const originalLayouts=new WeakMap<Rendition,{calculate:InternalLayout['calculate'];count:InternalLayout['count']}>();
+function patchMultiPageLayout(rendition: Rendition, runtime: PaneRuntime): void {
+  const internal = rendition as InternalRendition;
+  const layout = internal._layout;
+  if(!originalLayouts.has(rendition))originalLayouts.set(rendition,{calculate:layout.calculate.bind(layout),count:layout.count.bind(layout)});
+  if(runtime.readingMode==='scroll'){const original=originalLayouts.get(rendition)!;layout.calculate=original.calculate;layout.count=original.count;internal.manager.updateLayout();return;}
+  layout.calculate = (width: number, height: number, suppliedGap?: number) => {
+    const divisor = Math.min(10, Math.max(1, runtime.actualPageCount));
+    const pageWidth = width / divisor;
+    const requestedGap = Number.isFinite(suppliedGap) ? Number(suppliedGap) : 18;
+    const gap = divisor > 1
+      ? Math.min(26, Math.max(0, Math.min(requestedGap, pageWidth - 12)))
+      : 0;
+    // epub.js adds half a gap at both viewport edges. Therefore every complete
+    // visible page is exactly pageWidth = viewport / divisor, while its text
+    // column is pageWidth - gap. No edge page can extend beyond the pane.
+    const columnWidth = Math.max(12, pageWidth - gap);
+    const spreadWidth = Math.max(12, width - gap);
+
+    layout.width = width;
+    layout.height = height;
+    layout.spreadWidth = spreadWidth;
+    layout.pageWidth = pageWidth;
+    // One click advances one column, so 1–10 becomes a sliding window (1–4 → 2–5).
+    layout.delta = pageWidth;
+    layout.columnWidth = columnWidth;
+    layout.gap = gap;
+    layout.divisor = divisor;
+    layout.update({
+      width,
+      height,
+      spreadWidth,
+      pageWidth,
+      delta: pageWidth,
+      columnWidth,
+      gap,
+      divisor,
+    });
+    // Add blank group slots only when the final spine section is mounted. A
+    // permanent spacer behind an intermediate section would delay loading the
+    // following chapter in the continuous manager.
+    updateGroupTail(rendition, runtime);
+  };
+  layout.count = (totalLength: number, pageLength?: number) => {
+    const unit = Math.max(1, pageLength || layout.pageWidth || layout.delta);
+    const pages = Math.max(1, Math.ceil(totalLength / unit));
+    return {
+      spreads: Math.max(1, Math.ceil(pages / Math.max(1, runtime.actualPageCount))),
+      pages,
+    };
+  };
+  internal.manager.updateLayout();
+}
+
+async function reflowPaneNow(index: number, force = false): Promise<void> {
+  const runtime = runtimes[index];
+  const rendition = runtime.rendition;
+  const lazyPageBook = runtime.lazyPageCount > 0;
+  const pane = paneElement(index);
+  const stage = pane.querySelector<HTMLElement>(".pane-stage");
+  const host = pane.querySelector<HTMLElement>(".epub-host");
+  if ((!rendition && !lazyPageBook) || !stage || !host || stage.clientWidth < 50 || stage.clientHeight < 50) return;
+  if (force && runtime.resizeActive) {
+    if (runtime.resizeTimer !== null) window.clearTimeout(runtime.resizeTimer);
+    if (runtime.resizeFrame !== null) window.cancelAnimationFrame(runtime.resizeFrame);
+    runtime.resizeTimer = null;
+    runtime.resizeFrame = null;
+    runtime.resizeActive = false;
+    runtime.resizeAnchorCfi = null;
+    pane.classList.remove("live-resizing");
+  }
+  const available = availableStageSize(stage);
+  const nextCount = runtime.readingMode==='scroll' ? 1 : runtime.pageMode > 0
+    ? runtime.pageMode
+    : automaticPageCountForWidth(available.width);
+  const changed = nextCount !== runtime.actualPageCount;
+  const viewportChanged =
+    Math.abs(runtime.viewportWidth - available.width) > 1 ||
+    Math.abs(runtime.viewportHeight - available.height) > 1;
+
+  if (lazyPageBook) {
+    if (runtime.pageMode > 0 && !changed && !force && runtime.layoutWidth >= 50) {
+      if (viewportChanged) positionRenditionCanvas(index);
+      return;
+    }
+    if (!changed && !force) return;
+    runtime.actualPageCount = nextCount;
+    if (runtime.pageMode === 0 || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) {
+      runtime.layoutWidth = available.width;
+      runtime.layoutHeight = available.height;
+    }
+    positionRenditionCanvas(index);
+    updatePaneHeader(index);
+    await renderLazyPageWindow(index, runtime.currentPage || 1);
+    return;
+  }
+  if (!rendition) return;
+
+  // A pinned page mode owns a fixed logical canvas. Resizing, maximizing,
+  // entering full screen, or changing the number of sibling panes only scales
+  // that canvas. The page breaks and visible text therefore remain identical.
+  if (runtime.readingMode!=='scroll' && runtime.pageMode > 0 && !changed && !force && runtime.layoutWidth >= 50) {
+    if (viewportChanged) positionRenditionCanvas(index);
+    return;
+  }
+  if (!changed && !viewportChanged && !force) {
+    void rendition.reportLocation();
+    return;
+  }
+  const anchor = runtime.readingMode==='scroll' ? runtime.resizeAnchorCfi??runtime.layoutAnchorCfi??runtime.cfi : runtime.layoutAnchorCfi??runtime.cfi;
+  runtime.layoutAnchorCfi=anchor;
+  runtime.actualPageCount = nextCount;
+  if (runtime.readingMode==='scroll' || runtime.pageMode === 0 || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) {
+    runtime.layoutWidth = available.width;
+    runtime.layoutHeight = available.height;
+  }
+  runtime.restoringLocation = true;
+  positionRenditionCanvas(index);
+  applyAdaptiveFontScale(index, host);
+  updatePaneHeader(index);
+  runtime.restoringLocation = true;
+  try {
+    rendition.resize(runtime.layoutWidth, runtime.layoutHeight);
+    if (anchor) await rendition.display(anchor);
+    await settleRenditionLayout(index);
+    fitAtomicBlocks(index);
+    await settleRenditionLayout(index);
+    if (anchor && runtime.rendition === rendition) {await rendition.display(anchor);await ensureAnchorVisible(index,anchor);}
+  } finally {
+    if (runtime.rendition === rendition) runtime.restoringLocation = false;
+  }
+  await settleBookLocation(index, rendition);
+  scheduleAtomicFit(index);
+  scheduleDynamicPageMap(index);
+}
+
+function setBookPageMode(index: number, requestedMode: number): void {
+  const source = runtimes[index];
+  if (!source.bookId) return;
+  const mode = Math.min(10, Math.max(0, Math.round(requestedMode)));
+  const existing = snapshot.progress[source.bookId] ?? {
+    cfi: source.cfi,
+    page: source.currentPage,
+    totalPages: source.totalPages,
+    percent: source.percent,
+    updatedAt: Math.floor(Date.now() / 1000),
+    pageMode: mode,
+    annotations: [],
+  };
+  existing.pageMode = mode;
+  snapshot.progress[source.bookId] = existing;
+
+  runtimes.forEach((runtime, paneIndex) => {
+    if (runtime.bookId !== source.bookId) return;
+    runtime.pageMode = mode;
+    updatePaneHeader(paneIndex);
+    savePaneProgress(paneIndex, 0);
+    void reflowPane(paneIndex, true);
+  });
+  showToast(
+    mode === 0
+      ? "已按阅读宽度自动分栏"
+      : mode >= 6 ? `已切换到 ${mode} 栏概览` : `同屏显示 ${mode} 栏`,
+  );
+}
+
+
+// A continuous rendition can report the previous section when only its empty
+// column gutter intersects the viewport. Persist the first actual visible
+// glyph/replaced element, so a chapter jump and later reopen share one anchor.
+function firstVisibleContentCfi(index: number, slot = 0): string | null {
+  const runtime = runtimes[index];
+  const rendition = runtime.rendition;
+  const stage = paneElement(index).querySelector<HTMLElement>(".pane-stage");
+  if (!rendition || !stage) return null;
+  const stageRect = stage.getBoundingClientRect();
+  const scale = Math.max(0.001, runtime.viewportScale);
+  const pageWidth = (rendition as InternalRendition)._layout.pageWidth * scale;
+  const left = stageRect.left + 2 + Math.max(0, Math.min(runtime.actualPageCount - 1, slot)) * pageWidth;
+  const right = Math.min(stageRect.right - 2, left + pageWidth);
+  const top = stageRect.top + 2;
+  const bottom = stageRect.bottom - 2;
+  let best: { contents: EpubContents; range: Range; element?: Element; top: number; left: number } | null = null;
+  for (const contents of visibleContents(rendition)) {
+    const frame = contents.window.frameElement as HTMLIFrameElement | null;
+    if (!frame || !frame.clientWidth) continue;
+    const frameRect = frame.getBoundingClientRect();
+    if (frameRect.right <= left || frameRect.left >= right) continue;
+    const frameScale = frameRect.width / frame.clientWidth;
+    const document = contents.document;
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT | NodeFilter.SHOW_ELEMENT);
+    let node: Node | null;
+    while ((node = walker.nextNode())) {
+      const textNode = node.nodeType === Node.TEXT_NODE;
+      if (textNode ? !node.textContent?.trim() : !(node as Element).matches("img,svg,video")) continue;
+      const range = document.createRange();
+      if (textNode) range.selectNodeContents(node); else range.selectNode(node);
+      for (const rect of Array.from(range.getClientRects())) {
+        const x = frameRect.left + rect.left * frameScale;
+        const y = frameRect.top + rect.top * frameScale;
+        const w = rect.width * frameScale;
+        const h = rect.height * frameScale;
+        if (w < 0.3 || h < 0.3 || x + w <= left + 0.5 || x >= right - 0.5 || y + h <= top || y >= bottom) continue;
+        const visibleTop = Math.max(y, top);
+        const visibleLeft = Math.max(x, left);
+        if (best && (visibleTop > best.top + 1 || Math.abs(visibleTop - best.top) <= 1 && visibleLeft >= best.left)) continue;
+        let anchor = range.cloneRange();
+        if (textNode) {
+          const localX = (visibleLeft - frameRect.left) / frameScale + 0.3;
+          const localY = (visibleTop - frameRect.top) / frameScale + Math.min(rect.height / 2, 5);
+          const caret = (document as Document & { caretRangeFromPoint?: (x: number, y: number) => Range | null }).caretRangeFromPoint?.(localX, localY);
+          if (caret && caret.startContainer.nodeType === Node.TEXT_NODE) anchor = caret.cloneRange();
+        }
+        anchor.collapse(true);
+        best = { contents, range: anchor, element: textNode ? undefined : node as Element, top: visibleTop, left: visibleLeft };
+      }
+    }
+  }
+  try { return best ? best.element ? best.contents.cfiFromNode(best.element, "reader-annotation") : best.contents.cfiFromRange(best.range, "reader-annotation") : null; }
+  catch { return null; }
+}
+
+const singleSectionPageCounts=new WeakMap<Document,{key:string;count:number}>();
+function measuredSingleSectionPages(runtime:PaneRuntime):number|null{
+  if(!runtime.rendition||!runtime.book||(runtime.book.spine as InternalSpine).spineItems.length!==1)return null;
+  const contents=visibleContents(runtime.rendition)[0];const doc=contents?.document;if(!doc?.body||doc.fonts?.status==="loading")return null;
+  const layout=(runtime.rendition as InternalRendition)._layout;const pageWidth=layout.pageWidth;if(!(pageWidth>1))return null;
+  const key=`${runtime.layoutWidth}|${runtime.layoutHeight}|${runtime.actualPageCount}|${runtime.effectiveFontScale}|${snapshot.session.readerFont}`;
+  const previous=singleSectionPageCounts.get(doc);if(previous?.key===key)return previous.count;
+  let right=0;const walker=doc.createTreeWalker(doc.body,NodeFilter.SHOW_TEXT);let node:Node|null;
+  while((node=walker.nextNode())){if(!node.textContent?.trim()||node.parentElement?.closest('script,style,annotation'))continue;const range=doc.createRange();range.selectNodeContents(node);for(const rect of Array.from(range.getClientRects()))if(rect.width>0&&rect.height>0)right=Math.max(right,rect.right);}
+  for(const object of Array.from(doc.querySelectorAll<HTMLElement>('img,svg,video,table'))){for(const rect of Array.from(object.getClientRects()))if(rect.width>0&&rect.height>0)right=Math.max(right,rect.right);}
+  if(!right)return null;const count=Math.max(1,Math.ceil((right-1)/pageWidth));singleSectionPageCounts.set(doc,{key,count});return count;
+}
+
+function handleRelocated(index: number, location: EpubLocation): void {
+  const runtime = runtimes[index];
+  if (!runtime.book || !runtime.bookId) return;
+  if (runtime.rendition) updateGroupTail(runtime.rendition, runtime);
+  let cfi = location.start?.cfi;
+  if (!cfi) return;
+  // epub.js can briefly report its default first page while a saved CFI is
+  // still being restored. Never let that transient event overwrite progress.
+  if (runtime.restoringLocation || runtime.resizeActive) return;
+  if (linearSectionCount(runtime.book) > 1) cfi = firstVisibleContentCfi(index) ?? cfi;
+  const fallbackPage = location.start.displayed?.page ?? 1;
+  const fallbackTotal = location.start.displayed?.total ?? 1;
+  if (runtime.readingMode!=='scroll' && linearSectionCount(runtime.book) === 1) {
+    runtime.totalPages = measuredSingleSectionPages(runtime) ?? Math.max(1, fallbackTotal);
+    const internal = runtime.rendition as InternalRendition | null;
+    const container = internal?.manager.container;
+    // Chromium quantizes fractional scroll positions. epub.js floors them,
+    // which can label column 3 as page 2 at widths not divisible by three.
+    const exactSingleView = (runtime.book.spine as InternalSpine).spineItems.length === 1;
+    const snappedPage = exactSingleView && container && internal && internal._layout.settings.direction !== "rtl"
+      ? Math.round(container.scrollLeft / internal._layout.pageWidth) + 1 : fallbackPage;
+    runtime.currentPage = Math.min(runtime.totalPages, Math.max(1, snappedPage));
+    runtime.endPage = Math.min(
+      runtime.totalPages,
+      runtime.currentPage + Math.max(1, runtime.actualPageCount) - 1,
+    );
+    runtime.percent = runtime.totalPages > 1
+      ? Math.min(1, Math.max(0, (runtime.currentPage - 1) / (runtime.totalPages - 1)))
+      : 0;
+    runtime.cfi = cfi;
+    updatePaneProgress(index);
+    applyTextAnnotations(index);
+    renderOverlayAnnotations(index);
+    savePaneProgress(index);
+    return;
+  }
+  const total = runtime.book.locations.length();
+  const locatedResult = total > 0 ? runtime.book.locations.locationFromCfi(cfi) : -1;
+  const located = typeof locatedResult === "number" ? locatedResult : -1;
+  runtime.currentPage = located >= 0 ? located + 1 : fallbackPage;
+  // The visible range is defined by the reader's complete-page window, not by
+  // the EPUB location chunk nearest the right edge (chunks are only a page-map
+  // approximation and can otherwise under-count a visible page).
+  runtime.endPage = Math.min(
+    total || fallbackTotal,
+    runtime.currentPage + Math.max(1, runtime.actualPageCount) - 1,
+  );
+  runtime.totalPages = total > 0 ? total : fallbackTotal;
+  runtime.percent =
+    total > 1
+      ? Math.min(1, Math.max(0, located / (total - 1)))
+      : Math.min(1, Math.max(0, location.start.percentage ?? 0));
+  runtime.cfi = cfi;
+  if(runtime.readingMode==='scroll')runtime.layoutAnchorCfi=cfi;
+  updatePaneProgress(index);
+  applyTextAnnotations(index);
+  renderOverlayAnnotations(index);
+  savePaneProgress(index);
+}
+
+async function openBook(bookId: string, index = snapshot.session.activePane,requestedChapter?:string): Promise<void> {
+  const openingRequest=++bookOpenSequence[index];
+  if(learningIsOpen()){await closeLearning();if(learningIsOpen())return;}
+  if(openingRequest!==bookOpenSequence[index])return;
+  const bookRecord = getBook(bookId);
+  if (!bookRecord) {
+    showToast("这本书已不在本地书库中", "error");
+    return;
+  }
+  setActivePane(index);
+  const runtime = runtimes[index];
+  const sourceKey=JSON.stringify([bookRecord.path,bookRecord.modifiedAt,bookRecord.catalogSource?.sha256]);
+  if (runtime.bookId === bookId && runtime.openedSourceKey===sourceKey&&(runtime.rendition || runtime.lazyPageCount > 0)) {
+    if(requestedChapter){const chapter=portableBooks.get(bookId)?.book.chapters.find((item:any)=>item.id===requestedChapter);if(!chapter)throw new Error('当前内容版本没有这个章节，原书页保持打开');await jumpToBookTarget(chapter.readingDocument.path.split('/').pop(),false,index);}
+    return;
+  }
+
+  try{const previous=makePaneProgress(index);if(previous)await writePaneProgress(index,previous);else await progressWrites[index];}catch(error){showToast('原位置尚未保存，书页保持打开：'+String(error),'error');return;}
+  if(openingRequest!==bookOpenSequence[index])return;
+  destroyRuntime(index, false, false);
+  runtime.bookId = bookId;
+  runtime.openedSourceKey=sourceKey;
+  snapshot.session.paneBookIds[index] = bookId;
+  updatePaneHeader(index);
+  updateActiveUi();
+  persistSession();
+
+  const pane = paneElement(index);
+  const stage = pane.querySelector<HTMLElement>(".pane-stage");
+  const host = pane.querySelector<HTMLElement>(".epub-host");
+  if (!stage || !host) return;
+  pane.classList.add("loading");
+  const generation = runtime.generation;
+  let finishOpening!:()=>void;
+  const opening=new Promise<void>(resolve=>{finishOpening=resolve;});
+  runtime.opening=opening;runtime.finishOpening=finishOpening;
+
+  try {
+    if (bookRecord.lazyPages && bookRecord.lazyPages > 0) {
+      await openLazyPageBook(
+        index,
+        generation,
+        bookRecord.lazyPages,
+        snapshot.progress[bookId],
+        stage,
+        host,
+      );
+      return;
+    }
+    let portable=null;
+    if(bookRecord.catalogSource){try{portable=await preparePortableBook(bookRecord as CatalogRecord);}catch(error){portableBooks.delete(bookId);if(!isDesktop||/^https?:\/\//.test(bookRecord.path))throw error;showToast('在线材料暂未取得，先读取本机正文。');}}
+    const streamed=Boolean(portable&&/^https?:\/\//.test(bookRecord.path));
+    await prepareLearning(bookId);
+    const raw = streamed?null:await invoke<ArrayBuffer | number[]>("load_book_bytes", { bookId });
+    if (generation !== runtime.generation) return;
+    const bytes=raw?rawResponseToBuffer(raw):null;
+    const sourceHash=streamed?(portable!.book.reader.epubSha256??portable!.record.catalogSource.sha256):Array.from(new Uint8Array(await crypto.subtle.digest("SHA-256",bytes!))).map(x=>x.toString(16).padStart(2,"0")).join("");
+    if(generation!==runtime.generation)return;
+    sourceDigests.set(bookId,sourceHash);
+    const contentDigest=streamed?portable!.book.reader.contentDigest:await invoke<string>('epub_content_identity',{bookId,sourceSha256:sourceHash}).catch(()=>null);
+    if(generation!==runtime.generation)return;
+    if(contentDigest)contentDigests.set(bookId,contentDigest);
+    const priorHash=snapshot.progress[bookId]?.sourceSha256;
+    const priorContent=snapshot.progress[bookId]?.contentDigest;
+    const changed=priorContent&&contentDigest?priorContent!==contentDigest:priorHash&&(streamed?priorHash!==portable!.record.catalogSource.sha256:priorHash!==sourceHash);
+    if(changed){
+      try{snapshot.progress[bookId]=await invoke<BookProgress>('activate_progress_edition',{bookId,sourceSha256:sourceHash,contentDigest});sourceMismatches.delete(bookId);showToast(snapshot.progress[bookId].cfi?'已恢复这份内容版本自己的位置与批注。':'已打开新的内容版本。原版位置与批注保留在“版本记录”，没有直接贴到新正文。');}
+      catch(error){sourceMismatches.add(bookId);showToast('旧记录保持完整，但新版本记录尚未建立：'+String(error),'error');}
+    }
+    else{sourceMismatches.delete(bookId);if(contentDigest)ensureBookProgress(bookId,index).contentDigest=contentDigest;ensureBookProgress(bookId,index).bookUuid=bookRecord.bookUuid;}
+    if(portable&&!streamed&&contentDigest&&contentDigest!==portable.book.reader.contentDigest){portableBooks.delete(bookId);portable=null;holdLearning(bookId,'学习材料与本机正文的版本不同；普通阅读与原记录保留，请核对后重新连接材料。');}
+    const book = streamed?ePub(readerPackageUrl(bookId),{requestMethod:portableRequest(portable!),replacements:'none'}):ePub(bytes!);
+    runtime.book = book;
+    await Promise.all([book.ready, book.opened]);
+    if(portable)book.locations.load(JSON.stringify(portable.book.reader.locations));
+    else if(isDesktop){try{const cached=await invoke<string|null>('load_location_index',{sourceSha256:sourceHash});if(cached)book.locations.load(cached);}catch{/* Reading remains usable without an optional index cache. */}}
+    refreshLearningButton();
+    if (generation !== runtime.generation) {
+      book.destroy();
+      return;
+    }
+
+    // Window-state restoration and an eager user drag can otherwise race the
+    // first CFI display. Capture the fixed logical canvas only after the native
+    // window has been quiet for a short interval.
+    await waitForStableStage(stage);
+
+    const saved = snapshot.progress[bookId];
+    runtime.readingMode=saved?.readingMode==='scroll'?'scroll':saved?.readingMode==='paged'||isDesktop?'paged':'scroll';
+    runtime.pageMode = pageModeForBook(bookId);
+    const available = availableStageSize(stage);
+    runtime.actualPageCount = runtime.readingMode==='scroll' ? 1 : runtime.pageMode > 0
+      ? runtime.pageMode
+      : automaticPageCountForWidth(available.width);
+    runtime.layoutWidth = available.width;
+    runtime.layoutHeight = available.height;
+    positionRenditionCanvas(index);
+    updatePaneHeader(index);
+
+    const rendition = new Rendition(book, {
+      // Numeric dimensions prevent epub.js Stage from registering its own
+      // throttled window.resize handler. The app is the sole resize owner;
+      // otherwise epub.js clears every view repeatedly while a border is dragged.
+      width: runtime.layoutWidth,
+      height: runtime.layoutHeight,
+      // Continuous keeps adjacent EPUB spine sections mounted, so a one-page
+      // slide remains continuous even when the visible window crosses chapters.
+      manager: streamed?"default":"continuous",
+      flow: runtime.readingMode==='scroll'?'scrolled-continuous':"paginated",
+      spread: "none",
+      infinite: true,
+      snap: false,
+      allowScriptedContent: false,
+      ignoreClass: "reader-annotation",
+      // The application owns resizing. In a fixed page mode the EPUB canvas is
+      // intentionally not reflowed when the outer window changes size.
+      resizeOnOrientationChange: false,
+    });
+    runtime.rendition = rendition;
+    await rendition.started;
+    if (generation !== runtime.generation) {
+      rendition.destroy();
+      return;
+    }
+    patchMultiPageLayout(rendition, runtime);
+    await rendition.attachTo(host);
+    let overlayFrame=0;
+    (rendition as InternalRendition).manager.container?.addEventListener('scroll',()=>{if(runtime.readingMode==='scroll'&&!overlayFrame)overlayFrame=requestAnimationFrame(()=>{overlayFrame=0;if(runtime.rendition===rendition)renderOverlayAnnotations(index);});},{passive:true});
+    rendition.hooks.content.register((contents: EpubContents) => applyReadingTheme(contents));
+    applyAdaptiveFontScale(index, host);
+    updatePaneHeader(index);
+    book.spine.hooks.serialize.register(async(output: string, section: { output: string; url:string }) => {
+      if(streamed)section.output=await rewritePortableResources(bookId,section.output||output,section.url);
+      prepareSectionForLayout(index,section.output||output,section);
+    });
+    const requestedHref=requestedChapter&&portable?portable.book.chapters.find((c:any)=>c.id===requestedChapter)?.readingDocument.path.split('/').pop():null;
+    const restoreCfi = requestedHref??(editionHeld(bookId)?null:saved?.cfi ?? null);
+    runtime.layoutAnchorCfi=restoreCfi;
+    runtime.restoringLocation = Boolean(restoreCfi);
+    rendition.hooks.content.register((contents: EpubContents) => wireBookDocument(index, contents));
+    rendition.on("relocated", (location: EpubLocation) => handleRelocated(index, location));
+    rendition.on("selected", (cfiRange: string, contents: EpubContents) =>
+      handleTextSelection(index, cfiRange, contents),
+    );
+    rendition.on("rendered", () => {
+      if (!runtime.restoringLocation) pane.classList.remove("loading");
+      updateGroupTail(rendition, runtime);
+      scheduleAtomicFit(index);
+      window.requestAnimationFrame(() => {
+        applyTextAnnotations(index);
+        renderOverlayAnnotations(index);
+      });
+    });
+
+    try {
+      await rendition.display(restoreCfi ?? undefined);
+      // A native resize during startup can race the first display request.
+      // Reassert the persisted anchor once before exposing/saving the page.
+      await settleRenditionLayout(index);
+      fitAtomicBlocks(index);
+      await settleRenditionLayout(index);
+      if (restoreCfi) {await rendition.display(restoreCfi);await ensureAnchorVisible(index,restoreCfi);}
+    } catch (error) {
+      if (!restoreCfi) throw error;
+      await rendition.display();
+      showToast("原阅读位置已失效，已从书籍开头打开", "error");
+    } finally {
+      runtime.restoringLocation = false;
+    }
+    await rendition.reportLocation();
+    if (index === snapshot.session.activePane) renderChapterList();
+    pane.classList.remove("loading");
+    applyTextAnnotations(index);
+    renderOverlayAnnotations(index);
+
+    runtime.resizeObserver = new ResizeObserver((entries) => {
+      if (!runtime.rendition) return;
+      const rect = entries[0]?.contentRect;
+      scheduleLiveViewportScale(
+        index,
+        rect?.width ?? stage.clientWidth,
+        rect?.height ?? stage.clientHeight,
+      );
+    });
+    runtime.resizeObserver.observe(stage);
+
+    scheduleAtomicFit(index);
+    scheduleDynamicPageMap(index, 0);
+  } catch (error) {
+    if(generation!==runtime.generation)return;
+    pane.classList.remove("loading");
+    destroyRuntime(index, true);
+    runtime.bookId = bookId;
+    pane.classList.add("load-error");
+    showToast(`无法打开“${bookRecord.title}”：${String(error)}`, "error");
+  } finally {
+    finishOpening();
+    if(runtime.opening===opening){runtime.opening=null;runtime.finishOpening=null;}
+  }
+}
+
+function setActivePane(index: number): void {
+  if (index < 0 || index >= snapshot.session.paneCount) return;
+  snapshot.session.activePane = index;
+  updateActiveUi();
+  renderChapterList();
+  updateNavigationHistoryUi();
+  persistSession();
+}
+
+async function ensureLocationsForJump(index: number): Promise<boolean> {
+  const runtime = runtimes[index];
+  if (!runtime.book || !runtime.rendition) return false;
+  if (runtime.book.locations.length() > 0) return true;
+  scheduleDynamicPageMap(index, 0, true);
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    if (runtime.book.locations.length() > 0) return true;
+    await new Promise<void>((resolve) => window.setTimeout(resolve, 100));
+  }
+  return runtime.book.locations.length() > 0;
+}
+
+async function jumpToPage(index: number, requestedPage: number): Promise<void> {
+  const runtime = runtimes[index];
+  if (!runtime.bookId) return;
+  setActivePane(index);
+  if (runtime.lazyPageCount > 0) {
+    await renderLazyPageWindow(index, requestedPage);
+    return;
+  }
+  if (!runtime.rendition || !runtime.book) return;
+  if (runtime.readingMode!=='scroll' && linearSectionCount(runtime.book) === 1) { await jumpToScreenPage(index, requestedPage); return; }
+  const ready = await ensureLocationsForJump(index);
+  if (!ready) {
+    showToast("阅读位置索引仍在生成，请稍后再试", "error");
+    return;
+  }
+  const total = runtime.book.locations.length();
+  const bodyTarget = learningCfiFromBodyPosition(runtime.bookId, runtime.book, runtime.cfi, requestedPage);
+  if (bodyTarget) { await jumpToBookTarget(bodyTarget, false, index); return; }
+  const page = Math.min(Math.max(1, Math.round(requestedPage)), Math.max(1, total));
+  const percentage = total > 1 ? (page - 1) / (total - 1) : 0;
+  const cfi = runtime.book.locations.cfiFromPercentage(percentage);
+  await jumpToBookTarget(cfi, false, index);
+}
+
+type NavigationDistance = "single" | "group";
+
+async function navigateNow(
+  index: number,
+  direction: "prev" | "next",
+  distance: NavigationDistance = "single",
+): Promise<void> {
+  const runtime = runtimes[index];
+  if (runtime?.lazyPageCount > 0) {
+    const step = distance === "group" ? Math.max(1, runtime.actualPageCount) : 1;
+    const current = Math.max(1, runtime.currentPage);
+    const target = distance === "group"
+      ? (() => {
+          const groupStart = Math.floor((current - 1) / step) * step + 1;
+          const lastGroupStart = Math.floor((runtime.lazyPageCount - 1) / step) * step + 1;
+          return direction === "next"
+            ? Math.min(lastGroupStart, groupStart + step)
+            : Math.max(1, groupStart - step);
+        })()
+      : direction === "next"
+        ? Math.min(runtime.lazyPageCount, current + 1)
+        : Math.max(1, current - 1);
+    await renderLazyPageWindow(index, target);
+    return;
+  }
+  const rendition = runtime?.rendition;
+  if (!rendition) {
+    openDrawer();
+    return;
+  }
+  if(runtime.readingMode==='scroll'){
+    const container=(rendition as InternalRendition).manager.container;
+    if(container){container.scrollTop+=(direction==='next'?1:-1)*(distance==='group'?container.clientHeight*.88:80);await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));await rendition.reportLocation();}
+    return;
+  }
+  if(runtime.book&&(runtime.book.spine as InternalSpine).spineItems.length===1){
+    if(direction==="prev"&&runtime.currentPage<=1)return;
+    if(direction==="next"&&(distance==="group"?runtime.endPage:runtime.currentPage)>=runtime.totalPages)return;
+  }
+  const internal = rendition as InternalRendition;
+  const layout = internal._layout;
+  const originalDelta = layout.delta;
+  const originalPropsDelta = layout.props.delta;
+  let navigated = false;
+  try {
+    if (distance === "group") {
+      const groupDelta = originalDelta * Math.max(1, runtime.actualPageCount);
+      layout.delta = groupDelta;
+      layout.props.delta = groupDelta;
+    }
+    await rendition[direction]();
+    navigated = true;
+  } catch (error) {
+    showToast(`翻页失败：${String(error)}`, "error");
+  } finally {
+    layout.delta = originalDelta;
+    if (originalPropsDelta === undefined) delete layout.props.delta;
+    else layout.props.delta = originalPropsDelta;
+  }
+  if (navigated && distance === "group") {
+    updateGroupTail(rendition, runtime);
+    await rendition.reportLocation();
+  }
+}
+
+function navigateActive(
+  direction: "prev" | "next",
+  distance: NavigationDistance = "single",
+): void {
+  void navigate(snapshot.session.activePane, direction, distance);
+}
+
+async function closeBook(index: number): Promise<void> {
+  const request=++bookOpenSequence[index];
+  try{const previous=makePaneProgress(index);if(previous)await writePaneProgress(index,previous);else await progressWrites[index];}catch(error){showToast('原位置尚未保存，书页保持打开：'+String(error),'error');return;}
+  if(request!==bookOpenSequence[index])return;
+  destroyRuntime(index, false, false);
+  snapshot.session.paneBookIds[index] = null;
+  updatePaneHeader(index);
+  updatePaneProgress(index);
+  updateActiveUi();
+  persistSession();
+}
+
+function setPaneCount(count: number): void {
+  const nextCount = Math.min(MAX_PANES, Math.max(1, count));
+  const previousCount = snapshot.session.paneCount;
+  snapshot.session.paneCount = nextCount;
+  snapshot.session.activePane = Math.min(snapshot.session.activePane, nextCount - 1);
+  updateLayoutUi();
+
+  if (nextCount < previousCount) {
+    for (let index = nextCount; index < previousCount; index += 1) destroyRuntime(index, true);
+  } else {
+    for (let index = previousCount; index < nextCount; index += 1) {
+      const bookId = snapshot.session.paneBookIds[index];
+      if (bookId) void openBook(bookId, index);
+    }
+  }
+  persistSession();
+}
+
+function openBookInNewPane(bookId: string): void {
+  const alreadyOpen = snapshot.session.paneBookIds.findIndex((id) => id === bookId);
+  if (alreadyOpen >= 0 && alreadyOpen < snapshot.session.paneCount) {
+    setActivePane(alreadyOpen);
+    return;
+  }
+  let target = snapshot.session.paneBookIds
+    .slice(0, snapshot.session.paneCount)
+    .findIndex((id) => !id);
+  if (target < 0 && snapshot.session.paneCount < MAX_PANES) {
+    target = snapshot.session.paneCount;
+    setPaneCount(snapshot.session.paneCount + 1);
+  }
+  if (target < 0) {
+    target = snapshot.session.activePane;
+    showToast("四个窗格已满，已替换当前选中的窗格");
+  }
+  void openBook(bookId, target);
+}
+
+function renderLibraryAudit(): void {
+  if(!isDesktop){libraryAudit.innerHTML='<strong>我的书籍</strong><span>这里保留读过的书；完整材料只在主动选择时保存。</span>';return;}
+  const scan = snapshot.scan;
+  const hasWarning =
+    scan.unreadable > 0 || scan.missingRoots > 0 || scan.otherBookFiles > 0 || snapshot.books.some(book=>book.available===false);
+  const allCandidatesLoaded = scan.loadedCandidates === scan.epubCandidates;
+  libraryAudit.classList.toggle("warning", hasWarning || !allCandidatesLoaded);
+
+  const details = [
+    `递归扫描 ${scan.rootsScanned} 个书库`,
+    `EPUB ${scan.loadedCandidates}/${scan.epubCandidates}`,
+  ];
+  if (scan.duplicates) details.push(`去重 ${scan.duplicates}`);
+  if (scan.ignoredTrees) details.push(`排除回收站 ${scan.ignoredTrees}`);
+  if (scan.otherBookFiles) details.push(`待转换 ${scan.otherBookFiles}`);
+  if (scan.missingRoots) details.push(`离线目录 ${scan.missingRoots}`);
+  if (scan.unreadable) details.push(`不可读 ${scan.unreadable}`);
+  const offline=snapshot.books.filter(book=>book.available===false).length;if(offline)details.push(`暂不可用的已登记文件 ${offline}`);
+
+  libraryAudit.innerHTML = `
+    <strong>${
+      !hasWarning && allCandidatesLoaded
+        ? `书目已更新 · ${scan.booksLoaded} 本书`
+        : `已读取 ${scan.booksLoaded} 本，另有项目需处理`
+    }</strong>
+    <span>${details.join(" · ")}</span>`;
+  libraryAudit.title = [
+    `共享书库清单：${snapshot.libraryRoots.join("；") || "尚未登记"}`,
+    ...scan.issues.map((issue) => `${issue.path}：${issue.message}`),
+  ].join("\n");
+}
+
+function renderLibrary(query = ""): void {
+  renderLibraryAudit();
+  const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+  const books = snapshot.books.filter((book) =>
+    `${book.title} ${book.author}`.toLocaleLowerCase("zh-CN").includes(normalizedQuery),
+  );
+  const count = app.querySelector<HTMLElement>(".book-count");
+  if (count) count.textContent = String(snapshot.books.length);
+  if (books.length === 0) {
+    libraryList.innerHTML = `
+      <div class="empty-library">
+        ${icons.book}
+        <strong>${snapshot.books.length ? "没有匹配的书" : "书库还是空的"}</strong>
+        <span>${snapshot.books.length ? "换个关键词试试" : "添加 EPUB，或选择一个已有书库文件夹"}</span>
+      </div>`;
+    return;
+  }
+  libraryList.innerHTML = books
+    .map((book, index) => {
+      const progress = snapshot.progress[book.id];
+      const metric = progress ? readingMetricLabel(progress.readingMetric) : {text: '尚未阅读', percent: null};
+      const hue = (index * 43 + book.title.length * 17) % 360;
+      const isOpen = snapshot.session.paneBookIds.includes(book.id);
+      return `
+        <article class="library-book ${isOpen ? "open" : ""}" role="listitem" data-book-id="${escapeHtml(book.id)}">
+          <button class="book-main" type="button" title="在当前窗格打开">
+            <span class="mini-cover" style="--cover-hue:${hue}">${escapeHtml(book.title.slice(0, 1))}</span>
+            <span class="book-copy">
+              <strong>${escapeHtml(book.title)}</strong>
+              <em>${escapeHtml(book.author)}</em>
+              ${metric.percent === null ? '' : `<span class="book-progress"><i style="width:${metric.percent}%"></i></span>`}
+              <small>${escapeHtml(metric.text)}</small>
+            </span>
+          </button>
+          <button class="book-new-pane" type="button" title="在新窗格打开" aria-label="在新窗格打开">${
+            isOpen ? icons.check : icons.plus
+          }</button>
+        </article>`;
+    })
+    .join("");
+}
+
+async function importSelectedBooks(): Promise<void> {
+  const selected = await open({
+    multiple: true,
+    directory: false,
+    title: "选择要加入书库的 EPUB",
+    filters: [{ name: "EPUB 电子书", extensions: ["epub"] }],
+  });
+  if (!selected) return;
+  const paths = Array.isArray(selected) ? selected : [selected];
+  await importPaths(paths);
+}
+
+async function importFolder(): Promise<void> {
+  const selected = await open({
+    multiple: false,
+    directory: true,
+    title: "选择本地书库文件夹",
+  });
+  if (!selected) return;
+  await importPaths([selected]);
+}
+
+async function importPaths(paths: string[]): Promise<void> {
+  try {
+    const next = await invoke<AppSnapshot>("import_paths", { paths });
+    snapshot = {
+      ...next,
+      progress: normalizeProgress(next.progress),
+      session: normalizeSession(next.session),
+    };
+    renderLibrary(searchInput.value);
+    const failed = snapshot.scan.unreadable + snapshot.scan.missingRoots;
+    showToast(
+      failed
+        ? `书库共 ${snapshot.books.length} 本；有 ${failed} 项未读取，请查看书库核对栏`
+        : `书库已完整更新，共 ${snapshot.books.length} 本书`,
+      failed ? "error" : "normal",
+    );
+  } catch (error) {
+    showToast(String(error), "error");
+  }
+}
+
+async function refreshLibrary(): Promise<void> {
+  try {
+    const next = await invoke<AppSnapshot>("refresh_library");
+    snapshot.books = next.books;
+    snapshot.progress = normalizeProgress(next.progress);
+    snapshot.libraryRoots = next.libraryRoots;
+    snapshot.scan = next.scan;
+    renderLibrary(searchInput.value);
+    const failed = snapshot.scan.unreadable + snapshot.scan.missingRoots;
+    showToast(
+      failed
+        ? `已读取 ${snapshot.books.length} 本；有 ${failed} 项未读取，请查看书库核对栏`
+        : `书库已更新，共 ${snapshot.books.length} 本书`,
+      failed ? "error" : "normal",
+    );
+  } catch (error) {
+    showToast(String(error), "error");
+  }
+}
+
+function cycleTheme(): void {
+  const themes: ThemeName[] = ["paper", "light", "night", "contrast"];
+  const current = themes.indexOf(snapshot.session.theme);
+  snapshot.session.theme = themes[(current + 1) % themes.length];
+  applyTheme();
+  persistSession();
+}
+
+function changeFont(delta: number): void {
+  snapshot.session.fontScale = Math.min(
+    180,
+    Math.max(70, snapshot.session.fontScale + delta),
+  );
+  applyFontScale();
+  persistSession();
+}
+
+async function toggleFullscreen(): Promise<void> {
+  const appWindow = getCurrentWindow();
+  const next = !(await appWindow.isFullscreen());
+  await appWindow.setFullscreen(next);
+  showToast(next ? "已进入全屏，按 F11 退出" : "已退出全屏");
+}
+
+function wireEvents(): void {
+  wireReadingNavigation();
+
+  libraryHandle.addEventListener("click", () => {
+    if (drawer.classList.contains("visible")) closeDrawer();
+    else openDrawer();
+  });
+
+  app.querySelector(".library-toggle")?.addEventListener("click", () => {
+    if (drawer.classList.contains("visible")) closeDrawer();
+    else openDrawer();
+  });
+  app.querySelector(".drawer-close")?.addEventListener("click", closeDrawer);
+  app.querySelector(".nav-back")?.addEventListener("click", () => navigateActive("prev"));
+  app.querySelector(".nav-forward")?.addEventListener("click", () => navigateActive("next"));
+  app.querySelector(".nav-group-back")?.addEventListener("click", () =>
+    navigateActive("prev", "group"),
+  );
+  app.querySelector(".nav-group-forward")?.addEventListener("click", () =>
+    navigateActive("next", "group"),
+  );
+  app.querySelector(".jump-toggle")?.addEventListener("click", () => openJumpDialog());
+  app.querySelector(".jump-close")?.addEventListener("click", closeJumpDialog);
+  app.querySelector(".jump-cancel")?.addEventListener("click", closeJumpDialog);
+  jumpDialog.addEventListener("click", (event) => {
+    if (event.target === jumpDialog) closeJumpDialog();
+  });
+  jumpForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const index = snapshot.session.activePane;
+    const requested = Number(jumpInput.value);
+    if (!Number.isFinite(requested) || requested < 1) {
+      jumpInput.focus();
+      return;
+    }
+    closeJumpDialog();
+    void jumpToPage(index, requested);
+  });
+  app.querySelector(".font-down")?.addEventListener("click", () => changeFont(-10));
+  app.querySelector(".font-up")?.addEventListener("click", () => changeFont(10));
+  app.querySelector(".theme-cycle")?.addEventListener("click", cycleTheme);
+  annotationToggle.addEventListener("click", () =>
+    setAnnotationPanelVisible(!annotationPanel.classList.contains("visible")),
+  );
+  app.querySelector(".annotation-close")?.addEventListener("click", () =>
+    setAnnotationPanelVisible(false),
+  );
+  app.querySelector(".apply-text-mark")?.addEventListener("click", applyPendingTextMark);
+  app.querySelector(".annotation-undo")?.addEventListener("click", undoLastAnnotation);
+  app.querySelectorAll<HTMLButtonElement>(".format-toggle").forEach((button) => {
+    button.addEventListener("click", () => {
+      const format = button.dataset.format;
+      if (!format || !["highlight", "bold", "underline", "wave", "box"].includes(format)) return;
+      const key = format as keyof AnnotationTextStyle;
+      if (activeFormats.has(key)) activeFormats.delete(key);
+      else activeFormats.add(key);
+      button.classList.toggle("selected", activeFormats.has(key));
+    });
+  });
+  app.querySelectorAll<HTMLButtonElement>(".annotation-tool").forEach((button) => {
+    button.addEventListener("click", () => {
+      const tool = button.dataset.tool;
+      if (tool === "read" || tool === "text" || tool === "pen" || tool === "eraser") {
+        setAnnotationTool(tool);
+      }
+    });
+  });
+  annotationList.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const item = target.closest<HTMLElement>(".annotation-list-item");
+    const annotationId = item?.dataset.annotationId;
+    const bookId = runtimes[snapshot.session.activePane].bookId;
+    if (!annotationId || !bookId) return;
+    if (target.closest(".annotation-delete")) deleteBookAnnotation(bookId, annotationId);
+    else if (target.closest(".annotation-jump")) jumpToAnnotation(annotationId);
+  });
+  app.querySelector(".fullscreen-toggle")?.addEventListener("click", () => {
+    void toggleFullscreen().catch((error) => showToast(`无法切换全屏：${String(error)}`, "error"));
+  });
+  app.querySelector(".add-books")?.addEventListener("click", () => void importSelectedBooks());
+  app.querySelector(".add-folder")?.addEventListener("click", () => void importFolder());
+  app.querySelector(".refresh-library")?.addEventListener("click", () => void refreshLibrary());
+
+  app.querySelectorAll<HTMLButtonElement>("[data-pane-count]").forEach((button) => {
+    button.addEventListener("click", () => setPaneCount(Number(button.dataset.paneCount)));
+  });
+
+  searchInput.addEventListener("input", () => renderLibrary(searchInput.value));
+  libraryList.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const item = target.closest<HTMLElement>(".library-book");
+    const bookId = item?.dataset.bookId;
+    if (!bookId) return;
+    if (target.closest(".book-new-pane")) {
+      openBookInNewPane(bookId);
+      closeDrawer();
+    } else if (target.closest(".book-main")) {
+      void openBook(bookId);
+      closeDrawer();
+    }
+  });
+
+  readerGrid.addEventListener("pointerdown", (event) => {
+    const pane = (event.target as HTMLElement).closest<HTMLElement>(".reader-pane");
+    if (pane) setActivePane(Number(pane.dataset.paneIndex));
+  });
+  readerGrid.addEventListener("pointerdown", handleAnnotationPointerDown);
+  readerGrid.addEventListener("input", (event) => {
+    const target = event.target as HTMLElement;
+    if (target.matches(".free-note-content")) updateFreeTextFromEditor(target);
+  });
+  readerGrid.addEventListener("click", (event) => {
+    const target = event.target as HTMLElement;
+    const pane = target.closest<HTMLElement>(".reader-pane");
+    const index = Number(pane?.dataset.paneIndex);
+    if (!Number.isFinite(index)) return;
+    if (target.closest(".page-hotspot-group-prev")) {
+      void navigate(index, "prev", "group");
+    } else if (target.closest(".page-hotspot-prev")) {
+      void navigate(index, "prev");
+    } else if (target.closest(".page-hotspot-group-next")) {
+      void navigate(index, "next", "group");
+    } else if (target.closest(".page-hotspot-next")) {
+      void navigate(index, "next");
+    } else if (target.closest(".pane-close")) {
+      closeBook(index);
+    } else if (target.closest(".page-jump-button")) {
+      openJumpDialog(index);
+    } else if (target.closest('.retry-book')&&runtimes[index].bookId) {
+      void openBook(runtimes[index].bookId!,index);
+    } else if (target.closest(".empty-library-button")) {
+      openDrawer();
+    }
+  });
+  readerGrid.addEventListener("change", (event) => {
+    const target = event.target as HTMLElement;
+    if (!target.matches(".pane-page-mode select,.pane-reading-mode select")) return;
+    const pane = target.closest<HTMLElement>(".reader-pane");
+    const index = Number(pane?.dataset.paneIndex);
+    if (!Number.isFinite(index)) return;
+    setActivePane(index);
+    if(target.matches('.pane-reading-mode select')){void setReadingMode(index,(target as HTMLSelectElement).value==='scroll'?'scroll':'paged');(target as HTMLSelectElement).blur();return;}
+    setBookPageMode(index, Number((target as HTMLSelectElement).value));
+    // Do not leave keyboard focus inside the select: native left/right would
+    // otherwise change 4 pages into 3/5 pages instead of turning the book.
+    (target as HTMLSelectElement).blur();
+  });
+
+  window.addEventListener("keydown", (event) => {
+    if (learningIsOpen()) return;
+    if (event.altKey && event.key === "ArrowLeft") { event.preventDefault(); returnToPreviousPosition(); return; }
+    if (event.ctrlKey && event.key.toLowerCase() === "f") { event.preventDefault(); openBookNavigation("search"); return; }
+    if (event.ctrlKey && event.key.toLowerCase() === "t") { event.preventDefault(); openBookNavigation("contents"); return; }
+    if (event.key === "Escape") { closeBookNavigation(); setReadingSettings(false); closeFigureViewer(); }
+    if (event.key === "F11") {
+      event.preventDefault();
+      void toggleFullscreen().catch((error) => showToast(`无法切换全屏：${String(error)}`, "error"));
+      return;
+    }
+    const target = event.target as HTMLElement | null;
+    if (event.ctrlKey && event.key.toLowerCase() === "n") {
+      event.preventDefault();
+      setAnnotationPanelVisible(!annotationPanel.classList.contains("visible"));
+      return;
+    }
+    if (
+      target?.matches(".pane-page-mode select") &&
+      (event.key === "ArrowLeft" || event.key === "ArrowRight")
+    ) {
+      event.preventDefault();
+      (target as HTMLSelectElement).blur();
+      navigateActive(event.key === "ArrowLeft" ? "prev" : "next");
+      return;
+    }
+    if (target?.matches("input, textarea, select, [contenteditable='true']")) return;
+    if (event.ctrlKey && event.key.toLowerCase() === "l") {
+      event.preventDefault();
+      openDrawer();
+      searchInput.focus();
+      return;
+    }
+    if (event.key.toLowerCase() === "g") {
+      event.preventDefault();
+      openJumpDialog();
+      return;
+    }
+    if (event.ctrlKey && /^[1-4]$/.test(event.key)) {
+      event.preventDefault();
+      setActivePane(Number(event.key) - 1);
+      return;
+    }
+    if (event.key === "ArrowLeft") {
+      event.preventDefault();
+      navigateActive("prev");
+      return;
+    }
+    if (event.key === "ArrowRight") {
+      event.preventDefault();
+      navigateActive("next");
+      return;
+    }
+    if (event.key === "PageUp" || (event.key === " " && event.shiftKey)) {
+      event.preventDefault();
+      navigateActive("prev", "group");
+      return;
+    }
+    if (event.key === "PageDown" || (event.key === " " && !event.shiftKey)) {
+      event.preventDefault();
+      navigateActive("next", "group");
+      return;
+    }
+    if (event.key === "Escape") {
+      if (jumpDialog.classList.contains("visible")) closeJumpDialog();
+      else if (annotationPanel.classList.contains("visible")) setAnnotationPanelVisible(false);
+      else closeDrawer();
+    }
+  });
+
+  window.addEventListener("pointermove", (event) => {
+    if (drawingDraft) extendDrawing(event);
+    if (noteDragState) moveNote(event);
+  });
+  window.addEventListener("pointerup", (event) => {
+    if (drawingDraft) finishDrawing(event);
+    if (noteDragState) finishNoteDrag(event);
+  });
+  window.addEventListener("pointercancel", (event) => {
+    if (drawingDraft) finishDrawing(event);
+    if (noteDragState) finishNoteDrag(event);
+  });
+}
+
+function readingFontFamily(): string {
+  return snapshot.session.readerFont === "sans"
+    ? '"Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif'
+    : 'Georgia, "Noto Serif SC", "Source Han Serif SC", SimSun, serif';
+}
+function fitAlgorithmPreview(element:HTMLElement,fitKey:string,usableWidth:number,columnWidth:number):void {
+  if(element.dataset.comfortableFitKey===fitKey)return;
+  element.style.removeProperty("zoom");element.dataset.comfortableFitKey=fitKey;
+  const widths=Array.from(element.getClientRects()).map(rect=>rect.width);
+  const width=Math.max(0,...widths);
+  // Narrow overview columns cannot contain deeply indented code at the
+  // normal intrinsic table width. Fit width only; keep semantic row flow.
+  if(width>columnWidth+2) {
+    element.style.zoom=String(Math.max(.05,Math.min(1,usableWidth/width)));
+    element.dataset.readerDetail="true";element.classList.add("reader-expandable");element.tabIndex=0;
+    element.title="点按放大阅读算法";
+  }
+}
+function readingThemeCss():string {
+  return Object.entries(themeRules(snapshot.session.theme)).map(([selector,properties])=>`${selector}{${Object.entries(properties).map(([key,value])=>`${key}:${value}`).join(";")}}`).join("\n");
+}
+function scrollReadingCss(index:number):string{
+  if(runtimes[index]?.readingMode!=='scroll')return '';
+  const width=Math.max(28,Math.min(64,snapshot.session.contentWidth??44));
+  return `\nhtml{overflow:visible!important}body{max-width:${width}em!important;margin:0 auto!important;padding:1.8em 1.4em 3em!important;column-rule:none!important;overflow-wrap:break-word}pre,table{max-width:100%!important;overflow-x:auto}pre{white-space:pre-wrap}img,svg,video{max-width:100%!important;height:auto!important}h1{font-size:1.7em!important}h2{font-size:1.3em!important}`;
+}
+function prepareSectionForLayout(index:number, output:string, section:{output:string}):void {
+  // epub.js fires rendition content hooks after the first size measurement.
+  // Late font changes in a prepended section otherwise move the scroll origin
+  // by its temporary, unscaled width and can restore an earlier chapter.
+  // Earlier serialize hooks may already have replaced archive image/CSS URLs.
+  // Their current output is authoritative; the hook's first argument is stale.
+  const doc=new DOMParser().parseFromString(section.output || output,"application/xhtml+xml");
+  if(doc.querySelector("parsererror"))return;
+  const head=doc.querySelector("head");if(!head)return;
+  let sheet=doc.getElementById("comfortable-reader-theme");
+  if(!sheet){sheet=doc.createElementNS("http://www.w3.org/1999/xhtml","style");sheet.id="comfortable-reader-theme";head.append(sheet);}
+  sheet.textContent=readingThemeCss()+scrollReadingCss(index)+`\nbody{font-size:${18*runtimes[index].effectiveFontScale/100}px}`;
+  section.output=new XMLSerializer().serializeToString(doc);
+}
+function applyReadingTheme(contents: EpubContents): void {
+  // epub.js addStylesheetRules appends even when the key already exists.
+  // Replacing one owned sheet prevents old palettes and fonts winning later
+  // in the cascade, including when returning to the publisher's font.
+  const frame=contents.window.frameElement as Element|null;
+  const index=Number(frame?.closest<HTMLElement>('.reader-pane')?.dataset.paneIndex??-1);
+  const css=readingThemeCss()+(index>=0?scrollReadingCss(index):'');
+  let sheet=contents.document.getElementById("comfortable-reader-theme");
+  if(!sheet) {sheet=contents.document.createElement("style");sheet.id="comfortable-reader-theme";contents.document.head.append(sheet);}
+  sheet.textContent=css;
+  contents.document.documentElement.dataset.readerTheme=snapshot.session.theme;
+}
+
+let navigationTab: "contents" | "search" = "contents";
+let searchGeneration = 0;
+let navigationBookId: string | null = null;
+let searchHits: Array<{ cfi: string; excerpt: string; chapter: string }> = [];
+const searchHighlights = new WeakMap<Rendition,string>();
+const paneOperations=Array.from({length:MAX_PANES},()=>({generation:-1,pending:Promise.resolve()}));
+const layoutRequests=[0,0,0,0];
+const indexingBooks=new WeakSet<EpubBook>();
+const navigationSequence=[0,0,0,0];
+const navigationHistory=Array.from({length:MAX_PANES},()=>({bookId:null as string|null,entries:[] as string[]}));
+const navigationPanel = requireElement<HTMLElement>(app, ".book-navigation");
+const settingsPanel = requireElement<HTMLElement>(app, ".reading-settings");
+const bookSearchInput = requireElement<HTMLInputElement>(app, ".book-search-input");
+const chapterList = requireElement<HTMLElement>(app, ".chapter-list");
+const searchResults = requireElement<HTMLElement>(app, ".book-search-results");
+const navigationStatus = requireElement<HTMLElement>(app, ".navigation-status");
+
+interface SearchableSection {
+  href: string;
+  linear?: string | boolean;
+  document?: Document;
+  load: (load: unknown) => Promise<unknown>;
+  cfiFromRange: (range: Range) => string;
+}
+function findNormalizedText(section: SearchableSection, query: string): Array<{ cfi: string; excerpt: string }> {
+  const doc=section.document;
+  if(!doc)return [];
+  const root=doc.querySelector("body")??doc.documentElement;
+  const walker=doc.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  const chars:string[]=[];
+  const positions:Array<{node:Text;start:number;end:number}>=[];
+  let lastBlock:Element|null=null,node:Node|null;
+  while((node=walker.nextNode())) {
+    const parent=node.parentElement;
+    if(!parent||parent.closest("script,style,annotation,annotation-xml"))continue;
+    const block=parent.closest("p,li,h1,h2,h3,h4,h5,h6,td,th,figcaption");
+    if(lastBlock&&block!==lastBlock&&chars.length&&chars[chars.length-1]!==" ") {chars.push(" ");positions.push(positions[positions.length-1]);}
+    lastBlock=block;
+    const text=node.textContent??"";
+    for(let offset=0;offset<text.length;) {
+      const value=String.fromCodePoint(text.codePointAt(offset)!);
+      const normalized=value.normalize("NFKC").toLocaleLowerCase();
+      for(const char of normalized) {
+        const safe=/\s/u.test(char)?" ":char;
+        if(safe===" "&&chars[chars.length-1]===" ")continue;
+        // Search normalization expands ligatures while every result retains
+        // an offset into the unchanged EPUB text and its original CFI.
+        for(let codeUnit=0;codeUnit<safe.length;codeUnit++) {
+          chars.push(safe[codeUnit]);positions.push({node:node as Text,start:offset,end:offset+value.length});
+        }
+      }
+      offset+=value.length;
+    }
+  }
+  const text=chars.join("");
+  const needle=query.normalize("NFKC").toLocaleLowerCase().replace(/\s+/gu," ");
+  const found:Array<{cfi:string;excerpt:string}>=[];
+  let at=-1;
+  while((at=text.indexOf(needle,at+1))>=0&&found.length<150) {
+    const first=positions[at],last=positions[at+needle.length-1];
+    if(!first||!last)continue;
+    const range=doc.createRange();range.setStart(first.node,first.start);range.setEnd(last.node,last.end);
+    found.push({cfi:section.cfiFromRange(range),excerpt:(at>55?"…":"")+text.slice(Math.max(0,at-55),at+needle.length+85)+(at+needle.length+85<text.length?"…":"")});
+  }
+  return found;
+}
+
+function closeBookNavigation(): void {
+  navigationPanel.classList.remove("visible");
+  navigationPanel.inert = true;
+  navigationPanel.setAttribute("aria-hidden", "true");
+  app.querySelector(".contents-toggle")?.setAttribute("aria-expanded", "false");
+}
+function setReadingSettings(visible: boolean): void {
+  if (visible) { closeDrawer(); closeBookNavigation(); }
+  settingsPanel.classList.toggle("visible", visible);
+  settingsPanel.inert = !visible;
+  settingsPanel.setAttribute("aria-hidden", String(!visible));
+  app.querySelector(".reading-settings-toggle")?.setAttribute("aria-expanded", String(visible));
+  requireElement<HTMLSelectElement>(settingsPanel, ".reader-font").value = snapshot.session.readerFont;
+  requireElement<HTMLSelectElement>(settingsPanel,'.reading-mode').value=runtimes[snapshot.session.activePane].readingMode;
+  requireElement<HTMLInputElement>(settingsPanel,'.reader-line-height').value=String(snapshot.session.lineHeight??1.72);
+  requireElement<HTMLSelectElement>(settingsPanel,'.reader-content-width').value=String(snapshot.session.contentWidth??44);
+}
+function openBookNavigation(tab: "contents" | "search"): void {
+  closeDrawer(); setReadingSettings(false);
+  navigationTab = tab;
+  navigationPanel.inert = false;
+  navigationPanel.classList.add("visible");
+  navigationPanel.setAttribute("aria-hidden", "false");
+  app.querySelector(".contents-toggle")?.setAttribute("aria-expanded", "true");
+  requireElement<HTMLElement>(navigationPanel, ".navigation-heading").textContent = tab === "contents" ? "本书目录" : "搜索本书";
+  requireElement<HTMLElement>(navigationPanel, ".book-search-form").hidden = tab !== "search";
+  chapterList.hidden = tab !== "contents";
+  searchResults.hidden = tab !== "search";
+  navigationPanel.querySelectorAll<HTMLElement>("[data-navigation-tab]").forEach(button => button.classList.toggle("selected", button.dataset.navigationTab === tab));
+  renderChapterList();
+  if (tab === "search") { bookSearchInput.focus(); bookSearchInput.select(); }
+}
+function renderChapterList(): void {
+  const runtime = runtimes[snapshot.session.activePane];
+  if (!runtime) return;
+  if (navigationBookId !== runtime.bookId) {
+    navigationBookId = runtime.bookId;
+    searchGeneration++;
+    searchHits = [];
+    searchResults.replaceChildren();
+    bookSearchInput.value = "";
+  }
+  type TocItem = { label: string; href: string; subitems?: TocItem[] };
+  const toc = runtime.book?.navigation?.toc as TocItem[] | undefined;
+  const render = (items: TocItem[], depth = 0): string => items.map(item => {
+    const label=item.label.trim();
+    const inferredDepth=depth||(/^[★\s]*[\dA-D]+\.\d/.test(label)?1:0);
+    return `<div class="chapter-entry"><button type="button" data-chapter-href="${escapeHtml(item.href)}" style="--depth:${inferredDepth}">${escapeHtml(label)}</button>${item.subitems?.length ? render(item.subitems, depth + 1) : ""}</div>`;
+  }).join("");
+  chapterList.innerHTML = toc?.length ? render(toc) : '<p class="navigation-empty">这本书没有独立目录。</p>';
+  if (navigationTab === "contents") navigationStatus.textContent = getBook(runtime.bookId)?.title ?? "请先打开一本书";
+  else if (!searchHits.length) navigationStatus.textContent = "搜索整本书，结果直接定位到原文。";
+}
+async function searchCurrentBook(): Promise<void> {
+  const query = bookSearchInput.value.trim();
+  const runtime = runtimes[snapshot.session.activePane];
+  const book = runtime.book;
+  const generation = ++searchGeneration;
+  searchHits = []; searchResults.replaceChildren();
+  if (!book || query.length < 2) { navigationStatus.textContent = "请输入至少两个字符。"; return; }
+  const sections = (book.spine as unknown as { spineItems: SearchableSection[] }).spineItems.filter(section => section.linear !== false && section.linear !== "no");
+  const headings = new Map<string,string>();
+  const walk = (items: Array<{href: string; label: string; subitems?: Array<any>}>) => { for (const item of items) { const key = item.href.split("#")[0]; if (!headings.has(key)) headings.set(key,item.label); if(item.subitems)walk(item.subitems); } };
+  walk(book.navigation.toc);
+  let unreadable = 0;
+  for (let i = 0; i < sections.length; i++) {
+    if (generation !== searchGeneration || runtime.book !== book) return;
+    const section = sections[i];
+    try {
+      await section.load(book.load.bind(book));
+      if (generation !== searchGeneration || runtime.book !== book) return;
+      const hits = findNormalizedText(section,query);
+      const seen = new Set(searchHits.map(hit => hit.cfi));
+      for (const hit of hits) {
+        if (seen.has(hit.cfi)) continue;
+        seen.add(hit.cfi);
+        searchHits.push({...hit, chapter: headings.get(section.href) ?? `第 ${i+1} 节`});
+        if (searchHits.length >= 150) break;
+      }
+    } catch { unreadable++; }
+    if (i % 4 === 0 || i === sections.length - 1 || searchHits.length >= 150) {
+      searchResults.innerHTML = searchHits.map((hit, position)=>`<button type="button" class="search-result" data-search-hit="${position}"><strong>${escapeHtml(hit.chapter)}</strong><span>${escapeHtml(hit.excerpt)}</span></button>`).join("");
+      navigationStatus.textContent = `已检索 ${i+1}/${sections.length} 节 · ${searchHits.length} 处匹配`;
+      await new Promise<void>(resolve=>window.setTimeout(resolve,0));
+    }
+    if (searchHits.length >= 150) break;
+  }
+  if (generation !== searchGeneration) return;
+  navigationStatus.textContent = (searchHits.length >= 150 ? "显示前 150 处匹配，请用更具体的词缩小范围。" : `找到 ${searchHits.length} 处匹配`) + (unreadable ? `；${unreadable} 节检索失败。` : "");
+}
+function enqueuePaneOperation(index:number,operation:()=>Promise<void>):Promise<void> {
+  const entry=paneOperations[index],generation=runtimes[index].generation;
+  if(entry.generation!==generation){entry.generation=generation;entry.pending=Promise.resolve();}
+  const opening=runtimes[index].opening;
+  const task=entry.pending.catch(()=>{}).then(async()=>{if(opening)await opening;if(runtimes[index].generation===generation)await operation();});
+  entry.pending=task;return task;
+}
+function jumpToBookTarget(target: string, highlight = false, index = snapshot.session.activePane, remember = true): Promise<void> {
+  return enqueuePaneOperation(index,async()=>{await performBookJump(index,target,highlight,remember);});
+}
+async function restoreImportedPosition(target:string,index:number):Promise<boolean>{let result=false;await enqueuePaneOperation(index,async()=>{result=await performBookJump(index,target,false,true);});return result;}
+function jumpToScreenPage(index:number,requestedPage:number):Promise<void> {
+  return enqueuePaneOperation(index,async()=>{
+    const runtime=runtimes[index],rendition=runtime.rendition;if(!rendition)return;
+    const target=Math.min(Math.max(1,Math.round(requestedPage)),Math.max(1,runtime.totalPages));
+    const internal=rendition as InternalRendition;
+    const manager=internal.manager as typeof internal.manager & {settings:{direction?:string};scrollTo:(x:number,y:number,silent:boolean)=>void};
+    if(!manager.container)return;
+    const history=navigationHistory[index];
+    if(history.bookId!==runtime.bookId){history.bookId=runtime.bookId;history.entries=[];}
+    if(runtime.cfi&&history.entries[history.entries.length-1]!==runtime.cfi){history.entries.push(runtime.cfi);if(history.entries.length>50)history.entries.shift();}
+    updateNavigationHistoryUi();
+    const direction=manager.settings.direction==='rtl'?-1:1;
+    const left=manager.container.scrollLeft+(target-runtime.currentPage)*internal._layout.pageWidth*direction;
+    manager.scrollTo(left,0,true);
+    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+    await settleBookLocation(index,rendition);
+    runtime.layoutAnchorCfi=runtime.cfi;
+  });
+}
+function reflowPane(index:number,force=false):Promise<void> {
+  const request=++layoutRequests[index];
+  return enqueuePaneOperation(index,async()=>{if(request===layoutRequests[index])await reflowPaneNow(index,force);});
+}
+function navigate(index:number,direction:"prev"|"next",distance:NavigationDistance="single"):Promise<void> {
+  return enqueuePaneOperation(index,async()=>{
+    const rendition=runtimes[index].rendition;
+    await navigateNow(index,direction,distance);
+    if(rendition&&runtimes[index].rendition===rendition)await settleBookLocation(index,rendition);
+    runtimes[index].layoutAnchorCfi=runtimes[index].cfi;
+  });
+}
+async function settleRenditionLayout(index:number):Promise<void> {
+  const runtime=runtimes[index],rendition=runtime.rendition;
+  if(!rendition)return;
+  const start=performance.now();let signature="",quietSince=start;
+  while(performance.now()-start<650&&runtime.rendition===rendition) {
+    await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+    const frames=Array.from(paneElement(index).querySelectorAll<HTMLIFrameElement>(".epub-host iframe"));
+    const next=frames.map(frame=>`${frame.clientWidth}:${frame.clientHeight}:${frame.contentDocument?.body?.scrollWidth??0}`).join("|");
+    const ready=frames.length>0&&frames.every(frame=>Boolean(frame.contentDocument?.body)&&frame.contentDocument?.fonts.status!=="loading"&&Array.from(frame.contentDocument?.images??[]).every(image=>image.complete));
+    if(next!==signature||!ready){signature=next;quietSince=performance.now();}
+    else if(performance.now()-quietSince>=65)return;
+  }
+}
+async function settleBookLocation(index:number, rendition:Rendition): Promise<void> {
+  await new Promise<void>(resolve=>{
+    let timer:number;
+    const done=()=>{window.clearTimeout(timer);rendition.off("relocated",done);resolve();};
+    rendition.on("relocated",done);
+    timer=window.setTimeout(done,1000);
+    void rendition.reportLocation();
+  });
+  if(runtimes[index].rendition!==rendition)return;
+}
+function setReadingMode(index:number,mode:'paged'|'scroll'):Promise<void>{
+  return enqueuePaneOperation(index,async()=>{
+    const runtime=runtimes[index],rendition=runtime.rendition;
+    if(!runtime.bookId||!rendition||runtime.readingMode===mode)return;
+    const anchor=firstVisibleContentCfi(index)??runtime.layoutAnchorCfi??runtime.cfi;
+    const oldMode=runtime.readingMode,generation=runtime.generation;runtime.restoringLocation=true;
+    for(const annotation of annotationsForBook(runtime.bookId))if(annotation.kind!=='text-mark'&&!annotation.contentPlacement)captureAnnotationPlacement(index,annotation);
+    try{
+      runtime.readingMode=mode;runtime.layoutAnchorCfi=anchor;
+      const stage=paneElement(index).querySelector<HTMLElement>('.pane-stage')!;
+      const available=availableStageSize(stage);runtime.layoutWidth=available.width;runtime.layoutHeight=available.height;
+      runtime.actualPageCount=mode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(available.width);
+      positionRenditionCanvas(index);applyAdaptiveFontScale(index,paneElement(index).querySelector('.epub-host')!);
+      patchMultiPageLayout(rendition,runtime);rendition.flow(mode==='scroll'?'scrolled-continuous':'paginated');
+      rendition.resize(runtime.layoutWidth,runtime.layoutHeight);
+      if(anchor)await rendition.display(anchor);
+      await settleRenditionLayout(index);fitAtomicBlocks(index);
+      if(anchor){await rendition.display(anchor);await ensureAnchorVisible(index,anchor);}
+      if(runtime.generation!==generation)return;
+      ensureBookProgress(runtime.bookId,index).readingMode=mode;
+    }catch(e){if(runtime.generation!==generation)return;runtime.readingMode=oldMode;runtime.actualPageCount=oldMode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(runtime.layoutWidth);patchMultiPageLayout(rendition,runtime);rendition.flow(oldMode==='scroll'?'scrolled-continuous':'paginated');if(anchor)await rendition.display(anchor).catch(()=>{});showToast('阅读方式暂未切换，原位置仍已保留：'+String(e),'error');}
+    finally{if(runtime.generation===generation)runtime.restoringLocation=false;}
+    if(runtime.generation!==generation)return;
+    await settleBookLocation(index,rendition);updatePaneHeader(index);updatePaneProgress(index);savePaneProgress(index,0);scheduleDynamicPageMap(index,0);
+  });
+}
+async function ensureAnchorVisible(index:number,cfi:string):Promise<void>{
+  const runtime=runtimes[index],rendition=runtime.rendition;if(!rendition||!cfi.startsWith('epubcfi('))return;
+  try{
+    const range=rendition.getRange(cfi,'reader-annotation');if(!range)return;
+    const frame=Array.from(paneElement(index).querySelectorAll<HTMLIFrameElement>('.epub-host iframe')).find(f=>f.contentDocument===range.startContainer.ownerDocument);if(!frame)return;
+    const rect=range.getClientRects()[0]??range.getBoundingClientRect();if(!rect||!Number.isFinite(rect.left)||rect.height<=0)return;
+    const host=paneElement(index).querySelector<HTMLElement>('.epub-host')!,view=host.getBoundingClientRect(),frameBox=frame.getBoundingClientRect();
+    const scale=frameBox.width/frame.offsetWidth;if(!Number.isFinite(scale)||scale<=0)return;
+    const x=frameBox.left+rect.left*scale;
+    if(runtime.readingMode==='scroll'){
+      const y=frameBox.top+rect.top*scale;const container=(rendition as InternalRendition).manager.container;
+      if(container&&(y<view.top||y+rect.height*scale>view.bottom))container.scrollTop+=(y-view.top)/scale-16;
+      return;
+    }
+    if(x>=view.left-.5&&x<view.right-1)return;
+    // epub.js floors location/pageWidth. At an exact CSS column boundary a
+    // subpixel rounding error can land one column early. Use the actual target
+    // and the measured grid; never guess a page from text length.
+    const internal=rendition as InternalRendition;
+    const manager=internal.manager as typeof internal.manager&{scrollTo:(x:number,y:number,silent:boolean)=>void};
+    const container=manager.container,pageWidth=internal._layout.pageWidth;if(!container||!(pageWidth>0))return;
+    const destination=Math.round((container.scrollLeft+(x-view.left)/scale)/pageWidth)*pageWidth;
+    manager.scrollTo(destination,0,true);await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));
+  }catch{/* Existing unavailable-anchor handling remains responsible for stale CFIs. */}
+}
+async function stableTargetCfi(book:EpubBook,target:string): Promise<string> {
+  if(target.startsWith("epubcfi(")||!target.includes("#"))return target;
+  const [path,fragment]=target.split("#",2);
+  const section=book.spine.get(path);
+  if(!section)return target;
+  await section.load(book.load.bind(book));
+  const doc=section.document;
+  const element=doc?.getElementById(decodeURIComponent(fragment));
+  if(!element)return target;
+  const walker=doc.createTreeWalker(element,NodeFilter.SHOW_TEXT|NodeFilter.SHOW_ELEMENT);
+  let node:Node|null;
+  while((node=walker.nextNode())) {
+    const range=doc.createRange();
+    if(node.nodeType===Node.TEXT_NODE&&node.textContent?.trim()) {
+      const offset=node.textContent.search(/\S/u);range.setStart(node,offset);range.setEnd(node,offset+1);
+    } else if(node.nodeType===Node.ELEMENT_NODE&&(node as Element).matches("img,svg"))return section.cfiFromElement(node as Element);
+    else continue;
+    return section.cfiFromRange(range);
+  }
+  return target;
+}
+function updateNavigationHistoryUi():void {
+  const index=snapshot.session.activePane,entry=navigationHistory[index];
+  const button=app.querySelector<HTMLButtonElement>(".reading-back");
+  if(button)button.disabled=entry.bookId!==runtimes[index].bookId||!entry.entries.length;
+}
+function returnToPreviousPosition():void {
+  const index=snapshot.session.activePane,entry=navigationHistory[index];
+  if(entry.bookId!==runtimes[index].bookId)return;
+  const cfi=entry.entries.pop();updateNavigationHistoryUi();
+  if(cfi)void jumpToBookTarget(cfi,false,index,false);
+}
+async function performBookJump(index:number, target:string, highlight:boolean, remember:boolean): Promise<boolean> {
+  const runtime = runtimes[index];
+  const request=++navigationSequence[index];
+  const pane=paneElement(index);
+  const rendition=runtime.rendition;
+  const oldAnchor=runtime.cfi;let succeeded=false;
+  closeBookNavigation();
+  try {
+    if(!rendition)return false;
+    const history=navigationHistory[index];
+    if(history.bookId!==runtime.bookId){history.bookId=runtime.bookId;history.entries=[];}
+    if(remember&&runtime.cfi&&history.entries[history.entries.length-1]!==runtime.cfi){history.entries.push(runtime.cfi);if(history.entries.length>50)history.entries.shift();}
+    updateNavigationHistoryUi();
+    runtime.restoringLocation=true;
+    pane.setAttribute("aria-busy","true");
+    const previous=searchHighlights.get(rendition);
+    if(previous)rendition.annotations.remove(previous,"highlight");
+    const destination=runtime.book?await stableTargetCfi(runtime.book,target):target;
+    await rendition.display(destination);
+    await settleRenditionLayout(index);
+    if(request!==navigationSequence[index]||runtime.rendition!==rendition)return false;
+    fitAtomicBlocks(index);
+    await settleRenditionLayout(index);
+    // Image fitting and long table fragmentation can change a section after
+    // the first display. Reassert the requested anchor before saving progress.
+    await rendition.display(destination);
+    if(request!==navigationSequence[index]||runtime.rendition!==rendition)return false;
+    await ensureAnchorVisible(index,destination);
+    runtime.restoringLocation=false;
+    await settleBookLocation(index,rendition);
+    runtime.layoutAnchorCfi=destination.startsWith('epubcfi(')?destination:runtime.cfi;
+    if(highlight) {
+      rendition.annotations.highlight(target,{},()=>{},"reader-search-hit",{fill:"#d8913d","fill-opacity":"0.32","mix-blend-mode":"multiply"});
+      searchHighlights.set(rendition,target);
+    }
+    succeeded=true;
+  }
+  catch (error) { if(runtime.rendition===rendition){if(oldAnchor&&rendition){try{await rendition.display(oldAnchor);await settleRenditionLayout(index);await ensureAnchorVisible(index,oldAnchor);runtime.restoringLocation=false;await settleBookLocation(index,rendition);}catch{pane.classList.add('load-error');}}showToast(`目标尚未打开，原位置与记录已保留：${String(error)}`, "error");} }
+  finally {if(request===navigationSequence[index]&&runtime.rendition===rendition){runtime.restoringLocation=false;pane.setAttribute("aria-busy","false");}}
+  return succeeded;
+}
+let figureDialog: HTMLDialogElement | null = null;
+function closeFigureViewer(): void { figureDialog?.close(); }
+function ensureDetailDialog():HTMLDialogElement {
+  if (!figureDialog) {
+    figureDialog = document.createElement("dialog");
+    figureDialog.className = "figure-viewer";
+    figureDialog.innerHTML = `<header><span>原图 · 可滚动查看</span><button type="button" class="icon-button" aria-label="关闭插图">${icons.close}</button></header><div class="figure-viewer-content"></div>`;
+    figureDialog.querySelector("button")?.addEventListener("click",closeFigureViewer);
+    figureDialog.addEventListener("click",event=>{if(event.target===figureDialog)closeFigureViewer();});
+    app.append(figureDialog);
+  }
+  return figureDialog;
+}
+function showFigureViewer(image: HTMLImageElement): void {
+  const figureDialog=ensureDetailDialog();
+  const copy = document.createElement("img"); copy.src = image.currentSrc || image.src; copy.alt = image.alt;
+  figureDialog.dataset.kind="image";
+  figureDialog.querySelector("header span")!.textContent="原图 · 可滚动查看";
+  figureDialog.querySelector("button")!.setAttribute("aria-label","关闭插图");
+  figureDialog.querySelector(".figure-viewer-content")?.replaceChildren(copy);
+  figureDialog.showModal();
+}
+function showTextDetail(element:Element,index:number):void {
+  const dialog=ensureDetailDialog();
+  const label=element.classList.contains("reader-algorithm")?"算法":element.tagName.toLowerCase()==="table"?"表格":"公式";
+  dialog.dataset.kind="text";
+  dialog.querySelector("header span")!.textContent=`${label} · 可选择、复制原文`;
+  dialog.querySelector("button")!.setAttribute("aria-label","关闭细节视图");
+  const copy=element.cloneNode(true) as HTMLElement;
+  for(const node of [copy,...Array.from(copy.querySelectorAll<HTMLElement>("*"))]) {
+    if(node.matches("script,iframe,object,embed,style")){node.remove();continue;}
+    for(const attribute of Array.from(node.attributes))if(attribute.name.toLowerCase().startsWith("on"))node.removeAttribute(attribute.name);
+    node.removeAttribute("tabindex");node.removeAttribute("data-reader-detail");node.classList.remove("reader-expandable");
+    if(node.style){node.style.removeProperty("zoom");node.style.removeProperty("max-height");node.style.removeProperty("transform-origin");}
+  }
+  copy.addEventListener("click",event=>{
+    const anchor=(event.target as Element).closest("a[href]") as HTMLAnchorElement|null;
+    if(!anchor)return;
+    const href=anchor.getAttribute("href")??"";
+    if(/^(?:https?:|mailto:)/i.test(href)){anchor.target="_blank";anchor.rel="noopener noreferrer";return;}
+    event.preventDefault();
+    if(/^[a-z][a-z\d+.-]*:/i.test(href))return;
+    closeFigureViewer();void jumpToBookTarget(href,false,index);
+  });
+  const content=dialog.querySelector<HTMLElement>(".figure-viewer-content")!;
+  content.style.setProperty("--detail-font",readingFontFamily());
+  content.replaceChildren(copy);dialog.showModal();
+}
+const wheelState = Array.from({length:MAX_PANES},()=>({sum:0,last:0,turned:0}));
+function wireBookDocument(index: number, contents: EpubContents): void {
+  if (runtimes[index].bookId) wireLearningDocument(runtimes[index].bookId!, index, contents, runtimes[index].book?.spine.get(contents.sectionIndex)?.href ?? "");
+  const doc = contents.document;
+  doc.addEventListener("click",event=>{
+    const anchor=(event.target as Element).closest("a[href]");
+    const raw=anchor?.getAttribute("href");
+    if(!raw||/^(?:[a-z][a-z\d+.-]*:|\/\/)/i.test(raw))return;
+    const book=runtimes[index].book;if(!book)return;
+    const base=doc.querySelector("base")?.getAttribute("href")??book.spine.get(contents.sectionIndex).href;
+    const resolved=new URL(raw,new URL(base,location.href));
+    const target=book.path.relative(resolved.pathname)+resolved.hash;
+    if(!book.spine.get(target.split("#")[0]))return;
+    event.preventDefault();event.stopImmediatePropagation();
+    void jumpToBookTarget(target,false,index);
+  },true);
+  doc.addEventListener("pointerdown",()=>{
+    if(snapshot.session.activePane!==index)setActivePane(index);
+    closeDrawer(); closeBookNavigation(); setReadingSettings(false);
+  });
+  doc.addEventListener("keydown",event=>{
+    const target = event.target as HTMLElement;
+    if (target?.closest("input, textarea, select, [contenteditable='true']")) return;
+    const expandable=target.closest("[data-reader-detail]");
+    if(expandable&&(event.key==="Enter"||event.key===" ")) {event.preventDefault();showTextDetail(expandable,index);return;}
+    const relevant = ["ArrowLeft","ArrowRight","PageUp","PageDown"," ","Escape","F11","g"].includes(event.key) || event.ctrlKey && ["f","l","n","t"].includes(event.key.toLowerCase());
+    if (!relevant) return;
+    if(snapshot.session.activePane!==index)setActivePane(index);
+    const forwarded = new KeyboardEvent("keydown",{key:event.key,code:event.code,ctrlKey:event.ctrlKey,shiftKey:event.shiftKey,altKey:event.altKey,cancelable:true});
+    window.dispatchEvent(forwarded);
+    if(forwarded.defaultPrevented)event.preventDefault();
+  });
+  doc.addEventListener("wheel",event=>{
+    if(runtimes[index].readingMode==='scroll'){if(snapshot.session.activePane!==index)setActivePane(index);return;}
+    if(event.ctrlKey||annotationTool!=="read"||doc.getSelection()?.toString())return;
+    const state=wheelState[index],now=performance.now();
+    const delta=(Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY)*(event.deltaMode===1?18:event.deltaMode===2?400:1);
+    if(Math.abs(delta)<0.5)return;
+    event.preventDefault();
+    if(now-state.last>180||Math.sign(delta)!==Math.sign(state.sum))state.sum=0;
+    state.last=now; state.sum+=delta;
+    if(Math.abs(state.sum)>=55 && now-state.turned>190) { const direction=state.sum>0?"next":"prev";state.sum=0;state.turned=now;if(snapshot.session.activePane!==index){setActivePane(index);contents.window.focus();}void navigate(index,direction); }
+  },{passive:false});
+  doc.addEventListener("click",event=>{
+    const target=event.target as HTMLElement;
+    if(doc.getSelection()?.toString())return;
+    if(target.tagName === "IMG" && target.closest("figure") && !target.closest("a")) {event.preventDefault();showFigureViewer(target as HTMLImageElement);return;}
+    const expandable=target.closest("[data-reader-detail]");
+    if(expandable&&!target.closest("a")){event.preventDefault();showTextDetail(expandable,index);}
+  });
+}
+function wireReadingNavigation(): void {
+  app.querySelector('.reading-mode')?.addEventListener('change',event=>{void setReadingMode(snapshot.session.activePane,(event.target as HTMLSelectElement).value==='scroll'?'scroll':'paged');});
+  app.querySelector('.reader-line-height')?.addEventListener('change',event=>{snapshot.session.lineHeight=Number((event.target as HTMLInputElement).value);applyTheme();applyFontScale();persistSession();});
+  app.querySelector('.reader-content-width')?.addEventListener('change',event=>{snapshot.session.contentWidth=Number((event.target as HTMLSelectElement).value);applyTheme();applyFontScale();persistSession();});
+  app.querySelector(".reading-back")?.addEventListener("click",returnToPreviousPosition);
+  app.querySelector(".contents-toggle")?.addEventListener("click",()=>navigationPanel.classList.contains("visible")&&navigationTab==="contents"?closeBookNavigation():openBookNavigation("contents"));
+  app.querySelector(".book-search-toggle")?.addEventListener("click",()=>openBookNavigation("search"));
+  app.querySelector(".navigation-close")?.addEventListener("click",closeBookNavigation);
+  app.querySelector(".reading-settings-toggle")?.addEventListener("click",()=>setReadingSettings(!settingsPanel.classList.contains("visible")));
+  app.querySelector(".settings-close")?.addEventListener("click",()=>setReadingSettings(false));
+  app.querySelector(".book-search-form")?.addEventListener("submit",event=>{event.preventDefault();void searchCurrentBook();});
+  navigationPanel.addEventListener("click",event=>{
+    const target=event.target as HTMLElement;
+    const tab=target.closest<HTMLElement>("[data-navigation-tab]")?.dataset.navigationTab;
+    if(tab==="contents"||tab==="search")openBookNavigation(tab);
+    const href=target.closest<HTMLElement>("[data-chapter-href]")?.dataset.chapterHref;
+    if(href)void jumpToBookTarget(href);
+    const hit=target.closest<HTMLElement>("[data-search-hit]")?.dataset.searchHit;
+    if(hit!==undefined&&searchHits[Number(hit)])void jumpToBookTarget(searchHits[Number(hit)].cfi,true);
+  });
+  app.querySelector(".reader-font")?.addEventListener("change",event=>{
+    snapshot.session.readerFont=(event.target as HTMLSelectElement).value as ReaderSession["readerFont"];
+    applyTheme();applyFontScale();persistSession();
+  });
+  document.addEventListener("pointerdown",event=>{
+    const target=event.target as HTMLElement;
+    if(!target.closest(".library-drawer,.library-toggle,.left-library-handle"))closeDrawer();
+    if(!target.closest(".book-navigation,.contents-toggle,.book-search-toggle"))closeBookNavigation();
+    if(!target.closest(".reading-settings,.reading-settings-toggle"))setReadingSettings(false);
+  });
+}
+
+async function start(): Promise<void> {
+  buildPaneShells();
+  wireEvents();
+  await initCatalogue({
+    known:uuid=>{const record=snapshot.books.find(book=>book.bookUuid===uuid);return record?{record,sourceHash:snapshot.progress[record.id]?.sourceSha256}:null;},
+    openExisting:async(id,chapter)=>{closeDrawer();await openBook(id,snapshot.session.activePane,chapter);},
+    current:()=>{const r=runtimes[snapshot.session.activePane];if(!r.bookId)return null;return{id:r.bookId,href:r.book?.spine.get(r.cfi??0)?.href??''};},
+    open:async(record,chapter,replaceExisting)=>{
+      const saved=await invoke<CatalogRecord>('register_catalog_book',{record,replaceExisting:replaceExisting??false});
+      const old=snapshot.books.findIndex(b=>b.id===saved.id);if(old<0)snapshot.books.push(saved);else snapshot.books[old]=saved;
+      renderLibrary();closeDrawer();await openBook(saved.id,snapshot.session.activePane,chapter);
+      if(!isDesktop){const url=new URL(location.href);url.searchParams.set('book',record.catalogSource.slug);if(chapter)url.searchParams.set('chapter',chapter);else url.searchParams.delete('chapter');history.replaceState(null,'',url);}
+    },
+    toast:message=>showToast(message),
+    importPersonal:async(value,restorePosition)=>{
+      const runtime=runtimes[snapshot.session.activePane],record=getBook(runtime.bookId);if(!record||!runtime.bookId)throw new Error('请先打开目标书籍');
+      if(value.format!=='comfortable-reader-personal@1'||!record.bookUuid||record.bookUuid!==value.book?.bookUuid)throw new Error('记录属于另一部书。未修改当前书籍或个人数据。');
+      const matchingContent=value.progress?.contentDigest&&value.progress.contentDigest===contentDigests.get(runtime.bookId);
+      const matchingLocalBytes=!record.catalogSource&&value.progress?.sourceSha256===sourceDigests.get(runtime.bookId);
+      if(!matchingContent&&!matchingLocalBytes)throw new Error('内容身份尚未匹配。旧记录仍完整保留；请从新版阅读器导出同一内容版本，再导入，不能把旧批注直接贴到未经核对的正文。');
+      await closeLearning();
+      if((value.progress.annotations?.length??0)>10000||(value.study?.notes?.length??0)>10000||(value.drafts?.length??0)>500)throw new Error('记录数量超过本次导入范围');
+      for(const draft of Array.isArray(value.drafts)?value.drafts:[])if(typeof draft.code!=='string'||draft.code.length>300000||!/^[a-z][a-z0-9-]{0,63}$/.test(draft.activityId))throw new Error('导入草稿的身份或大小无效');
+      const identity=async(value:unknown)=>'import-'+Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(value))))).slice(0,12).map(v=>v.toString(16).padStart(2,'0')).join('');
+      const incoming=normalizeAnnotations(value.progress.annotations),current=structuredClone(ensureBookProgress(runtime.bookId,snapshot.session.activePane));
+      for(const note of incoming){const old=current.annotations.find(n=>n.id===note.id);if(old&&JSON.stringify(old)===JSON.stringify(note))continue;if(old)note.id=await identity(note);if(!current.annotations.some(n=>n.id===note.id))current.annotations.push(note);}
+      const state=await invoke<any>('learning_load_state',{bookId:runtime.bookId});state.notes??=[];
+      for(const incomingNote of Array.isArray(value.study?.notes)?value.study.notes:[]){if(!incomingNote||typeof incomingNote.text!=='string')continue;const note=structuredClone(incomingNote);if(note.run_id){note.imported_run_id=note.run_id;delete note.run_id;}const old=state.notes.find((n:any)=>n.id===note.id);if(old&&JSON.stringify(old)===JSON.stringify(note))continue;if(old||typeof note.id!=='string')note.id=await identity(note);if(!state.notes.some((n:any)=>n.id===note.id))state.notes.push(note);}
+      state.importedRuns??=[];for(const receipt of Array.isArray(value.runs)?value.runs:[]){if(receipt?.record?.run_id&&!state.importedRuns.some((r:any)=>r.record.run_id===receipt.record.run_id))state.importedRuns.push(receipt);}
+      if(new TextEncoder().encode(JSON.stringify(state)).length>4*1024*1024)throw new Error('合并后的学习记录超过 4 MB，请分批迁移；本次未更改数据');
+      await invoke('save_progress',{bookId:runtime.bookId,progress:current});snapshot.progress[runtime.bookId]=current;
+      await invoke('learning_save_state',{bookId:runtime.bookId,value:state});
+      for(const draft of Array.isArray(value.drafts)?value.drafts:[])if(typeof draft.code==='string'&&typeof draft.activityId==='string')await invoke('learning_import_draft',{bookId:runtime.bookId,activityId:draft.activityId,code:draft.code});
+      if(restorePosition){const cfi=value.progress?.cfi;if(typeof cfi!=='string'||!cfi.startsWith('epubcfi(')||cfi.length>1000)throw new Error('记录已合并，但导出文件没有可用的阅读位置。');if(!await restoreImportedPosition(cfi,snapshot.session.activePane))throw new Error('记录已合并，但目标内容尚未取得。原阅读位置保留；联网或准备所需章节后可再次恢复。');if(['paged','scroll'].includes(value.progress.readingMode))await setReadingMode(snapshot.session.activePane,value.progress.readingMode);}
+      applyTextAnnotations(snapshot.session.activePane);renderOverlayAnnotations(snapshot.session.activePane);renderAnnotationPanel();showToast('已合并批注与笔记；已有草稿保留，导入代码可在草稿历史中查看。运行收据只读，不会自动执行。');
+    },
+  });
+  initLearning({
+    current: () => {
+      const pane = snapshot.session.activePane;
+      const r = runtimes[pane];
+      if (!r.bookId || !r.book) return null;
+      const section = r.book.spine.get(r.cfi ?? 0);
+      return { bookId: r.bookId, contentDigest:contentDigests.get(r.bookId),sourceSha256:sourceDigests.get(r.bookId),localSource:Boolean((r.book as any).archive),pane, cfi: r.cfi, href: section ? section.href : "", quote: "", focus: document.activeElement as HTMLElement | null };
+    },
+    settle:()=>enqueuePaneOperation(snapshot.session.activePane,async()=>{}),
+    jump: (target, pane) => jumpToBookTarget(target, false, pane),
+    toast: (text) => showToast(text, "error"),
+  });
+  await getCurrentWindow().onCloseRequested(async (event) => {
+    if(!readerReady)return;
+    try {
+      await flushLearningBeforeClose();
+      await Promise.all(progressWrites);
+      if (sessionSaveTimer !== null) window.clearTimeout(sessionSaveTimer);
+      for (let index=0;index<MAX_PANES;index++) {
+        if(progressSaveTimers[index]!==null)window.clearTimeout(progressSaveTimers[index]!);
+        const runtime=runtimes[index];if(!runtime.bookId||editionHeld(runtime.bookId)||runtime.restoringLocation||(!runtime.cfi&&!runtime.lazyPageCount))continue;
+        const existing=snapshot.progress[runtime.bookId];
+        await invoke("save_progress",{bookId:runtime.bookId,progress:{...existing,sourceSha256:sourceDigests.get(runtime.bookId)??existing?.sourceSha256??null,cfi:runtime.lazyPageCount>0?null:runtime.cfi??existing?.cfi??null,page:runtime.currentPage||existing?.page||0,totalPages:runtime.totalPages||existing?.totalPages||0,percent:runtime.cfi?runtime.percent:existing?.percent??0,pageMode:runtime.pageMode,annotations:existing?.annotations??[],updatedAt:Math.floor(Date.now()/1000)}});
+      }
+      await invoke("save_session",{session:sessionPayload()});
+    } catch(error) {
+      event.preventDefault();showToast(`保存未完成，窗口保持打开：${String(error)}`,"error");
+    }
+  });
+  try {
+    const loaded = await invoke<AppSnapshot>("bootstrap");
+    snapshot = {
+      ...loaded,
+      progress: normalizeProgress(loaded.progress),
+      session: normalizeSession(loaded.session),
+    };
+    snapshot.session.paneBookIds = snapshot.session.paneBookIds.map((bookId) =>
+      getBook(bookId) ? bookId : null,
+    );
+    if (!snapshot.session.paneBookIds[0] && snapshot.books[0]) {
+      snapshot.session.paneBookIds[0] = snapshot.books[0].id;
+    }
+    snapshot.session.activePane = Math.min(
+      snapshot.session.activePane,
+      snapshot.session.paneCount - 1,
+    );
+    if(!isDesktop)await openWebLink();
+    renderLibrary();
+    updateLayoutUi();
+    applyTheme();
+    applyFontScale();
+    persistSession();
+
+    const visibleBooks = snapshot.session.paneBookIds.slice(0, snapshot.session.paneCount);
+    await Promise.allSettled(
+      visibleBooks.map((bookId, index) => (bookId ? openBook(bookId, index) : Promise.resolve())),
+    );
+    readerReady=true;
+    if(!isDesktop&&'serviceWorker' in navigator)void navigator.serviceWorker.register(new URL('sw.js',location.href)).catch(()=>showToast('离线页面尚未准备，已保存的材料仍在。'));
+    window.setTimeout(() => bootScreen.classList.add("hidden"), 220);
+    if(!isDesktop&&!snapshot.session.paneBookIds.some(Boolean))void showCatalogue();
+  } catch (error) {
+    bootScreen.innerHTML = `
+      <div class="boot-mark error">${icons.close}</div>
+      <strong>书库没有成功启动</strong>
+      <span>${escapeHtml(String(error))}</span>`;
+  }
+}
+
+void start();

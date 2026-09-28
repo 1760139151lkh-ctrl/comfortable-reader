@@ -1,0 +1,118 @@
+{
+  "source_manifest_sha256": "2d283754b8f073aedd4fae151f59d1bbfe6eda9ec8671397c9e3da630c20ee2b",
+  "task": "BBB final Pass/Distinction vs Fail/Withdrawn from past VLE weekly click sums",
+  "presentations": {
+    "train": [
+      "2013B",
+      "2013J"
+    ],
+    "validation": [
+      "2014B"
+    ],
+    "test": [
+      "2014J"
+    ]
+  },
+  "same_anonymous_student_later_presentations_removed": true,
+  "scanned_vle_rows": 10655280,
+  "vle_rows_BBB_day0_to41": 435902,
+  "horizons": {
+    "7": {
+      "train": {
+        "n": 3458,
+        "weekly_shape": [
+          3458,
+          1
+        ],
+        "X_sha256": "5147e86073d13783268602cf0a45c6484183fd5373a6476348b01809ace0f2d5",
+        "y_sha256": "173cd33e3fa53e1029e069f93f6ef94155a79067c562ab4451a49e4c973e8ff5",
+        "positive": 1862
+      },
+      "validation": {
+        "n": 1224,
+        "weekly_shape": [
+          1224,
+          1
+        ],
+        "X_sha256": "b0effe9ea990e19d0bd86c78d4d8e5f1e45fca1204c7a6f1629951a883e11679",
+        "y_sha256": "d71ce41bf15da61d58c911070803171e89b4e3a64ca7ca5f0ac6b47cde33deee",
+        "positive": "sealed_until_test"
+      },
+      "test": {
+        "n": 1901,
+        "weekly_shape": [
+          1901,
+          1
+        ],
+        "X_sha256": "cf2f162a3b1ed8bdd7856ff6832e05922d21d89b20ac2bcf4231e0aaebcec952",
+        "y_sha256": "970e1e1a58bc66a812abcbe7315d8c4bfac701fceb65e74c90475cb9b9686044",
+        "positive": "sealed_until_test"
+      }
+    },
+    "21": {
+      "train": {
+        "n": 3396,
+        "weekly_shape": [
+          3396,
+          3
+        ],
+        "X_sha256": "9eb62f62fb524c5cca0266f592015cbfc867d4d6b455f6368fec91171a664ca9",
+        "y_sha256": "dafdb407dab9fa0527656b4109fa62452c9407919bd8dd75459697b810b3d087",
+        "positive": 1864
+      },
+      "validation": {
+        "n": 1205,
+        "weekly_shape": [
+          1205,
+          3
+        ],
+        "X_sha256": "402d8648031c768c3b22a903faf16cab45f9f426aa03ccea80d7009ddd7944a8",
+        "y_sha256": "819a43f1aa88a0de258994d5327d7465e64e9e514a038e9f45d58a9eed91c265",
+        "positive": "sealed_until_test"
+      },
+      "test": {
+        "n": 1733,
+        "weekly_shape": [
+          1733,
+          3
+        ],
+        "X_sha256": "ff4ee7f6a811e05c4d272b12e84b4824d3e9a80a017a5d2b901cd55ddf108b77",
+        "y_sha256": "79c2a79393feab9caabce81c530eafea2740906bfa44d60f8309a83bf3ab97c3",
+        "positive": "sealed_until_test"
+      }
+    },
+    "42": {
+      "train": {
+        "n": 3273,
+        "weekly_shape": [
+          3273,
+          6
+        ],
+        "X_sha256": "b40374fd278c4aa7fa290748ca223d26e082529d1d6f26a253eca4bc242be1a9",
+        "y_sha256": "07a332cfb3b54c1b391bf0e2c3e3edb33c5570d455286613e3a3fd26f1a5888e",
+        "positive": 1866
+      },
+      "validation": {
+        "n": 1192,
+        "weekly_shape": [
+          1192,
+          6
+        ],
+        "X_sha256": "8d10575c04bdf41bc9302c6ad45600da53f2ca409eb157ff1e641605029ec9ac",
+        "y_sha256": "2a869845eb062873953e1a94824d581b13289141546388e017a4879b56ba923a",
+        "positive": "sealed_until_test"
+      },
+      "test": {
+        "n": 1707,
+        "weekly_shape": [
+          1707,
+          6
+        ],
+        "X_sha256": "195f0342be9a1223c98ecc768ad119f50b1c453bf5877bc5d19efb2f76528556",
+        "y_sha256": "9ed7a9252d3295f72b14b86564ca5286581bb185cbda52cc29c7f4d116449b76",
+        "positive": "sealed_until_test"
+      }
+    }
+  },
+  "test_label_content_not_printed": true
+}

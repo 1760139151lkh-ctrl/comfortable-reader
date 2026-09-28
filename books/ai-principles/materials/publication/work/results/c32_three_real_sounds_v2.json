@@ -1,0 +1,23 @@
+{
+  "speech_split_sha256": "aa7f4d036e377e55c61c2b1a8bc2bd0349c423b83cff208adbe736be772f46ed",
+  "event_feature_manifest_sha256": "2987f369010c029938e27bb613407a2915ddab5abfd264fe0711bda5e2e4cb38",
+  "all_examples_from_training_splits": true,
+  "speech_id": "1272-128104-0000",
+  "speech_transcript": "MISTER QUILTER IS THE APOSTLE OF THE MIDDLE CLASSES AND WE ARE GLAD TO WELCOME HIS GOSPEL",
+  "event_examples": [
+    {
+      "id": "1-100032-A-0",
+      "category": "dog",
+      "source_recording": "100032"
+    },
+    {
+      "id": "1-17367-A-10",
+      "category": "rain",
+      "source_recording": "17367"
+    }
+  ],
+  "same_display_sample_rate": 16000,
+  "event_resampling": "scipy.signal.resample_poly 160/441 with antialias filter",
+  "plot_magnitude": "per-clip relative dB, cannot compare absolute loudness between panels",
+  "figure_sha256": "7f63427a07083f8e20523a86759ec4fa3f183792d8a9f59f2876554165b5a556"
+}

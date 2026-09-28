@@ -1,0 +1,425 @@
+{
+  "protocol": "work/verification/C08_iris_protocol.md",
+  "data_source": "work/data/uci_iris_SOURCE.md",
+  "iris_data_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+  "python": "3.13.14",
+  "numpy": "2.4.6",
+  "scikit_learn": "1.9.0",
+  "feature_names": [
+    "petal_length_cm",
+    "petal_width_cm"
+  ],
+  "source_row_ids": {
+    "train": [
+      55,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      67,
+      68,
+      70,
+      71,
+      75,
+      76,
+      78,
+      79,
+      80,
+      81,
+      83,
+      85,
+      86,
+      88,
+      89,
+      91,
+      92,
+      95,
+      96,
+      97,
+      98,
+      100,
+      101,
+      105,
+      107,
+      108,
+      109,
+      110,
+      111,
+      112,
+      113,
+      115,
+      117,
+      118,
+      120,
+      121,
+      125,
+      126,
+      128,
+      129,
+      131,
+      133,
+      135,
+      137,
+      138,
+      140,
+      141,
+      145,
+      146,
+      147,
+      148,
+      150
+    ],
+    "validation": [
+      51,
+      54,
+      56,
+      65,
+      72,
+      84,
+      87,
+      90,
+      93,
+      94,
+      103,
+      104,
+      106,
+      122,
+      130,
+      134,
+      136,
+      139,
+      142,
+      144
+    ],
+    "test": [
+      52,
+      53,
+      64,
+      66,
+      69,
+      73,
+      74,
+      77,
+      82,
+      99,
+      102,
+      114,
+      116,
+      119,
+      123,
+      124,
+      127,
+      132,
+      143,
+      149
+    ]
+  },
+  "train_only_scaling": {
+    "mean_cm": [
+      4.886666666666667,
+      1.6799999999999997
+    ],
+    "std_cm": [
+      0.7774888352181585,
+      0.4411349000022556
+    ]
+  },
+  "candidate_order_predeclared": [
+    "fisher",
+    "knn5",
+    "tree2",
+    "svm_linear",
+    "svm_rbf",
+    "forest100"
+  ],
+  "selected_on_validation": "svm_linear",
+  "scores": {
+    "train": {
+      "fisher": {
+        "n": 60,
+        "wrong": 4,
+        "error_rate": 0.06666666666666667,
+        "versicolor_wrong": 2,
+        "virginica_wrong": 2
+      },
+      "knn5": {
+        "n": 60,
+        "wrong": 3,
+        "error_rate": 0.05,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 2
+      },
+      "tree2": {
+        "n": 60,
+        "wrong": 2,
+        "error_rate": 0.03333333333333333,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 1
+      },
+      "svm_linear": {
+        "n": 60,
+        "wrong": 3,
+        "error_rate": 0.05,
+        "versicolor_wrong": 2,
+        "virginica_wrong": 1
+      },
+      "svm_rbf": {
+        "n": 60,
+        "wrong": 3,
+        "error_rate": 0.05,
+        "versicolor_wrong": 2,
+        "virginica_wrong": 1
+      },
+      "forest100": {
+        "n": 60,
+        "wrong": 3,
+        "error_rate": 0.05,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 2
+      }
+    },
+    "validation": {
+      "fisher": {
+        "n": 20,
+        "wrong": 2,
+        "error_rate": 0.1,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 1
+      },
+      "knn5": {
+        "n": 20,
+        "wrong": 2,
+        "error_rate": 0.1,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 1
+      },
+      "tree2": {
+        "n": 20,
+        "wrong": 2,
+        "error_rate": 0.1,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 1
+      },
+      "svm_linear": {
+        "n": 20,
+        "wrong": 1,
+        "error_rate": 0.05,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 0
+      },
+      "svm_rbf": {
+        "n": 20,
+        "wrong": 1,
+        "error_rate": 0.05,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 0
+      },
+      "forest100": {
+        "n": 20,
+        "wrong": 2,
+        "error_rate": 0.1,
+        "versicolor_wrong": 1,
+        "virginica_wrong": 1
+      }
+    },
+    "test": {
+      "fisher": {
+        "n": 20,
+        "wrong": 0,
+        "error_rate": 0.0,
+        "versicolor_wrong": 0,
+        "virginica_wrong": 0
+      },
+      "knn5": {
+        "n": 20,
+        "wrong": 0,
+        "error_rate": 0.0,
+        "versicolor_wrong": 0,
+        "virginica_wrong": 0
+      },
+      "tree2": {
+        "n": 20,
+        "wrong": 3,
+        "error_rate": 0.15,
+        "versicolor_wrong": 2,
+        "virginica_wrong": 1
+      },
+      "svm_linear": {
+        "n": 20,
+        "wrong": 0,
+        "error_rate": 0.0,
+        "versicolor_wrong": 0,
+        "virginica_wrong": 0
+      },
+      "svm_rbf": {
+        "n": 20,
+        "wrong": 0,
+        "error_rate": 0.0,
+        "versicolor_wrong": 0,
+        "virginica_wrong": 0
+      },
+      "forest100": {
+        "n": 20,
+        "wrong": 1,
+        "error_rate": 0.05,
+        "versicolor_wrong": 0,
+        "virginica_wrong": 1
+      }
+    }
+  },
+  "fisher": {
+    "class_means_scaled": {
+      "versicolor": [
+        -0.8403121739362499,
+        -0.8160768962014994
+      ],
+      "virginica": [
+        0.8403121739362497,
+        0.8160768962015011
+      ]
+    },
+    "direction_scaled": [
+      0.0690294692069379,
+      0.04858082495534427
+    ],
+    "threshold_scaled": 3.5484629727446515e-17
+  },
+  "tree_first_question": {
+    "feature": "petal_length_cm",
+    "threshold_scaled": -0.047160377725958824,
+    "threshold_cm": 4.849999999520063
+  },
+  "support_vector_count": {
+    "svm_linear": [
+      6,
+      6
+    ],
+    "svm_rbf": [
+      9,
+      11
+    ]
+  },
+  "first_validation_row": {
+    "source_row": 51,
+    "actual_label": -1,
+    "petal_cm": [
+      4.7,
+      1.4
+    ],
+    "petal_scaled": [
+      -0.240089192553214,
+      -0.6347264748233887
+    ],
+    "predictions": {
+      "fisher": -1,
+      "knn5": -1,
+      "tree2": -1,
+      "svm_linear": -1,
+      "svm_rbf": -1,
+      "forest100": -1
+    },
+    "fisher_score": -0.04740876529218848,
+    "five_neighbors": [
+      {
+        "source_row": 92,
+        "label": -1,
+        "distance": 0.12861921029636544
+      },
+      {
+        "source_row": 59,
+        "label": -1,
+        "distance": 0.2606345386104161
+      },
+      {
+        "source_row": 55,
+        "label": -1,
+        "distance": 0.2606345386104164
+      },
+      {
+        "source_row": 67,
+        "label": -1,
+        "distance": 0.34286887652344017
+      },
+      {
+        "source_row": 79,
+        "label": -1,
+        "distance": 0.34286887652344017
+      }
+    ],
+    "forest_positive_votes": 0
+  },
+  "first_validation_disagreement": {
+    "source_row": 134,
+    "actual_label": 1,
+    "petal_cm": [
+      5.1,
+      1.5
+    ],
+    "petal_scaled": [
+      0.27438764863224424,
+      -0.4080384481007496
+    ],
+    "predictions": {
+      "fisher": -1,
+      "knn5": -1,
+      "tree2": 1,
+      "svm_linear": 1,
+      "svm_rbf": 1,
+      "forest100": 1
+    },
+    "fisher_score": -0.0008820106802092776,
+    "five_neighbors": [
+      {
+        "source_row": 120,
+        "label": 1,
+        "distance": 0.12861921029636425
+      },
+      {
+        "source_row": 78,
+        "label": -1,
+        "distance": 0.4712671716710977
+      },
+      {
+        "source_row": 57,
+        "label": -1,
+        "distance": 0.5622044837739835
+      },
+      {
+        "source_row": 55,
+        "label": -1,
+        "distance": 0.6430960514818237
+      },
+      {
+        "source_row": 150,
+        "label": 1,
+        "distance": 0.6800640801679172
+      }
+    ],
+    "tree_questions": [
+      {
+        "feature": "petal_length_cm",
+        "value_cm": 5.1,
+        "threshold_cm": 4.849999999520063,
+        "answer_value_at_most_threshold": false,
+        "training_rows_at_node": 60
+      },
+      {
+        "feature": "petal_width_cm",
+        "value_cm": 1.5,
+        "threshold_cm": 1.7500000029972793,
+        "answer_value_at_most_threshold": true,
+        "training_rows_at_node": 30
+      }
+    ],
+    "svm_decision_values": {
+      "svm_linear": 0.2226032692615292,
+      "svm_rbf": 0.3084132781612237
+    },
+    "forest_positive_votes": 55
+  },
+  "decision_regions_figure": "work/figures/iris_six_rules.png",
+  "scope": "UCI 1988 public archive, 100 rows of two species, two petal measurements; one predetermined 60/20/20 grouped stratified split. Teaching comparison of rule organization, not new ecological validation."
+}

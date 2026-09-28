@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>15. 最准确的理解</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="15-最准确的理解">15. 最准确的理解</h2>
+<p>智能优化算法不是某一个具体算法，而是一大类以启发式搜索为核心的方法。它们通常：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>不穷举全部解，而是用评价、随机、记忆和群体信息引导搜索</mtext></mrow></menclose></mrow></math></div>
+<p>它的优势是适用范围广、对问题结构要求少；缺点是通常只能得到近似解，参数较多，结果具有随机性，并且缺乏严格的最优性保证。</p>
+<p>因此更准确地说，它们是：</p>
+<blockquote>
+<p>用有限计算资源，在巨大而复杂的解空间中寻找高质量解的通用搜索策略。</p>
+</blockquote>
+<p>“智能”是包装，真正的数学核心其实是：<strong>如何利用已有样本，设计下一个更值得尝试的候选解。</strong> 当你能逐项说清解的表示、候选生成、接受或选择规则、参数、约束处理、停止条件与验证方式时，才算真正看懂了一个智能优化算法。</p>
+</body></html>

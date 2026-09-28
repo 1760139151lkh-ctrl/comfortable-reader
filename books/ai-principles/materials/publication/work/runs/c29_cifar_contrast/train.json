@@ -1,0 +1,120 @@
+{
+  "scope": "official CIFAR-10 32x32 RGB scenes, label byte ignored in pretraining; random unstratified 45k/5k split",
+  "mode": "cifar_contrast",
+  "epochs_planned": 8,
+  "batch_images": 256,
+  "source_identity": {
+    "manifest_sha256": "c877180a2bc8cd17106f12cc40b3f43540bc203aced12cfd64cd9613197e2df6",
+    "official_archive_sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+    "train_members": {
+      "data_batch_1.bin": "cee916563c9f80d84e3cc88e17fdc0941787f1244f00a67874d45b261883ada5",
+      "data_batch_2.bin": "a591ca11fa1708a91ee40f54b3da4784ccd871ecf2137de63f51ada8b3fa57ed",
+      "data_batch_3.bin": "bbe8596564c0f86427f876058170b84dac6670ddf06d79402899d93ceea26f67",
+      "data_batch_4.bin": "014e562d6e23c72197cc727519169a60359f5eccd8945ad5a09d710285ff4e48",
+      "data_batch_5.bin": "755304fc0b379caeae8c14f0dac912fbc7d6cd469eb67a1029a08a39453a9add"
+    },
+    "random_unstratified_split_sha256": "8b597c99f13b0cbdc99e7bfc8c9051b0cc5073ce4f10a4ff958c9ad320b8eb68",
+    "train_rows": 45000,
+    "validation_rows": 5000
+  },
+  "augmentation": "two independent shifts up to four pixels, horizontal flip, brightness, Gaussian noise; same-source positives",
+  "objective": "2B normalized projected-view cross entropy, other originals as negatives, temperature0.2",
+  "optimizer": "AdamW lr0.001 weight_decay1e-4 gradient_clip1",
+  "selection": "lowest fixed-view self-supervised loss on first2048 validation rows; no labels",
+  "history": [
+    {
+      "epoch": 1,
+      "train_online_mean_loss": 2.812307768247344,
+      "validation_fixed_views_loss": 2.3680099546909332,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 2.0276401042938232,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 2,
+      "train_online_mean_loss": 2.2185010341080753,
+      "validation_fixed_views_loss": 2.1370840966701508,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 2.494009494781494,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 3,
+      "train_online_mean_loss": 2.091338635845618,
+      "validation_fixed_views_loss": 2.0732343792915344,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 2.9014909267425537,
+        "coordinates_below_0.01_std": 56,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 4,
+      "train_online_mean_loss": 2.028392668474804,
+      "validation_fixed_views_loss": 2.0649008750915527,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 3.0468220710754395,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 5,
+      "train_online_mean_loss": 1.9906883564862339,
+      "validation_fixed_views_loss": 1.985938012599945,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 3.4020371437072754,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 6,
+      "train_online_mean_loss": 1.9600946788083424,
+      "validation_fixed_views_loss": 1.9636292457580566,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 3.5899033546447754,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 7,
+      "train_online_mean_loss": 1.9402449991215358,
+      "validation_fixed_views_loss": 1.9670943319797516,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 3.7404892444610596,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    },
+    {
+      "epoch": 8,
+      "train_online_mean_loss": 1.9239748391238125,
+      "validation_fixed_views_loss": 1.9322273433208466,
+      "steps": 176,
+      "feature_spread": {
+        "mean_coordinate_std": 3.955467700958252,
+        "coordinates_below_0.01_std": 55,
+        "feature_width": 128
+      }
+    }
+  ],
+  "selected_epoch": 8,
+  "checkpoint": "work/runs/c29_cifar_contrast/best.pt",
+  "checkpoint_sha256": "d03e430ed1b77d9fbf85174e330bda23cff88afdd8b3e0f3c544dc8209baccc6",
+  "labels_interpreted_in_pretraining": false,
+  "official_test_opened": false,
+  "peak_gpu_allocated_bytes": 971108864
+}

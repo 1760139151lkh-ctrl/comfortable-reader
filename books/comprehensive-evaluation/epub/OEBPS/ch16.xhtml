@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>16. DEA：评价投入—产出效率，而不是普通总分</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="16-dea评价投入产出效率而不是普通总分">16. DEA：评价投入—产出效率，而不是普通总分</h2>
+<p>若对象消耗多种投入、产生多种产出，问题不再只是“指标越大越好”。例如医院使用医生、床位和经费，产出诊疗量、治愈率和服务质量。资源少却产出高的医院可能更有效率。</p>
+<p>DEA 把每个对象称为决策单元 DMU，通过样本中的最优对象构造效率前沿。</p>
+<h3 id="161-乘数模型的直觉">16.1 乘数模型的直觉</h3>
+<p>对 DMU <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>o</mi></mrow></math></span>，设投入为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mrow><mi>ℓ</mi><mi>o</mi></mrow></msub></mrow></math></span>，产出为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>y</mi><mrow><mi>r</mi><mi>o</mi></mrow></msub></mrow></math></span>。效率比可写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><msubsup><mo>∑</mo><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>q</mi></mrow></msubsup><msub><mi>u</mi><mi>r</mi></msub><msub><mi>y</mi><mrow><mi>r</mi><mi>o</mi></mrow></msub></mrow><mrow><msubsup><mo>∑</mo><mrow><mi>ℓ</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>p</mi></mrow></msubsup><msub><mi>v</mi><mrow><mi>ℓ</mi></mrow></msub><msub><mi>x</mi><mrow><mi>ℓ</mi><mi>o</mi></mrow></msub></mrow></mfrac><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>u</mi><mi>r</mi></msub><mo>,</mo><msub><mi>v</mi><mrow><mi>ℓ</mi></mrow></msub><mo>≥</mo><mn>0</mn></mrow></math></span> 是产出与投入权重。DEA 允许目标 DMU 在共同约束下选择对自己有利的权重，但要求同一组权重用于评价所有 DMU 时，任何对象效率都不能超过 1：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>q</mi></mrow></munderover><msub><mi>u</mi><mi>r</mi></msub><msub><mi>y</mi><mrow><mi>r</mi><mi>j</mi></mrow></msub><mo>≤</mo><munderover><mo>∑</mo><mrow><mi>ℓ</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>p</mi></mrow></munderover><msub><mi>v</mi><mrow><mi>ℓ</mi></mrow></msub><msub><mi>x</mi><mrow><mi>ℓ</mi><mi>j</mi></mrow></msub><mo>,</mo><mtext> for </mtext><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>N</mi><mo>.</mo></mrow></math></div>
+<p>这就防止了完全任意的自我美化。</p>
+<h3 id="162-投入导向-ccr-包络模型">16.2 投入导向 CCR 包络模型</h3>
+<p>对 DMU <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>o</mi></mrow></math></span>，投入导向 CCR 模型为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mrow><mi>θ</mi><mo>,</mo><mi>λ</mi></mrow></msub><mtext> </mtext><mi>θ</mi></mrow></math></div>
+<p>满足：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>λ</mi><mi>j</mi></msub><msub><mi>x</mi><mrow><mi>ℓ</mi><mi>j</mi></mrow></msub><mo>≤</mo><mi>θ</mi><msub><mi>x</mi><mrow><mi>ℓ</mi><mi>o</mi></mrow></msub><mo>,</mo><mtext> for </mtext><mi>ℓ</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>p</mi><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>λ</mi><mi>j</mi></msub><msub><mi>y</mi><mrow><mi>r</mi><mi>j</mi></mrow></msub><mo>≥</mo><msub><mi>y</mi><mrow><mi>r</mi><mi>o</mi></mrow></msub><mo>,</mo><mtext> for </mtext><mi>r</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>q</mi><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>λ</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>λ</mi><mi>j</mi></msub></mrow></math></span> 把其他 DMU 组合成一个虚拟参照对象。若最优 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>θ</mi><mo>*</mo></msup><mo>=</mo><mn>0.8</mn></mrow></math></span>，直观上表示在保持至少相同产出的前提下，该对象的投入按径向最多可压缩约 20%。</p>
+<p>严格的 DEA 效率还要检查松弛量。即使 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>θ</mi><mo>*</mo></msup><mo>=</mo><mn>1</mn></mrow></math></span>，若某些投入仍可单独减少或某些产出仍可增加，对象也只是弱有效，而非完全 Pareto 有效。</p>
+<h3 id="163-ccr-与-bcc">16.3 CCR 与 BCC</h3>
+<p>CCR 假设规模报酬不变：投入扩大一倍，前沿上的产出也可同比扩大。BCC 模型增加凸性约束：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>λ</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>,</mo></mrow></math></div>
+<p>从而允许规模报酬变化。</p>
+<p>在同一投入导向设定下，通常有：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>θ</mi><mrow><mi>C</mi><mi>C</mi><mi>R</mi></mrow></msub><mo>≤</mo><msub><mi>θ</mi><mrow><mi>B</mi><mi>C</mi><mi>C</mi></mrow></msub><mo>≤</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>BCC 效率常被解释为纯技术效率，规模效率为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mi>E</mi><mo>=</mo><mfrac><mrow><msub><mi>θ</mi><mrow><mi>C</mi><mi>C</mi><mi>R</mi></mrow></msub></mrow><mrow><msub><mi>θ</mi><mrow><mi>B</mi><mi>C</mi><mi>C</mi></mrow></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mi>E</mi><mo>&lt;</mo><mn>1</mn></mrow></math></span>，说明总技术无效率中有一部分与规模不合适有关。</p>
+<h3 id="164-投入导向还是产出导向">16.4 投入导向还是产出导向？</h3>
+<p>投入导向问：“保持当前产出，投入可以减少多少？”</p>
+<p>产出导向问：“保持当前投入，产出可以扩大多少？”</p>
+<p>医院短期内可能难以削减床位和人员，却可以提升服务产出；此时产出导向更有现实意义。方向选择是管理问题，不应仅凭软件默认值决定。</p>
+<h3 id="165-dea-的主要限制">16.5 DEA 的主要限制</h3>
+<ul>
+<li>它给出相对于当前样本前沿的效率，不是绝对效率；</li>
+<li>极端值和测量误差可能直接构成前沿；</li>
+<li>投入、产出项目过多而 DMU 太少时，许多对象都会显得有效；</li>
+<li>权重过于自由时，模型可能几乎忽略某些重要指标，可设置保证域等权重约束；</li>
+<li>环境条件不同会损害可比性，必要时需要分组、二阶段分析或其他扩展模型；</li>
+<li>标准 DEA 是确定性的，不能自动区分随机噪声与真正无效率。</li>
+</ul>
+<p>常见经验规则要求 DMU 数量至少达到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mi>q</mi></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>3</mn><mo stretchy="false">(</mo><mi>p</mi><mo>+</mo><mi>q</mi><mo stretchy="false">)</mo></mrow></math></span> 中较大者，但这只是粗略启发，不是保证识别质量的定理。最终还要看前沿稳定性、有效单元比例与变量选择是否合理。</p>
+<p>DEA 输出的是效率前沿、参照集合、改进目标与松弛，而不只是一个普通综合分。若问题中没有明确的投入—产出逻辑，硬套 DEA 往往会把概念弄乱。</p>
+<hr/>
+</body></html>

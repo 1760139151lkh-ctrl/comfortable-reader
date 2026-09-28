@@ -1,0 +1,37 @@
+{
+  "scope": "64 C18 training blocks; 32 full and 32 padded tails; random C19 model; gradients only, no optimizer step or validation/test",
+  "manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "environment": {
+    "python": "3.13.14",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.4.6",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "gpu_total_bytes": 25650855936,
+    "bf16_supported": true
+  },
+  "model_parameter_count": 4930304,
+  "full_batch_target_count": 6070,
+  "counted_target_rule": "labels != -100; current C18 pure next-token blocks happen to match readable input counts",
+  "microbatch_target_counts": [
+    2048,
+    2048,
+    1107,
+    867
+  ],
+  "full_batch_nll": 9.161132490733113,
+  "weighted_against_full": {
+    "max_absolute_gradient_difference": 2.2351741790771484e-08,
+    "relative_gradient_l2_difference": 4.4380363703421256e-07
+  },
+  "naive_equal_micro_means_against_full": {
+    "max_absolute_gradient_difference": 0.008562210947275162,
+    "relative_gradient_l2_difference": 0.25274763149801305
+  },
+  "peak_allocated_bytes": {
+    "full_batch": 1483286016,
+    "weighted_microbatches": 447974912,
+    "naive_microbatches": 466652672
+  },
+  "equation": "sum_i grad(sum_loss_i / sum_j N_j), versus mean_i grad(sum_loss_i / N_i)"
+}

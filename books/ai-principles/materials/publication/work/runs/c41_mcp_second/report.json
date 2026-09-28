@@ -1,0 +1,38 @@
+{
+  "sdk_mcp_version": "2.0.0",
+  "protocol_version": "2026-07-28",
+  "discovered_capabilities": {
+    "prompts": {
+      "list_changed": true
+    },
+    "resources": {
+      "subscribe": true,
+      "list_changed": true
+    },
+    "tools": {
+      "list_changed": true
+    }
+  },
+  "tool_names": [
+    "multiply",
+    "read_note"
+  ],
+  "multiply_12_13": {
+    "result": 156
+  },
+  "wrong_type_is_error": true,
+  "note_before": "Start\nalpha\nbeta\ngamma\n",
+  "resource_names": [
+    "evidence://c40/retrieval-summary"
+  ],
+  "retrieval_resource": "{\"paragraphs\": 1759, \"gold_questions\": 12, \"recall_at_5\": 9, \"source_sha256\": \"47a31f6459b8fc0339727210c51026a955c4cccc8b82b2bd0fbfbf881ffff161\"}",
+  "prompt_names": [
+    "check_note"
+  ],
+  "prompt_text": "Read the permitted note source, cite its current SHA-256, and answer only what it supports. If the source changed, stop. Question: What is the final line?",
+  "note_after_copy_change_is_error": true,
+  "note_after_copy_change_text": "Error executing tool read_note: note source changed; recheck it before use",
+  "original_c39_sha256_unchanged": true,
+  "copy_sha256_after_change": "156d831406a9fc9dafdae1a3ac6edcd0c9a5a823efb1b631da87e0d764097a52",
+  "scope": "real MCP Python SDK v2 stdio subprocess and current protocol; client calls chosen by author, no model trained/used to choose tools, no remote OAuth or OS sandbox"
+}

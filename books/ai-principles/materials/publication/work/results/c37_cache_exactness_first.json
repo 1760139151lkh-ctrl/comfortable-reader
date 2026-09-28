@@ -1,0 +1,106 @@
+{
+  "device": "cuda",
+  "serving_sha256": "d22a0799e70c070c29d292cbb527d748c5b28089c3ce88632fa990490c6cff7c",
+  "checkpoint_source_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "context": 128,
+  "checks": [
+    {
+      "prefix": 16,
+      "incremental_steps_without_eviction": 16,
+      "prefill_max_logit_difference": 3.814697265625e-06,
+      "decode_max_logit_difference": 9.5367431640625e-06,
+      "cache_bytes_last_step": 196608,
+      "analytical_float32_cache_bytes_last_step": 196608
+    },
+    {
+      "prefix": 64,
+      "incremental_steps_without_eviction": 16,
+      "prefill_max_logit_difference": 2.86102294921875e-06,
+      "decode_max_logit_difference": 4.291534423828125e-06,
+      "cache_bytes_last_step": 491520,
+      "analytical_float32_cache_bytes_last_step": 491520
+    },
+    {
+      "prefix": 120,
+      "incremental_steps_without_eviction": 8,
+      "prefill_max_logit_difference": 2.86102294921875e-06,
+      "decode_max_logit_difference": 8.106231689453125e-06,
+      "cache_bytes_last_step": 786432,
+      "analytical_float32_cache_bytes_last_step": 786432
+    },
+    {
+      "prefix": 127,
+      "incremental_steps_without_eviction": 1,
+      "prefill_max_logit_difference": 2.86102294921875e-06,
+      "decode_max_logit_difference": 2.384185791015625e-06,
+      "cache_bytes_last_step": 786432,
+      "analytical_float32_cache_bytes_last_step": 786432
+    },
+    {
+      "prefix": 128,
+      "incremental_steps_without_eviction": 0,
+      "prefill_max_logit_difference": 2.384185791015625e-06,
+      "decode_max_logit_difference": 0.0,
+      "cache_bytes_last_step": 786432,
+      "analytical_float32_cache_bytes_last_step": 786432
+    }
+  ],
+  "wrong_evict_only_max_logit_difference": 0.2184152603149414,
+  "greedy_short_full_equals_cache": true,
+  "greedy_long_window_full_equals_rebuilding_cache": true,
+  "short_generation": {
+    "prompt": "The city of",
+    "full": {
+      "new_token_ids": [
+        263,
+        978,
+        1277,
+        266,
+        290,
+        263,
+        520,
+        647,
+        283,
+        263,
+        520,
+        647,
+        283,
+        263,
+        520,
+        647
+      ],
+      "new_token_count": 16,
+      "ended_with_eos": false,
+      "context_rebuilds_after_window_overflow": 0,
+      "engine": "full",
+      "selection": "greedy"
+    },
+    "cached": {
+      "new_token_ids": [
+        263,
+        978,
+        1277,
+        266,
+        290,
+        263,
+        520,
+        647,
+        283,
+        263,
+        520,
+        647,
+        283,
+        263,
+        520,
+        647
+      ],
+      "new_token_count": 16,
+      "ended_with_eos": false,
+      "context_rebuilds_after_window_overflow": 0,
+      "engine": "cached",
+      "selection": "greedy"
+    },
+    "decoded": " the United States , and the first time of the first time of the first time"
+  },
+  "long_generation_rebuilds": 7
+}

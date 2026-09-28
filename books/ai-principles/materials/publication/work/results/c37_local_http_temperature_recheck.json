@@ -1,0 +1,308 @@
+{
+  "health": {
+    "http_status": 200,
+    "json": {
+      "ready": true,
+      "device": "cuda",
+      "model_source_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+      "model_training_epoch": 4,
+      "context_positions": 128,
+      "batching": "explicit equal-token-length batches only; inference lock serializes unrelated requests"
+    },
+    "client_elapsed_ms": 19.40460002515465
+  },
+  "one_warmup_request": {
+    "http_status": 200,
+    "json": {
+      "text": " the United",
+      "new_token_ids": [
+        263,
+        978
+      ],
+      "ended_with_eos": false,
+      "input_tokens_outside_128_window": 0,
+      "selection": "greedy",
+      "temperature": null,
+      "context_rebuilds": 0,
+      "elapsed_model_ms": 1142.304699984379,
+      "identity": "fixed C19 trained model, no update"
+    },
+    "client_elapsed_ms": 1154.5684000011533
+  },
+  "single_greedy": {
+    "http_status": 200,
+    "json": {
+      "text": " the United States , and the first time of the first time",
+      "new_token_ids": [
+        263,
+        978,
+        1277,
+        266,
+        290,
+        263,
+        520,
+        647,
+        283,
+        263,
+        520,
+        647
+      ],
+      "ended_with_eos": false,
+      "input_tokens_outside_128_window": 0,
+      "selection": "greedy",
+      "temperature": null,
+      "context_rebuilds": 0,
+      "elapsed_model_ms": 24.349199957214296,
+      "identity": "fixed C19 trained model, no update"
+    },
+    "client_elapsed_ms": 45.88919994421303
+  },
+  "single_sample": {
+    "http_status": 200,
+    "json": {
+      "text": " the Tadets , Category \" is not be a",
+      "new_token_ids": [
+        263,
+        301,
+        321,
+        1176,
+        266,
+        312,
+        5798,
+        304,
+        366,
+        475,
+        358,
+        261
+      ],
+      "ended_with_eos": false,
+      "input_tokens_outside_128_window": 0,
+      "selection": "sample_top40",
+      "temperature": 0.8,
+      "context_rebuilds": 0,
+      "elapsed_model_ms": 108.4145000204444,
+      "identity": "fixed C19 trained model, no update"
+    },
+    "client_elapsed_ms": 110.13369995635003
+  },
+  "single_sample_temperature_1": {
+    "http_status": 200,
+    "json": {
+      "text": " the Tadatra LS @-@ 5 – 1 –",
+      "new_token_ids": [
+        263,
+        301,
+        321,
+        273,
+        379,
+        382,
+        53,
+        342,
+        567,
+        524,
+        310,
+        524
+      ],
+      "ended_with_eos": false,
+      "input_tokens_outside_128_window": 0,
+      "selection": "sample_top40",
+      "temperature": 1.0,
+      "context_rebuilds": 0,
+      "elapsed_model_ms": 26.902000070549548,
+      "identity": "fixed C19 trained model, no update"
+    },
+    "client_elapsed_ms": 29.10160005558282
+  },
+  "explicit_equal_length_eight_batch": {
+    "http_status": 200,
+    "json": {
+      "outputs": [
+        {
+          "text": " the United States , and the first time of the first time",
+          "new_token_ids": [
+            263,
+            978,
+            1277,
+            266,
+            290,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the United States , and the first time of the first time",
+          "new_token_ids": [
+            263,
+            978,
+            1277,
+            266,
+            290,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the first time of the first time of the first time of",
+          "new_token_ids": [
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647,
+            283
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the United States , and the first time of the first time",
+          "new_token_ids": [
+            263,
+            978,
+            1277,
+            266,
+            290,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the first time of the first time of the first time .",
+          "new_token_ids": [
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647,
+            274
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " of the United States . \n = = = = \n The",
+          "new_token_ids": [
+            283,
+            263,
+            978,
+            1277,
+            274,
+            319,
+            303,
+            303,
+            303,
+            303,
+            319,
+            326
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the United States , and the first time of the first time",
+          "new_token_ids": [
+            263,
+            978,
+            1277,
+            266,
+            290,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        },
+        {
+          "text": " the United States , and the first time of the first time",
+          "new_token_ids": [
+            263,
+            978,
+            1277,
+            266,
+            290,
+            263,
+            520,
+            647,
+            283,
+            263,
+            520,
+            647
+          ],
+          "ended_with_eos": false,
+          "input_tokens_outside_128_window": 0
+        }
+      ],
+      "selection": "greedy",
+      "context_rebuilds": 0,
+      "elapsed_model_ms": 36.230499972589314,
+      "identity": "one explicit same-length batch, fixed C19 trained model"
+    },
+    "client_elapsed_ms": 58.17640002351254
+  },
+  "invalid_max_new_rejected": {
+    "http_status": 400,
+    "json": {
+      "error": "max_new_tokens must be an integer 1..64"
+    },
+    "client_elapsed_ms": 25.426400010474026
+  },
+  "different_tokenized_lengths_rejected": {
+    "http_status": 400,
+    "json": {
+      "error": "this batch route needs equal tokenized prompt lengths"
+    },
+    "client_elapsed_ms": 1.5758000081405044
+  },
+  "invalid_temperature_rejected": {
+    "http_status": 400,
+    "json": {
+      "error": "temperature must be a finite number within 0.1..5.0"
+    },
+    "client_elapsed_ms": 14.435299905017018
+  },
+  "long_prompt_window_boundary": {
+    "status": 200,
+    "input_tokens_outside_128_window": 115,
+    "context_rebuilds": 0
+  },
+  "single_first_equals_batch_first_greedy_token_ids": true,
+  "note": "localhost HTTP service, one weight load, one explicit model warmup before quoted single/batch times, lock serializes unrelated handlers; explicit batch endpoint requires equal tokenized lengths and does not implement automatic continuous batching"
+}

@@ -1,0 +1,83 @@
+{
+  "identity": "finite math probe only; probabilities supplied by a fixed table, not a trained RNN-T",
+  "acoustic_steps": 2,
+  "target_labels": [
+    "A",
+    "B"
+  ],
+  "node_distribution_order": [
+    "blank",
+    "A",
+    "B"
+  ],
+  "node_probabilities": [
+    [
+      [
+        0.5465493872661796,
+        0.3314989604240915,
+        0.12195165230972885
+      ],
+      [
+        0.34968652401054967,
+        0.12864248303818515,
+        0.5216709929512652
+      ],
+      [
+        0.7162474222675079,
+        0.17662443976216924,
+        0.10712813797032279
+      ]
+    ],
+    [
+      [
+        0.38514039444450354,
+        0.5198851535942091,
+        0.09497445196128734
+      ],
+      [
+        0.2609554589423494,
+        0.15827748666791625,
+        0.5807670543897343
+      ],
+      [
+        0.5502946151303707,
+        0.2472633093758146,
+        0.2024420754938147
+      ]
+    ]
+  ],
+  "paths": [
+    {
+      "edges": [
+        "blank at (0,0)",
+        "emit A at (1,0)",
+        "emit B at (1,1)",
+        "blank at (1,2)"
+      ],
+      "probability": 0.09081008079883103
+    },
+    {
+      "edges": [
+        "emit A at (0,0)",
+        "blank at (0,1)",
+        "emit B at (1,1)",
+        "blank at (1,2)"
+      ],
+      "probability": 0.037047448397877845
+    },
+    {
+      "edges": [
+        "emit A at (0,0)",
+        "emit B at (0,1)",
+        "blank at (0,2)",
+        "blank at (1,2)"
+      ],
+      "probability": 0.06816119481603126
+    }
+  ],
+  "path_count": 3,
+  "direct_total_probability": 0.19601872401274012,
+  "dynamic_total_probability": 0.19601872401274012,
+  "negative_log_probability": 1.629545093637139,
+  "maximum_logit_gradient_difference": 5.551115123125783e-17
+}

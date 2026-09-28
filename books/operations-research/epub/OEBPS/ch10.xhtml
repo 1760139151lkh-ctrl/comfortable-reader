@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>十、第九步：根据验证结果反过来修改前面的模型</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="十第九步根据验证结果反过来修改前面的模型">十、第九步：根据验证结果反过来修改前面的模型</h1>
+<p>真实建模不是一条直线，而是一个循环：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>问题</mtext><mo>→</mo><mtext>结构</mtext><mo>→</mo><mtext>模型</mtext><mo>→</mo><mtext>数据</mtext><mo>→</mo><mtext>求解</mtext><mo>→</mo><mtext>验证</mtext><mo>→</mo><mtext>修改模型</mtext></mrow></menclose></mrow></math></div>
+<p>不同问题对应不同的返回位置。</p>
+<h2 id="预测效果差">预测效果差</h2>
+<p>返回：</p>
+<ul>
+<li>数据层；</li>
+<li>特征设计；</li>
+<li>模型假设；</li>
+<li>参数估计。</li>
+</ul>
+<h2 id="模型无解">模型无解</h2>
+<p>返回：</p>
+<ul>
+<li>检查约束是否冲突；</li>
+<li>是否存在过强限制；</li>
+<li>是否需要引入软约束；</li>
+<li>是否需要允许一定违约并加惩罚。</li>
+</ul>
+<h2 id="模型有解但计算太慢">模型有解但计算太慢</h2>
+<p>返回：</p>
+<ul>
+<li>利用特殊结构；</li>
+<li>简化变量；</li>
+<li>分解问题；</li>
+<li>使用松弛；</li>
+<li>使用近似算法；</li>
+<li>使用启发式算法。</li>
+</ul>
+<h2 id="数学结果不符合现实">数学结果不符合现实</h2>
+<p>返回：</p>
+<ul>
+<li>系统边界；</li>
+<li>目标函数；</li>
+<li>漏掉的约束；</li>
+<li>不合理假设；</li>
+<li>参数取值；</li>
+<li>未建模的行为因素。</li>
+</ul>
+<h2 id="结果对参数极敏感">结果对参数极敏感</h2>
+<p>返回：</p>
+<ul>
+<li>鲁棒优化；</li>
+<li>随机规划；</li>
+<li>情景分析；</li>
+<li>更稳健的目标；</li>
+<li>收集更可靠的数据。</li>
+</ul>
+<p>因此，模型不是一次“选出来”的，而是在现实、数据和验证的压力下不断被修正出来的。</p>
+<hr/>
+</body></html>

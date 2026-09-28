@@ -1,0 +1,788 @@
+{
+  "scope": "current published guide+chapters1..39 paragraph lexical retrieval, author-chosen questions/gold anchors; no generative answer benchmark",
+  "publication_sha256": "f3d8e80f28c906872705ab37df4b8b0cf334fa2dcf7c6e7b042b180c49fe5287",
+  "publication_total_units_at_run": 40,
+  "frozen_corpus_first_units": 40,
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "paragraphs": 1759,
+  "mean_character_bigram_and_latin_term_count": 160.83854462762935,
+  "index_sha256": "daf8a2daf78ef9fc1b002d2dbef9fe6570c5341de3a1a00443ecfd9d09a84057",
+  "scorer": "BM25-style character bigrams for contiguous Chinese plus lowercased Latin/digits; k1=1.2,b=.75,idf=log(1+(N-df+0.5)/(df+0.5))",
+  "gold_questions": 12,
+  "recall_at_1": 6,
+  "recall_at_5": 9,
+  "recall_at_10": 10,
+  "full_top1_context_fits_128_with_16_reserved": 0,
+  "naive_shortest_fragment_fits": 4,
+  "questions": [
+    {
+      "question": "第十九章自己训练的文章模型有多少可训练参数？",
+      "gold_file": "第十九章_从随机权重训练到真实生成.md",
+      "gold_anchor": "nineteenth-model",
+      "best_gold_rank": 111,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 29.902662581605572,
+          "path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+          "anchor": "thirtyseventh-weight-origin",
+          "start_line": 10,
+          "text_sha256": "c8194b35808491cca125fdd7a9468f233881d769bfef12af7e1e4833f1d5839a",
+          "excerpt": "第十九章的模型是四层、每层四个读取头、活动宽192的因果 Transformer；一次前向最多看128个分词位置，词表8192项，共 4,930,304 个可训练参数。它先由第十八章从训练文章拟合的字节级分词器把文字变成编号。训练检查点除了权重，还保存 AdamW 的两份历史数、训练步数和随机状态；那些对接着训练必要，对固定权重回答请求没有作用。第十九章的模型与保存过程"
+        },
+        {
+          "rank": 2,
+          "score": 25.554883835214014,
+          "path": "work/book/第二十五章_文章模型怎样学着回应要求.md",
+          "anchor": null,
+          "start_line": 3,
+          "text_sha256": "16e3659387318c908e86c34ae48a0c5eb412c3f3f323022218f4a3dfeecb739b",
+          "excerpt": "上一章在游戏和控制里追问“下一步之后会怎样”。现在回到第十九章那台从随机权重训练过的语言模型。它确实学会了比无条件片段频率更好的文章预测：四轮后 WikiText 验证逐片段 NLL 约 5.816。但撤掉真实文章的后文、让它自己接着写，六条原先固定的提示仍常循环或散乱，100 个新片段内没有自然写出篇末 EOS。我们不能因为这本书刚讲完策略梯度和搜索，就把那台弱小的文本模型说成已经会做数学、写程序或听从人的要求。"
+        },
+        {
+          "rank": 3,
+          "score": 25.54199677184665,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-next",
+          "start_line": 223,
+          "text_sha256": "12844785824759b8abcc1dd4e6191a8025b48510f802b00bf49c0b83452ecdaa",
+          "excerpt": "我们现在有许多不同的已训权重：第十九章能给文章续片段概率，本章能为论文节点报七类分数，还有前几章的视觉与声音模型。用户真的发来请求时，谁负责加载哪一份权重、何时算完整前缀、何时只算新增一步、怎样控制并发与内存？这些是下一章从训练模型到推断服务的问题。服务一个第十九章的文章模型并不以先学完本章图神经网络为逻辑前置；这里只是把“有模型可调用”这件事实交到了下一段系统工作。"
+        },
+        {
+          "rank": 4,
+          "score": 24.179420300524885,
+          "path": "work/book/第二十章_一台机器上怎样分配训练预算.md",
+          "anchor": "twentieth-budget",
+          "start_line": 14,
+          "text_sha256": "924dae464bdbfb00f4b6ce7a1eb72340ac816316bf256467d8cc64d93fcfe9ed",
+          "excerpt": "还有一道立即会撞上的硬界限：显存。24 GB 左右的显卡容量，不能直接除以“每个权重占两字节”来得到可训练参数上限。模型要在前向留下反向所需的中间结果，要存梯度，AdamW 还要记每个参数的两份过去。第十九章那次训练在 CUDA 前向用了 BF16，但常驻的权重、梯度和 AdamW 状态仍是 FP32。这件实物给我们一个可以核对的起点。"
+        },
+        {
+          "rank": 5,
+          "score": 23.529461255877802,
+          "path": "work/book/第二十九章_没有逐张答案图像还能教会网络什么.md",
+          "anchor": null,
+          "start_line": 3,
+          "text_sha256": "b34acb53a809cfa0dbc76d650fb1757276feb9942a0c641b75f8e965eabd35e7",
+          "excerpt": "第二十八章里的比较，必须有人看过两份具体答复，按某个目标说哪一份更好。第十三章的服饰分类也有明确的十类答案。这样的信息很珍贵，却不可能为每一张将来收集的图片、每一段声音和每一篇文章，都提前写好所有任务的答案。拿掉十类编号，训练就真的停了吗？第八章已经给过一个反例：批发商的六项消费额没有“客户类型”的标准答案，我们仍能规定重建误差，找少数连续坐标或两个代表点。第十九章的文章模型也没有人逐词写语义说明，原文的下一个片段却能成为预测目标。"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 541,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "第十九章的模型与保存过程",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 115,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "同一个字符串可能由不同BPE编号路径解出，这和字符串概率有何区别？",
+      "gold_file": "第十八章_文章怎样进入下一词模型.md",
+      "gold_anchor": "eighteenth-tokenizer",
+      "best_gold_rank": 3,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 40.371051671143746,
+          "path": "work/book/第二十五章_文章模型怎样学着回应要求.md",
+          "anchor": "twentyfifth-mask",
+          "start_line": 52,
+          "text_sha256": "08dde9d3ebb8619d6c4f64cd1ac509c28f26f6071bc9bab3666e72d81e440c56",
+          "excerpt": "提示和回答各用同一份旧分词器分别编码，再拼成这条定义好的编号路径，因而两者的边界不会被一次跨段BPE合并藏起来；训练和下面的生成都沿同一模板。第十八章已经指出同一字串可能有不止一种合法片段路径，这里测的是所选编号路径上的条件预测，不是所有等价路径的字串概率总和。"
+        },
+        {
+          "rank": 2,
+          "score": 23.14903709168236,
+          "path": "work/book/第十九章_从随机权重训练到真实生成.md",
+          "anchor": "nineteenth-generation",
+          "start_line": 130,
+          "text_sha256": "feba168deb60d27c61d4a3d37b04df811e964453067caac5dbd96b8150ec708a",
+          "excerpt": "还有第十八章已实际核到的一层区别：训练文章由确定的分词器走一条规范编号路径，生成器却在完整词表里逐项选编号，没有另设“只许走规范合并”的门。某些不同编号序列可能解码成同一字串，所以测试中“给规范下一片段的概率”与自由生成“这段文字出现的总概率”也不是同一个量。本机没有统计六条样例里有多少片段走了非规范组合，不能把下面的错误都归咎于分词；这里只保住两个评价对象不被悄悄混同。"
+        },
+        {
+          "rank": 3,
+          "score": 21.137467954965565,
+          "path": "work/book/第十八章_文章怎样进入下一词模型.md",
+          "anchor": "eighteenth-tokenizer",
+          "start_line": 53,
+          "text_sha256": "717156b742d088bfed5853eabc524f445b2502150ae68d863c268d6986e7be6e",
+          "excerpt": "为什么还要分这两层？刚才的空格加 the，本机分词器默认编码成一枚 Ġthe，编号 263；但实际回读探针还核到 [259,260]（Ġt、he）和 [223,86,260] 也都解回同一个“ the”。确定性编码器只选第一条路；一个没有额外禁止这些词表项的生成模型，却可能说出后两条。若从 BOS 到 EOS 问它生成这段原字串的概率，须把所有解码为该字串的互不相同编号路径的概率相加；只算 [263] 是指定路径的概率。这一步与前面“一个可见结果可能对应多个隐藏解释，要把它们"
+        },
+        {
+          "rank": 4,
+          "score": 19.870302528984883,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-copy-problem",
+          "start_line": 112,
+          "text_sha256": "a2eb828dbe023b662131ab8ad5cebb23ed986db13959f2dc94008f8ce4be591e",
+          "excerpt": "再把一条返回真的送进分词器检查。T: Weather buoy中的第一个英文词有前导空格，旧ByteLevel-BPE把它从 ĠWe 之类的编号开始；我们原来把宿主的A: 连空格一起先塞给模型，助手单独要生成的Weather buoy却从 W,e,… 开始。人看见的是同一个“Weather”，模型看到的复制来源和目标编号并不相同。v3让A:后那个空格也由助手生成，使训练组190条真标题的返回值与回答值/换行在BPE编号上逐项对齐；同时保留模拟目录版本、重新平衡直接词练习。同一"
+        },
+        {
+          "rank": 5,
+          "score": 19.517312241719385,
+          "path": "work/book/第二十一章_一次行动为何改变以后.md",
+          "anchor": "twentyfirst-history",
+          "start_line": 148,
+          "text_sha256": "2f76e42bf5550f7d10953be7f222ae10fbddff8cdf1502df87f9971183890960",
+          "excerpt": "这两项历史计数也能参加一次真正的概率核算。令 p 为这一长段里元音的比例；把“上一字母是元音”与“上一字母是辅音”分开，下一字母为元音的比例应近似满足 p=0.128p+0.663(1-p)。解出约 0.4319，恰与他从两万个字母直接数得的 8638/20000=0.4319 相称。用原文未四舍五入计数的本机核算得约 0.431922，与实数频率差约 2.2\\times10^{-5}。这不是又一条独立证明“只看前一字母就够”：相邻次数与总字数本来从同一段文字数出，长序列里两"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 493,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "训练和下面的生成都沿同一模板。",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 151,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "查询与键的点积为什么要除以根号键维度？",
+      "gold_file": "第十七章_每个位置怎样读到需要的信息.md",
+      "gold_anchor": "seventeenth-from-alignment",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 41.262135746653136,
+          "path": "work/book/第十七章_每个位置怎样读到需要的信息.md",
+          "anchor": "seventeenth-from-alignment",
+          "start_line": 38,
+          "text_sha256": "9e9ad5bc733b558c495f52cb1c682510d37c84e7d722cd604787dc33ef5896b8",
+          "excerpt": "为什么偏要除 \\sqrt{d_k}？先作一项有假设的计算：若查询与键的各坐标相互独立、均值为 0、方差为 1，那么 q^\\top k=\\sum_{r=1}^{d_k}q_rk_r 的方差为 d_k；除以 \\sqrt{d_k} 后方差变为 1。维数增大时，未缩放点积容易有较大的绝对值，softmax 一行可能很快挤到接近 0 或 1，许多方向的导数随之变小。缩放是一个针对这种计算情形的设计，不是说训练后的所有键都独立同分布，也不是保证每行永不饱和。本机随机向量核算取 8192 "
+        },
+        {
+          "rank": 2,
+          "score": 21.313015851037672,
+          "path": "work/book/第二十章_一台机器上怎样分配训练预算.md",
+          "anchor": "twentieth-systems",
+          "start_line": 144,
+          "text_sha256": "2a34636db83b9fe53bbd715e1c86ccf35989a6fdde905c7f1d46eb9fd879889f",
+          "excerpt": "因为 e^{z-m'}=e^{z-m}e^{m-m'}，旧块和新块都被改写到同一个分母基准；最后的注意力输出仍是 u'/s'。这在实数运算里和一次算完整 softmax 是同一个式子，有限精度下会有求和次序差。它节省的是大中间矩阵的读写，计算仍须考虑查询与键的相互作用；不是随意跳过远处的文字。第十九章只有 128 位上下文，词表分数张量又很大，因此不能听到 FlashAttention 的速度报道，就宣布它是这次训练最该改的一项。我们没有在本机做它与普通注意力的受控对照。(D"
+        },
+        {
+          "rank": 3,
+          "score": 15.728799120921154,
+          "path": "work/book/第十七章_每个位置怎样读到需要的信息.md",
+          "anchor": "seventeenth-from-alignment",
+          "start_line": 53,
+          "text_sha256": "d15d0ac615dff9646c868a265803245426f2d7106493d1fdd6974049848fb2e6",
+          "excerpt": "上章已经看过软权重怎样接收误差，这里可以把键和值为什么要分开再推进一步。只取一个查询行，令 z=\\sum_j a_jv_j，从后续损失传回这一行的向量梯度记为 g=\\partial L/\\partial z。对于允许读取的位置，softmax 的链式法则给出 \\partial L/\\partial s_j=a_j\\,g^\\top(v_j-z)。所以增加位置 j 的分数是否能减小损失，要看它带回的值 v_j 相对当前平均 z 在误差方向上的差异；光说“这个键很相似”还不够。这个"
+        },
+        {
+          "rank": 4,
+          "score": 13.422431669324032,
+          "path": "work/book/第二章_为什么还要量分数的距离.md",
+          "anchor": "second-optimum",
+          "start_line": 136,
+          "text_sha256": "7d674673c8b3c4c8599a065e00298f46f0b24693f6800a2cd3da982749876207",
+          "excerpt": "现在把七条卡片的 x_1^2,x_1x_2,x_1 等分别相加，将这三个“残差与一列输入的内积为零”写开，得到"
+        },
+        {
+          "rank": 5,
+          "score": 12.734912841782092,
+          "path": "work/book/第十七章_每个位置怎样读到需要的信息.md",
+          "anchor": "seventeenth-history",
+          "start_line": 13,
+          "text_sha256": "2706aaa54a0aca35769776617ca6a4120aaa1af253642a83ec1803f96b83c336",
+          "excerpt": "到了 2015 年，Luong、Pham 与 Manning 并没有把“注意力”当成只有一种公式。他们比较读完整来源的全局方式和只读一段来源的局部方式，也比较直接点积、带一层映射的匹配等打分。局部读取可以少看位置，却要决定窗口放在哪；直接点积便于计算，也未必在任何资料和设置中胜出。这些试验使本章稍后的点积有一段真实来路：选择打分办法本身就是设计问题，不是 2017 年有人突然从概率公理里推得唯一的 Q、K、V。(Luong 等，2015，§3、§5.3)"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 804,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "(Transformer，§3.2.1 及注 4)",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 93,
+        "naive_shortest_fragment_fits_with_reserved_answer": true,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "Dolly指令训练为什么提示可读却只对回答算损失？",
+      "gold_file": "第二十五章_文章模型怎样学着回应要求.md",
+      "gold_anchor": "twentyfifth-mask",
+      "best_gold_rank": 16,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 32.20722051227393,
+          "path": "work/book/第三十五章_照片和文字怎样指向同一件事.md",
+          "anchor": "thirtyfifth-frozen-joint",
+          "start_line": 199,
+          "text_sha256": "b562b5151cb5cdf643a6a5f2eef3a4c4d5c44a518021e50981b9436d07a84528",
+          "excerpt": "这个训练安排与第二十五章已经教过的回答区损失接得上，但多了一个真正有图的条件。若一次样例为图片 x、人给的问题 q、希望学会的回答编号 a_1,\\ldots,a_T，一种指令训练目标是 -\\sum_t\\log p_\\Theta(a_t\\mid x,q,a_{<t})：图和问题可读，计分的是助手回答和结束符，前面的用户问句不必当助手应续写的目标。原论文的多轮样例还让后轮见到前轮对话；视觉token从 W 变成语言模型能用的输入后，回复损失才有一条返回 W 的梯度路径。这里的 \\"
+        },
+        {
+          "rank": 2,
+          "score": 28.61854301578968,
+          "path": "work/book/第十八章_文章怎样进入下一词模型.md",
+          "anchor": "eighteenth-loss",
+          "start_line": 102,
+          "text_sha256": "62d8cb0b1bac57eabcbcf49d8d943ac5cad4639299038ec82fadfd83f68437ef",
+          "excerpt": "还可以只改一项条件来检查两张表为何要分开：让首块最初那个 BOS 仍是可读输入，但暂时不把它右邻的 303 算进损失，即只将这项标签改成 −100。程序里可读输入仍有 242 处，计损失的目标却只剩 241 处；这一变体的正确平均约 9.180，错除以可读输入数只得到约 9.142。原模型当然不会因为遮掉一项标签而学得更好；这里核的是“什么进入上下文”与“什么提供训练误差”可以分开决定。后面若给模型一段可读提示、却只要求它学习接下来的回答，这个区别会直接承担训练责任，本章已把"
+        },
+        {
+          "rank": 3,
+          "score": 23.69331395498584,
+          "path": "work/book/第二十五章_文章模型怎样学着回应要求.md",
+          "anchor": "twentyfifth-prompt-versus-update",
+          "start_line": 12,
+          "text_sha256": "a47e57290a9e575c2f44133f925fc151088309c4eb2af5e33c77c5b5f5781d3b",
+          "excerpt": "另一件工作才叫适配训练：保留已有模型作起点，提供带任务条件的资料，按明确目标求导、改变参数。继续用代码原文预测下一片段，是一条选择；让一份写着“问题→参考回答”的资料只对回答计损失，是另一条。二者都还用因果语言模型，不必把网络末端改成另一种神秘“指令脑”；改变的是资料构成和每个位置的训练责任。"
+        },
+        {
+          "rank": 4,
+          "score": 19.67073019638959,
+          "path": "work/book/第二十五章_文章模型怎样学着回应要求.md",
+          "anchor": "twentyfifth-source",
+          "start_line": 21,
+          "text_sha256": "d28343ccd5128355263c0a5b7237bc8b58809da004e9c3cddb06aa494ee71ee9",
+          "excerpt": "为让训练不只停在一条手造字符串，我们取得 Databricks 发布的 Dolly 15k 英文指令资料：原件有 15,011 条，每条可含 instruction、context、response 和任务类别；人写出的回复与部分维基百科参考段落有发布者说明和 CC BY-SA 3.0 条件。发布者同时提醒：原回答可能有事实、拼写和题材偏差。取得资料是拥有示范，不是取得Databricks那台已指令训练的12B模型权重，更不是得到一份已独立核实的答案真值。(Databrick"
+        },
+        {
+          "rank": 5,
+          "score": 17.227761856720193,
+          "path": "work/book/第二十六章_回答得到分数以后谁在学习.md",
+          "anchor": null,
+          "start_line": 3,
+          "text_sha256": "316ade312cd415ac95be43742fc4142efe05c942caeadef1eee52824f4bcdcb9",
+          "excerpt": "第二十五章做完三轮指令训练时，有一个看似矛盾的场面：同一台从 WikiText 随机权重训练起来的小模型，已经更愿意给短英文示范回答中的片段较高概率；可让它独立接续，“哪种乐器是弦乐”之类的要求仍没有被可靠完成。逐位置的训练损失有真回答作参照，独立作答却要沿自己刚写的文字继续。这两件事之间的距离，不能只用“再训练久些”概括。"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 1014,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "LLaVA原文式(3)与回答位置标记)",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 113,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "因果模型超过128位置后为什么不能只弹出旧KV缓存？",
+      "gold_file": "第三十七章_训练好的模型怎样接住一次请求.md",
+      "gold_anchor": "thirtyseventh-window",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 22.354131986772995,
+          "path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+          "anchor": "thirtyseventh-window",
+          "start_line": 93,
+          "text_sha256": "9112d8b3203059e8c225058addad39f37ffb67f39d99e6efd507940017b01ab8",
+          "excerpt": "本章为了忠于这份具体C19模型，在窗口未满时逐项追加K/V，满128位后每产生下一项就对新窗口重新计算一次。120位提示再生16项，在这次16步里有7次重建。若故意采用“仅弹出旧K/V”的错误办法，新一次分数的最大绝对差约 0.2184；正确重建与FP32全前缀路线在同组贪心输出上逐项相同，窗口内各测点的logit最大差约 9.54\\times10^{-6}。FP32在这里表示每个浮点数用32位存储和计算；第十九章当时的CUDA自由生成曾启用BF16混合精度，本章的两条对照路"
+        },
+        {
+          "rank": 2,
+          "score": 22.33559682750081,
+          "path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+          "anchor": "thirtyseventh-window",
+          "start_line": 91,
+          "text_sha256": "1dca7127571314d90507a5ebb2ba217d10abf9a85ae22d2ea857a2cd42ac602b",
+          "excerpt": "第十九章模型最多接受128位。它原来的无缓存生成遇到更长前缀时，取最后128位重做前向；固定正弦位置向量从这一小块的第0位重新编号。假设原窗口为编号0到127的128项，选出新项后，原编号0被扔掉，其余127项现在须按新窗口编号0到126进入模型。若只从缓存数组删掉最旧K/V，把其余127项原值照留，它们仍带着旧的位置编码；更深层旧活动还曾读取过被扔掉的那项。即使正弦位置公式是固定的，也不能只把旧K/V张量的一列数字改个名字就使它们成为新前向的K/V。"
+        },
+        {
+          "rank": 3,
+          "score": 21.60595284431376,
+          "path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+          "anchor": "thirtyseventh-kv-derive",
+          "start_line": 65,
+          "text_sha256": "391737efa7cedfe61eabc108b960a1af9ad3ed7a21bf11d36f6b834e2942a268",
+          "excerpt": "余下还有输出投影、残差相加、归一化与逐位置前馈层；这些在第十九章的四层实现里依次发生。公式把本次必须新算的 q_t,k_t,v_t 与过去位置已有的 k_j,v_j 分开。过去位置为何能够留？因果遮罩规定第 j<t 处从未读过后来的第 t 项；在同一权重、同一位置编号、推断模式下，新项到来不会倒过来改变旧项的层输入。于是旧项在每一层算好的K、V可以保存，下一步只为新位置算查询、键和值，再向旧K/V读取。这是 KV缓存，不是给模型新增外部记忆，也不是把之前的回答写进参数。C17"
+        },
+        {
+          "rank": 4,
+          "score": 17.142663056650203,
+          "path": "work/book/第十四章_过去的信息怎样留到需要时.md",
+          "anchor": "fourteenth-exercises",
+          "start_line": 187,
+          "text_sha256": "8eaa948ee310e598025668909ad7c70675f72dd454d316b00a1490921e401fa2",
+          "excerpt": "5. 打开真实活动的混淆表，解释为什么 GRU 官方总准确率超过六成却仍不能说它学好了六类。再看事后输入诊断：它实际比较的是什么、没有重训什么？为什么不能把 80.84% 填进原来 GRU 的官方测试一格？"
+        },
+        {
+          "rank": 5,
+          "score": 17.061649698280608,
+          "path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+          "anchor": "thirtyseventh-window",
+          "start_line": 95,
+          "text_sha256": "8b7ab3d5b1649321078661c17c60a7b8c3db6e7b3d1b6c648ce46ffe2c1a5300",
+          "excerpt": "决定走哪条路的代码就在生成循环里。cache[0][0].shape[2] 是第一层K的位置数，各层本来同长；window 是包含刚选出的token、最多128位的当前输入，chosen 是那枚新token："
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 907,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "窗口与错误路线的核验",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 111,
+        "naive_shortest_fragment_fits_with_reserved_answer": true,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "工具返回为什么不是模型此次采样动作的对数概率？",
+      "gold_file": "第三十八章_模型怎样学会请求工具并使用返回.md",
+      "gold_anchor": "thirtyeighth-probability",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 46.05283547048401,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-probability",
+          "start_line": 49,
+          "text_sha256": "b04cea661976c3b73e92efb6685c5622b9ffa66e2bd5aee645ad815f811dc418",
+          "excerpt": "下标 E 指执行工具的环境，不是模型参数的另一个名称。若 mul(37,42)是稳定确定的纯函数，正确请求发生后 P_E(o=1554\\mid h,a)=1；若是查询可能失败、资料可能更新的外部系统，该项也有其自己的条件与变化。模型没有在本次采样里“选择工具返回1554”——它选的是请求及后续回答。仅对这次模型自己做出的动作使用策略梯度时，样本的对数概率项来自"
+        },
+        {
+          "rank": 2,
+          "score": 45.56127564864754,
+          "path": "work/book/第二十六章_回答得到分数以后谁在学习.md",
+          "anchor": "twentysixth-sft-result",
+          "start_line": 20,
+          "text_sha256": "bae9a8cc18c6d9e82afc0a77acfad110df7a9bee6df24eec1e7ae8ea4f05b25b",
+          "excerpt": "这里 y_{<t} 是模型这次已经写出的前缀；若结束符由模型选择，它也应算一次动作。输入要求 x 由任务提供，不是模型此次抽出的动作。于是一次输出的对数概率是"
+        },
+        {
+          "rank": 3,
+          "score": 33.3093959024211,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-probability",
+          "start_line": 55,
+          "text_sha256": "69aa58176d50c91338fdb818107b2cd65f04b35615c62abdd6584691a620f273",
+          "excerpt": "而不是把 \\log p_\\theta(o\\mid h,a) 塞进同一条“动作的对数概率”。否则奖励会错误地鼓励模型为环境已经返回的文字争功。结果得分可以在交互完成后由题目验收者提供，例如这道乘法是否答对；它本身也不是一个能机械地从解释器穿过离散输出传回网络的导数。若训练者另想教模型预测工具返回、模拟环境，或继续对整份记录做普通语言建模，可以设计给 o 的目标；那是换了学习任务，不是数学上禁止观察token有loss。前文结果反馈的真实概率更新"
+        },
+        {
+          "rank": 4,
+          "score": 28.72749830089907,
+          "path": "work/book/第二十三章_结果不会求导行动的概率怎样学习.md",
+          "anchor": "twentythird-score",
+          "start_line": 52,
+          "text_sha256": "83d3c0c52eae5e37d1fa3068af9e65f365408deda2bd752c0de06333ff22a777",
+          "excerpt": "第二个等号为何只留策略的对数概率？路径概率等于“首步动作的概率 × 在此动作下环境给出结果的概率”；后一项没有 \\theta，对它的对数求导是零。若环境机制也随同一个参数改变，就不能这样删掉它。这里是在固定环境里优化行动概率。"
+        },
+        {
+          "rank": 5,
+          "score": 26.65695713180048,
+          "path": "work/book/第二十三章_结果不会求导行动的概率怎样学习.md",
+          "anchor": "twentythird-score",
+          "start_line": 69,
+          "text_sha256": "f1acd80029e99b7affe6f216cfcfc0f08c3aba0812aa6cc4872d93e7640b5e98",
+          "excerpt": "它与直接对 4-\\tfrac52\\sigma(\\theta) 求导完全相同。区别在于，右侧每次只需实际抽到的一条路径、那条路径的总分和当时被抽中动作的对数概率导数。重复经历后取平均，才形成估计；一次快送成功不是整个期望梯度。"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 539,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "下标 E 指执行工具的环境，不是模型参数的另一个名称。",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 156,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "模型会写正确工具请求却不会照读标题返回，这个失败怎么发现的？",
+      "gold_file": "第三十八章_模型怎样学会请求工具并使用返回.md",
+      "gold_anchor": "thirtyeighth-first-failure",
+      "best_gold_rank": 7,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 32.69353517860149,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-copy-problem",
+          "start_line": 114,
+          "text_sha256": "e9baaab7ca78bb47be0d0411a3457fee6ea930cd9b1a0b97af4fe510efe58b0e",
+          "excerpt": "到这里，失败不该再被一行“多训一些”遮过去。固定宽192、四层、原本以文章右邻预测起步的小模型，在这些短模板上已经可产生许多合式请求；但新的多词标题是一个不同的运算要求：读入外部返回，保留它每一个片段的顺序，再一项一项写回。我们可以给这个操作一个更明确的结构，而不是让读者误以为“观察进了上下文”就足以保证它自动形成。"
+        },
+        {
+          "rank": 2,
+          "score": 27.730116540694933,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": null,
+          "start_line": 5,
+          "text_sha256": "d5145a9889f0d54c41054b5b650745d7680bf9062f7257d815c82dd246b326eb",
+          "excerpt": "这章研究的是其中可学习的行为：什么时候直接回答、什么时候发工具请求、参数从问题里怎样来、看到返回后究竟有没有用它。执行者的权限和失败恢复仍是真问题，但暂且用两种只读本机工具，让“模型的动作”和“工具观察”各有清楚身份。上章那条不做工具训练的弱小文章模型、第二十五章在真实指令示范上适配过的模型，都会作为实际起点；我们不会突然换上一套强大的外部聊天模型，然后把它的本领写成这四层小网络学会的结果。已服务的模型及能力边界；指令适配的实际来源"
+        },
+        {
+          "rank": 3,
+          "score": 25.527020854577888,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-copy-problem",
+          "start_line": 110,
+          "text_sha256": "1a2f14dc119a54aa243976cd460c70f0c31012b914a838bdb3f253ddd6af25b8",
+          "excerpt": "先怀疑训练示范都只给同一个编号一个固定标题，模型可能记住“编号→某个常见名字”，却没有理由每次看新的T。v2在训练组给190个真实标题编号各造6个作者模拟的目录版本，令同一编号在不同情景返回别的、同样来自训练组的标题；只有当前观察能分辨该答哪个值。另加数字复制练习，想帮助它按原样带回乘法工具给出的四位数。验证/内部测试的问题文件原字节不变。这一改动使乘法验证整题到 79/100，但标题仍 0/40，直接短词题还从10/12降到6/12。把最后回答位置的训练损失另外加四倍，验证"
+        },
+        {
+          "rank": 4,
+          "score": 25.30638336241401,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-to-bigger-work",
+          "start_line": 181,
+          "text_sha256": "7432695fad76553b657a826e40b19af8f57eda269682c5b0d83e409187aa8cb8",
+          "excerpt": "在本章自己的数据里，这个问题已有一个小而具体的形状：一份旧权重并不懂调用格式；作者给它动作/答复示范后，它开始会发请求，却仍不会精确复述新的多词返回；把观察当条件的loss、文字片段的编号边界和另加的复制结构，每一项都改变了可学信息。真实的学会并非一个tool_use=True开关。下一章接的不是更多同样的短标题，而是宿主执行开始可能修改世界时，模型看见超时却不知工具是否已做过的困难：谁授权、谁留下收据、重试会不会造成两次副作用。模型发对请求是这里已经讨论的一件事；现实执行可"
+        },
+        {
+          "rank": 5,
+          "score": 25.27320146694116,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-results",
+          "start_line": 170,
+          "text_sha256": "945cabaa85df8f3d84a40d7cc9547b0ebfaa81597f023d684533e9c46c5c48b7",
+          "excerpt": "合计 138/167。首次内部测试完整逐题收据还显示：乘法100道虽都选择调用，只有97条语法可解析；标题40道调用都可解析，实际参数29条正确，回答跟随当次工具返回33条。问“标题编号10”，模型有一次却请求编号109；它再准确转述109的标题，仍不算完成用户题。问编号375，它正确调用并看见Cougar，却回答Cougars，多了一个字母。这些错误把“是否调用、参数、返回利用、最终任务”放在四张不同的检查表里，避免一个总数吞掉具体失败。"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 574,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "到这里，失败不该再被一行“多训一些”遮过去。",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 169,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "没有收到远端回执时，为什么无法知道工具是否已经执行？",
+      "gold_file": "第三十九章_请求发出以后怎样知道它做了什么.md",
+      "gold_anchor": "thirtyninth-two-worlds",
+      "best_gold_rank": 2,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 23.005520472886758,
+          "path": "work/book/第三十八章_模型怎样学会请求工具并使用返回.md",
+          "anchor": "thirtyeighth-to-bigger-work",
+          "start_line": 181,
+          "text_sha256": "7432695fad76553b657a826e40b19af8f57eda269682c5b0d83e409187aa8cb8",
+          "excerpt": "在本章自己的数据里，这个问题已有一个小而具体的形状：一份旧权重并不懂调用格式；作者给它动作/答复示范后，它开始会发请求，却仍不会精确复述新的多词返回；把观察当条件的loss、文字片段的编号边界和另加的复制结构，每一项都改变了可学信息。真实的学会并非一个tool_use=True开关。下一章接的不是更多同样的短标题，而是宿主执行开始可能修改世界时，模型看见超时却不知工具是否已做过的困难：谁授权、谁留下收据、重试会不会造成两次副作用。模型发对请求是这里已经讨论的一件事；现实执行可"
+        },
+        {
+          "rank": 2,
+          "score": 20.078119946472885,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-two-worlds",
+          "start_line": 35,
+          "text_sha256": "d212b5e4462478b0f562424f2348a24e13b38db4702c28b3124d21a48e94391b",
+          "excerpt": "客户端给出的观察完全一样。若它的下一步只能依赖这个观察，同一个决定必须用于甲与乙。总是不重试，甲里效果永远没有发生；不问远端能力便总是重试，乙里可能发生第二次。随机选哪边也无法对两种世界给出确定的“恰好一次”。这个结论不是说网络绝无办法处理，而是说要多拿到一类资料或服务契约：能查远端操作状态、能带稳定身份重试并由远端去重，或者把未知交人对账。仅在本地多写一份“我打算执行”日志，无法决定远处到底做了没有。"
+        },
+        {
+          "rank": 3,
+          "score": 18.059695703916084,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-next",
+          "start_line": 115,
+          "text_sha256": "ce718033726fe78bdef0f84a8a16ac20af62179eea1ab3258717ca2835378218",
+          "excerpt": "至此，宿主在一份有限本机文档上能区分已提交、未提交和没得到答复时的客户未知，并在同ID/同参数、记录仍保留的范围里做安全重试；另外的本机远端模拟告诉我们，缺服务端合同便没有凭空长出的远端恰一次。模型负责学会提有用的请求，宿主负责权限、执行事实与可核产物，二者合作才构成可信任务的一部分。真正可能长期保存的却不只是这次KV缓存或一次工具返回：隔日再开任务时，哪份收据还有效、事实来自哪里、用户纠正后旧记忆怎么办？下一章接着研究检索、上下文和记忆怎样跨会话保留这些区别，而不会把“有一"
+        },
+        {
+          "rank": 4,
+          "score": 17.452783495105706,
+          "path": "work/book/第十九章_从随机权重训练到真实生成.md",
+          "anchor": "nineteenth-gradient",
+          "start_line": 38,
+          "text_sha256": "7327fb73a3717a605f3b8641be3a7bdf71d03112433e12165cc381f0fe802033",
+          "excerpt": "正确项收到 p_y-1，其他项收到各自的 p_j。误差从末端线性层传回当前位置的表示；表示又由前馈、残差以及四层读取组成。第十七章逐项算过一次读取的查询、键、值怎样分到梯度，所以这里的反向传播并非神秘地“告诉模型答案”：它沿已经执行的运算，把这个具体错误对各参数的影响累加。若某列在因果遮罩中不允许读到，它不会通过那条读取边得到当前目标的梯度。"
+        },
+        {
+          "rank": 5,
+          "score": 16.074660435780903,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-acceptance",
+          "start_line": 99,
+          "text_sha256": "adcb74ff3e63d0a83d13f66e5b505f9395a90f1ee40d57768ff72b751dfbd65a",
+          "excerpt": "运行最后不只报告“成功”：我们另开实际SQLite，查最终内容、版本3、三条已提交op_id与预算0；导出的final_note.txt SHA-256为 e18ebeed0a9d7a3855c5b6511011c355bc045d11402751144c0c3a5f8b6cd056，和报告中记录的字节哈希一致。这个核查对象是产物而非对话里一个好听的完成宣言。若换成远端系统，客户只见发出请求而没有受信回执或可查状态，我们会明确写UNKNOWN，再根据那项服务真实支持的查询/幂"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 861,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "工具调用与执行失败的连续试样",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 133,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "同一个操作编号重试但参数改变时为什么要拒绝？",
+      "gold_file": "第三十九章_请求发出以后怎样知道它做了什么.md",
+      "gold_anchor": "thirtyninth-idempotence",
+      "best_gold_rank": 2,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 23.76189287292141,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-one-normal-call",
+          "start_line": 10,
+          "text_sha256": "d8bf4a020cf4113d527c91b1d38919a3026fc9773038c0a56330004615fc2acd",
+          "excerpt": "设教学笔记初始内容只有 Start 一行，版本号是0。宿主收到一个意图明确的请求：给这份教学笔记添 alpha 一行，预期原版本为0；这次逻辑操作叫 op-normal。顺利运行以后，内容成为 Start\\nalpha\\n，版本为1，宿主交回一份收据：它写的是哪个文档、哪个操作编号、改前/改后版本、新内容的SHA-256是什么。模型若后来对用户说“已完成”，至少应能让人从磁盘笔记和收据核对这件事，而不是把它说出的一句话当执行事实。当前本机收据与文档；数据只写何处"
+        },
+        {
+          "rank": 2,
+          "score": 23.6916533739968,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-idempotence",
+          "start_line": 42,
+          "text_sha256": "cb95065cf7f2bf0bfb134e2f930115e34131f807431865c8e8ad5aad4fe3f275",
+          "excerpt": "先分清原始动作。令笔记内容是字符串 S，追加行 u 的动作是 A_u(S)=S\\Vert u，其中 \\Vert 表示把两段文字接在一起。再执行一次，得到 S\\Vert u\\Vert u，通常不等于 S\\Vert u。追加本身不幂等。现在扩大“状态”的对象：用 \\mathcal S 表示笔记连同已用操作编号、参数哈希和收据的整份持久状态。包装后的动作 F_k 第一次按授权真正追加并记录；以后同编号 k、同请求参数 r 只读原回执，不再改变 \\mathcal S。只要该记录仍在并"
+        },
+        {
+          "rank": 3,
+          "score": 22.156058564554325,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-two-worlds",
+          "start_line": 37,
+          "text_sha256": "6cf92d77f55a64d0eccca968d7b3b547beea3eceb9e8edad5dfb3dd11796b8b0",
+          "excerpt": "我们把甲乙真的做成两个物理分开的本机模拟服务：客户可见JSON字节哈希相同，模拟远端的effects表在重试前分别是0和1。它还放了第三个世界：远处先做过，却完全不按请求编号去重。同一编号重试后，前两种支持同ID/同参数去重的服务各有1项，而第三种变成2项。这里没有连接真实网络；这组0→1、1→1、1→2是对信息不足与不同远端合同的可复算演示，不能据此宣布任何第三方API天然提供我们的合同。"
+        },
+        {
+          "rank": 4,
+          "score": 17.3509256126698,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-idempotence",
+          "start_line": 48,
+          "text_sha256": "b24ecc461560d8bbdeb2c7a195bb18ab80d67217dfbc8ab1ee80d83934727afd",
+          "excerpt": "这个式子对包装后的同一逻辑请求成立，不是说任意两条文字一样的请求应合并。用户可能确实想把same写两次，第二次就应给新的逻辑ID并针对新版本提交。本机独立表里，op-intent-a和op-intent-b文字完全相同，最终确有两行same、版本2。反过来，同一个op-normal如果改成另一段文字，却沿用旧ID，宿主拒绝KeyConflict；否则一个ID会同时指向两件事，旧回执不能说明后来究竟要什么。实际系统还必须规定ID在远端保留多久、旧请求迟到怎么办。(本机两种ID操"
+        },
+        {
+          "rank": 5,
+          "score": 16.19657550800497,
+          "path": "work/book/第三十九章_请求发出以后怎样知道它做了什么.md",
+          "anchor": "thirtyninth-two-worlds",
+          "start_line": 35,
+          "text_sha256": "d212b5e4462478b0f562424f2348a24e13b38db4702c28b3124d21a48e94391b",
+          "excerpt": "客户端给出的观察完全一样。若它的下一步只能依赖这个观察，同一个决定必须用于甲与乙。总是不重试，甲里效果永远没有发生；不问远端能力便总是重试，乙里可能发生第二次。随机选哪边也无法对两种世界给出确定的“恰好一次”。这个结论不是说网络绝无办法处理，而是说要多拿到一类资料或服务契约：能查远端操作状态、能带稳定身份重试并由远端去重，或者把未知交人对账。仅在本地多写一份“我打算执行”日志，无法决定远处到底做了没有。"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 659,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "数据只写何处",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 97,
+        "naive_shortest_fragment_fits_with_reserved_answer": true,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "图节点重新编号后，节点分类输出为什么应同样重新排序？",
+      "gold_file": "第三十六章_连接关系怎样进入学习.md",
+      "gold_anchor": "thirtysixth-permutation",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 31.81487223918255,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-permutation",
+          "start_line": 108,
+          "text_sha256": "c24d2f56370d5ff5d7bf22141c6ecf150ecb548118fb742f88b77fa35816b916",
+          "excerpt": "一份引用文件今天把某篇叫第17行，明天换作第107行，论文内容和它引用谁并未变。令 P 是给2708行重新排序的置换矩阵，新的词矩阵为 X'=PX，相同真实边在新编号里应写作 A'=PAP^\\top。自环随节点一起换，度矩阵也换成 \\tilde D'=P\\tilde DP^\\top，所以用刚才相同的定义计算出的归一化邻接满足 S'=PSP^\\top。现在核一层："
+        },
+        {
+          "rank": 2,
+          "score": 27.562736878571172,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-permutation",
+          "start_line": 119,
+          "text_sha256": "b3c5a083e2f095d9aa116532a8ece93d35570b430df4e98bd84561c84b4c6926",
+          "excerpt": "这叫节点置换等变：输出仍是一行一篇，改编号则输出按同一编号改位置，而不是每个输出数值完全留在旧行。若最终只要“这整张分子图性质是多少”一项数，我们可在所有节点活动上做和或平均，再送入图级头；这种对节点顺序不敏感的读出称为置换不变。两者不要混：论文节点分类需要等变，不是把2708篇的类别都压成一个答案。本机对已训GCN在全真Cora上把词、引文边一致重编号，逐项输出与“旧输出再重排”的最大差约 1.9\\times10^{-6}，图级均值最大差约 1.2\\times10^{-7}"
+        },
+        {
+          "rank": 3,
+          "score": 21.223435695975002,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-next",
+          "start_line": 241,
+          "text_sha256": "b5c5bc8a4ccd1a9a72d4758e03a01542e4a80659f1d37b5cdc0789896aceabf6",
+          "excerpt": "5. 每个特征方向的能量项为 (1-\\lambda)\\lambda^{2k}\\|b\\|^2，固定 |\\lambda|\\le1 使它不增；可学习权重和残差改变递推，不能套同一式。过平滑是已收到的信息在多次局部混合后难辨；过挤压是大量远处信息通过少数边/固定宽中间量时难以逐项保留。 6. 平移在差分中抵消，正交旋转保距离，所以 w 与标量和不变；向量差随 R 旋转，向量和也如此。节点重新编号另需所有坐标、特征与边同步重排的置换等变。缩放不是刚体变换，固定尺度参数 \\sigma 下"
+        },
+        {
+          "rank": 4,
+          "score": 19.81377917055269,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-geometry",
+          "start_line": 176,
+          "text_sha256": "e691b786af3b85a611be64740d16b996037bf67ccacdbfff42c26544bcde2466",
+          "excerpt": "直到现在，Cora节点是抽象论文，P 只改它们在文件中的名字。回到第三十四章的真实三维资料，每个点还有以米数表示的位置 r_i\\in\\mathbb R^3。若把整件物体连同相机世界坐标系一起平移 t、旋转 R（R^\\top R=I），那不是把第17号点改名，而是把物理坐标变成 r_i'=Rr_i+t。物体的材质类名、两点间距离等标量不应因转身而改变；若输出是指向哪里的一条速度或受力向量，它应同样旋转。这两种要求分别叫刚体运动下的不变与等变。空间旋转/平移是一类变换，节点编号置"
+        },
+        {
+          "rank": 5,
+          "score": 18.27499593510578,
+          "path": "work/book/第三十六章_连接关系怎样进入学习.md",
+          "anchor": "thirtysixth-permutation",
+          "start_line": 114,
+          "text_sha256": "6b3f83038e5d018b54a6c65c5220821d7d96fc60415cd230bc62704df4667edc",
+          "excerpt": "对每一行做同一ReLU，换行次序只会把ReLU后的行也同样换掉；后一层仍然成立。这里先看推断状态，代码的dropout已关闭；若训练时也要逐样本比较两次前向，就得把随机遮盖掩码随着论文行一同重排，不能给换名后的图另抽一张不同掩码却要求浮点结果逐项完全相同。因此在所述一致变换下，推断的节点模型满足"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 488,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "现在核一层：",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 109,
+        "naive_shortest_fragment_fits_with_reserved_answer": true,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "双目图像视差和三维深度如何随基线与焦距变化？",
+      "gold_file": "第三十四章_两张照片怎样约束三维世界.md",
+      "gold_anchor": "thirtyfourth-disparity",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 28.157968346468447,
+          "path": "work/book/第三十四章_两张照片怎样约束三维世界.md",
+          "anchor": "thirtyfourth-disparity",
+          "start_line": 41,
+          "text_sha256": "fad6cd51c5f1cba0433d86f8d8e9f30bd45c88281669893faabd894688f5c4c3",
+          "excerpt": "d 叫视差，是同一可见点的左右水平像素差；两主点的差 doffs 正好是 c_{x,R}-c_{x,L}。本章第一对 ETH3D 图已由原发布者去除镜头畸变并排成相同行，calib.txt里的两个主点横坐标都为376.739、doffs=0，焦距711.415像素，基线59.9701毫米。我们核对了数据页所引用的 Middlebury第3版原格式说明：基线的单位确实是毫米，因此 Z 也以毫米报。双眼都看见的参考像素里，视差中位约9.592像素，对应深度中位约4447.9毫米，"
+        },
+        {
+          "rank": 2,
+          "score": 19.96490478441385,
+          "path": "work/book/第三十四章_两张照片怎样约束三维世界.md",
+          "anchor": "thirtyfourth-disparity",
+          "start_line": 33,
+          "text_sha256": "52517bdef75e5605db24db86dbb3fe93e3a96f608cb642081f71e575077486e3",
+          "excerpt": "先取最好算的相机安排：两台针孔相机的视线平行、图像行对齐，右相机中心比左相机沿水平多 B，焦距同为 f。把同一个点以左相机为原点记 (X,Y,Z)，则左图横坐标 u_L=fX/Z+c_{x,L}，右相机看到它的横坐标 u_R=f(X-B)/Z+c_{x,R}。两式相减，得"
+        },
+        {
+          "rank": 3,
+          "score": 18.701084859458902,
+          "path": "work/book/第三十四章_两张照片怎样约束三维世界.md",
+          "anchor": "thirtyfourth-one-ray",
+          "start_line": 10,
+          "text_sha256": "878154d5e7d03855d9db8d0472d9d74bdf8c1db82d9b5b81ebc247f7393f8f33",
+          "excerpt": "针孔模型让复杂相机先只保留最必要的几何：光通过一个投影中心，世界点与中心连成直线，直线与图像平面相交。设相机局部坐标的 Z 朝镜头前方、X 向右、Y 向下，图像中横纵像素为 (u,v)。相机横纵方向的焦距用像素记为 f_x,f_y，主点 (c_x,c_y) 是相机正前方轴线穿过图像的位置。相似三角形分别给"
+        },
+        {
+          "rank": 4,
+          "score": 18.514733386334516,
+          "path": "work/book/第三十三章_视频不只是许多图片.md",
+          "anchor": "thirtythird-next",
+          "start_line": 211,
+          "text_sha256": "8bbdf4b8570163090a2c02c495a901950a65950b05fd832393a779f1a2f1800b",
+          "excerpt": "还有一个更深的未解问题。图像里一个点的横坐标变化，不只取决于它在地面上怎样走。先做最简单的几何假设：相机只有一个让光线通过的投影中心，前方三维点沿着连接中心的直线落到平面图像上；这样的模型叫针孔相机。设相机暂时不动，三维点相对它的横、纵、深度坐标是 (X,Y,Z)，投影中心到成像平面的尺度为焦距 f，画面中心横坐标为 c_x。相似三角形便给出图像横坐标 x=fX/Z+c_x。同样的 x 可以来自较远处较大的 X，也可以来自近处较小的 X；相机再移动，歧义更多。眼前的 RGB "
+        },
+        {
+          "rank": 5,
+          "score": 16.552239670300047,
+          "path": "work/book/第三十四章_两张照片怎样约束三维世界.md",
+          "anchor": "thirtyfourth-practice",
+          "start_line": 193,
+          "text_sha256": "2101f7a047f49cc8a98b7ee863986a7a61bed4bbec3445203a935584726f9289",
+          "excerpt": "先拿 delivery_area_1s 的两张真图，指出木箱边缘与远处货架哪一处视差应该大，并用 f,B,d 把约9.592像素算成毫米。再在双目程序中把 --num-disparities 64 改成128：这不是换另一套神经网络，只是允许匹配器在右图搜索更远的水平范围。你能预测它可能使哪块图边缘没有可比候选、哪类近处极大视差反而可能得到机会吗？看程序的覆盖与误差两个列，别只找一个总分。上面两条网格命令只改变手选矩形和深度位移，实际由8518个顶点改动变为6497个；不要把"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 759,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "两主点的差 doffs 正好是 c_{x,R}-c_{x,L}。",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 125,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    },
+    {
+      "question": "训练、验证、测试资料为什么不应按一条时间序列随机分段？",
+      "gold_file": "第六章_训练得好下一次还会好吗.md",
+      "gold_anchor": "sixth-splitting",
+      "best_gold_rank": 1,
+      "top5": [
+        {
+          "rank": 1,
+          "score": 25.533075178525802,
+          "path": "work/book/第六章_训练得好下一次还会好吗.md",
+          "anchor": "sixth-splitting",
+          "start_line": 198,
+          "text_sha256": "5e060d12dc8a475e8f64df77adf0f4b2d12e9690de4aa12f9864144916763404",
+          "excerpt": "从时间回到 1995 年，Kohavi 在分类问题上系统比较过不同折数、分层交叉验证与自助抽样，发现对与他实验资料相近的任务，十折分层交叉验证适合选择模型；他的论文从一开始就假定样本独立同分布。我们不能抽走结论“十折好用”，却把这个前提忘在原文里。分层的意思是各折尽量保留类别比例，不等于可以拆开同一人、同一文档或颠倒时间。对时间序列，Tashman 2000 年摘要列出的预测起点、重新估计和多个测试时期，恰好是在追问普通随机分折没有回答的事。(Kohavi，1995，摘要与§"
+        },
+        {
+          "rank": 2,
+          "score": 21.161861954082262,
+          "path": "work/book/第十二章_一次评价很贵时下一次试哪里.md",
+          "anchor": "twelfth-exercises",
+          "start_line": 168,
+          "text_sha256": "7db7345960787499be8d3b95e0e64ba9cbbd11dc99493c41e396bd198edd8c97",
+          "excerpt": "5. 若把评价接口改为训练模型的验证误差，明确指出 D_{\\mathrm{train}}、D_{\\mathrm{val}}、最终测试资料与 \\lambda 各在哪一步出现。同一验证集反复用于 48 次候选时，最终测试资料应在什么时候打开？"
+        },
+        {
+          "rank": 3,
+          "score": 19.88394819841808,
+          "path": "work/book/第十二章_一次评价很贵时下一次试哪里.md",
+          "anchor": "twelfth-cost",
+          "start_line": 132,
+          "text_sha256": "2d6b7f9cec23de157bc19e0c8d175bcf646abaa6a935e491a60d68f6ee86e8df",
+          "excerpt": "这里 \\lambda 是训练过程的设置；训练内部真正被调整的权重可以记作 \\theta。改变 \\lambda 往往意味着重新训练一份 \\theta，所以外层搜索看见的 V(\\lambda) 可以很贵，而且未必有一条能直接回传到 \\lambda 的导数。第六章已讨论过为什么验证资料负责选择、独立测试资料负责最终检查；第七章的不同判断规则则提醒我们，一张小验证表的名次很容易受少数记录影响。若拿测试集来决定每一个新 \\lambda，它就被反复用作调参，最后再叫它“独立测试”已经失实"
+        },
+        {
+          "rank": 4,
+          "score": 17.38477966929601,
+          "path": "work/book/第三十二章_声音怎样从波形走向文字与新声音.md",
+          "anchor": "thirtysecond-practice",
+          "start_line": 220,
+          "text_sha256": "1e0b8646bc0edb98f14b3960296d60e6d10b22318eb14654d8040441e70b30f1",
+          "excerpt": "真正训练语音转写要从同一数据分组与80维特征出发，不把已经生成的测试转录拿去调模型。当前Windows上的训练程序为避开循环网络后端的原生退出故障，使用了更稳但较慢的CUDA计算路径；本机全量第一轮实测约3.6分钟，12轮需要按自己的设备另留时间。后续较小学习率的延续可在验证上选择，但若验证损失上升，应按已定规则保留较早检查点。ESC-10两支、波形生成器都从随机权重独立开始，它们的参数并不是第一条语音模型“换头”得来。"
+        },
+        {
+          "rank": 5,
+          "score": 17.31411640274281,
+          "path": "work/book/第十四章_过去的信息怎样留到需要时.md",
+          "anchor": "fourteenth-exercises",
+          "start_line": 187,
+          "text_sha256": "8eaa948ee310e598025668909ad7c70675f72dd454d316b00a1490921e401fa2",
+          "excerpt": "5. 打开真实活动的混淆表，解释为什么 GRU 官方总准确率超过六成却仍不能说它学好了六类。再看事后输入诊断：它实际比较的是什么、没有重训什么？为什么不能把 80.84% 填进原来 GRU 的官方测试一格？"
+        }
+      ],
+      "c19_context_check": {
+        "context_limit": 128,
+        "reserved_answer_tokens": 16,
+        "top1_full_prompt_tokens_including_bos": 752,
+        "top1_full_fits_with_reserved_answer": false,
+        "naive_shortest_fragment": "Tashman，2000，原刊摘要)",
+        "naive_shortest_fragment_prompt_tokens_including_bos": 118,
+        "naive_shortest_fragment_fits_with_reserved_answer": false,
+        "naive_fragment_may_omit_answer": true
+      }
+    }
+  ],
+  "manual_source_checked_compression_example": {
+    "question": "因果模型超过128位置后为什么不能只弹出旧KV缓存？",
+    "source_path": "work/book/第三十七章_训练好的模型怎样接住一次请求.md",
+    "source_anchor": "thirtyseventh-window",
+    "source_start_line": 91,
+    "source_text_sha256": "1dca7127571314d90507a5ebb2ba217d10abf9a85ae22d2ea857a2cd42ac602b",
+    "author_paraphrase_not_verbatim": "[R1 C37:91] Sliding resets positions; old KV has old positions and saw dropped tokens. Rebuild.",
+    "prompt_tokens_including_bos": 110,
+    "reserved_answer_tokens": 16,
+    "fits_128": true,
+    "caveat": "human checked against the C37 paragraph; fits by using terse English but does not establish that C19 understands the Chinese question or can answer it"
+  },
+  "limits": "gold question set author-selected after published source exists; lexical paragraph retrieval cannot establish final answer correctness, source authority, user memory or Chinese ability of weak C19 English LM"
+}

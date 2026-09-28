@@ -1,0 +1,51 @@
+{
+  "input": "all2708 real Cora anonymous word features, row-normalized, no labels, no trained network weights",
+  "operator": "S = D^-1/2 (A+I) D^-1/2 for undirected/symmetrized citation graph",
+  "connected_components": 78,
+  "largest_component": 2485,
+  "meaning": "This fixed linear diffusion can erase distinction; it is not a theorem that every learned deep GNN must over-smooth",
+  "records": [
+    {
+      "averaging_rounds": 0,
+      "normalized_dirichlet_energy": 121.40046691894531,
+      "sampled_pair_feature_rms_distance": 0.3710939288139343,
+      "feature_l2_norm": 14.03104019165039
+    },
+    {
+      "averaging_rounds": 1,
+      "normalized_dirichlet_energy": 13.977334976196289,
+      "sampled_pair_feature_rms_distance": 0.20554077625274658,
+      "feature_l2_norm": 8.06730842590332
+    },
+    {
+      "averaging_rounds": 2,
+      "normalized_dirichlet_energy": 4.727267265319824,
+      "sampled_pair_feature_rms_distance": 0.16710808873176575,
+      "feature_l2_norm": 6.749514102935791
+    },
+    {
+      "averaging_rounds": 4,
+      "normalized_dirichlet_energy": 1.530559778213501,
+      "sampled_pair_feature_rms_distance": 0.1389540582895279,
+      "feature_l2_norm": 5.789328098297119
+    },
+    {
+      "averaging_rounds": 8,
+      "normalized_dirichlet_energy": 0.4907379448413849,
+      "sampled_pair_feature_rms_distance": 0.11814063042402267,
+      "feature_l2_norm": 5.108646869659424
+    },
+    {
+      "averaging_rounds": 16,
+      "normalized_dirichlet_energy": 0.1474519968032837,
+      "sampled_pair_feature_rms_distance": 0.10362626612186432,
+      "feature_l2_norm": 4.651572227478027
+    },
+    {
+      "averaging_rounds": 32,
+      "normalized_dirichlet_energy": 0.04126238077878952,
+      "sampled_pair_feature_rms_distance": 0.0943925604224205,
+      "feature_l2_norm": 4.3682451248168945
+    }
+  ]
+}

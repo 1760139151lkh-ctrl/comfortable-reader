@@ -1,0 +1,39 @@
+{
+  "identity": "external pinned Piper TTS inference, not this book's trained waveform model",
+  "voice_revision": "c10ece1aade47bb51c153c893d14e5bf8e5b7117",
+  "voice_model_sha256": "5849957f929cbf720c258f8458692d6103fff2f0e3d3b19c8259474bb06a18d4",
+  "voice_model_card_sha256": "8c181b1d5f7d8152b914faab941fcbe6b8f0495e63e5189d6f27b8c68c8393fc",
+  "voice_config_sha256": "5681426d4aead22195de70531eeeeddb46493cfaffc5764b2ea3db73428b651c",
+  "voice_dataset_and_training_claim": "trained from scratch on about 11.5 hours of LibriVox recordings, per pinned MODEL_CARD",
+  "source_manifest_sha256": "c485f8579442ab85c4e95f314a88398b8c6aa44cfebd5833ae39abd020c1e521",
+  "code_sha256": "894542ed53813f751a76a8136648ac94aeb7274ec90ab858eed53495a38d3326",
+  "model_load_seconds": 1.0551743999822065,
+  "espeak_data_cache": "[local temporary espeak data cache; path omitted for publication]",
+  "espeak_phontab_sha256": "d15c42e99a6f792775c281173bbc82c86b490c2d4a939215a1d526768c1db8ce",
+  "external_model_parameters_updated": false,
+  "examples": [
+    {
+      "sentence": "The dog barked once, and then the rain began.",
+      "file": "work/runs/c32_external_piper_kristin_v2/dog_and_rain.wav",
+      "file_sha256": "67e22f2975cdbe56a38df92fe64da38e667f14981ac6999a0ad499de4d527979",
+      "sample_rate": 22050,
+      "samples": 69120,
+      "duration_seconds": 3.1346938775510202,
+      "inference_wall_seconds": 0.10005140001885593,
+      "rms": 0.13504888117313385,
+      "peak_abs": 0.999969482421875
+    },
+    {
+      "sentence": "Please wait. The train is coming.",
+      "file": "work/runs/c32_external_piper_kristin_v2/train_arrives.wav",
+      "file_sha256": "3a179faba7ad71ff93015ce9fc57eeacec8e449b808b4f43bf2856e58a9cf787",
+      "sample_rate": 22050,
+      "samples": 48384,
+      "duration_seconds": 2.1942857142857144,
+      "inference_wall_seconds": 0.0505496000405401,
+      "rms": 0.1579788476228714,
+      "peak_abs": 0.999969482421875
+    }
+  ],
+  "no_human_intelligibility_or_preference_rating": true
+}

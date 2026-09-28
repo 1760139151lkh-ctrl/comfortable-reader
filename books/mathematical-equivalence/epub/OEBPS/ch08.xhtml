@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第六章　条件、否定与双箭头</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第六章-条件否定与双箭头">第六章　条件、否定与双箭头</h2>
+<h3 id="61-原逆否逆否">6.1 原、逆、否、逆否</h3>
+<ul>
+<li>原命题：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi><mo>→</mo><mi>Q</mi></mrow></math></span>；</li>
+<li>逆命题：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo>→</mo><mi>P</mi></mrow></math></span>；</li>
+<li>否命题：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>¬</mi><mi>P</mi><mo>→</mo><mi>¬</mi><mi>Q</mi></mrow></math></span>；</li>
+<li>逆否命题：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>¬</mi><mi>Q</mi><mo>→</mo><mi>¬</mi><mi>P</mi></mrow></math></span>。</li>
+</ul>
+<p>在经典逻辑中，</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mi>P</mi><mo>→</mo><mi>Q</mi><mo stretchy="false">)</mo><mo>≡</mo><mo stretchy="false">(</mo><mi>¬</mi><mi>Q</mi><mo>→</mo><mi>¬</mi><mi>P</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mi>Q</mi><mo>→</mo><mi>P</mi><mo stretchy="false">)</mo><mo>≡</mo><mo stretchy="false">(</mo><mi>¬</mi><mi>P</mi><mo>→</mo><mi>¬</mi><mi>Q</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>原命题的否定不是否命题，而是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>¬</mi><mo stretchy="false">(</mo><mi>P</mi><mo>→</mo><mi>Q</mi><mo stretchy="false">)</mo><mo>≡</mo><mi>P</mi><mo>∧</mo><mi>¬</mi><mi>Q</mi><mo>.</mo></mrow></math></div>
+<h3 id="62-单箭头不能自动升级为双箭头">6.2 单箭头不能自动升级为双箭头</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>→</mo><mi>Q</mi></mrow></math></div>
+<p>只排除 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi></mrow></math></span> 真且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi></mrow></math></span> 假；</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>↔</mo><mi>Q</mi></mrow></math></div>
+<p>还要求 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi><mo>→</mo><mi>P</mi></mrow></math></span>。所以</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>→</mo><mi>Q</mi><mspace width="1em"/><mpadded width="0"><mtext>⧸</mtext></mpadded><mi>⟹</mi><mspace width="1em"/><mi>P</mi><mo>↔</mo><mi>Q</mi><mo>.</mo></mrow></math></div>
+<p>在实数中，</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mo stretchy="false">(</mo><mi>x</mi><mo>&gt;</mo><mn>5</mn><mo>→</mo><mi>x</mi><mo>&gt;</mo><mn>3</mn><mo stretchy="false">)</mo></mrow></math></div>
+<p>为真，但</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mo stretchy="false">(</mo><mi>x</mi><mo>&gt;</mo><mn>5</mn><mo>↔</mo><mi>x</mi><mo>&gt;</mo><mn>3</mn><mo stretchy="false">)</mo></mrow></math></div>
+<p>为假，因为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>=</mo><mn>4</mn></mrow></math></span> 给出反例。用本书的元语言约定可概括为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>&gt;</mo><mn>5</mn><mo>⇒</mo><mi>x</mi><mo>&gt;</mo><mn>3</mn><mspace width="1em"/><mo stretchy="false">(</mo><mi>x</mi><mo>∈</mo><mi mathvariant="double-struck">R</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>却不能写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>&gt;</mo><mn>5</mn><mo>⇔</mo><mi>x</mi><mo>&gt;</mo><mn>3</mn><mo>.</mo></mrow></math></div>
+<h3 id="63-今天下雨-今天不晴">6.3 “今天下雨 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>→</mo></mrow></math></span> 今天不晴”</h3>
+<p>若“今天”已经固定，令</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mi>:</mi><mtext> </mtext><mtext>今天下雨</mtext><mo>,</mo><mspace width="2em"/><mi>q</mi><mi>:</mi><mtext> </mtext><mtext>今天不晴</mtext><mo>,</mo></mrow></math></div>
+<p>那么 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>→</mo><mi>q</mi></mrow></math></span> 是命题逻辑公式：它忽略天气的内部结构，只讨论整句真值的组合。</p>
+<p>若需要表达日期、地点或天气机制，可在日期论域中写</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∀</mo><mi>d</mi><mspace width="0.167em"/><mo stretchy="false">[</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo><mo>→</mo><mi>¬</mi><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">y</mi></mrow><mo stretchy="false">(</mo><mi>d</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>.</mo></mrow></math></div>
+<p>即便这条句子在某结构中为真，也不能得到反方向，因为“不晴”还可能由阴天等原因造成。</p>
+<h3 id="64-量词否定">6.4 量词否定</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>¬</mi><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mi>φ</mi><mo>≡</mo><mo>∃</mo><mi>x</mi><mspace width="0.167em"/><mi>¬</mi><mi>φ</mi><mo>,</mo></mrow></menclose><mspace width="2em"/><menclose class="comfortable-math-box" notation="box"><mrow><mi>¬</mi><mo>∃</mo><mi>x</mi><mspace width="0.167em"/><mi>φ</mi><mo>≡</mo><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mi>¬</mi><mi>φ</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>第一式说：“并非每个对象都满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi></mrow></math></span>”正等于“有一个对象不满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi></mrow></math></span>”。这直接来自量词的满足条件。</p>
+<h1 id="第三编-一阶逻辑从对象表达式到真值条件">第三编　一阶逻辑：从对象表达式到真值条件</h1>
+</body></html>

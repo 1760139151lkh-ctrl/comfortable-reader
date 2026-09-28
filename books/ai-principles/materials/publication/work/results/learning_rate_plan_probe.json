@@ -1,0 +1,35 @@
+{
+  "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "train_blocks": 21353,
+  "batch_size_blocks": 64,
+  "steps_per_epoch": 334,
+  "warmup_steps": 100,
+  "peak_lr": 0.0003,
+  "final_lr": 1e-05,
+  "plans_total_steps": {
+    "four_epochs_executed": 1336,
+    "eight_epochs_counterfactual_only": 2672
+  },
+  "selected_step_learning_rates": {
+    "four_epochs_executed": {
+      "1": 2.9999999999999997e-06,
+      "50": 0.00015,
+      "100": 0.0003,
+      "334": 0.00027510042188894356,
+      "335": 0.00027489352819281995,
+      "668": 0.00017337806236619862,
+      "1336": 1e-05
+    },
+    "eight_epochs_counterfactual_only": {
+      "1": 2.9999999999999997e-06,
+      "50": 0.00015,
+      "100": 0.0003,
+      "334": 0.0002941174053627139,
+      "335": 0.0002940673657642435,
+      "668": 0.0002664801780935545,
+      "1336": 0.00016385007399604803,
+      "2672": 1e-05
+    }
+  },
+  "scope": "直接调用真实C19训练器的learning_rate函数；八轮曲线只是假设计划，不是已运行八轮模型的成绩。"
+}

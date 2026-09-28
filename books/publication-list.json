@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "books": [
+    "ai-principles",
+    "mathematical-equivalence",
+    "intelligent-optimization",
+    "finite-element-method",
+    "fuzzy-programming",
+    "comprehensive-evaluation",
+    "operations-research"
+  ],
+  "scope": "reviewed_substantive_books",
+  "releaseApproved": true
+}

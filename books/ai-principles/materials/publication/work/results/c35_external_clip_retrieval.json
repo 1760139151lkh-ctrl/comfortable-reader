@@ -1,0 +1,28 @@
+{
+  "identity": "OpenAI published CLIP ViT-B/32 pretrained weights, local inference only; NO gradient or new training",
+  "official_code": "https://github.com/openai/CLIP",
+  "official_code_commit_installed": "d05afc436d78f1c48dc0dbf8e5980a9d471f35f6",
+  "official_paper": "https://arxiv.org/abs/2103.00020",
+  "weight_file": "work\\data\\c35_external_openai_clip\\ViT-B-32.pt",
+  "weight_bytes": 353976522,
+  "weight_sha256": "40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af",
+  "weight_url": "https://openaipublic.azureedge.net/clip/models/40d365715913c9da98579312b702a82c18be219cc2a73407c4526f58eba950af/ViT-B-32.pt",
+  "test": "same 500 author-internal COCO2017 val image IDs and first human caption; original full-res images with official CLIP preprocessing/tokenizer, unlike C35 local 112px/30-token tiny model",
+  "external_training_overlap_with_these_500_coco_images": "UNKNOWN; original CLIP learned on external internet image-text pairs and local COCO image hashes were not compared with that inaccessible training corpus",
+  "scores": {
+    "image_to_text": {
+      "r1": 0.6019999980926514,
+      "r5": 0.8840000033378601,
+      "r10": 0.9679999947547913,
+      "median_rank": 1.0,
+      "mean_rank": 2.819999933242798
+    },
+    "text_to_image": {
+      "r1": 0.5440000295639038,
+      "r5": 0.8799999952316284,
+      "r10": 0.9620000123977661,
+      "median_rank": 1.0,
+      "mean_rank": 4.760000228881836
+    }
+  }
+}

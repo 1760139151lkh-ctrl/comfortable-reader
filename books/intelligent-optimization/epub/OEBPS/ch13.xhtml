@@ -1,0 +1,179 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>13. 禁忌搜索：有记忆的局部搜索</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="13-禁忌搜索有记忆的局部搜索">13. 禁忌搜索：有记忆的局部搜索</h2>
+<p>普通下降型局部搜索的规则通常是：只有邻居更好才移动。若当前解满足</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi>;</mi><mo>∀</mo><mi>y</mi><mo>∈</mo><mi>N</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>它就停止。但这只证明 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 在所选邻域内是局部最优，并不证明它是全局最优。</p>
+<p>禁忌搜索的核心不是模仿某种动物，而是一个朴素而有力的想法：</p>
+<blockquote>
+<p>下一步即使暂时更差，也可以走；但把最近做过的修改暂时列为禁忌，防止立刻后悔、来回打转。</p>
+</blockquote>
+<h3 id="131-禁忌的通常不是整个解而是移动属性">13.1 禁忌的通常不是整个解，而是移动属性</h3>
+<p>假设当前排列是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>5</mn><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>本轮交换第 2、4 个位置：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>5</mn><mo stretchy="false">)</mo><mi>⟶</mi><mo stretchy="false">(</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo>,</mo><mn>5</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>可以把“撤销这次交换”或“把任务放回原位置”设为禁忌。若禁忌期限为 3 轮，可记为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mi>:</mi><mn>3</mn><mi>⟶</mi><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mi>:</mi><mn>2</mn><mi>⟶</mi><mo stretchy="false">(</mo><mn>2</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mi>:</mi><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>期限结束后删除该记录。这个期限叫禁忌任期或 tabu tenure。</p>
+<p>为什么不总是存整个解？因为完整解可能很大，比较和存储代价高。更常见的是存：</p>
+<ul>
+<li>最近交换的元素；</li>
+<li>被删除或新加入的边；</li>
+<li>任务原来的机器或位置；</li>
+<li>本轮移动的反向操作。</li>
+</ul>
+<p>禁忌属性定义不当会“禁得太少”或“误伤太多”，它是算法设计的一部分。</p>
+<h3 id="132-允许集合与最好允许移动">13.2 允许集合与最好允许移动</h3>
+<p>设禁忌表为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span>，从当前邻域中筛出允许集合：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">{</mo><mi>y</mi><mo>∈</mo><mi>N</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi>:</mi><mo>move</mo><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>∉</mo><mi>T</mi><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>标准禁忌搜索通常选择允许集合中的最好者：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mo>argmin</mo><mrow><mi>y</mi><mo>∈</mo><mi>A</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy="false">)</mo></mrow></msub><mi>f</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>关键是它不要求</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>&lt;</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>它只要求这是当前允许移动中最好的一个。因此算法可以越过一道短暂的“上坡”，进入另一个更有希望的区域。与此同时，另存</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>x</mi><mo>*</mo></msup><mo>=</mo><msub><mo>argmin</mo><mrow><mn>0</mn><mo>≤</mo><mi>t</mi><mo>≤</mo><mi>k</mi></mrow></msub><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow></math></div>
+<p>作为历史最好解。当前解与历史最好解必须分开。</p>
+<h3 id="133-特赦准则禁忌不是机械死规则">13.3 特赦准则：禁忌不是机械死规则</h3>
+<p>若某个移动虽然处于禁忌状态，却能产生新的历史最好解：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>&lt;</mo><mi>f</mi><mo stretchy="false">(</mo><msup><mi>x</mi><mo>*</mo></msup><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>仍允许执行，这叫特赦准则或 aspiration criterion。于是允许条件实际是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>move</mo><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>∉</mo><mi>T</mi><mtext> 或 </mtext><mi>f</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>&lt;</mo><mi>f</mi><mo stretchy="false">(</mo><msup><mi>x</mi><mo>*</mo></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>它防止禁忌表把真正突破性的移动挡在门外。</p>
+<h3 id="134-一轮到底怎样运算">13.4 一轮到底怎样运算？</h3>
+<pre><code class="language-text">构造初始解 x
+x_best ← x
+tabu ← 空表
+
+while 未达到停止条件:
+    生成或抽样邻域 N(x)
+    对每个邻居 y:
+        检查可行性或计算约束违反
+        计算目标值或增量 Δf
+        识别 move(x, y) 是否禁忌
+        检查是否满足特赦条件
+    从允许邻居中选择评价最好的 y_best
+    x ← y_best                 # 即使它比上一步差
+    若 f(x) &lt; f(x_best):
+        x_best ← x
+    把本轮移动的反向属性加入 tabu
+    所有旧禁忌期限减一，删除到期项
+返回 x_best
+</code></pre>
+<p>停止条件可用迭代上限、时间限制、目标评价预算、连续若干轮没有改善历史最好解，或达到已知目标值。不能简单设置成“当前解没有变好就停止”，因为允许暂时恶化正是禁忌搜索的意义。</p>
+<h3 id="135-一个具体的-tsp-选择回合">13.5 一个具体的 TSP 选择回合</h3>
+<p>假设当前路线长度是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>100</mn></mrow></math></span>，生成若干邻居：</p>
+<table>
+<thead>
+<tr>
+<th>移动</th>
+<th style="text-align:right">新路线长度</th>
+<th>是否禁忌</th>
+<th>是否产生历史最好</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>交换 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi><mo>,</mo><mi>C</mi></mrow></math></span></td>
+<td style="text-align:right">98</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>交换 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi><mo>,</mo><mi>D</mi></mrow></math></span></td>
+<td style="text-align:right">101</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>交换 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>C</mi><mo>,</mo><mi>E</mi></mrow></math></span></td>
+<td style="text-align:right">103</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>交换 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>D</mi><mo>,</mo><mi>E</mi></mrow></math></span></td>
+<td style="text-align:right">102</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>若交换 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi><mo>,</mo><mi>C</mi></mrow></math></span> 没有触发特赦，就从其余允许移动中选择长度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>101</mn></mrow></math></span> 的邻居。虽然</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>101</mn><mo>&gt;</mo><mn>100</mn><mo>,</mo></mrow></math></div>
+<p>仍然前进。之后可能出现：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>100</mn><mo>→</mo><mn>101</mn><mo>→</mo><mn>99</mn><mo>→</mo><mn>94</mn><mo>→</mo><mn>87</mn><mo>.</mo></mrow></math></div>
+<p>普通下降搜索可能停在 100；禁忌搜索通过一次暂时变差进入了更好的区域。当然，这只是说明机制能够做到，并不保证每次暂时变差都会得到回报。</p>
+<h3 id="136-2-opt-为什么常和-tsp-禁忌搜索配合">13.6 2-opt 为什么常和 TSP 禁忌搜索配合？</h3>
+<p>2-opt 删除两条边 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo stretchy="false">)</mo><mo>,</mo><mo stretchy="false">(</mo><mi>c</mi><mo>,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></math></span>，加入 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">(</mo><mi>a</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo><mo>,</mo><mo stretchy="false">(</mo><mi>b</mi><mo>,</mo><mi>d</mi><mo stretchy="false">)</mo></mrow></math></span>，并反转中间路线段。路线长度变化可增量计算：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Δ</mi><mi>L</mi><mo>=</mo><msub><mi>d</mi><mrow><mi>a</mi><mi>c</mi></mrow></msub><mo>+</mo><msub><mi>d</mi><mrow><mi>b</mi><mi>d</mi></mrow></msub><mo>−</mo><msub><mi>d</mi><mrow><mi>a</mi><mi>b</mi></mrow></msub><mo>−</mo><msub><mi>d</mi><mrow><mi>c</mi><mi>d</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>不必每次重新计算整条路线。若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>L</mi><mo>&lt;</mo><mn>0</mn></mrow></math></span>，路线变短。禁忌属性可以设为“短期内禁止重新加入刚删除的边”，而特赦规则允许产生历史最短路线的禁忌移动。</p>
+<p>这说明算法效率不仅来自搜索策略，也来自<strong>增量评价</strong>。若邻域有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></math></span> 个移动，而每个移动都重新计算 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow></math></span> 的总路程，一轮可能达到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></math></span>；使用常数时间的边差计算可显著降低成本。</p>
+<h3 id="137-车辆容量约束怎么办">13.7 车辆容量约束怎么办？</h3>
+<p>车辆路径中每条路线 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mi>k</mi></msub></mrow></math></span> 可能要求：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>R</mi><mi>k</mi></msub></mrow></munder><msub><mi>q</mi><mi>i</mi></msub><mo>≤</mo><mi>Q</mi><mo>.</mo></mrow></math></div>
+<p>把顾客移到另一辆车上后可能超载。此时必须明确选择：</p>
+<ul>
+<li>直接禁止超载邻居；</li>
+<li>把顾客修复到其他路线；</li>
+<li>允许超载，并把 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>max</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><msub><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>R</mi><mi>k</mi></msub></mrow></msub><msub><mi>q</mi><mi>i</mi></msub><mo>−</mo><mi>Q</mi><mo stretchy="false">}</mo></mrow></math></span> 加入惩罚；</li>
+<li>设计只会生成容量可行邻居的移动。</li>
+</ul>
+<p>禁忌搜索不会自动替你决定约束策略。</p>
+<h3 id="138-禁忌期限强化与多样化">13.8 禁忌期限、强化与多样化</h3>
+<p>禁忌期限 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi></mrow></math></span> 太小，搜索可能循环：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>→</mo><msub><mi>x</mi><mn>2</mn></msub><mo>→</mo><msub><mi>x</mi><mn>3</mn></msub><mo>→</mo><msub><mi>x</mi><mn>1</mn></msub><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi></mrow></math></span> 太大，又会禁止过多移动。可以固定 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi><mo>=</mo><mn>7</mn></mrow></math></span>，也可以每轮取</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>L</mi><mi>k</mi></msub><mi>~</mi><mi>U</mi><mo stretchy="false">(</mo><msub><mi>L</mi><mrow><mo>min</mo></mrow></msub><mo>,</mo><msub><mi>L</mi><mrow><mo>max</mo></mrow></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>或在停滞时动态增大。</p>
+<p>更成熟的禁忌搜索还会用长期记忆：</p>
+<ul>
+<li><strong>强化搜索</strong>：回到优秀解附近，保留好解中频繁出现的结构；</li>
+<li><strong>多样化搜索</strong>：惩罚过度使用的边或移动，前往较少访问的区域；</li>
+<li><strong>重启</strong>：从精英解、随机解或新的构造解重新出发；</li>
+<li><strong>多邻域</strong>：在 swap、insert、2-opt 等邻域之间切换。</li>
+</ul>
+<p>可以用频率记忆构造：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mi>f</mi><mo stretchy="false">~</mo></mover><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>y</mi><mo stretchy="false">)</mo><mo>+</mo><mi>λ</mi><msub><mi>F</mi><mrow><mrow><mi mathvariant="normal">f</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">q</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mo>move</mo><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>使过度使用的移动暂时变得不那么有吸引力。</p>
+<h3 id="139-禁忌搜索与模拟退火的区别">13.9 禁忌搜索与模拟退火的区别</h3>
+<p>两者都允许更差解，但机制不同：</p>
+<table>
+<thead>
+<tr>
+<th/>
+<th>模拟退火</th>
+<th>禁忌搜索</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接受较差解</td>
+<td>按 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>e</mi><mrow><mo>−</mo><mi>Δ</mi><mi>f</mi><mo>/</mo><mi>T</mi></mrow></msup></mrow></math></span> 随机接受</td>
+<td>选择允许邻域中的最好移动</td>
+</tr>
+<tr>
+<td>跳出局部最优的主要工具</td>
+<td>温度与随机性</td>
+<td>记忆、禁忌与特赦</td>
+</tr>
+<tr>
+<td>是否系统检查邻域</td>
+<td>通常只抽一个或少量邻居</td>
+<td>常枚举或抽样较大邻域</td>
+</tr>
+<tr>
+<td>关键参数</td>
+<td>初温、降温、邻域尺度</td>
+<td>禁忌属性、期限、特赦、邻域</td>
+</tr>
+<tr>
+<td>典型气质</td>
+<td>“偶尔走一条坏路”</td>
+<td>“有计划地不走回头路”</td>
+</tr>
+</tbody>
+</table>
+<p>所以禁忌搜索的本质可以概括为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>下一步不必更好，但不能轻易走回头路</mtext></mrow></menclose></mrow></math></div>
+<hr/>
+</body></html>

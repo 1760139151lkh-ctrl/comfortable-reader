@@ -1,0 +1,145 @@
+{
+  "source_train_sha256": "5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d",
+  "script_sha256": "bc01f25dd8091734babf46e861c9773e667ee8cb6bbcae51e0f19d6b7be985dd",
+  "split_seed": 20260925,
+  "split_file": "split.npz",
+  "split_sha256": "14f7b847be1ce490852178c65a5a6fc1200e12c4310645a81fbf38e985aa65e9",
+  "fit_rows": 26048,
+  "validation_rows": 6513,
+  "feature_columns": [
+    "age",
+    "education-num",
+    "capital-gain",
+    "capital-loss",
+    "hours-per-week",
+    "workclass",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "native-country"
+  ],
+  "excluded_from_model": [
+    "sex",
+    "race",
+    "fnlwgt",
+    "education"
+  ],
+  "missing_as_category": "?",
+  "candidates": [
+    {
+      "C": 0.1,
+      "validation_nll_nats": 0.322220409834852,
+      "validation_accuracy_at_0_5": 0.8489175495163519,
+      "n_iter": 54
+    },
+    {
+      "C": 1.0,
+      "validation_nll_nats": 0.3217506079741844,
+      "validation_accuracy_at_0_5": 0.8487640104406572,
+      "n_iter": 60
+    },
+    {
+      "C": 10.0,
+      "validation_nll_nats": 0.3216748450035747,
+      "validation_accuracy_at_0_5": 0.8489175495163519,
+      "n_iter": 78
+    }
+  ],
+  "selected_C_by_validation_nll": 10.0,
+  "selected_model_file": "selected_model.joblib",
+  "selected_model_sha256": "dea6092cb002c61cd1654d8c4a7f3e20841890d74a987e8959105139ee7343c5",
+  "thresholds_validation_TPR_target_0_8": {
+    "Female": 0.24017917050739884,
+    "Male": 0.30364606584250825
+  },
+  "validation_global_threshold_0_5": {
+    "overall": {
+      "n": 6513,
+      "accuracy": 0.8489175495163519,
+      "predicted_positive": 1286,
+      "selection_rate": 0.19745125134346692,
+      "nll_nats_unchanged_by_threshold": 0.3216748450035747,
+      "roc_auc_unchanged_by_threshold": 0.9049145188914799
+    },
+    "by_group": {
+      "Female": {
+        "n": 2155,
+        "actual_positive": 236,
+        "label_rate": 0.10951276102088167,
+        "threshold": 0.5,
+        "predicted_positive": 190,
+        "selection_rate": 0.08816705336426914,
+        "tp": 132,
+        "fp": 58,
+        "tn": 1861,
+        "fn": 104,
+        "tpr_given_label_positive": 0.559322033898305,
+        "fpr_given_label_negative": 0.030224075039082855,
+        "ppv_given_predicted_positive": 0.6947368421052632,
+        "accuracy": 0.9248259860788863
+      },
+      "Male": {
+        "n": 4358,
+        "actual_positive": 1332,
+        "label_rate": 0.30564479118861865,
+        "threshold": 0.5,
+        "predicted_positive": 1096,
+        "selection_rate": 0.25149150986691143,
+        "tp": 803,
+        "fp": 293,
+        "tn": 2733,
+        "fn": 529,
+        "tpr_given_label_positive": 0.6028528528528528,
+        "fpr_given_label_negative": 0.09682749504296101,
+        "ppv_given_predicted_positive": 0.7326642335766423,
+        "accuracy": 0.8113813675998164
+      }
+    }
+  },
+  "validation_group_TPR_target_0_8": {
+    "overall": {
+      "n": 6513,
+      "accuracy": 0.8277291570704745,
+      "predicted_positive": 2062,
+      "selection_rate": 0.316597574082604,
+      "nll_nats_unchanged_by_threshold": 0.3216748450035747,
+      "roc_auc_unchanged_by_threshold": 0.9049145188914799
+    },
+    "by_group": {
+      "Female": {
+        "n": 2155,
+        "actual_positive": 236,
+        "label_rate": 0.10951276102088167,
+        "threshold": 0.24017917050739884,
+        "predicted_positive": 344,
+        "selection_rate": 0.15962877030162412,
+        "tp": 189,
+        "fp": 155,
+        "tn": 1764,
+        "fn": 47,
+        "tpr_given_label_positive": 0.8008474576271186,
+        "fpr_given_label_negative": 0.08077123501823867,
+        "ppv_given_predicted_positive": 0.5494186046511628,
+        "accuracy": 0.9062645011600928
+      },
+      "Male": {
+        "n": 4358,
+        "actual_positive": 1332,
+        "label_rate": 0.30564479118861865,
+        "threshold": 0.30364606584250825,
+        "predicted_positive": 1718,
+        "selection_rate": 0.3942175309775126,
+        "tp": 1065,
+        "fp": 653,
+        "tn": 2373,
+        "fn": 267,
+        "tpr_given_label_positive": 0.7995495495495496,
+        "fpr_given_label_negative": 0.21579643093192333,
+        "ppv_given_predicted_positive": 0.619906868451688,
+        "accuracy": 0.7888939880679211
+      }
+    }
+  },
+  "official_test_status": "not_parsed_or_scored_in_train_mode",
+  "scope": "1994 filtered UCI Adult source rows, no fnlwgt population weighting, logistic income-label task not a personnel decision; sex/race excluded as model inputs, proxies remain possible"
+}

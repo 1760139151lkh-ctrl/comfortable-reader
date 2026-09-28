@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第三章　从无限维函数到有限个未知数</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第三章-从无限维函数到有限个未知数">第三章　从无限维函数到有限个未知数</h1>
+<h2 id="31-基函数把函数变成系数">3.1 基函数把函数变成系数</h2>
+<p>有限元在完整空间 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi></mrow></math></span> 中选一个有限维子空间</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>V</mi><mi>h</mi></msub><mo>⊂</mo><mi>V</mi><mo>.</mo></mrow></math></div>
+<p>设这个空间有基函数</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>φ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>φ</mi><mn>2</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><msub><mi>φ</mi><mi>N</mi></msub><mo>.</mo></mrow></math></div>
+<p>近似解写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup><msub><mi>U</mi><mi>j</mi></msub><msub><mi>φ</mi><mi>j</mi></msub><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>未知函数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>u</mi><mi>h</mi></msub></mrow></math></span> 因而完全由系数</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>,</mo><msub><mi>U</mi><mn>2</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><msub><mi>U</mi><mi>N</mi></msub></mrow></math></div>
+<p>决定。</p>
+<p>这就是矩阵出现的根本原因：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>只要把未知函数表示成有限个系数，线性问题就会变成矩阵问题。</mtext></mrow></menclose></mrow></math></div>
+<p>矩阵并不是由物理空间恰好是一维、二维或三维造成的。二维温度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></math></span> 和三维位移 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo stretchy="false">)</mo></mrow></math></span> 在离散后，同样都只是有限个自由度组成的向量。</p>
+<h2 id="32-一维帽子与二维帐篷">3.2 一维帽子与二维帐篷</h2>
+<p>一维线性有限元的节点基函数像一顶“小帽子”：在自己的节点取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>，在其他节点取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span>，只在相邻小区间上非零。</p>
+<p>二维三角网格中，节点基函数则像一顶分片平面的“帐篷”：在自己的节点取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>，在其他节点取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span>，只在围绕该节点的三角形上非零。</p>
+<p>这种局部性有一个重要后果：相距很远的两个基函数没有重叠，它们不会直接耦合。因此最终矩阵中的大多数元素为零，也就是所谓的稀疏矩阵。</p>
+<h2 id="33-自由度而不是几何维数决定矩阵大小">3.3 自由度，而不是几何维数，决定矩阵大小</h2>
+<p>若二维温度问题每个节点只有一个温度未知量，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi></mrow></math></span> 个节点产生 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi></mrow></math></span> 个自由度，矩阵大小是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>N</mi><mo>×</mo><mi>N</mi></mrow></math></span>。</p>
+<p>二维弹性中，每个节点有水平和竖直两个位移分量，总自由度为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mi>N</mi></mrow></math></span>，矩阵大小是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mi>N</mi><mo>×</mo><mn>2</mn><mi>N</mi></mrow></math></span>。三维弹性每个节点有三个位移分量，总自由度为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>3</mn><mi>N</mi></mrow></math></span>。</p>
+<p>因此矩阵大小取决于：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>节点或单元数量</mtext><mo>×</mo><mtext>每处未知分量数</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<hr/>
+</body></html>

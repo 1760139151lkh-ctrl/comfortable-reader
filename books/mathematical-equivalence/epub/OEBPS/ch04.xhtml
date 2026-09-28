@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第二章　非平凡等价：把背景理论尽量削薄</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第二章-非平凡等价把背景理论尽量削薄">第二章　非平凡等价：把背景理论尽量削薄</h2>
+<h3 id="21-真正有信息量的模板">2.1 真正有信息量的模板</h3>
+<p>数学家往往寻找一个较弱的共同背景 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi></mrow></math></span>，使</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mo>⊬</mo><mi>A</mi><mo>,</mo><mspace width="2em"/><mi>S</mi><mo>⊬</mo><mi>B</mi><mo>,</mo></mrow></math></div>
+<p>但仍能分别证明</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>S</mi><mo>+</mo><mi>A</mi><mo>⊢</mo><mi>B</mi><mo>,</mo><mspace width="2em"/><mi>S</mi><mo>+</mo><mi>B</mi><mo>⊢</mo><mi>A</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这时 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span> 与 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 不是因为“背景已经把答案全写好了”才互推；相反，它们提供了同样的额外证明力量。于是可以说：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>A</mi><mtext> 与 </mtext><mi>B</mi><mtext> 在背景 </mtext><mi>S</mi><mtext> 上等强，或相对 </mtext><mi>S</mi><mtext> 可证明等价。</mtext></mrow></menclose></mrow></math></div>
+<p>“等强”并不是说二者的主题、表面语言或证明长度相同；它说的是：在指定背景上，加入其中任一个所扩展出来的可证明内容相同。</p>
+<p>这里有一个容易漏掉的逻辑边界：两条非可证条件</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>S</mi><mo>⊬</mo><mi>A</mi><mo>,</mo><mspace width="2em"/><mi>S</mi><mo>⊬</mo><mi>B</mi></mrow></math></div>
+<p>不是“相对可证明等价”的定义本身，而是防止比较退化为背景已知事实的<strong>反冗余检验</strong>。严格说，定义只要求双向可推导；为什么还要检查它们，见第十五章 15.2 节。</p>
+<h3 id="22-选择公理佐恩引理与良序定理">2.2 选择公理、佐恩引理与良序定理</h3>
+<p>最经典的例子是在集合论背景 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi></mrow></mrow></math></span> 中讨论：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mi mathvariant="sans-serif">A</mi><mi mathvariant="sans-serif">C</mi></mrow><mo>,</mo><mspace width="2em"/><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">o</mi><mi mathvariant="sans-serif">r</mi><mi mathvariant="sans-serif">n</mi></mrow><mo>,</mo><mspace width="2em"/><mrow><mi mathvariant="sans-serif">W</mi><mi mathvariant="sans-serif">O</mi></mrow><mo>.</mo></mrow></math></div>
+<p>它们分别可概括为：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">A</mi><mi mathvariant="sans-serif">C</mi></mrow></mrow></math></span>：每个由非空集合组成的集合族 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="script">A</mi></mrow></math></span> 都有选择函数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span>，满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>dom</mo><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="script">A</mi></mrow></math></span> 且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>∈</mo><mi>X</mi></mrow></math></span>；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">o</mi><mi mathvariant="sans-serif">r</mi><mi mathvariant="sans-serif">n</mi></mrow></mrow></math></span>：若非空偏序集 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi></mrow></math></span> 的每条链在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi></mrow></math></span> 中都有上界，则 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi></mrow></math></span> 有极大元；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">W</mi><mi mathvariant="sans-serif">O</mi></mrow></mrow></math></span>：每个集合都带有一个使它成为良序集的二元关系。</li>
+</ul>
+<p>标准结论是，在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi></mrow></mrow></math></span> 上它们互相可推导：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi></mrow><mo>⊢</mo><mrow><mi mathvariant="sans-serif">A</mi><mi mathvariant="sans-serif">C</mi></mrow><mo>↔</mo><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">o</mi><mi mathvariant="sans-serif">r</mi><mi mathvariant="sans-serif">n</mi></mrow><mo>,</mo><mspace width="2em"/><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi></mrow><mo>⊢</mo><mrow><mi mathvariant="sans-serif">A</mi><mi mathvariant="sans-serif">C</mi></mrow><mo>↔</mo><mrow><mi mathvariant="sans-serif">W</mi><mi mathvariant="sans-serif">O</mi></mrow><mo>.</mo></mrow></math></div>
+<p>这很深刻，正因为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi></mrow></mrow></math></span> 本身没有预先把选择公理放进去。若改在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="sans-serif">Z</mi><mi mathvariant="sans-serif">F</mi><mi mathvariant="sans-serif">C</mi></mrow></mrow></math></span> 中讨论，三者都已是定理，形式互推仍为真，但“它们究竟增加了多少力量”的问题已被背景掩盖。</p>
+<h3 id="23-反向数学问的不是能不能证明而是最少需要什么">2.3 反向数学问的不是“能不能证明”，而是“最少需要什么”</h3>
+<p>反向数学把普通方向</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>公理</mtext><mi>⟹</mi><mtext>定理</mtext></mrow></math></div>
+<p>倒过来追问：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>为了证明这个定理，最低需要多强的基础？</mtext></mrow></menclose></mrow></math></div>
+<p>常见框架是在二阶算术的弱基础 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi mathvariant="sans-serif">R</mi><mi mathvariant="sans-serif">C</mi><mi mathvariant="sans-serif">A</mi></mrow><mn>0</mn></msub></mrow></math></span> 上比较命题。一个典型结果的形状不是“两个结论都真实”，而是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi mathvariant="sans-serif">R</mi><mi mathvariant="sans-serif">C</mi><mi mathvariant="sans-serif">A</mi></mrow><mn>0</mn></msub><mo>⊢</mo><mi>A</mi><mo>↔</mo><mi>B</mi><mo>.</mo></mrow></math></div>
+<p>这表明 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow></math></span> 恰好需要同一层级的公理资源。不同定理可能来自分析、组合或拓扑，却在这种意义下携带同一份“逻辑燃料”。</p>
+<p>这里的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow></math></span> 必须是已编码为二阶算术语言 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi mathvariant="script">L</mi><mn>2</mn></msub></mrow></math></span> 的句子，所以显示的双条件式确实是一个对象语言公式。若右边写的是整个系统或公理模式，例如 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi mathvariant="sans-serif">A</mi><mi mathvariant="sans-serif">C</mi><mi mathvariant="sans-serif">A</mi></mrow><mn>0</mn></msub></mrow></math></span>，则要改用后面 15.4 节定义的元理论记号，不能把系统名称伪装成句子。</p>
+<p>必须避免两个夸张：</p>
+<ol>
+<li>不能说所有数学定理都在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mrow><mi mathvariant="sans-serif">R</mi><mi mathvariant="sans-serif">C</mi><mi mathvariant="sans-serif">A</mi></mrow><mn>0</mn></msub></mrow></math></span> 上互相等价；</li>
+<li>不能只因两个定理能用类似技巧证明，就断言它们有相同证明强度。</li>
+</ol>
+<h3 id="24-三种看起来像等价的事情">2.4 三种“看起来像等价”的事情</h3>
+<p>下面三件事都很有价值，却不是同一个关系。</p>
+<table>
+<thead>
+<tr>
+<th>关系</th>
+<th>典型形式</th>
+<th>它真正说明什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>等价刻画</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mo stretchy="false">[</mo><mi>P</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>↔</mo><mi>Q</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo></mrow></math></span></td>
+<td>同一类对象可从两种性质识别</td>
+</tr>
+<tr>
+<td>相对证明强度</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>+</mo><mi>A</mi><mo>⊢</mo><mi>B</mi><mo>,</mo><mtext> </mtext><mi>S</mi><mo>+</mo><mi>B</mi><mo>⊢</mo><mi>A</mi></mrow></math></span></td>
+<td>两个额外原理在背景 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi></mrow></math></span> 上等强</td>
+</tr>
+<tr>
+<td>问题归约</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>≤</mo><mi>B</mi></mrow></math></span></td>
+<td>解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 的方法可被转换为解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span> 的方法</td>
+</tr>
+</tbody>
+</table>
+<p>归约通常只有方向；双向归约还要说明转换的类型、是否可计算、是否保留解，以及在哪个类别里比较。它不能被含糊地自动升级为逻辑双条件。</p>
+<hr/>
+</body></html>

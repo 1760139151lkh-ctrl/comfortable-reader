@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第三章　经典方法从哪里来，又不该被说成什么</title><link rel="stylesheet" href="style.css"/></head><body><section class="chapter">
+<h1 id="第三章-经典方法从哪里来又不该被说成什么">第三章　经典方法从哪里来，又不该被说成什么</h1>
+<p>数学模型的来源和模型本身同样重要。一个方法可以很经典，却不意味着它适用于所有问题；一个参数化选择可以很方便，却不意味着它是数学必然。</p>
+<p>讲到“经典方法”时，必须把来源、适用范围和建模选择分开。下面不把任何路线冒充成唯一标准，而是说明这些说法分别从哪条理论脉络发展出来。</p>
+<p>而且你质疑得对：我把“标准做法”“通常做法”说得太满了。更准确的说法应该是：</p>
+<blockquote>
+<p class="">这是模糊规划文献中的几类经典建模路线，不是全领域唯一公认的统一标准。</p>
+</blockquote>
+<h2 id="这些说法分别从哪里来">这些说法分别从哪里来？</h2>
+<h3 class="" id="1-模糊目标模糊约束统一成满意度bellmanzadeh">1. 模糊目标、模糊约束统一成满意度：Bellman–Zadeh</h3>
+<p>最源头的是：</p>
+<p><strong>R. E. Bellman 与 L. A. Zadeh，1970，<br/>
+“Decision-Making in a Fuzzy Environment”</strong></p>
+<p class="">这篇文章明确提出：</p>
+<ul>
+<li>
+<p>目标和约束都可以是模糊集合；</p>
+</li>
+<li>
+<p>模糊决策可以看成目标集合与约束集合的交集；</p>
+</li>
+<li>
+<p>最优决策取该决策模糊集合隶属度最大的点。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 108px;"><a alt="https://pubsonline.informs.org/doi/pdf/10.1287/mnsc.17.4.B141" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://pubsonline.informs.org/doi/pdf/10.1287/mnsc.17.4.B141" rel="noopener" style="max-width: 108px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">PubsOnline</span></span></span></span></a></span></span></p>
+</li>
+</ul>
+<p>也就是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>D</mi><mo>=</mo><mi>G</mi><mo>∩</mo><msub><mi>C</mi><mn>1</mn></msub><mo>∩</mo><mo>⋯</mo><mo>∩</mo><msub><mi>C</mi><mi>m</mi></msub><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">D=G\cap C_1\cap\cdots\cap C_m.</annotation></semantics></math></span></span></span>
+<p>若采用最小算子表达交集：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>D</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false">{</mo><msub><mi>μ</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msub><mi>μ</mi><msub><mi>C</mi><mn>1</mn></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>μ</mi><msub><mi>C</mi><mi>m</mi></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\mu_D(x)
+=
+\min\{\mu_G(x),\mu_{C_1}(x),\dots,\mu_{C_m}(x)\},</annotation></semantics></math></span></span></span>
+<p>那么就是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>x</mi></munder><munder><mrow><mi>min</mi><mo>⁡</mo></mrow><mi>i</mi></munder><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\max_x\min_i\mu_i(x).</annotation></semantics></math></span></span></span>
+<p>引入 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\max\quad &amp;\lambda,\\
+\text{s.t.}\quad&amp;\mu_i(x)\ge\lambda,
+\end{aligned}</annotation></semantics></math></span></span></span>
+<p class="">只是对这个 max–min 问题的普通辅助变量改写。</p>
+<p>所以，“模糊目标与模糊约束统一放进 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>”的来源主要是这条 <strong>Bellman–Zadeh 路线</strong>，不是所有模糊规划都必须这样做。</p>
+<hr/>
+<h3 class="" id="2-把它做成线性规划zimmermann">2. 把它做成线性规划：Zimmermann</h3>
+<p>接下来最重要的是：</p>
+<p><strong>H.-J. Zimmermann，1978，<br/>
+“Fuzzy Programming and Linear Programming with Several Objective Functions”</strong></p>
+<p class="">Zimmermann 将 Bellman–Zadeh 的模糊决策方法用于线性规划和多目标线性规划。之后的 Springer 教材对这段历史的概括是：Zimmermann 考察了带模糊目标与模糊约束的线性规划，并通过线性隶属度函数得到等价的普通线性规划。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 101px;"><a alt="https://link.springer.com/chapter/10.1007/978-1-4899-1633-4_3" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/chapter/10.1007/978-1-4899-1633-4_3" rel="noopener" style="max-width: 101px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span><span class="-me-1 flex h-full items-center rounded-full px-1 text-[#8F8F8F]">+1</span></span></span></a></span></span></p>
+<p class="">例如：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≲</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i^\top x\lesssim b_i</annotation></semantics></math></span></span></span>
+<p>具有线性容忍范围 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i</annotation></semantics></math></span></span>，其满意度写成：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>−</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><msub><mi>p</mi><mi>i</mi></msub></mfrac><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_i(x)
+=
+1-\frac{a_i^\top x-b_i}{p_i}.</annotation></semantics></math></span></span></span>
+<p>令：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\lambda,</annotation></semantics></math></span></span></span>
+<p>就得到：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≤</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">a_i^\top x
+\le
+b_i+p_i(1-\lambda).</annotation></semantics></math></span></span></span>
+<p class="">因此我前面所讲的“最大化最低满意度 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>”主要来自 <strong>Zimmermann 型模糊线性规划</strong>，不应笼统地说成整个模糊规划的唯一标准。</p>
+<p class="">Zimmermann 还写过：</p>
+<p><strong>Fuzzy Set Theory—and Its Applications</strong></p>
+<p class="">其中第四版的“Decision Making in Fuzzy Environments”一章位于第 329–370 页，随后还有工程与管理应用章节。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 85px;"><a alt="https://link.springer.com/book/10.1007/978-94-010-0646-0" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/book/10.1007/978-94-010-0646-0" rel="noopener" style="max-width: 85px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span></span></span></a></span></span></p>
+<hr/>
+<h3 id="3-精确目标-软约束verdegaychanasrommelfangersłowiński">3. 精确目标 + 软约束：Verdegay、Chanas、Rommelfanger–Słowiński</h3>
+<p>你提出的那种：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\max f(x)</annotation></semantics></math></span></span></span>
+<p class="">其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span></span> 是精确目标，只有若干约束是软的或模糊的，确实是文献中单独研究的一类问题。</p>
+<p>比较直接的早期来源是：</p>
+<p><strong>J. L. Verdegay，1982，<br/>
+“Fuzzy Mathematical Programming”</strong></p>
+<p class="">他的处理是考察约束模糊集合和目标模糊集合的不同 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>-截集；对于每个给定的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>，得到一个普通的确定性数学规划问题。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 103px;"><a alt="https://www.researchgate.net/publication/266514882_Fuzzy_mathematical_programming?utm_source=chatgpt.com" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://www.researchgate.net/publication/266514882_Fuzzy_mathematical_programming?utm_source=chatgpt.com" rel="noopener" style="max-width: 103px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">ResearchGate</span></span><span class="-me-1 flex h-full items-center rounded-full px-1 text-[#8F8F8F]">+1</span></span></span></a></span></span></p>
+<p>若目标是精确的、约束是模糊的，就可以形成一族参数规划：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>x</mi><mo>∈</mo><mi>X</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\max\quad &amp;f(x),\\
+\text{s.t.}\quad&amp;\mu_i(x)\ge\alpha,\\
+&amp;x\in X,
+\end{aligned}</annotation></semantics></math></span></span></span>
+<p>其中 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 是给定参数。</p>
+<p>S. Chanas 在 1983 年的论文：</p>
+<p><strong>“The Use of Parametric Programming in Fuzzy Linear Programming”</strong></p>
+<p>进一步研究了这种参数规划路线。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 73px;"><a alt="https://www.sciencedirect.com/science/article/pii/S0165011483800839?utm_source=chatgpt.com" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://www.sciencedirect.com/science/article/pii/S0165011483800839?utm_source=chatgpt.com" rel="noopener" style="max-width: 73px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">科学直通车</span></span></span></span></a></span></span></p>
+<p>后来的权威综述章节：</p>
+<p><strong>H. Rommelfanger 与 R. Słowiński，1998，<br/>
+“Fuzzy Linear Programming with Single or Multiple Objective Functions”</strong></p>
+<p class="">一开始就把最简单的“具有软约束的线性规划”称为 <strong>flexible programming</strong>，然后再分别讨论模糊数据、模糊目标、多目标折中以及不同的模糊不等式语义。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 85px;"><a alt="https://link.springer.com/chapter/10.1007/978-1-4615-5645-9_6" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/chapter/10.1007/978-1-4615-5645-9_6" rel="noopener" style="max-width: 85px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span></span></span></a></span></span></p>
+<p>因此，我前面说：</p>
+<blockquote>
+<p>对于精确目标与软约束，可以固定一个满意度水平 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>，再最大化精确目标。</p>
+</blockquote>
+<p class="">这不是凭空编的；它对应 Verdegay–Chanas 的参数化路线，以及后来手册里所说的 flexible programming。但我不该把它说成“正常人唯一都会这样做”。</p>
+<hr/>
+<h2 id="哪本书最直接回答你现在的问题">哪本书最直接回答你现在的问题？</h2>
+<p>最贴近“模糊规划到底有哪些不同模型”的一本是：</p>
+<p><strong>Young-Jou Lai、Ching-Lai Hwang，<br/>
+Fuzzy Mathematical Programming: Methods and Applications，Springer，1992。</strong></p>
+<p class="">这本书专门系统整理和分类模糊数学规划与可能性规划方法，其中“Fuzzy Mathematical Programming”主体章节是第 74–186 页。出版方也明确说，它的目标就是系统综述和分类已有方法及其适用范围。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 85px;"><a alt="https://link.springer.com/book/10.1007/978-3-642-48753-8?utm_source=chatgpt.com" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/book/10.1007/978-3-642-48753-8?utm_source=chatgpt.com" rel="noopener" style="max-width: 85px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span></span></span></a></span></span></p>
+<p>另外两本/章也值得对照：</p>
+<ul>
+<li>
+<p><strong>Masatoshi Sakawa，Fuzzy Sets and Interactive Multiobjective Optimization，1993</strong>：第 36–90 页专讲模糊线性规划。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 85px;"><a alt="https://link.springer.com/chapter/10.1007/978-1-4899-1633-4_3" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/chapter/10.1007/978-1-4899-1633-4_3" rel="noopener" style="max-width: 85px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between overflow-hidden" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span></span></span></a></span></span></p>
+</li>
+<li>
+<p><strong>Roman Słowiński 编，Fuzzy Sets in Decision Analysis, Operations Research and Statistics，1998</strong>：其中 Rommelfanger–Słowiński 一章第 179–213 页专门区分软约束、模糊目标和单目标/多目标问题。<span class=""><span class="ms-1 inline-flex max-w-full items-center select-none relative top-[-0.094rem] translate-y-0.5 animate-[show_150ms_ease-in]" style="width: 101px;"><a alt="https://link.springer.com/chapter/10.1007/978-1-4615-5645-9_6" class="flex h-4.5 overflow-hidden rounded-xl pe-2 ps-1 text-[9px] font-medium transition-colors duration-150 ease-in-out text-token-text-secondary! bg-[#F4F4F4]! dark:bg-[#303030]! select-none" href="https://link.springer.com/chapter/10.1007/978-1-4615-5645-9_6" rel="noopener" style="max-width: 101px;" target="_blank"><span class="relative start-0 bottom-0 flex h-full w-full items-center"><span class="flex h-4 w-full items-center justify-between" style="opacity: 1; transform: none;"><span class="flex min-w-0 flex-1 items-center gap-1"><span class="inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full"/><span class="max-w-[15ch] grow truncate overflow-hidden text-center">Springer Link</span></span><span class="-me-1 flex h-full items-center rounded-full px-1 text-[#8F8F8F]">+1</span></span></span></a></span></span></p>
+</li>
+</ul>
+<h2 id="我刚才真正应该怎样表述">我刚才真正应该怎样表述？</h2>
+<p>我应该说：</p>
+<ol>
+<li>
+<p class=""><strong>Bellman–Zadeh/Zimmermann 方法</strong>是经典的 max–min 满意度方法；</p>
+</li>
+<li>
+<p><strong>固定 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 后优化精确目标</strong>是模糊约束问题的一种经典参数化处理；</p>
+</li>
+<li>
+<p><strong>模糊目标、软约束、模糊系数、可能性约束</strong>不是同一种问题；</p>
+</li>
+<li>
+<p>不存在一个无条件适用于所有“模糊规划”的唯一模型；</p>
+</li>
+<li>
+<p>选择哪种模型，必须先说明“模糊”到底表示软偏好、容忍违反，还是参数本身不精确。</p>
+</li>
+</ol>
+<p>所以你刚才对“所谓标准”的警惕是对的。<strong>可以称 Bellman–Zadeh 与 Zimmermann 方法为经典方法，但不能不加限定地把它叫作唯一标准方法。</strong></p>
+</section>
+</body></html>

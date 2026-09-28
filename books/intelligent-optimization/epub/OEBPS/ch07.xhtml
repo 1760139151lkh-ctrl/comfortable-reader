@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>7. 它最大的难点：探索和利用的平衡</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="7-它最大的难点探索和利用的平衡">7. 它最大的难点：探索和利用的平衡</h2>
+<p>智能优化的本质矛盾是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>探索未知区域，与深入搜索已知好区域</mtext></mrow></math></div>
+<p>之间的平衡。</p>
+<p>只探索会到处乱跑，覆盖范围大却难以把某个解精细优化；只利用会很快围绕当前最好解收缩，却容易陷入局部最优。</p>
+<p>因此许多算法都让早期偏向探索、后期偏向利用：模拟退火降低温度；粒子群可逐渐减小惯性权重；遗传算法用变异维持多样性；蚁群用蒸发抵消过强的历史反馈；差分进化会随群体收缩而自然减小差分步长。</p>
+<p>不过“早探索、晚利用”只是常见设计，不是任何问题都强制遵守的定理。如果搜索后期发现群体已经过早趋同，还可能重新增大变异、重启部分个体或引入局部搜索。这些属于算法设计选择。</p>
+<hr/>
+</body></html>

@@ -1,0 +1,48 @@
+{
+  "scope": "C13 supervised Fashion gray CNN is an external, limited class9 recognizability probe; calibrated on C13 validation boots; neither human image quality nor user preference",
+  "c13_checkpoint_sha256": "cf21ae82864d5f4b5ba9fbbb76da34a3a6908b9509f19aafb5b74a032cfc5c73",
+  "ddpm_checkpoint_sha256": "0199491a0ead650551cacfd6af9dfc05ab3295ff6ba30c26dbbc79bf99bcb32a",
+  "source_identity": {
+    "official_manifest_sha256": "0e99922a3f8f8e173e6c8cd9b35c71f8b7456f866353e865bb8f0df4d6421060",
+    "train_images_sha256": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+    "train_labels_sha256": "a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845",
+    "c13_stratified_split_sha256": "ac870595933df8a373507f0728aa2d275645e05ac53a052556995c49fe43ea9b",
+    "train_count": 50000,
+    "validation_count": 10000,
+    "pixel_transform": "official grayscale uint8 /127.5 -1, no binarization",
+    "labels": "10 official Fashion classes enter conditional model; null condition randomly trained"
+  },
+  "results": {
+    "real_validation_class9": {
+      "count": 1000,
+      "predicted_class9_count": 979,
+      "mean_classifier_probability_class9": 0.9615371823310852,
+      "pairwise_raw_pixel_rmse_mean": 0.31770347568207796
+    },
+    "unconditional": {
+      "count": 16,
+      "predicted_class9_count": 2,
+      "mean_classifier_probability_class9": 0.12434177845716476,
+      "pairwise_raw_pixel_rmse_mean": 0.3822493143379688
+    },
+    "ankle_boot_w0": {
+      "count": 16,
+      "predicted_class9_count": 15,
+      "mean_classifier_probability_class9": 0.9353510737419128,
+      "pairwise_raw_pixel_rmse_mean": 0.296193461989363
+    },
+    "ankle_boot_w2": {
+      "count": 16,
+      "predicted_class9_count": 16,
+      "mean_classifier_probability_class9": 0.999617874622345,
+      "pairwise_raw_pixel_rmse_mean": 0.2446995054682096
+    },
+    "ankle_boot_w5": {
+      "count": 16,
+      "predicted_class9_count": 16,
+      "mean_classifier_probability_class9": 0.9997432231903076,
+      "pairwise_raw_pixel_rmse_mean": 0.2325576818237702
+    }
+  },
+  "limitations": "C13 classifier was trained on the same Fashion corpus, can be fooled by generated artifacts, and pairwise pixel RMSE does not measure semantic diversity"
+}

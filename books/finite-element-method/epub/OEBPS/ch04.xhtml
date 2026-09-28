@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第四章　Galerkin 方法如何自动产生矩阵</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第四章-galerkin-方法如何自动产生矩阵">第四章　Galerkin 方法如何自动产生矩阵</h1>
+<p>有限元解要求在离散空间中满足</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>a</mi><mo stretchy="false">(</mo><msub><mi>u</mi><mi>h</mi></msub><mo>,</mo><msub><mi>v</mi><mi>h</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><msub><mi>v</mi><mi>h</mi></msub><mo stretchy="false">)</mo><mo>,</mo><mspace width="0.278em"/><mo>∀</mo><msub><mi>v</mi><mi>h</mi></msub><mo>∈</mo><msub><mi>V</mi><mi>h</mi></msub><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这称为 Galerkin 方法：试探函数和测试函数取自同一个有限元空间。</p>
+<p>因为任意 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>v</mi><mi>h</mi></msub></mrow></math></span> 都能由基函数线性组合得到，只需依次选择</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>h</mi></msub><mo>=</mo><msub><mi>φ</mi><mi>i</mi></msub><mo>,</mo><mspace width="0.278em"/><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mo>⋯</mo><mo>,</mo><mi>N</mi><mo>.</mo></mrow></math></div>
+<p>代入</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>U</mi><mi>j</mi></msub><msub><mi>φ</mi><mi>j</mi></msub></mrow></math></div>
+<p>得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></msubsup><msub><mi>U</mi><mi>j</mi></msub><msub><mi>φ</mi><mi>j</mi></msub><mo>,</mo><msub><mi>φ</mi><mi>i</mi></msub><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>利用线性性：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>U</mi><mi>j</mi></msub><mo>,</mo><mi>a</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>j</mi></msub><mo>,</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>定义</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>a</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>j</mi></msub><mo>,</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></menclose><mo>,</mo><mspace width="0.278em"/><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow></menclose><mo>,</mo></mrow></math></div>
+<p>便得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>U</mi><mi>j</mi></msub><mo>=</mo><msub><mi>F</mi><mi>i</mi></msub><mo>.</mo></mrow></math></div>
+<p>把所有方程放在一起：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>K</mi><mi>U</mi><mo>=</mo><mi>F</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>对于 Poisson 方程，刚度矩阵具体是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mo>∫</mo><mi>Ω</mi></msub><mo>∇</mo><msub><mi>φ</mi><mi>j</mi></msub><mo>·</mo><mo>∇</mo><msub><mi>φ</mi><mi>i</mi></msub><mo>,</mo><mi>d</mi><mi>Ω</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>矩阵不是工程师凭空设计出来的；它是双线性型 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>a</mi><mo stretchy="false">(</mo><mo>·</mo><mo>,</mo><mi>c</mi><mi>d</mi><mi>o</mi><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span> 在有限元基函数下的矩阵表示。</p>
+<hr/>
+</body></html>

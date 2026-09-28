@@ -1,0 +1,53 @@
+{
+  "identity": "Original LINQS Cora 2708 papers/1433 anonymous binary stemmed-word features/7 labels/5429 directed citation rows; author-internal split, not Planetoid official split",
+  "source_download_manifest_sha256": "eaa87b07d1f55203e26e10dbdaa34463128aa415681b250077034030dfbb624c",
+  "source_readme_sha256": "ecfcfcdc830c6fe49a148c318044cd65d8335c9442c6ba5d9fba1bcee9bc7a0d",
+  "directed_citation_rows": 5429,
+  "undirected_unique_edge_pairs_after_symmetrizing_for_a_model": 5278,
+  "split_rule": "20 training labels/class via C36-cora-v1 ID hash, then 500 validation via second hash, 1000 model-held-out test via third hash, 1068 labels unused; all node features/edges visible transductively",
+  "split_counts": {
+    "train": {
+      "Case_Based": 20,
+      "Genetic_Algorithms": 20,
+      "Neural_Networks": 20,
+      "Probabilistic_Methods": 20,
+      "Reinforcement_Learning": 20,
+      "Rule_Learning": 20,
+      "Theory": 20
+    },
+    "validation": {
+      "Neural_Networks": 151,
+      "Probabilistic_Methods": 85,
+      "Case_Based": 57,
+      "Genetic_Algorithms": 68,
+      "Reinforcement_Learning": 36,
+      "Theory": 72,
+      "Rule_Learning": 31
+    },
+    "test": {
+      "Theory": 131,
+      "Neural_Networks": 315,
+      "Probabilistic_Methods": 155,
+      "Genetic_Algorithms": 145,
+      "Case_Based": 96,
+      "Reinforcement_Learning": 79,
+      "Rule_Learning": 79
+    },
+    "unused": {
+      "Probabilistic_Methods": 166,
+      "Theory": 128,
+      "Reinforcement_Learning": 82,
+      "Genetic_Algorithms": 185,
+      "Neural_Networks": 332,
+      "Case_Based": 125,
+      "Rule_Learning": 50
+    }
+  },
+  "file_sha256": {
+    "features_uint8.npy": "1d1d78998d438662e15aacb4137e13f2d6f859cd66c33789e2e6cee98a1d110c",
+    "labels_int64.npy": "0e6d3f649c9d23c67e069f58866bf19b8c14a9e836484369f5426300ae8f90e8",
+    "directed_citing_to_cited_int64.npy": "03437f33882d5dfb2bc147da5d370f83341b4fe58c23585c17243be091781014",
+    "undirected_unique_edges_int64.npy": "3af2a69256fba4df28597bb0a2711da3b473575fb04698fa6a03894e40a50667",
+    "split.json": "405b30f9338009ba8aaa089bd1fcb49ecca06e2b592007fc13c39caa2735fd98"
+  }
+}

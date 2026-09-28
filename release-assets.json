@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "baseUrl": "https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/download/v0.5.0",
+  "assets": [
+    {
+      "path": "books/ai-principles/materials/publication/work/results/transformer_bridge_best.pt",
+      "name": "ai-principles-asset-d5b11a61d4655afc-68e481ff85517385.pt",
+      "bytes": 32294911,
+      "sha256": "68e481ff855173856f6c6ac267d3a55b483f72ccf6096b349c8b6ea4f62c0ed9",
+      "license": "CC-BY-4.0",
+      "role": "author_trained_reference_checkpoint"
+    },
+    {
+      "path": "books/ai-principles/materials/publication/work/data/c37_serving/c19_model_only.pt",
+      "name": "ai-principles-input-ca8eee78bc434d85-d22a0799e70c070c.pt",
+      "bytes": 19737098,
+      "sha256": "d22a0799e70c070c29d292cbb527d748c5b28089c3ce88632fa990490c6cff7c",
+      "license": "CC-BY-4.0",
+      "role": "author_trained_reference_checkpoint"
+    },
+    {
+      "path": "books/ai-principles/materials/publication/work/runs/c25_full_mix_trial/best.pt",
+      "name": "ai-principles-input-9dd1190c4439b3e3-a6f4c6fa030b4099.pt",
+      "bytes": 59222375,
+      "sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced",
+      "license": "CC-BY-4.0",
+      "role": "author_trained_reference_checkpoint"
+    },
+    {
+      "path": "books/ai-principles/materials/publication/work/runs/c38_tool_aligned_copy_2400/best.pt",
+      "name": "ai-principles-input-41db96ed3de22aa7-e000f24e5422fc5a.pt",
+      "bytes": 19737098,
+      "sha256": "e000f24e5422fc5a0d2e1712b50229b8b1425930c9e154ac345eb85f8226a95d",
+      "license": "CC-BY-4.0",
+      "role": "author_trained_reference_checkpoint"
+    }
+  ]
+}

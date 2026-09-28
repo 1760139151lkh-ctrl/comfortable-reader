@@ -1,0 +1,18 @@
+{
+  "scope": "One fixed old-math/new-code train minibatch at C27 math checkpoint; FP32 eval-mode gradients and one tiny plain SGD step, not the actual BF16/AdamW branch update",
+  "parent_sha256": "02be020308fabdc0b7ea05f800ac424d8c062e525130f91cae9aa30825464115",
+  "old_batch_n": 16,
+  "new_batch_n": 16,
+  "rng_seed": 4604,
+  "old_math_loss_before": 0.004128297790884972,
+  "new_code_loss_before": 15.508611679077148,
+  "gradient_dot": -0.4885646104812622,
+  "old_gradient_norm": 0.592556893825531,
+  "new_gradient_norm": 37.50310516357422,
+  "gradient_cosine": -0.021984911542523387,
+  "tiny_sgd_step": 1e-06,
+  "first_order_predicted_old_loss_change": 4.885646104812622e-07,
+  "actual_same_old_batch_loss_after": 0.004128755535930395,
+  "actual_old_loss_change": 4.577450454235077e-07,
+  "code_sha256": "487ddc67ec4b7f3c5a05ea8df0fe2d6facf3cac835aab977ec234529f612d935"
+}

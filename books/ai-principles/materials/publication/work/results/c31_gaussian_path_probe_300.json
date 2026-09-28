@@ -1,0 +1,80 @@
+{
+  "scope": "closed-form Gaussian/finite-mixture mathematics, no trained image model",
+  "schedule": {
+    "steps": 300,
+    "beta_first": 0.0001,
+    "beta_last": 0.05,
+    "bar_alpha_at_terminal": 0.0004790536009816845,
+    "forward": "x_t=sqrt(bar_alpha_t)*x_0+sqrt(1-bar_alpha_t)*epsilon"
+  },
+  "posterior_checks": [
+    {
+      "step": 1,
+      "bar_alpha": 0.9999,
+      "signal_coefficient": 0.9999499987499375,
+      "noise_coefficient": 0.009999999999999449,
+      "posterior_mean_direct": 0.8000000000000882,
+      "posterior_mean_from_noise": 0.8000000000001105,
+      "posterior_variance": 0.0
+    },
+    {
+      "step": 50,
+      "bar_alpha": 0.8105632464974792,
+      "signal_coefficient": 0.9003128603421586,
+      "noise_coefficient": 0.4352433267754036,
+      "posterior_mean_direct": -0.16045438822399785,
+      "posterior_mean_from_noise": -0.16045438822399788,
+      "posterior_variance": 0.007981967374317942
+    },
+    {
+      "step": 200,
+      "bar_alpha": 0.034083951202466774,
+      "signal_coefficient": 0.18461839345652095,
+      "noise_coefficient": 0.98281028118225,
+      "posterior_mean_direct": -0.19122109657824674,
+      "posterior_mean_from_noise": -0.19122109657824674,
+      "posterior_variance": 0.03327053258612461
+    },
+    {
+      "step": 300,
+      "bar_alpha": 0.0004790536009816845,
+      "signal_coefficient": 0.021887293139666322,
+      "noise_coefficient": 0.9997604445060918,
+      "posterior_mean_direct": -0.19403230348717085,
+      "posterior_mean_from_noise": -0.19403230348717088,
+      "posterior_variance": 0.049998738728412304
+    }
+  ],
+  "two_clean_point_noisy_observation": {
+    "step": 100,
+    "observed_x_t": 0.3,
+    "possible_clean_x_0": [
+      -1.0,
+      1.0
+    ],
+    "posterior_weights_for_possible_x_0": [
+      0.33336321671797964,
+      0.6666367832820203
+    ],
+    "realized_epsilon_if_clean_x_0_known": [
+      1.2688131045583382,
+      -0.47313980768222463
+    ],
+    "conditional_gaussian_scores": [
+      -1.6826011767059168,
+      0.6274411844364101
+    ],
+    "unconditional_mixture_score": -0.1426419678287929,
+    "posterior_mean_epsilon": 0.10756321851354195,
+    "minus_posterior_mean_epsilon_over_sigma": -0.1426419678287929
+  },
+  "flow_pair_crossing": {
+    "time": 0.3333333333333333,
+    "position_from_pair_a": -1.1102230246251565e-16,
+    "position_from_pair_b": 1.1102230246251565e-16,
+    "paired_velocity_a": 3.0,
+    "paired_velocity_b": -3.0,
+    "mean_velocity_if_pair_is_equiprobable_at_crossing": 0.0,
+    "scope": "four discrete endpoints illustrate paired target ambiguity, not a smooth ODE theorem"
+  }
+}
