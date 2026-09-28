@@ -13,6 +13,14 @@ from export_epub import export_book
 
 
 class SemanticBookSource(unittest.TestCase):
+    def test_component_notices_resolve_on_case_sensitive_filesystems(self):
+        desktop=ROOT/'desktop'
+        exact={p.relative_to(desktop).as_posix() for p in (desktop/'licenses').rglob('*') if p.is_file()}
+        dependencies=json.loads((desktop/'licenses/dependencies.json').read_text(encoding='utf-8'))
+        for dependency in dependencies:
+            for name in dependency['notice_files']:
+                self.assertIn(name,exact,dependency['name'])
+
     def test_same_source_exports_identical_bytes_and_preserves_math(self):
         source=ROOT/'books/mathematical-equivalence'
         spec,_=validate_book(source,source.name)

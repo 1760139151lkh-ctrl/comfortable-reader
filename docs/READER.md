@@ -1,6 +1,6 @@
 # 从书页开始
 
-[打开公开书库](https://1760139151lkh-ctrl.github.io/comfortable-reader/)，直接选书即可。想在本机运行活动时，从 [0.5.0 Release](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/tag/v0.5.0) 下载安装包。当前 Windows 安装包未签名；核对下载来源与同页 SHA256SUMS 后安装。
+[打开公开书库](https://1760139151lkh-ctrl.github.io/comfortable-reader/)，直接选书即可。想在本机运行活动时，从 [0.5.1 Release](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/tag/v0.5.1) 下载安装包。当前 Windows 安装包未签名；核对下载来源与同页 SHA256SUMS 后安装。
 
 安装后打开“发现书籍”，在书目地址中填入 `https://1760139151lkh-ctrl.github.io/comfortable-reader/catalog.json`。连接只读取公共书目，不上传私人书库。可以在线打开某章，也可以先从网页下载 EPUB，再在桌面导入；相同 UUID 和实际内容身份用于核对它们的关系。
 

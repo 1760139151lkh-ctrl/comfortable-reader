@@ -2,7 +2,7 @@
 
 **选一章，顺着问题读下去。** 同一本书可以翻页、多栏或连续滚动；需要时打开随书学习，查看来源、代码、声音与三维材料，再回到原段落。
 
-[开始在线阅读](https://1760139151lkh-ctrl.github.io/comfortable-reader/) · [下载 Windows 版](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/tag/v0.5.0) · [读者指南](docs/READER.md) · [贡献一本书](CONTRIBUTING.md) · [让 Codex 加入](docs/CODEX.md)
+[开始在线阅读](https://1760139151lkh-ctrl.github.io/comfortable-reader/) · [下载 Windows 版](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/tag/v0.5.1) · [读者指南](docs/READER.md) · [贡献一本书](CONTRIBUTING.md) · [让 Codex 加入](docs/CODEX.md)
 
 阅读无需账号、无需克隆源码，也无需安装 Python 或 GPU 环境。本站使用桌面版的同一套阅读与学习界面。阅读方式与主题分别设置，笔记留在自己的设备；目前通过主动导入、导出迁移个人记录，没有自动上传或跨端同步。
 

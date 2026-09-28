@@ -42,5 +42,6 @@
       "exceptions": "books/operations-research/RIGHTS.md"
     }
   },
-  "scope": "Original code, skill, teaching books and explicitly cleared materials. Each third-party exception retains its own license; personal records are excluded."
+  "scope": "Original code, skill, teaching books and explicitly cleared materials. Each third-party exception retains its own license; personal records are excluded.",
+  "releaseTag": "v0.5.1"
 }

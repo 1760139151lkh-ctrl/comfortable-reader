@@ -91,7 +91,9 @@ def main():
         owner=approval['repositoryOwner'];name=approval.get('repositoryName','comfortable-reader')
         if not re.fullmatch(r'[A-Za-z0-9_.-]+',owner) or not re.fullmatch(r'[A-Za-z0-9_.-]+',name):raise BookError('公开仓库名称无效')
         base=f'https://github.com/{owner}/{name}'
-        catalog['project']={'repository':base,'download':base+'/releases/tag/v0.5.0'}
+        tag=approval.get('releaseTag','v0.5.0')
+        if not re.fullmatch(r'v\d+\.\d+\.\d+',tag):raise BookError('发行标签格式无效')
+        catalog['project']={'repository':base,'download':base+'/releases/tag/'+tag}
     written=[]
     for slug,folder,spec,documents in built:
         dest=output/'books'/slug
