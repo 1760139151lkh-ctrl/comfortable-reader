@@ -10,11 +10,11 @@
 
 ```text
 请使用 $skill-installer，从
-https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.5.2/skill/comfortable-reader
+https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.6.0/skill/comfortable-reader
 安装 comfortable-reader 技能。先核对来源和版本；如果已有同名技能，保留我的私人配置并比较差异，不直接覆盖。
 ```
 
-安装后可输入 `$comfortable-reader`，或从技能列表选择它。没有出现时再重新启动 Codex。[官方技能说明](https://learn.chatgpt.com/docs/build-skills) 说明了仓库技能安装和发现方式。
+安装后可输入 `$comfortable-reader`，或从技能列表选择「舒适阅读书库」。没有出现时再重新启动 Codex。[官方技能说明](https://learn.chatgpt.com/docs/build-skills) 说明了仓库技能安装和发现方式。
 
 也可以手工从已核对的 Release 源码包取出 `skill/comfortable-reader`，放入当前 Codex 的技能发现目录。当前官方文档列出用户级 `~/.agents/skills/` 与项目级 `.agents/skills/`；部分既有安装使用 `~/.codex/skills/`，应以自己的实际版本和技能列表为准，不同时复制出多个同名版本。
 

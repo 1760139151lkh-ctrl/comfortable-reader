@@ -28,7 +28,7 @@ After intentional reflow, the target may lie lower in its new whole column, so t
 
 ## Density, fonts and resize
 
-Increasing n at constant font creates narrow strips. The approximation pageCapacity ∝ pageArea/fontSize² suggests a square-root adjustment. The current reader retains sqrt(referenceColumns/(selectedColumns*1.2)); the factor 1.2 and “20% more text” are not universal design laws. Verify actual line lengths, glyph size, mathematical structure and whitespace. Ten columns are an explicit overview mode, not the default for long reading.
+Increasing n at constant font creates narrow strips. The approximation pageCapacity ∝ pageArea/fontSize² suggests a square-root adjustment. Auto uses the requested font size. Fixed overview columns use sqrt(referenceColumns/(selectedColumns*1.2)); the factor 1.2 and “20% more text” are not universal design laws. Verify actual line lengths, glyph size, mathematical structure and whitespace. Ten columns are an explicit overview mode, not the default for long reading.
 
 Book CSS uses relative font sizes and reader typography roles. Publisher mode removes reader body-family overrides; math/code keep their own roles. Replace a single theme sheet instead of appending rules. Inspect computed styles and switch-back behavior.
 

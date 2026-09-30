@@ -1,13 +1,21 @@
 ---
 name: comfortable-reader
 metadata:
-  version: "0.5.2"
-description: Maintain the existing Comfortable Reader product and its book sources, or faithfully import supplied material into its configured personal library. Use for shareable books, reader repairs, 多栏阅读、翻页阅读、保真入库、原文批注、自由笔记 and $comfortable-reader. Do not replace this product with a separate reader; ordinary import does not authorize publishing or running book code.
+  version: "0.6.0"
+description: 维护现有舒适阅读书库、书籍源与多书阅读工作区，或将材料保真导入已配置的私人书库。用于阅读器修复、分屏与沉浸阅读、多栏翻页、原文批注、自由笔记和 $comfortable-reader；普通入库不授权另建阅读器、公开材料或运行书中代码。
 ---
 
-# Comfortable Reader
+# 舒适阅读书库
 
 本技能构建和维护的对象是**已有的舒适阅读书库及其书籍、学习资源和工具**。书籍源项目保存权威内容，网页和 EPUB 是该产品的使用版本；不能另造阅读器来代替产品工作。Calibre、独立 HTML 与临时浏览器页面可作明确标名的兼容预览或诊断，不能当作指定书库中的交付或安装版验收。用户只要求源文件时，按其范围交付源文件。
+
+## 产品名称与本机入口
+
+产品对外名称统一为「舒适阅读书库」。`comfortable-reader` 仅保留为已有技能调用、仓库地址及兼容技术标识，不作为英文产品名。
+
+本机任务先读取本技能目录可选的 `local-config.json`，按其中 `project_root` 定位当前维护主本，再核该根下可选的 `本机配置.json`、`AGENTS.md` 与真实安装/登记书库。不能因为原路径仍可用，就另建分散的 checkout 或书库。本机配置不得进入公开技能包。配置缺失时根据当前安装身份查找，不为其他用户硬编码本机桌面路径。
+
+多书与同一本书的同屏页数分开。0.6 工作区可保留最多 12 本不同书籍；不足以舒适共显时只显示当前书并提供已打开书籍切换，原空间关系保留。拖动书名手柄或用阅读现场菜单摆放，分隔线调比例；临时专注不是关闭。阅读工具通过显式点击或 F8 出现，覆盖正文而不推动排版。字号、字体、行距、宽度和阅读方式按书保存，主题共享；不将一本书多视图当作已实现。更详细的状态和回归义务仍在下方契约中。
 
 ## 新增能力调度（学习增强版）
 

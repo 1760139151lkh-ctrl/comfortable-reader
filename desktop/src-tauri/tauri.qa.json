@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "舒适阅读书库 · 回归验收",
-  "version": "0.5.2",
-  "identifier": "com.comfortablereader.desktop.regressionqa20260928",
+  "version": "0.6.0",
+  "identifier": "com.comfortablereader.desktop.workspaceqa20260930",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
@@ -16,8 +16,8 @@
         "title": "舒适阅读书库 · 回归验收",
         "width": 1480,
         "height": 920,
-        "minWidth": 820,
-        "minHeight": 560,
+        "minWidth": 480,
+        "minHeight": 420,
         "center": true,
         "resizable": true,
         "maximized": false,
@@ -35,7 +35,7 @@
     "targets": [
       "nsis"
     ],
-    "shortDescription": "本地多书并排 EPUB 阅读器",
+    "shortDescription": "舒适阅读书库：多书对照与沉浸阅读",
     "longDescription": "本地舒适阅读与随书学习：多栏正文、原文批注、真实 Python 实践、声音视频、来源核对与独立学习记录。",
     "icon": [
       "icons/32x32.png",
@@ -53,5 +53,6 @@
       "../THIRD_PARTY_NOTICES.md": "THIRD_PARTY_NOTICES.md",
       "../licenses/": "licenses/"
     }
-  }
+  },
+  "mainBinaryName": "舒适阅读书库-验收"
 }

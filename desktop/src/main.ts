@@ -10,6 +10,9 @@ import ePub, {
   Rendition,
 } from "epubjs";
 import "./styles.css";
+import "./workspace.css";
+import {ReadingWorkspace} from './workspace';
+import {MAX_OPEN_BOOKS,type WorkspaceState} from './workspace-layout';
 import { readingMetricLabel } from './reading-progress';
 import { initLearning, prepareLearning, wireLearningDocument, refreshLearningButton, learningIsOpen, learningReadingProgress, learningCfiFromBodyPosition, flushLearningBeforeClose, closeLearning, holdLearning, learningMemoryBackup } from "./learning";
 import { mountImage } from './image-viewer';
@@ -93,6 +96,7 @@ interface BookRecord {
 }
 
 interface BookProgress {
+  readingPreferences?: {fontScale?:number;readerFont?:"serif"|"sans"|"publisher";lineHeight?:number|null;contentWidth?:number|null} | null;
   bookUuid?:string|null;
   contentDigest?: string | null;
   readingMode?: 'paged' | 'scroll' | null;
@@ -110,6 +114,7 @@ interface BookProgress {
 }
 
 interface ReaderSession {
+  workspace?: WorkspaceState | null;
   lineHeight?: number | null;
   contentWidth?: number | null;
   paneCount: number;
@@ -240,7 +245,9 @@ type InternalSpine = EpubBook["spine"] & {
   spineItems: Array<{ linear?: boolean }>;
 };
 
-const MAX_PANES = 4;
+const MAX_PANES = MAX_OPEN_BOOKS;
+let workspace:ReadingWorkspace;
+let toolsVisible=false;
 function requireElement<T extends Element>(root: ParentNode, selector: string): T {
   const element = root.querySelector<T>(selector);
   if (!element) throw new Error(`界面元素不存在：${selector}`);
@@ -288,8 +295,22 @@ const icons: Record<string, string> = {
 app.innerHTML = `
   <div class="app-shell" data-theme="paper">
 
-    <div class="top-hover-zone" aria-hidden="true"></div>
-    <header class="top-toolbar visible" aria-label="阅读工具栏">
+    <nav class="workspace-strip" aria-label="阅读空间">
+      <button class="workspace-library" type="button" title="书库（Ctrl+L）">${icons.library}<span>书库</span></button>
+      <button class="tools-toggle" type="button" aria-label="打开阅读工具" aria-expanded="false" title="阅读工具（F8）">${icons.book}<span>阅读工具</span></button>
+      <div class="workspace-tabs" aria-label="仍然打开的书籍"></div>
+      <span class="workspace-space-status" hidden></span>
+      <button class="workspace-focus" type="button" hidden>专注一本</button>
+      <button class="workspace-toggle" type="button" aria-expanded="false"><span>书籍 · 0</span><span aria-hidden="true">⌄</span></button>
+    </nav>
+    <section class="workspace-panel floating-panel" aria-label="打开的书籍与布局" aria-hidden="true" inert>
+      <header><strong>阅读现场</strong><button class="icon-button workspace-panel-close" aria-label="收起阅读现场">${icons.close}</button></header>
+      <div class="workspace-books"></div>
+      <button class="text-action workspace-organize" type="button">重新整理布局</button>
+      <p class="settings-help">拖动书名左侧的手柄摆放书籍；拖动细分隔线调整比例。窗口变小时保留原排列。</p>
+      <details class="workspace-move-controls"><summary>用按钮调整位置</summary><p>移动：<strong class="workspace-current-title"></strong></p><label>放到哪本书旁边<select class="workspace-target"></select></label><div class="workspace-placement-buttons">${Object.entries({left:'左侧',right:'右侧',top:'上方',bottom:'下方',swap:'交换'}).map(([value,label])=>`<button type="button" data-place="${value}">${label}</button>`).join('')}</div></details>
+    </section>
+    <header class="top-toolbar" aria-label="阅读工具栏" aria-hidden="true" inert>
       <button class="icon-button library-toggle" type="button" title="书库（Ctrl+L）" aria-label="打开书库" aria-expanded="false">${icons.library}</button>
       <button class="icon-button contents-toggle" type="button" title="本书目录（Ctrl+T）" aria-label="打开本书目录" aria-expanded="false">${icons.jump}</button>
       <button class="icon-button book-search-toggle" type="button" title="书内搜索（Ctrl+F）" aria-label="搜索本书" aria-expanded="false">${icons.search}</button>
@@ -304,16 +325,18 @@ app.innerHTML = `
       <button class="icon-button theme-cycle" type="button" title="切换阅读主题" aria-label="切换阅读主题">${icons.moon}</button>
       <button class="icon-button annotation-toggle" type="button" title="笔记与原文标记（Ctrl+N）" aria-label="打开笔记与标记工具" aria-expanded="false">${icons.note}</button>
       <button class="icon-button fullscreen-toggle" type="button" title="全屏（F11）" aria-label="切换全屏">${icons.fullscreen}</button>
+      <button class="icon-button tools-close" type="button" title="回到安静阅读（Escape）" aria-label="收起阅读工具">${icons.close}</button>
     </header>
     <section class="reading-settings floating-panel" aria-label="阅读设置" aria-hidden="true" inert>
-      <header><strong>阅读设置</strong><button type="button" class="icon-button settings-close" aria-label="关闭阅读设置">${icons.close}</button></header>
+      <header><strong>这本书的排版</strong><button type="button" class="icon-button settings-close" aria-label="关闭阅读设置">${icons.close}</button></header>
+      <p class="settings-book-title"></p>
       <label class="setting-row"><span>这本书怎样读</span><select class="reading-mode" aria-label="阅读方式"><option value="paged">翻页 · 可选多栏</option><option value="scroll">连续滚动</option></select></label>
+      <label class="setting-row"><span>这本书同屏页数</span><select class="settings-page-mode" aria-label="这本书同屏页数"><option value="0">自动 · 舒适行宽</option>${Array.from({length:10},(_,i)=>`<option value="${i+1}">${i+1} 页</option>`).join('')}</select></label>
       <label class="setting-row"><span>正文字体</span><select class="reader-font" aria-label="正文字体"><option value="serif">衬线 · 书籍</option><option value="sans">无衬线 · 清晰</option><option value="publisher">书籍原有字体</option></select></label>
       <div class="setting-row"><span>阅读字号</span><div class="font-controls"><button type="button" class="text-button font-down" title="缩小字号">A−</button><span class="font-scale-label">100%</span><button type="button" class="text-button font-up" title="放大字号">A+</button></div></div>
       <label class="setting-row"><span>行距</span><input class="reader-line-height" type="range" min="1.35" max="2.15" step="0.05" aria-label="正文行距"/></label>
       <label class="setting-row"><span>连续阅读宽度</span><select class="reader-content-width" aria-label="连续阅读宽度"><option value="34">紧凑</option><option value="44">标准</option><option value="56">舒展</option></select></label>
-      <div class="setting-row"><span>并排读书</span><div class="pane-switch" aria-label="并排阅读数量">${[1,2,3,4].map(count=>`<button type="button" data-pane-count="${count}" title="同时显示 ${count} 本书" aria-pressed="${count===1}">${count}</button>`).join("")}</div></div>
-      <p class="settings-help">每本书的同屏栏数在书名右侧选择。自动布局适合连续阅读；更多栏数适合概览。左右键移动一栏，PageUp / PageDown 移动一屏。</p>
+      <p class="settings-help">排版只影响当前书。左右键移动一页，PageUp / PageDown 移动一屏。要对照其他书，从书库打开即可。</p>
       <button class="text-action jump-toggle" type="button">跳转到阅读位置…</button>
     </section>
     <aside class="book-navigation floating-panel" aria-label="本书导航" aria-hidden="true" inert>
@@ -379,7 +402,7 @@ app.innerHTML = `
     <aside class="library-drawer" aria-label="本地书库" aria-hidden="true" inert>
       <div class="drawer-header">
         <div>
-          <p class="eyebrow">LOCAL LIBRARY</p>
+          <p class="eyebrow">舒适阅读书库</p>
           <h1>我的书库 <span class="book-count">0</span></h1>
         </div>
         <button class="icon-button drawer-close" type="button" title="收起书库" aria-label="收起书库">${icons.close}</button>
@@ -545,10 +568,10 @@ let snapshot: AppSnapshot = {
 };
 let toastTimer: number | null = null;
 let sessionSaveTimer: number | null = null;
-const progressSaveTimers: Array<number | null> = [null, null, null, null];
+const progressSaveTimers: Array<number | null> = Array.from({length:MAX_PANES},()=>null);
 const progressWrites:Array<Promise<void>>=Array.from({length:MAX_PANES},()=>Promise.resolve());
 const bookOpenSequence=Array.from({length:MAX_PANES},()=>0);
-const pendingSelections: Array<PendingSelection | null> = [null, null, null, null];
+const pendingSelections: Array<PendingSelection | null> = Array.from({length:MAX_PANES},()=>null);
 const activeFormats = new Set<keyof AnnotationTextStyle>(["highlight"]);
 let annotationTool: AnnotationTool = "read";
 let drawingDraft: DrawingDraft | null = null;
@@ -573,6 +596,7 @@ function normalizeSession(session: ReaderSession): ReaderSession {
   const paneBookIds = [...(session.paneBookIds ?? [])];
   while (paneBookIds.length < MAX_PANES) paneBookIds.push(null);
   return {
+    workspace:session.workspace??null,
     paneCount: Math.min(MAX_PANES, Math.max(1, Number(session.paneCount) || 1)),
     paneBookIds: paneBookIds.slice(0, MAX_PANES),
     activePane: Math.min(
@@ -581,7 +605,7 @@ function normalizeSession(session: ReaderSession): ReaderSession {
     ),
     theme: ["paper", "light", "night", "contrast"].includes(session.theme)
       ? session.theme
-      : "paper",
+      : "night",
     fontScale: Math.min(180, Math.max(70, Number(session.fontScale) || 100)),
     readerFont: ["serif", "sans", "publisher"].includes(session.readerFont) ? session.readerFont : "serif",
     lineHeight: session.lineHeight?Math.min(2.15,Math.max(1.35,Number(session.lineHeight))):null,
@@ -719,6 +743,46 @@ function pageModeForBook(bookId: string | null): number {
   return Math.min(10, Math.max(0, Number(snapshot.progress[bookId]?.pageMode) || 0));
 }
 
+function readingPreferences(index:number){
+  const id=runtimes[index]?.bookId??snapshot.session.paneBookIds[index],saved=id?snapshot.progress[id]?.readingPreferences:null;
+  return {
+    fontScale:Math.max(70,Math.min(180,saved?.fontScale??snapshot.session.fontScale)),
+    readerFont:saved?.readerFont&&['serif','sans','publisher'].includes(saved.readerFont)?saved.readerFont:snapshot.session.readerFont,
+    lineHeight:clampNumber(saved?.lineHeight??snapshot.session.lineHeight??1.72,1.35,2.15,1.72),
+    contentWidth:[34,44,56].includes(Number(saved?.contentWidth))?Number(saved?.contentWidth):snapshot.session.contentWidth??44,
+  };
+}
+function changeReadingPreference<K extends keyof NonNullable<BookProgress['readingPreferences']>>(key:K,value:NonNullable<BookProgress['readingPreferences']>[K]):void{
+  const index=snapshot.session.activePane,id=runtimes[index].bookId;if(!id)return;
+  const progress=ensureBookProgress(id,index);progress.readingPreferences={...readingPreferences(index),[key]:value};
+  const rendition=runtimes[index].rendition;if(rendition)for(const contents of visibleContents(rendition))applyReadingTheme(contents);
+  void reflowPane(index,true);syncReadingSettings();savePaneProgress(index,0);
+}
+function syncReadingSettings():void{
+  const index=snapshot.session.activePane,prefs=readingPreferences(index),runtime=runtimes[index];
+  fontScaleLabel.textContent=`${prefs.fontScale}%`;
+  requireElement<HTMLSelectElement>(app,'.reader-font').value=prefs.readerFont;
+  requireElement<HTMLSelectElement>(app,'.reading-mode').value=runtime.readingMode;
+  requireElement<HTMLInputElement>(app,'.reader-line-height').value=String(prefs.lineHeight);
+  requireElement<HTMLSelectElement>(app,'.reader-content-width').value=String(prefs.contentWidth);
+  const pages=requireElement<HTMLSelectElement>(app,'.settings-page-mode');pages.value=String(runtime.pageMode);pages.disabled=runtime.readingMode==='scroll'||!runtime.bookId;
+  requireElement<HTMLElement>(app,'.settings-book-title').textContent=getBook(runtime.bookId)?.title??'先从书库打开一本书';
+}
+function syncReadingChrome():void{
+  for(let index=0;index<MAX_PANES;index++){
+    const footer=paneElement(index).querySelector<HTMLElement>('.pane-footer')!;
+    const visible=toolsVisible&&index===snapshot.session.activePane;
+    footer.inert=!visible;footer.setAttribute('aria-hidden',String(!visible));
+  }
+}
+function setToolsVisible(visible:boolean):void{
+  toolsVisible=visible;shell.classList.toggle('tools-visible',visible);
+  const toolbar=requireElement<HTMLElement>(app,'.top-toolbar');toolbar.classList.toggle('visible',visible);toolbar.inert=!visible;toolbar.setAttribute('aria-hidden',String(!visible));
+  const trigger=requireElement<HTMLButtonElement>(app,'.tools-toggle');trigger.setAttribute('aria-expanded',String(visible));trigger.setAttribute('aria-label',visible?'收起阅读工具':'打开阅读工具');
+  if(!visible){closeBookNavigation();setReadingSettings(false);if(toolbar.contains(document.activeElement))trigger.focus({preventScroll:true});}
+  syncReadingChrome();
+}
+
 function showToast(message: string, kind: "normal" | "error" = "normal"): void {
   toast.textContent = message;
   toast.dataset.kind = kind;
@@ -730,6 +794,9 @@ function showToast(message: string, kind: "normal" | "error" = "normal"): void {
 
 
 function openDrawer(): void {
+  setToolsVisible(false);
+  setAnnotationPanelVisible(false);
+  workspace?.showPanel(false,false);
   closeBookNavigation();
   setReadingSettings(false);
   drawer.inert = false;
@@ -749,7 +816,7 @@ function closeDrawer(): void {
   drawer.classList.remove("visible");
   shell.classList.remove("drawer-open");
   libraryHandle.setAttribute("aria-expanded", "false");
-  if(returnFocus)app.querySelector<HTMLButtonElement>('.library-toggle')?.focus({preventScroll:true});
+  if(returnFocus)app.querySelector<HTMLButtonElement>('.workspace-library')?.focus({preventScroll:true});
 }
 
 function closeJumpDialog(): void {
@@ -804,7 +871,7 @@ function buildPaneShells(): void {
   readerGrid.innerHTML = Array.from({ length: MAX_PANES }, (_, index) => `
     <article class="reader-pane" data-pane-index="${index}">
       <header class="pane-header">
-        <span class="pane-number">${index + 1}</span>
+        <button class="pane-drag-handle" type="button" title="拖动摆放这本书；也可在阅读现场中用按钮调整" aria-label="拖动摆放这本书">⠿</button>
         <div class="pane-book-meta">
           <strong>空白阅读窗格</strong>
           <span>从左侧书库选择一本书</span>
@@ -817,6 +884,7 @@ function buildPaneShells(): void {
             ${Array.from({ length: 10 }, (_, pageIndex) => `<option value="${pageIndex + 1}">${pageIndex + 1} 页</option>`).join("")}
           </select>
         </label>
+        <button class="icon-button pane-focus" type="button" title="临时专注 / 返回对照" aria-label="临时专注这本书">${icons.fullscreen}</button>
         <button class="icon-button pane-close" type="button" title="关闭这本书" aria-label="关闭这本书">${icons.close}</button>
       </header>
       <div class="pane-stage">
@@ -921,6 +989,7 @@ function updatePaneHeader(index: number): void {
   const subtitle = pane.querySelector<HTMLElement>(".pane-book-meta span");
   const pageSelect = pane.querySelector<HTMLSelectElement>(".pane-page-mode select");
   pane.dataset.readingMode = runtime.readingMode;
+  pane.dataset.pageMode=String(runtime.pageMode);
   const modeSelect=pane.querySelector<HTMLSelectElement>('.pane-reading-mode select');
   if(modeSelect){modeSelect.value=runtime.readingMode;modeSelect.disabled=!book||Boolean(book.lazyPages);}
   const groupPrev = pane.querySelector<HTMLButtonElement>(".page-hotspot-group-prev");
@@ -956,7 +1025,7 @@ function updatePaneHeader(index: number): void {
   }
   pane.classList.toggle("has-book", Boolean(book));
   pane.classList.toggle("active", index === snapshot.session.activePane);
-  pane.classList.toggle("hidden-pane", index >= snapshot.session.paneCount);
+  pane.setAttribute('aria-label',book?.title??'阅读区域');
 }
 
 function updatePaneProgress(index: number): void {
@@ -999,11 +1068,17 @@ function updateActiveUi(): void {
     .querySelectorAll<HTMLElement>(".reader-pane")
     .forEach((pane, index) => pane.classList.toggle("active", index === snapshot.session.activePane));
   if (annotationPanel.classList.contains("visible")) renderAnnotationPanel();
+  workspace?.setActive(snapshot.session.activePane);
+  syncReadingSettings();
+  syncReadingChrome();
 }
 
 function updateLayoutUi(): void {
-  readerGrid.className = `reader-grid panes-${snapshot.session.paneCount}`;
-  readerGrid.dataset.panes = String(snapshot.session.paneCount);
+  const ids=snapshot.session.paneBookIds.flatMap((id,i)=>id?[i]:[]);
+  snapshot.session.paneCount=ids.length?Math.max(...ids)+1:1;
+  workspace?.sync(snapshot.session.workspace,ids,snapshot.session.activePane);
+  if(workspace)snapshot.session.workspace=workspace.state;
+  readerGrid.dataset.panes = String(ids.length);
   for (let index = 0; index < MAX_PANES; index += 1) updatePaneHeader(index);
   app.querySelectorAll<HTMLButtonElement>("[data-pane-count]").forEach((button) => {
     const selected = Number(button.dataset.paneCount) === snapshot.session.paneCount;
@@ -1072,7 +1147,8 @@ function savePaneProgress(index:number,delay=240):void{
   progressSaveTimers[index]=window.setTimeout(()=>{progressSaveTimers[index]=null;if(generation!==runtimes[index].generation)return;if(runtimes[index].restoringLocation||runtimes[index].resizeActive){savePaneProgress(index,240);return;}const value=makePaneProgress(index);if(value)void writePaneProgress(index,value).catch(error=>showToast(String(error),'error'));},delay);
 }
 
-function themeRules(theme: ThemeName): Record<string, Record<string, string>> {
+function themeRules(theme: ThemeName,index=snapshot.session.activePane): Record<string, Record<string, string>> {
+  const preferences=readingPreferences(index);
   const palette = {
     paper: {
       background: "#f8f3e9",
@@ -1093,13 +1169,13 @@ function themeRules(theme: ThemeName): Record<string, Record<string, string>> {
       rule: "#d8dee4",
     },
     night: {
-      background: "#1b1e23",
-      text: "#d8d2c9",
-      muted: "#aaa49b",
-      accent: "#e0a077",
-      surface: "#23272e",
-      border: "#4a5059",
-      rule: "#353a42",
+      background: "#1c1f23",
+      text: "#d9dadd",
+      muted: "#b2b7bd",
+      accent: "#a3b5bd",
+      surface: "#25292e",
+      border: "#43484e",
+      rule: "#33383e",
     },
     contrast: { background:"#08090b", text:"#ffffff", muted:"#e0e0e0", accent:"#ffe29a", surface:"#16191f", border:"#929292", rule:"#aaaaaa" },
   }[theme];
@@ -1112,9 +1188,9 @@ function themeRules(theme: ThemeName): Record<string, Record<string, string>> {
     body: {
       "background-color": `${palette.background} !important`,
       color: `${palette.text} !important`,
-      "font-family": `${readingFontFamily()} !important`,
-      "--reader-font-body": readingFontFamily(),
-      "line-height": `${snapshot.session.lineHeight??1.72} !important`,
+      "font-family": `${readingFontFamily(index)} !important`,
+      "--reader-font-body": readingFontFamily(index),
+      "line-height": `${preferences.lineHeight} !important`,
       "padding-left": "1em !important",
       "padding-right": "1em !important",
       "box-sizing": "border-box !important",
@@ -1201,16 +1277,16 @@ function themeRules(theme: ThemeName): Record<string, Record<string, string>> {
     };
   }
 
-  if (snapshot.session.readerFont !== "publisher") {
+  if (preferences.readerFont !== "publisher") {
     rules["p, li, blockquote, h1, h2, h3, h4, h5, h6, td, th, figcaption, .algorithm"] = {
       ...(rules["p, li, blockquote, h1, h2, h3, h4, h5, h6, td, th, figcaption, .algorithm"] ?? {}),
-      "font-family": `${readingFontFamily()} !important`,
+      "font-family": `${readingFontFamily(index)} !important`,
     };
   } else { delete rules.body["font-family"]; delete rules.body["--reader-font-body"]; }
-  rules["body:lang(en)"] = { "line-height": `${snapshot.session.lineHeight??1.62} !important`, "hyphens": "auto" };
+  rules["body:lang(en)"] = { "line-height": `${preferences.lineHeight} !important`, "hyphens": "auto" };
   rules["p, li"] = { "orphans": "2", "widows": "2", "word-break": "normal", "overflow-wrap": "break-word" };
   rules["p:lang(en), li:lang(en)"] = { "text-align": "start !important" };
-  rules["h1, h2, h3, h4, h5, h6"] = { ...rules["h1, h2, h3, h4, h5, h6"], "border-color": `${palette.accent} !important`, "overflow-wrap": "anywhere !important" };
+  rules["h1, h2, h3, h4, h5, h6"] = { ...rules["h1, h2, h3, h4, h5, h6"], "border-color": `${palette.border} !important`, "overflow-wrap": "anywhere !important" };
   rules["h1 a, h2 a, h3 a, h4 a, h5 a, h6 a"] = { "text-decoration": "none !important" };
   rules["ul, ol"] = { "margin": ".5em 0 !important", "padding-inline-start": "1.25em !important" };
   rules[".math-inline"] = { "display": "inline !important", "vertical-align": "baseline !important" };
@@ -1284,7 +1360,7 @@ function applyTheme(): void {
 }
 
 function applyFontScale(): void {
-  fontScaleLabel.textContent = `${snapshot.session.fontScale}%`;
+  fontScaleLabel.textContent = `${readingPreferences(snapshot.session.activePane).fontScale}%`;
   runtimes.forEach((runtime, index) => {
     if (runtime.rendition || runtime.lazyPageCount > 0) void reflowPane(index, true);
   });
@@ -1440,7 +1516,7 @@ async function openLazyPageBook(
   const available = availableStageSize(stage);
   runtime.actualPageCount = runtime.pageMode > 0
     ? runtime.pageMode
-    : automaticPageCountForWidth(available.width);
+    : automaticPageCountForWidth(available.width,index);
   runtime.layoutWidth = available.width;
   runtime.layoutHeight = available.height;
   host.replaceChildren();
@@ -1484,17 +1560,18 @@ async function waitForStableStage(stage: HTMLElement, quietMs = 360, maxMs = 260
   }
 }
 
-function automaticPageCountForWidth(width: number): number {
-  const idealPageWidth = 400 * Math.pow(snapshot.session.fontScale / 100, 0.35);
+function automaticPageCountForWidth(width: number,index=snapshot.session.activePane): number {
+  const idealPageWidth = 420 * Math.pow(readingPreferences(index).fontScale / 100, 0.35);
   return Math.min(10, Math.max(1, Math.floor((width + 18) / (idealPageWidth + 18))));
 }
 
 function automaticPageCount(host: HTMLElement): number {
-  return automaticPageCountForWidth(host.clientWidth);
+  return automaticPageCountForWidth(host.clientWidth,Number(host.closest<HTMLElement>('.reader-pane')?.dataset.paneIndex??snapshot.session.activePane));
 }
 
 function densityPreservingFontScale(runtime: PaneRuntime, host: HTMLElement): number {
-  if(runtime.readingMode==='scroll')return snapshot.session.fontScale;
+  const fontScale=readingPreferences(runtimes.indexOf(runtime)).fontScale;
+  if(runtime.readingMode==='scroll'||runtime.pageMode===0)return fontScale;
   const referencePageCount = automaticPageCount(host);
   const selectedPageCount = Math.max(1, runtime.actualPageCount);
   // Page capacity is approximately area / fontSize². Scaling by the square
@@ -1504,7 +1581,7 @@ function densityPreservingFontScale(runtime: PaneRuntime, host: HTMLElement): nu
   const densityFactor = Math.sqrt(
     referencePageCount / (selectedPageCount * PAGE_INFORMATION_GAIN),
   );
-  return Math.min(220, Math.max(16, snapshot.session.fontScale * densityFactor));
+  return Math.min(220, Math.max(16, fontScale * densityFactor));
 }
 
 function applyAdaptiveFontScale(index: number, host: HTMLElement): void {
@@ -1975,6 +2052,7 @@ function renderAnnotationPanel(): void {
 }
 
 function setAnnotationPanelVisible(visible: boolean): void {
+  if(visible){closeDrawer();closeBookNavigation();setReadingSettings(false);workspace?.showPanel(false,false);}
   const wasVisible = annotationPanel.classList.contains("visible");
   const hadFocus = annotationPanel.contains(document.activeElement);
   annotationPanel.inert = !visible;
@@ -1985,7 +2063,10 @@ function setAnnotationPanelVisible(visible: boolean): void {
   if (visible) {
     renderAnnotationPanel();
     if (!wasVisible) requireElement<HTMLButtonElement>(annotationPanel, ".annotation-close").focus();
-  } else if (wasVisible && hadFocus) annotationToggle.focus({ preventScroll: true });
+  } else {
+    if(annotationTool!=='read')setAnnotationTool('read');
+    if(wasVisible&&hadFocus)(toolsVisible?annotationToggle:app.querySelector<HTMLButtonElement>('.tools-toggle'))?.focus({preventScroll:true});
+  }
 }
 
 function setAnnotationTool(tool: AnnotationTool): void {
@@ -2396,7 +2477,7 @@ function fitAtomicBlocks(index: number): void {
     Math.round(usableHeight),
     Math.round(runtime.effectiveFontScale * 10) / 10,
     runtime.actualPageCount,
-    snapshot.session.readerFont,
+    readingPreferences(index).readerFont,
   ].join(":");
 
   for (const contents of visibleContents(rendition)) {
@@ -2611,6 +2692,25 @@ function patchMultiPageLayout(rendition: Rendition, runtime: PaneRuntime): void 
   internal.manager.updateLayout();
 }
 
+/** Reflow mounted chapters in place. epub.js resize() clears every iframe first,
+ * which flashes all books during a split adjustment and needlessly reloads assets.
+ * Keep its layout/view sizing primitives, then restore our semantic anchor. */
+function resizeMountedChapters(runtime:PaneRuntime):void {
+  const rendition=runtime.rendition!;
+  const manager=(rendition as any).manager;
+  const views=manager?.views?.all?.()??[];
+  if(!views.length||!manager.stage?.size||!manager.updateLayout){rendition.resize(runtime.layoutWidth,runtime.layoutHeight);return;}
+  (rendition as any).settings.width=runtime.layoutWidth;
+  (rendition as any).settings.height=runtime.layoutHeight;
+  manager._stageSize=manager.stage.size(runtime.layoutWidth,runtime.layoutHeight);
+  manager._bounds=manager.bounds();
+  for(const view of views){
+    view.settings.width=runtime.layoutWidth;view.settings.height=runtime.layoutHeight;
+    view.size(runtime.layoutWidth,runtime.layoutHeight);
+  }
+  manager.updateLayout();
+}
+
 async function reflowPaneNow(index: number, force = false): Promise<void> {
   const runtime = runtimes[index];
   const rendition = runtime.rendition;
@@ -2631,7 +2731,7 @@ async function reflowPaneNow(index: number, force = false): Promise<void> {
   const available = availableStageSize(stage);
   const nextCount = runtime.readingMode==='scroll' ? 1 : runtime.pageMode > 0
     ? runtime.pageMode
-    : automaticPageCountForWidth(available.width);
+    : automaticPageCountForWidth(available.width,index);
   const changed = nextCount !== runtime.actualPageCount;
   const viewportChanged =
     Math.abs(runtime.viewportWidth - available.width) > 1 ||
@@ -2670,7 +2770,7 @@ async function reflowPaneNow(index: number, force = false): Promise<void> {
   runtime.layoutAnchorCfi=anchor;
   runtime.preserveSemanticFocus=Boolean(anchor);
   runtime.actualPageCount = nextCount;
-  if (runtime.readingMode==='scroll' || runtime.pageMode === 0 || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) {
+  if (force || runtime.readingMode==='scroll' || runtime.pageMode === 0 || runtime.layoutWidth < 50 || runtime.layoutHeight < 50) {
     runtime.layoutWidth = available.width;
     runtime.layoutHeight = available.height;
   }
@@ -2680,7 +2780,7 @@ async function reflowPaneNow(index: number, force = false): Promise<void> {
   updatePaneHeader(index);
   runtime.restoringLocation = true;
   try {
-    rendition.resize(runtime.layoutWidth, runtime.layoutHeight);
+    resizeMountedChapters(runtime);
     if (anchor) await rendition.display(anchor);
     await settleRenditionLayout(index);
     fitAtomicBlocks(index);
@@ -2867,7 +2967,7 @@ function measuredSingleSectionPages(runtime:PaneRuntime):number|null{
   if(!runtime.rendition||!runtime.book||(runtime.book.spine as InternalSpine).spineItems.length!==1)return null;
   const contents=visibleContents(runtime.rendition)[0];const doc=contents?.document;if(!doc?.body||doc.fonts?.status==="loading")return null;
   const layout=(runtime.rendition as InternalRendition)._layout;const pageWidth=layout.pageWidth;if(!(pageWidth>1))return null;
-  const key=`${runtime.layoutWidth}|${runtime.layoutHeight}|${runtime.actualPageCount}|${runtime.effectiveFontScale}|${snapshot.session.readerFont}`;
+  const key=`${runtime.layoutWidth}|${runtime.layoutHeight}|${runtime.actualPageCount}|${runtime.effectiveFontScale}|${readingPreferences(runtimes.indexOf(runtime)).readerFont}`;
   const previous=singleSectionPageCounts.get(doc);if(previous?.key===key)return previous.count;
   let right=0;const walker=doc.createTreeWalker(doc.body,NodeFilter.SHOW_TEXT);let node:Node|null;
   while((node=walker.nextNode())){if(!node.textContent?.trim()||node.parentElement?.closest('script,style,annotation'))continue;const range=doc.createRange();range.selectNodeContents(node);for(const rect of Array.from(range.getClientRects()))if(rect.width>0&&rect.height>0)right=Math.max(right,rect.right);}
@@ -2943,6 +3043,9 @@ function handleRelocated(index: number, location: EpubLocation): void {
 }
 
 async function openBook(bookId: string, index = snapshot.session.activePane,requestedChapter?:string,activate=true): Promise<void> {
+  const previousActive=snapshot.session.activePane;
+  const alreadyOpen=snapshot.session.paneBookIds.findIndex((id,i)=>id===bookId&&i!==index);
+  if(alreadyOpen>=0){setActivePane(alreadyOpen);if(requestedChapter)await openBook(bookId,alreadyOpen,requestedChapter,activate);return;}
   const openingRequest=++bookOpenSequence[index];
   if(learningIsOpen()){await closeLearning();if(learningIsOpen())return;}
   if(openingRequest!==bookOpenSequence[index])return;
@@ -2965,6 +3068,8 @@ async function openBook(bookId: string, index = snapshot.session.activePane,requ
   runtime.bookId = bookId;
   runtime.openedSourceKey=sourceKey;
   snapshot.session.paneBookIds[index] = bookId;
+  snapshot.session.paneCount=Math.max(snapshot.session.paneCount,index+1);
+  if(workspace&&!workspace.ids.includes(index))workspace.added(index,previousActive);
   updatePaneHeader(index);
   updateActiveUi();
   persistSession();
@@ -3038,7 +3143,7 @@ async function openBook(bookId: string, index = snapshot.session.activePane,requ
     const available = availableStageSize(stage);
     runtime.actualPageCount = runtime.readingMode==='scroll' ? 1 : runtime.pageMode > 0
       ? runtime.pageMode
-      : automaticPageCountForWidth(available.width);
+      : automaticPageCountForWidth(available.width,index);
     runtime.layoutWidth = available.width;
     runtime.layoutHeight = available.height;
     positionRenditionCanvas(index);
@@ -3157,7 +3262,8 @@ async function openBook(bookId: string, index = snapshot.session.activePane,requ
 }
 
 function setActivePane(index: number): void {
-  if (index < 0 || index >= snapshot.session.paneCount) return;
+  if (index < 0 || index >= MAX_PANES) return;
+  if(snapshot.session.activePane===index)return;
   snapshot.session.activePane = index;
   updateActiveUi();
   renderChapterList();
@@ -3285,48 +3391,26 @@ async function closeBook(index: number): Promise<void> {
   if(request!==bookOpenSequence[index])return;
   destroyRuntime(index, false, false);
   snapshot.session.paneBookIds[index] = null;
+  workspace.removed(index);
+  if(snapshot.session.activePane===index)snapshot.session.activePane=workspace.active;
   updatePaneHeader(index);
   updatePaneProgress(index);
   updateActiveUi();
   persistSession();
 }
 
-function setPaneCount(count: number): void {
-  const nextCount = Math.min(MAX_PANES, Math.max(1, count));
-  const previousCount = snapshot.session.paneCount;
-  snapshot.session.paneCount = nextCount;
-  snapshot.session.activePane = Math.min(snapshot.session.activePane, nextCount - 1);
-  updateLayoutUi();
-
-  if (nextCount < previousCount) {
-    for (let index = nextCount; index < previousCount; index += 1) destroyRuntime(index, true);
-  } else {
-    for (let index = previousCount; index < nextCount; index += 1) {
-      const bookId = snapshot.session.paneBookIds[index];
-      if (bookId) void openBook(bookId, index);
-    }
-  }
-  persistSession();
-}
-
-function openBookInNewPane(bookId: string): void {
+async function openBookInNewPane(bookId: string,requestedChapter?:string): Promise<void> {
   const alreadyOpen = snapshot.session.paneBookIds.findIndex((id) => id === bookId);
-  if (alreadyOpen >= 0 && alreadyOpen < snapshot.session.paneCount) {
+  if (alreadyOpen >= 0) {
     setActivePane(alreadyOpen);
+    if(requestedChapter)await openBook(bookId,alreadyOpen,requestedChapter);
     return;
   }
-  let target = snapshot.session.paneBookIds
-    .slice(0, snapshot.session.paneCount)
-    .findIndex((id) => !id);
-  if (target < 0 && snapshot.session.paneCount < MAX_PANES) {
-    target = snapshot.session.paneCount;
-    setPaneCount(snapshot.session.paneCount + 1);
-  }
+  const target = snapshot.session.paneBookIds.findIndex((id) => !id);
   if (target < 0) {
-    target = snapshot.session.activePane;
-    showToast("四个窗格已满，已替换当前选中的窗格");
+    showToast(`已经打开 ${MAX_PANES} 本书。请先关闭一个阅读区域，书和位置会保留。`);return;
   }
-  void openBook(bookId, target);
+  await openBook(bookId, target,requestedChapter);
 }
 
 function renderLibraryAudit(): void {
@@ -3386,7 +3470,7 @@ function renderLibrary(query = ""): void {
       const isOpen = snapshot.session.paneBookIds.includes(book.id);
       return `
         <article class="library-book ${isOpen ? "open" : ""}" role="listitem" data-book-id="${escapeHtml(book.id)}">
-          <button class="book-main" type="button" title="在当前窗格打开">
+          <button class="book-main" type="button" title="${isOpen?'回到这本书':'打开并加入阅读空间'}">
             <span class="mini-cover" style="--cover-hue:${hue}">${escapeHtml(book.title.slice(0, 1))}</span>
             <span class="book-copy">
               <strong>${escapeHtml(book.title)}</strong>
@@ -3395,7 +3479,7 @@ function renderLibrary(query = ""): void {
               <small>${escapeHtml(metric.text)}</small>
             </span>
           </button>
-          <button class="book-new-pane" type="button" title="在新窗格打开" aria-label="在新窗格打开">${
+          <button class="book-new-pane" type="button" title="${isOpen?'回到这本书':'放在旁边对照'}" aria-label="${isOpen?'回到这本书':'放在旁边对照'}">${
             isOpen ? icons.check : icons.plus
           }</button>
         </article>`;
@@ -3475,12 +3559,7 @@ function cycleTheme(): void {
 }
 
 function changeFont(delta: number): void {
-  snapshot.session.fontScale = Math.min(
-    180,
-    Math.max(70, snapshot.session.fontScale + delta),
-  );
-  applyFontScale();
-  persistSession();
+  changeReadingPreference('fontScale',Math.min(180,Math.max(70,readingPreferences(snapshot.session.activePane).fontScale+delta)));
 }
 
 async function toggleFullscreen(): Promise<void> {
@@ -3491,6 +3570,9 @@ async function toggleFullscreen(): Promise<void> {
 }
 
 function wireEvents(): void {
+  app.querySelector('.tools-toggle')?.addEventListener('click',()=>setToolsVisible(!toolsVisible));
+  app.querySelector('.tools-close')?.addEventListener('click',()=>setToolsVisible(false));
+  app.querySelector('.workspace-library')?.addEventListener('click',()=>drawer.classList.contains('visible')?closeDrawer():openDrawer());
   window.addEventListener('reader-learning-ready',event=>{const id=(event as CustomEvent).detail.bookId;for(const [index,runtime] of runtimes.entries()){if(runtime.bookId!==id||!runtime.rendition)continue;for(const contents of visibleContents(runtime.rendition))wireLearningDocument(id,index,contents,runtime.book?.spine.get(contents.sectionIndex)?.href??'');}});
   const scrollPanel=(panel:HTMLElement,list:()=>HTMLElement|null)=>panel.addEventListener('wheel',event=>{
     if(!panel.classList.contains('visible'))return;
@@ -3606,10 +3688,6 @@ function wireEvents(): void {
   app.querySelector(".add-folder")?.addEventListener("click", () => void importFolder());
   app.querySelector(".refresh-library")?.addEventListener("click", () => void refreshLibrary());
 
-  app.querySelectorAll<HTMLButtonElement>("[data-pane-count]").forEach((button) => {
-    button.addEventListener("click", () => setPaneCount(Number(button.dataset.paneCount)));
-  });
-
   searchInput.addEventListener("input", () => renderLibrary(searchInput.value));
   libraryList.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
@@ -3620,7 +3698,7 @@ function wireEvents(): void {
       openBookInNewPane(bookId);
       closeDrawer();
     } else if (target.closest(".book-main")) {
-      void openBook(bookId);
+      openBookInNewPane(bookId);
       closeDrawer();
     }
   });
@@ -3628,6 +3706,7 @@ function wireEvents(): void {
   readerGrid.addEventListener("pointerdown", (event) => {
     const pane = (event.target as HTMLElement).closest<HTMLElement>(".reader-pane");
     if (pane) setActivePane(Number(pane.dataset.paneIndex));
+    if((event.target as Element).closest('.pane-drag-handle,.workspace-divider'))setToolsVisible(false);
   });
   readerGrid.addEventListener("pointerdown", handleAnnotationPointerDown);
   readerGrid.addEventListener("input", (event) => {
@@ -3649,6 +3728,8 @@ function wireEvents(): void {
       void navigate(index, "next");
     } else if (target.closest(".pane-close")) {
       closeBook(index);
+    } else if (target.closest('.pane-focus')) {
+      workspace.focus(index);
     } else if (target.closest(".page-jump-button")) {
       openJumpDialog(index);
     } else if (target.closest(".chapter-boundary-prev,.chapter-boundary-next")) {
@@ -3683,13 +3764,19 @@ function wireEvents(): void {
     if(figureDialog?.open){if(event.key==='Escape'){event.preventDefault();closeFigureViewer();}return;}
     if(document.querySelector('dialog[open]'))return;
     if (event.key === "Escape") {
+      event.preventDefault();
       if (figureDialog?.open) closeFigureViewer();
       else if (navigationPanel.classList.contains("visible")) closeBookNavigation();
       else if (settingsPanel.classList.contains("visible")) setReadingSettings(false);
       else if (annotationPanel.classList.contains("visible")) setAnnotationPanelVisible(false);
-      else closeDrawer();
+      else if(drawer.classList.contains('visible'))closeDrawer();
+      else if(app.querySelector('.workspace-panel')?.classList.contains('visible'))workspace.showPanel(false);
+      else if(toolsVisible)setToolsVisible(false);
+      else workspace.unfocus();
       return;
     }
+    if(event.key==='F8'){event.preventDefault();setToolsVisible(!toolsVisible);return;}
+    if(event.ctrlKey&&event.shiftKey&&event.key.toLowerCase()==='f'){event.preventDefault();workspace.focus(snapshot.session.activePane);return;}
     if (event.altKey && event.key === "ArrowLeft") { event.preventDefault(); returnToPreviousPosition(); return; }
     if (event.ctrlKey && event.key.toLowerCase() === "f") { event.preventDefault(); openBookNavigation("search"); return; }
     if (event.ctrlKey && event.key.toLowerCase() === "t") { event.preventDefault(); openBookNavigation("contents"); return; }
@@ -3725,9 +3812,9 @@ function wireEvents(): void {
       openJumpDialog();
       return;
     }
-    if (event.ctrlKey && /^[1-4]$/.test(event.key)) {
+    if (event.ctrlKey && /^[1-9]$/.test(event.key)) {
       event.preventDefault();
-      setActivePane(Number(event.key) - 1);
+      const pane=workspace.ids[Number(event.key)-1];if(pane!==undefined)setActivePane(pane);
       return;
     }
     if (event.key === "ArrowLeft") {
@@ -3766,8 +3853,8 @@ function wireEvents(): void {
   });
 }
 
-function readingFontFamily(): string {
-  return snapshot.session.readerFont === "sans"
+function readingFontFamily(index=snapshot.session.activePane): string {
+  return readingPreferences(index).readerFont === "sans"
     ? '"Segoe UI", "Noto Sans SC", "Microsoft YaHei", sans-serif'
     : 'Georgia, "Noto Serif SC", "Source Han Serif SC", SimSun, serif';
 }
@@ -3842,12 +3929,12 @@ function fitFlowCodePreview(element: HTMLElement, fitKey: string, usableWidth: n
     if (element.title === "点按在宽屏详情中阅读、选择并复制完整代码") element.removeAttribute("title");
   }
 }
-function readingThemeCss():string {
-  return Object.entries(themeRules(snapshot.session.theme)).map(([selector,properties])=>`${selector}{${Object.entries(properties).map(([key,value])=>`${key}:${value}`).join(";")}}`).join("\n");
+function readingThemeCss(index=snapshot.session.activePane):string {
+  return Object.entries(themeRules(snapshot.session.theme,index)).map(([selector,properties])=>`${selector}{${Object.entries(properties).map(([key,value])=>`${key}:${value}`).join(";")}}`).join("\n");
 }
 function scrollReadingCss(index:number):string{
   if(runtimes[index]?.readingMode!=='scroll')return '';
-  const width=Math.max(28,Math.min(64,snapshot.session.contentWidth??44));
+  const width=Math.max(28,Math.min(64,readingPreferences(index).contentWidth));
   const contentWidth=Math.max(8,width-2.8).toFixed(1);
   const imageHeight=Math.max(180,Math.round((runtimes[index].viewportHeight||window.innerHeight)*.72));
   return `\nhtml{overflow:visible!important}body{max-width:${width}em!important;margin:0 auto!important;padding:1.8em 1.4em 3em!important;column-rule:none!important;overflow-wrap:break-word}pre{max-width:100%!important;overflow-x:auto;white-space:pre-wrap}table{display:block!important;max-width:100%!important;overflow-x:auto!important;table-layout:auto!important;scrollbar-width:thin}th.reader-short-table-header{white-space:nowrap!important}figure{max-width:100%!important}img,svg,video{max-width:min(calc(100vw - 2.8em),${contentWidth}em)!important;min-width:0!important;height:auto!important}figure img,figure.reader-flow-figure img{max-width:min(calc(100vw - 2.8em),${contentWidth}em)!important;max-height:${imageHeight}px!important;width:auto!important;object-fit:contain!important}.math-block,.math-display,.MathJax_Display,.katex-display{max-width:100%!important;overflow-x:auto!important;overflow-y:auto!important;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:.25em!important}h1{font-size:1.7em!important}h2{font-size:1.3em!important}`;
@@ -3865,7 +3952,7 @@ function prepareSectionForLayout(index:number, output:string, section:{output:st
   const head=doc.querySelector("head");if(!head)return;
   let sheet=doc.getElementById("comfortable-reader-theme");
   if(!sheet){sheet=doc.createElementNS("http://www.w3.org/1999/xhtml","style");sheet.id="comfortable-reader-theme";head.append(sheet);}
-  sheet.textContent=readingThemeCss()+scrollReadingCss(index)+`\nbody{--reader-logical-height:${runtimes[index].layoutHeight}px;font-size:${18*runtimes[index].effectiveFontScale/100}px}h1{font-size:clamp(1.25em,calc(var(--reader-logical-height)*.085),1.7em)!important;text-wrap:balance!important}`;
+  sheet.textContent=readingThemeCss(index)+scrollReadingCss(index)+`\nbody{--reader-logical-height:${runtimes[index].layoutHeight}px;font-size:${18*runtimes[index].effectiveFontScale/100}px}h1{font-size:clamp(1.25em,calc(var(--reader-logical-height)*.085),1.7em)!important;text-wrap:balance!important}`;
   section.output=new XMLSerializer().serializeToString(doc);
 }
 function applyReadingTheme(contents: EpubContents): void {
@@ -3875,7 +3962,7 @@ function applyReadingTheme(contents: EpubContents): void {
   const frame=contents.window.frameElement as Element|null;
   const index=Number(frame?.closest<HTMLElement>('.reader-pane')?.dataset.paneIndex??-1);
   protectHeadingWords(contents.document);
-  const css=readingThemeCss()+(index>=0?scrollReadingCss(index):'');
+  const css=readingThemeCss(index>=0?index:snapshot.session.activePane)+(index>=0?scrollReadingCss(index):'');
   let sheet=contents.document.getElementById("comfortable-reader-theme");
   if(!sheet) {sheet=contents.document.createElement("style");sheet.id="comfortable-reader-theme";contents.document.head.append(sheet);}
   sheet.textContent=css;
@@ -3961,7 +4048,7 @@ function closeBookNavigation(): void {
   app.querySelector(".contents-toggle")?.setAttribute("aria-expanded", "false");
   app.querySelector(".book-search-toggle")?.setAttribute("aria-expanded", "false");
   if (wasVisible && hadFocus) {
-    const fallback = app.querySelector<HTMLElement>(navigationTab === "search" ? ".book-search-toggle" : ".contents-toggle");
+    const fallback = app.querySelector<HTMLElement>(toolsVisible?(navigationTab === "search" ? ".book-search-toggle" : ".contents-toggle"):'.tools-toggle');
     const trigger = navigationReturnFocus?.isConnected && !navigationReturnFocus.closest("[inert]") ? navigationReturnFocus : fallback;
     trigger?.focus({ preventScroll: true });
   }
@@ -3974,15 +4061,12 @@ function setReadingSettings(visible: boolean): void {
     const starter = document.activeElement;
     settingsReturnFocus = starter instanceof HTMLElement && starter !== document.body ? starter : app.querySelector<HTMLElement>(".reading-settings-toggle");
   }
-  if (visible) { closeDrawer(); closeBookNavigation(); }
+  if (visible) { closeDrawer(); closeBookNavigation(); setAnnotationPanelVisible(false);workspace?.showPanel(false,false); }
   settingsPanel.classList.toggle("visible", visible);
   settingsPanel.inert = !visible;
   settingsPanel.setAttribute("aria-hidden", String(!visible));
   app.querySelector(".reading-settings-toggle")?.setAttribute("aria-expanded", String(visible));
-  requireElement<HTMLSelectElement>(settingsPanel, ".reader-font").value = snapshot.session.readerFont;
-  requireElement<HTMLSelectElement>(settingsPanel,'.reading-mode').value=runtimes[snapshot.session.activePane].readingMode;
-  requireElement<HTMLInputElement>(settingsPanel,'.reader-line-height').value=String(snapshot.session.lineHeight??1.72);
-  requireElement<HTMLSelectElement>(settingsPanel,'.reader-content-width').value=String(snapshot.session.contentWidth??44);
+  syncReadingSettings();
   if (visible && !wasVisible) requireElement<HTMLSelectElement>(settingsPanel, ".reading-mode").focus();
   if (!visible && wasVisible) {
     if (hadFocus) {
@@ -3999,7 +4083,7 @@ function openBookNavigation(tab: "contents" | "search"): void {
     navigationReturnFocus = starter instanceof HTMLElement && starter !== document.body
       ? starter : app.querySelector<HTMLElement>(tab === "search" ? ".book-search-toggle" : ".contents-toggle");
   }
-  closeDrawer(); setReadingSettings(false);
+  closeDrawer(); setReadingSettings(false);setAnnotationPanelVisible(false);workspace?.showPanel(false,false);
   navigationTab = tab;
   navigationPanel.inert = false;
   navigationPanel.classList.add("visible");
@@ -4174,7 +4258,7 @@ function setReadingMode(index:number,mode:'paged'|'scroll'):Promise<void>{
       runtime.readingMode=mode;runtime.layoutAnchorCfi=anchor;runtime.preserveSemanticFocus=Boolean(anchor);
       const stage=paneElement(index).querySelector<HTMLElement>('.pane-stage')!;
       const available=availableStageSize(stage);runtime.layoutWidth=available.width;runtime.layoutHeight=available.height;
-      runtime.actualPageCount=mode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(available.width);
+      runtime.actualPageCount=mode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(available.width,index);
       positionRenditionCanvas(index);applyAdaptiveFontScale(index,paneElement(index).querySelector('.epub-host')!);
       patchMultiPageLayout(rendition,runtime);rendition.flow(mode==='scroll'?'scrolled-continuous':'paginated');
       rendition.resize(runtime.layoutWidth,runtime.layoutHeight);
@@ -4183,7 +4267,7 @@ function setReadingMode(index:number,mode:'paged'|'scroll'):Promise<void>{
       if(anchor){await rendition.display(anchor);await ensureAnchorVisible(index,anchor);}
       if(runtime.generation!==generation)return;
       ensureBookProgress(runtime.bookId,index).readingMode=mode;
-    }catch(e){if(runtime.generation!==generation)return;runtime.readingMode=oldMode;runtime.layoutAnchorCfi=oldFocus;runtime.preserveSemanticFocus=oldPreserve;runtime.actualPageCount=oldMode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(runtime.layoutWidth);patchMultiPageLayout(rendition,runtime);rendition.flow(oldMode==='scroll'?'scrolled-continuous':'paginated');if(anchor)await rendition.display(anchor).catch(()=>{});showToast('阅读方式暂未切换，原位置仍已保留：'+String(e),'error');}
+    }catch(e){if(runtime.generation!==generation)return;runtime.readingMode=oldMode;runtime.layoutAnchorCfi=oldFocus;runtime.preserveSemanticFocus=oldPreserve;runtime.actualPageCount=oldMode==='scroll'?1:runtime.pageMode||automaticPageCountForWidth(runtime.layoutWidth,index);patchMultiPageLayout(rendition,runtime);rendition.flow(oldMode==='scroll'?'scrolled-continuous':'paginated');if(anchor)await rendition.display(anchor).catch(()=>{});showToast('阅读方式暂未切换，原位置仍已保留：'+String(e),'error');}
     finally{if(runtime.generation===generation)runtime.restoringLocation=false;}
     if(runtime.generation!==generation)return;
     await settleBookLocation(index,rendition);updatePaneHeader(index);updatePaneProgress(index);updateChapterBoundary(index);savePaneProgress(index,0);scheduleDynamicPageMap(index,0);
@@ -4409,16 +4493,18 @@ function wireBookDocument(index: number, contents: EpubContents): void {
   doc.addEventListener("pointerdown",()=>{
     if(snapshot.session.activePane!==index)setActivePane(index);
     closeDrawer(); closeBookNavigation(); setReadingSettings(false);
+    workspace.showPanel(false,false);setToolsVisible(false);
   });
   doc.addEventListener("keydown",event=>{
     const target = event.target as HTMLElement;
     if (target?.closest("input, textarea, select, [contenteditable='true']")) return;
+    if(event.shiftKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
     const table=target.closest<HTMLTableElement>('table');
     if(table&&runtimes[index].readingMode==='scroll'&&table.scrollWidth>table.clientWidth+2&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();table.scrollLeft+=event.key==='ArrowLeft'?-100:100;return;}
     if(target.tagName==='IMG'&&!target.closest('a')&&(event.key==='Enter'||event.key===' ')){event.preventDefault();showFigureViewer(target as HTMLImageElement);return;}
     const expandable=target.closest("[data-reader-detail]");
     if(expandable&&(event.key==="Enter"||event.key===" ")) {event.preventDefault();showTextDetail(expandable,index);return;}
-    const relevant = ["ArrowLeft","ArrowRight","PageUp","PageDown"," ","Escape","F11","g"].includes(event.key) || event.ctrlKey && ["f","l","n","t"].includes(event.key.toLowerCase());
+    const relevant = ["ArrowLeft","ArrowRight","PageUp","PageDown"," ","Escape","F8","F11","g"].includes(event.key) || event.ctrlKey && (["f","l","n","t"].includes(event.key.toLowerCase())||/^[1-9]$/.test(event.key));
     if (!relevant) return;
     if(snapshot.session.activePane!==index)setActivePane(index);
     const forwarded = new KeyboardEvent("keydown",{key:event.key,code:event.code,ctrlKey:event.ctrlKey,shiftKey:event.shiftKey,altKey:event.altKey,cancelable:true});
@@ -4446,8 +4532,9 @@ function wireBookDocument(index: number, contents: EpubContents): void {
 }
 function wireReadingNavigation(): void {
   app.querySelector('.reading-mode')?.addEventListener('change',event=>{void setReadingMode(snapshot.session.activePane,(event.target as HTMLSelectElement).value==='scroll'?'scroll':'paged');});
-  app.querySelector('.reader-line-height')?.addEventListener('change',event=>{snapshot.session.lineHeight=Number((event.target as HTMLInputElement).value);applyTheme();applyFontScale();persistSession();});
-  app.querySelector('.reader-content-width')?.addEventListener('change',event=>{snapshot.session.contentWidth=Number((event.target as HTMLSelectElement).value);applyTheme();applyFontScale();persistSession();});
+  app.querySelector('.reader-line-height')?.addEventListener('change',event=>changeReadingPreference('lineHeight',Number((event.target as HTMLInputElement).value)));
+  app.querySelector('.reader-content-width')?.addEventListener('change',event=>changeReadingPreference('contentWidth',Number((event.target as HTMLSelectElement).value)));
+  app.querySelector('.settings-page-mode')?.addEventListener('change',event=>setBookPageMode(snapshot.session.activePane,Number((event.target as HTMLSelectElement).value)));
   app.querySelector(".reading-back")?.addEventListener("click",returnToPreviousPosition);
   app.querySelector(".contents-toggle")?.addEventListener("click",()=>navigationPanel.classList.contains("visible")&&navigationTab==="contents"?closeBookNavigation():openBookNavigation("contents"));
   app.querySelector(".book-search-toggle")?.addEventListener("click",()=>openBookNavigation("search"));
@@ -4465,12 +4552,11 @@ function wireReadingNavigation(): void {
     if(hit!==undefined&&searchHits[Number(hit)])void jumpToBookTarget(searchHits[Number(hit)].cfi,true);
   });
   app.querySelector(".reader-font")?.addEventListener("change",event=>{
-    snapshot.session.readerFont=(event.target as HTMLSelectElement).value as ReaderSession["readerFont"];
-    applyTheme();applyFontScale();persistSession();
+    changeReadingPreference('readerFont',(event.target as HTMLSelectElement).value as ReaderSession['readerFont']);
   });
   document.addEventListener("pointerdown",event=>{
     const target=event.target as HTMLElement;
-    if(!target.closest(".library-drawer,.library-toggle,.left-library-handle"))closeDrawer();
+    if(!target.closest(".library-drawer,.library-toggle,.left-library-handle,.workspace-library"))closeDrawer();
     if(!target.closest(".book-navigation,.contents-toggle,.book-search-toggle"))closeBookNavigation();
     if(!target.closest(".reading-settings,.reading-settings-toggle"))setReadingSettings(false);
   });
@@ -4597,15 +4683,22 @@ async function preparePersonalImport(value: any, restorePosition: boolean): Prom
 
 async function start(): Promise<void> {
   buildPaneShells();
+  workspace=new ReadingWorkspace(readerGrid,app,{
+    changed:state=>{snapshot.session.workspace=state;persistSession();},
+    activate:setActivePane,
+    visible:panes=>{queueMicrotask(()=>{if(!readerReady)return;for(const index of panes){const id=snapshot.session.paneBookIds[index];if(id&&!runtimes[index].opening&&!runtimes[index].bookId)void openBook(id,index,undefined,false);}});},
+    title:index=>getBook(snapshot.session.paneBookIds[index])?.title??'阅读区域',
+    close:index=>{void closeBook(index);},toast:showToast,
+  });
   wireEvents();
   await initCatalogue({
     known:uuid=>{const record=snapshot.books.find(book=>book.bookUuid===uuid);return record?{record,sourceHash:snapshot.progress[record.id]?.sourceSha256}:null;},
-    openExisting:async(id,chapter)=>{closeDrawer();await openBook(id,snapshot.session.activePane,chapter);},
+    openExisting:async(id,chapter)=>{closeDrawer();await openBookInNewPane(id,chapter);},
     current:()=>{const r=runtimes[snapshot.session.activePane];if(!r.bookId)return null;return{id:r.bookId,title:getBook(r.bookId)?.title,href:r.book?.spine.get(r.cfi??0)?.href??''};},
     open:async(record,chapter,replaceExisting)=>{
       const saved=await invoke<CatalogRecord>('register_catalog_book',{record,replaceExisting:replaceExisting??false});
       const old=snapshot.books.findIndex(b=>b.id===saved.id);if(old<0)snapshot.books.push(saved);else snapshot.books[old]=saved;
-      renderLibrary();closeDrawer();await openBook(saved.id,snapshot.session.activePane,chapter);
+      renderLibrary();closeDrawer();await openBookInNewPane(saved.id,chapter);
       if(!isDesktop){const url=new URL(location.href);url.searchParams.set('book',record.catalogSource.slug);if(chapter)url.searchParams.set('chapter',chapter);else url.searchParams.delete('chapter');history.replaceState(null,'',url);}
     },
     toast:message=>showToast(message),
@@ -4746,13 +4839,14 @@ async function start(): Promise<void> {
     snapshot.session.paneBookIds = snapshot.session.paneBookIds.map((bookId) =>
       getBook(bookId) ? bookId : null,
     );
-    if (!snapshot.session.paneBookIds[0] && snapshot.books[0]) {
+    if (!snapshot.session.paneBookIds.some(Boolean) && !snapshot.session.workspace && snapshot.books[0]) {
       snapshot.session.paneBookIds[0] = snapshot.books[0].id;
     }
     snapshot.session.activePane = Math.min(
       snapshot.session.activePane,
       snapshot.session.paneCount - 1,
     );
+    if(!snapshot.session.paneBookIds[snapshot.session.activePane])snapshot.session.activePane=Math.max(0,snapshot.session.paneBookIds.findIndex(Boolean));
     if(!isDesktop){
       try { await openWebLink(); }
       catch(error) { showToast(`这条书籍链接暂时打不开：${readableError(error)}。可在“发现书籍”中重试。`,"error"); }
@@ -4763,9 +4857,8 @@ async function start(): Promise<void> {
     applyFontScale();
     persistSession();
 
-    const visibleBooks = snapshot.session.paneBookIds.slice(0, snapshot.session.paneCount);
     await Promise.allSettled(
-      visibleBooks.map((bookId, index) => (bookId ? openBook(bookId, index,undefined,false) : Promise.resolve())),
+      workspace.visiblePanes.map(index=>{const bookId=snapshot.session.paneBookIds[index];return bookId?openBook(bookId,index,undefined,false):Promise.resolve();}),
     );
     readerReady=true;
     if(!isDesktop&&'serviceWorker' in navigator)void navigator.serviceWorker.register(new URL('sw.js',location.href)).catch(()=>showToast('离线页面尚未准备，已保存的材料仍在。'));

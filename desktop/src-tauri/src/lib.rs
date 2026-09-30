@@ -44,6 +44,7 @@ pub struct BookRecord {
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 #[serde(default, rename_all = "camelCase")]
 pub struct BookProgress {
+    reading_preferences: Option<serde_json::Value>,
     book_uuid: Option<String>,
     content_digest: Option<String>,
     reading_mode: Option<String>,
@@ -67,6 +68,8 @@ pub struct BookProgress {
 #[serde(rename_all = "camelCase")]
 pub struct ReaderSession {
     #[serde(default)]
+    workspace: Option<serde_json::Value>,
+    #[serde(default)]
     line_height: Option<f64>,
     #[serde(default)]
     content_width: Option<u16>,
@@ -86,12 +89,13 @@ fn default_reader_font() -> String {
 impl Default for ReaderSession {
     fn default() -> Self {
         Self {
+            workspace: None,
             line_height: None,
             content_width: None,
             pane_count: 1,
             pane_book_ids: vec![None, None, None, None],
             active_pane: 0,
-            theme: "paper".to_string(),
+            theme: "night".to_string(),
             font_scale: 100,
             reader_font: default_reader_font(),
         }
@@ -168,7 +172,7 @@ fn storage_dir(app: &AppHandle) -> Result<PathBuf, String> {
         .app_data_dir()
         .map_err(|error| format!("无法确定应用数据目录：{error}"))?;
     fs::create_dir_all(&path).map_err(|error| format!("无法创建应用数据目录：{error}"))?;
-    Ok(path)
+    fs::canonicalize(&path).map_err(|error| format!("无法定位应用数据目录：{error}"))
 }
 
 fn state_path(app: &AppHandle) -> Result<PathBuf, String> {
@@ -774,7 +778,7 @@ fn activate_progress_edition(app:AppHandle,book_id:String,source_sha256:String,c
     for key in content_digest.iter().chain(std::iter::once(&source_sha256)){
         if let Ok(bytes)=fs::read(root.join(format!("{key}.json"))){if bytes.len()<=16*1024*1024{if let Ok(progress)=serde_json::from_slice::<BookProgress>(&bytes){if progress.content_digest==content_digest&&content_digest.is_some()||progress.source_sha256.as_deref()==Some(source_sha256.as_str()){selected=Some(progress);break;}}}}
     }
-    let mut progress=selected.unwrap_or_default();progress.page_mode=previous.page_mode;progress.reading_mode=previous.reading_mode;progress.source_sha256=Some(source_sha256);progress.content_digest=content_digest;progress.book_uuid=book.book_uuid;progress.updated_at=now_secs();
+    let mut progress=selected.unwrap_or_default();progress.reading_preferences=previous.reading_preferences;progress.page_mode=previous.page_mode;progress.reading_mode=previous.reading_mode;progress.source_sha256=Some(source_sha256);progress.content_digest=content_digest;progress.book_uuid=book.book_uuid;progress.updated_at=now_secs();
     save_edition(&app,&book_id,&progress)?;state.progress.insert(book_id,progress.clone());save_state(&app,&state)?;Ok(progress)
 }
 #[tauri::command]
@@ -811,14 +815,14 @@ fn save_location_index(app:AppHandle,source_sha256:String,locations:String)->Res
 fn save_session(app: AppHandle, mut session: ReaderSession) -> Result<(), String> {
     let lock = app.state::<ReaderWriteLock>();
     let _guard = lock.0.lock().map_err(|_| "书库写入锁不可用")?;
-    session.pane_count = session.pane_count.clamp(1, 4);
+    session.pane_count = session.pane_count.clamp(1, 12);
     session.active_pane = session.active_pane.min(session.pane_count as usize - 1);
     session.font_scale = session.font_scale.clamp(70, 180);
     if !["serif", "sans", "publisher"].contains(&session.reader_font.as_str()) {
         session.reader_font = default_reader_font();
     }
-    session.pane_book_ids.resize(4, None);
-    session.pane_book_ids.truncate(4);
+    session.pane_book_ids.resize(12, None);
+    session.pane_book_ids.truncate(12);
     let mut state = load_state(&app)?;
     state.session = session;
     save_state(&app, &state)

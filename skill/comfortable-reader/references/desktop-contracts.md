@@ -4,7 +4,7 @@ Read this file only when changing the reader application, its storage, paginatio
 
 ## State and annotation invariants
 
-- A stable book identifier owns its CFI/progression, page mode and annotations. Current global theme/font preferences and pane assignments belong to the session. Never key a note by a transient pane, iframe, computed screen page or window.
+- A stable book identifier owns its CFI/progression, page mode and annotations. Global theme and the workspace split tree belong to the session. Per-book readingPreferences own font/size/line-height/width; legacy session typography remains the fallback. Never key a note by a transient pane, iframe, computed screen page or window.
 - Older progress records with no annotation field load as an empty list. Saving pagination must preserve unknown compatible annotation fields and existing marks.
 - Original-text marks use an EPUB CFI range plus exact selected-text audit data. Runtime wrappers are ignored when resolving later CFIs. The embedded source EPUB bytes never change.
 - New free notes and strokes use the actual visible content CFI plus normalized within-column coordinates (anchorVersion 2); preserve legacy progression records. Finishing an index must not move existing new notes. Their layer shares the EPUB canvas's logical size, origin and transform.
@@ -46,6 +46,12 @@ Then use an isolated long structured fixture and capture evidence for:
 For each item record `installed_app`, `fixture_or_book_id`, `before`, `after`, `evidence_path`, and `status`. A browser screenshot or a mock IPC response must be marked as such and cannot be reported as installed-app verification.
 
 For visual and interaction regressions, inspect text buttons separately from fixed-size icon buttons, check computed foreground/background colors after each theme change, and make the last control reachable in short viewports by actual panel scrolling and keyboard navigation. Save real screenshots together with element bounds, scroll dimensions, focus/ARIA state, and the interaction that produced them. A source patch or isolated CSS experiment remains pending until the affected browser and installed-app paths are retested; use the review breadth requested for the current task rather than fixing a reviewer count into every future task.
+
+## Workspace continuity (0.6)
+
+Keep up to 12 distinct books in stable slots. The split tree records relationships and ratios; focus and insufficient-space presentation must never overwrite it. Opening another book may split a local region after manual adjustment; resizing the outer window must not change topology. Closing a pane is not removing a book from the library. Duplicate views of one book are not supported yet.
+
+Toolbars and panels overlay a fixed reading area. Opening or hiding them must not trigger reflow. Dragging starts only on the book handle or separator, preserving text selection and annotations. Check preview, cancel, keyboard movement, and sparse slots after close/reopen.
 
 ## Resize and density rules
 

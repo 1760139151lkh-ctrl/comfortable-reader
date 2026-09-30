@@ -1,6 +1,6 @@
-# 舒适阅读书库 · Comfortable Reader
+# 舒适阅读书库
 
-**选一章，顺着问题读下去。** 同一本书可以翻页、多栏或连续滚动；需要时打开随书学习，查看来源、代码、声音与三维材料，再回到原段落。
+**把书摊开，接着读下去。** 多本书可以在同一阅读空间对照，拖动书名手柄摆放、拖动细分隔线调比例，也可暂时专注一本再返回原布局。阅读工具点开才出现；目录、搜索、批注和随书学习围绕当前书使用。一本书内部仍可翻页、多栏或连续滚动。
 
 [下载 Windows 版](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/latest) · [读者指南](docs/READER.md) · [贡献一本书](CONTRIBUTING.md) · [让 Codex 加入](docs/CODEX.md)
 

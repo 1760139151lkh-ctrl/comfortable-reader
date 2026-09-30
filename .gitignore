@@ -15,6 +15,14 @@ desktop/public/open/
 private-audit/
 review/
 test-output/
+/我的书库/
+/个人数据/
+/应用/
+/迁移备份/
+/本地书源/
+/本机配置.json
+/work/
+/发行/
 
 # Large, hash-pinned reference checkpoints are Release assets.
 /books/ai-principles/materials/publication/work/results/transformer_bridge_best.pt

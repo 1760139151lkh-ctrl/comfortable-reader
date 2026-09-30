@@ -342,7 +342,7 @@ dependencies = [
 
 [[package]]
 name = "comfortable-reader-desktop"
-version = "0.5.2"
+version = "0.6.0"
 dependencies = [
  "hex",
  "roxmltree",

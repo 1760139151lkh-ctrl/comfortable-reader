@@ -116,11 +116,9 @@ fn state_root(app: &AppHandle) -> Result<PathBuf, String> {
 }
 fn learning_home(app: &AppHandle) -> Result<PathBuf, String> {
     if app.config().identifier == "com.comfortablereader.desktop" {
-        Ok(app
-            .path()
-            .home_dir()
-            .map_err(|e| e.to_string())?
-            .join(".comfortable-reader"))
+        let path = app.path().home_dir().map_err(|e| e.to_string())?.join(".comfortable-reader");
+        fs::create_dir_all(&path).map_err(|e| e.to_string())?;
+        fs::canonicalize(path).map_err(|e| e.to_string())
     } else {
         super::storage_dir(app)
     }

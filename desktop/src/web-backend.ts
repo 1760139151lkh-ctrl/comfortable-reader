@@ -7,7 +7,7 @@ import {publicStore} from './portable-books';
 const prefix='comfortable-reader-personal-v1:';
 function read(key:string,fallback:any):any{const value=localStorage.getItem(prefix+key);if(value===null)return structuredClone(fallback);try{return JSON.parse(value);}catch{throw new Error('本机保存的数据未能解析。原数据仍在，请先导出或检查，不会自动清空。');}}
 function save(key:string,value:any):void{const json=JSON.stringify(value);if(json.length>4*1024*1024)throw new Error('这份记录超过单次保存范围');try{localStorage.setItem(prefix+key,json);}catch{throw new Error('浏览器保存空间不足；请保留当前页面并导出记录。');}}
-const emptySession={paneCount:1,paneBookIds:[null,null,null,null],activePane:0,theme:'paper',fontScale:100,readerFont:'serif',contentWidth:44,lineHeight:null};
+const emptySession={paneCount:1,paneBookIds:[null,null,null,null],activePane:0,theme:'night',fontScale:100,readerFont:'serif',contentWidth:44,lineHeight:null};
 function saveEdition(bookId:string,progress:any):void{const key=progress?.contentDigest??progress?.sourceSha256;if(typeof key==='string'&&/^[a-f0-9]{64}$/.test(key))save(`edition:${bookId}:${key}`,progress);}
 const runWorkers=new Map<string,Worker>();
 const liveRuns=new Map<string,any>();
@@ -42,7 +42,7 @@ export async function webInvoke(command:string,args:any={}):Promise<any>{
     case 'register_catalog_book':{const books=read('books',[]);const old=books.findIndex((b:any)=>b.id===args.record.id);if(old<0)books.push(args.record);else books[old]=args.record;save('books',books);return args.record;}
     case 'save_session':save('session',args.session);return;
     case 'save_progress':{const progress=read('progress',{});saveEdition(bookId,progress[bookId]);saveEdition(bookId,args.progress);progress[bookId]=args.progress;save('progress',progress);return;}
-    case 'activate_progress_edition':{const all=read('progress',{}),previous=all[bookId];saveEdition(bookId,previous);const source=args.sourceSha256,key=args.contentDigest??source;let chosen=read(`edition:${bookId}:${key}`,null)??read(`edition:${bookId}:${source}`,null);chosen??={cfi:null,page:0,totalPages:0,percent:0,annotations:[]};chosen={...chosen,sourceSha256:source,contentDigest:args.contentDigest,bookUuid:portableBooks.get(bookId)?.book.id,pageMode:previous?.pageMode??0,readingMode:previous?.readingMode??'scroll',updatedAt:Math.floor(Date.now()/1000)};all[bookId]=chosen;saveEdition(bookId,chosen);save('progress',all);return chosen;}
+    case 'activate_progress_edition':{const all=read('progress',{}),previous=all[bookId];saveEdition(bookId,previous);const source=args.sourceSha256,key=args.contentDigest??source;let chosen=read(`edition:${bookId}:${key}`,null)??read(`edition:${bookId}:${source}`,null);chosen??={cfi:null,page:0,totalPages:0,percent:0,annotations:[]};chosen={...chosen,sourceSha256:source,contentDigest:args.contentDigest,bookUuid:portableBooks.get(bookId)?.book.id,readingPreferences:previous?.readingPreferences??null,pageMode:previous?.pageMode??0,readingMode:previous?.readingMode??'scroll',updatedAt:Math.floor(Date.now()/1000)};all[bookId]=chosen;saveEdition(bookId,chosen);save('progress',all);return chosen;}
     case 'progress_editions':{const key=prefix+`edition:${bookId}:`;return Object.keys(localStorage).filter(name=>name.startsWith(key)).map(name=>({key:name.slice(key.length),progress:JSON.parse(localStorage.getItem(name)!)})).sort((a,b)=>b.progress.updatedAt-a.progress.updatedAt);}
     case 'learning_pack':return portableLearningPack(bookId);
     case 'learning_asset':return await portableAsset(bookId,args.assetId);
