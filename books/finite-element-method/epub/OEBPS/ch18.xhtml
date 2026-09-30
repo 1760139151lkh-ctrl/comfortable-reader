@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十八章　验证与边界：不要把“看起来像”当成“数学等价”</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十八章-验证与边界不要把看起来像当成数学等价">第十八章　验证与边界：不要把“看起来像”当成“数学等价”</h1>
+<p>不同方法的更新公式可能长得几乎一样，但验证方式不能照搬。</p>
+<h2 id="181-有限差分要检查尺度和收敛">18.1 有限差分要检查尺度和收敛</h2>
+<p>有限差分中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 和 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>t</mi></mrow></math></span> 不是排版符号，而是模型离散尺度。至少要问：</p>
+<ul>
+<li>网格变细时，结果是否趋于稳定；</li>
+<li>时间步长是否满足稳定性条件；</li>
+<li>边界差分是否与边界条件一致；</li>
+<li>误差阶是否与理论预期相符。</li>
+</ul>
+<p>例如分别使用 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>/</mo><mn>2</mn></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>/</mo><mn>4</mn></mrow></math></span> 计算某个温度，得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>10.51</mn><mo>,</mo><mspace width="0.278em"/><mn>10.28</mn><mo>,</mo><mspace width="0.278em"/><mn>10.24</mn><mo>,</mo></mrow></math></div>
+<p>通常比一次得到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>10.24</mn></mrow></math></span> 更有说服力。</p>
+<h2 id="182-有限元要把模型离散和程序分层">18.2 有限元要把模型、离散和程序分层</h2>
+<p>有限元的检查至少分三层：</p>
+<ol>
+<li>方程是否正确描述现实；</li>
+<li>弱形式、边界条件和离散空间是否正确；</li>
+<li>程序是否正确组装、求解和后处理。</li>
+</ol>
+<p>网格收敛、能量残差、边界反力平衡、对称性和已知解析解都是有价值的测试。一个非常细的网格不能修复错误的材料参数，也不能把错误的边界条件变正确。</p>
+<h2 id="183-元胞自动机的收敛不是默认问题">18.3 元胞自动机的“收敛”不是默认问题</h2>
+<p>元胞自动机通常不要求 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>→</mo><mn>0</mn></mrow></math></span> 时逼近一个连续解，因此不能只用有限元式的网格收敛来评价它。更合适的问题可能是：</p>
+<ul>
+<li>初值稍微改变，长期模式是否稳定；</li>
+<li>规则是否保持某个不变量；</li>
+<li>有限尺寸扩大后，统计量是否趋于稳定；</li>
+<li>模式、速度、密度和相变阈值是否与观测一致；</li>
+<li>同步更新和异步更新是否改变结论。</li>
+</ul>
+<p>如果一个元胞模型声称能够近似某个偏微分方程，则还要额外说明缩放关系、平均方式和连续极限，而不能因为单步公式像差分格式就直接宣布等价。</p>
+<h2 id="184-一张最后的辨别清单">18.4 一张最后的辨别清单</h2>
+<p>遇到一个“每个格点根据邻居更新”的公式时，可以按下面顺序判断：</p>
+<ol>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>X</mi></mrow></math></span> 的状态空间是什么？是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi mathvariant="double-struck">R</mi><mi>N</mi></msup></mrow></math></span>、函数空间、有限集合，还是图上的构型？</li>
+<li>规则是从微分方程推导出来的，还是规则本身就是模型？</li>
+<li>所谓的“空间离散”是网格点、有限元自由度，还是抽象网络节点？</li>
+<li>局部相互作用是模型假设、差分模板，还是基函数支撑造成的？</li>
+<li>结果要通过收敛理论、守恒检验、模式统计，还是实验数据验证？</li>
+</ol>
+<p>只要这五个问题回答清楚，有限差分、有限元和元胞自动机即使共享相似外形，也不会再被混为一谈。</p>
+</body></html>

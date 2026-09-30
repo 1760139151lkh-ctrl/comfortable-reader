@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>1. 综合评价到底在做什么？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="1-综合评价到底在做什么">1. 综合评价到底在做什么？</h2>
+<p>设有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>m</mi></mrow></math></span> 个待评价对象、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 个评价指标。原始数据写成矩阵：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mo stretchy="false">)</mo><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow></msub><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 表示对象 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 在指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi></mrow></math></span> 上的观测值。</p>
+<p>例如，我们要评价五个地区的公共服务水平，指标可能包括医疗覆盖率、教育资源、交通可达性和财政成本。最后可能希望得到：</p>
+<ul>
+<li>一个综合得分；</li>
+<li>一个从优到劣的排序；</li>
+<li>“优、良、中、差”这样的等级；</li>
+<li>每个对象与理想状态的接近程度；</li>
+<li>或者在给定投入下的相对效率。</li>
+</ul>
+<p>这些输出看起来相似，数学问题却不完全相同。</p>
+<h3 id="11-同一张方法表里其实混着四个层次">1.1 同一张方法表里，其实混着四个层次</h3>
+<p>第一层是<strong>指标处理</strong>。它解决量纲、方向和数据质量问题。例如成本越小越好，而满意度越大越好，二者不能直接相加。</p>
+<p>第二层是<strong>权重确定</strong>。它回答每个指标在合成时占多大比重。AHP 表达决策者偏好；熵权法表达样本中的区分度。二者的“权重”虽然符号都写作 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>w</mi><mi>j</mi></msub></mrow></math></span>，含义并不相同。</p>
+<p>第三层是<strong>信息提取或降维</strong>。PCA、因子分析和投影寻踪会把多个相关指标压缩成少数综合方向，但它们寻找方向的准则不同。</p>
+<p>第四层是<strong>合成、排序或分级</strong>。TOPSIS、灰色关联、模糊综合评价和秩和比属于这一层。它们需要权重时，可以接收前一层的结果。</p>
+<p>DEA 更特殊：它不是一般意义上的“多指标打分”，而是考察多个投入如何转化为多个产出，回答的是相对效率问题。</p>
+<p>因此，问“TOPSIS 和熵权法谁更好”就像问“秤和砝码谁更好”。熵权法常用来产生权重，TOPSIS 用这些权重计算对象与理想解的距离；二者可以组合，并非只能二选一。</p>
+<h3 id="12-综合分数通常是相对量不是绝对真理">1.2 综合分数通常是相对量，不是绝对真理</h3>
+<p>如果加入一个新对象，样本的最大值、最小值、熵权和理想点都可能变化，旧对象的分数甚至排序也可能跟着变。这不是一定说明算法错了，而是说明许多综合评价方法定义的是：</p>
+<blockquote>
+<p>在当前指标、当前样本、当前预处理和当前偏好下，对象之间的相对位置。</p>
+</blockquote>
+<p>一份严谨报告不能只写“对象 D 得分最高”，还应说明：评价目标、样本范围、指标方向、标准化公式、权重来源和敏感性结果。</p>
+<hr/>
+</body></html>

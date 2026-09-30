@@ -1,0 +1,33 @@
+name: Check source and books
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  portable-books:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.13'
+      - run: npm ci --ignore-scripts --prefix desktop
+      - run: node --test tests/workspace-layout.test.mjs
+      - run: python tools/prepare_release_assets.py --download --github-auth
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - run: python tools/build_site.py --preview --out site-dist
+      - run: python tools/build_site.py --preview --books-dir examples/books --reader-dist desktop/dist --out site-dist-r01
+      - run: node --test tests/core.test.mjs
+        env:
+          SITE_DIST: site-dist-r01
+      - run: python -m unittest discover -s tests -p 'test_*.py'
+      - run: python tools/audit_release.py --report source-audit.json
+      # No contributed Python/activity code is run. No publishing credentials.

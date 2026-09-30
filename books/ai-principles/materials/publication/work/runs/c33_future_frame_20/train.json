@@ -1,0 +1,293 @@
+{
+  "task": "deterministic frame at t+5 from real Penn RGB frames t-5,t, selected on official TRAIN videos with visible monotonic wrist movement",
+  "source_archive_sha256": "e3e41bd99deb7b3beb9785f78b209de272bb0fa60ff4432ffa88118907a797de",
+  "data_manifest_sha256": "25f751175efa6125050813e9d7cab6eae9e1ae309a3b033b46b586ccdf34612b",
+  "code_sha256": "c91f56086fc8aa19d58ec7fe9a6abe354bfec4203580c3d217f81d13f0437a03",
+  "official_test_accessed": false,
+  "train_triplets": 1206,
+  "validation_triplets": 315,
+  "frame_gap_indices": 5,
+  "architecture": "small 6-channel residual encoder-decoder, no action/text label input and no stochastic latent",
+  "parameters": 383971,
+  "loss": "per RGB coordinate mean squared error of predicted t+5 frame",
+  "optimizer": "AdamW lr0.001 weight_decay0.01",
+  "epochs": 20,
+  "batch_size": 16,
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "initial_validation": {
+    "model_mse_per_rgb_coordinate": 0.006940818575814778,
+    "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+    "moving_region_fraction_of_pixels": 0.07430599647266314,
+    "moving_region_model_mse_per_coordinate": 0.08433269567749066,
+    "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+    "triplets": 315,
+    "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+  },
+  "best_epoch_by_validation_model_mse": 18,
+  "best_checkpoint_sha256": "c836e5bec43a3e4a137939ac025cffbeb50c7d0535ff5b735b8dddfe52f723f8",
+  "history": [
+    {
+      "epoch": 1,
+      "train_mse_per_rgb_coordinate": 0.004840023970852296,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.005886323241469861,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.07304573387299104,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 2,
+      "train_mse_per_rgb_coordinate": 0.004567360865325971,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.005626514979771205,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.06777208923557387,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 3,
+      "train_mse_per_rgb_coordinate": 0.004484962356148618,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.005605924019878013,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05906807488664274,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 4,
+      "train_mse_per_rgb_coordinate": 0.004286769365931971,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.0053047318590311076,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.0624762498806479,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 5,
+      "train_mse_per_rgb_coordinate": 0.00405506945908638,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.005056598481677828,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05444396395839267,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 6,
+      "train_mse_per_rgb_coordinate": 0.003928385851410515,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004902573367415422,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05356772258353774,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 7,
+      "train_mse_per_rgb_coordinate": 0.003939767548842217,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.0049102471030368165,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05499323998262493,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 8,
+      "train_mse_per_rgb_coordinate": 0.0037919122966664346,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004770261967483511,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.052110489727189416,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 9,
+      "train_mse_per_rgb_coordinate": 0.0037411926889554235,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004681371340115304,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05097320619296132,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 10,
+      "train_mse_per_rgb_coordinate": 0.003728433487439531,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.0049421084234113205,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.0577214338900654,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 11,
+      "train_mse_per_rgb_coordinate": 0.00396817587671267,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004735287271058959,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.052680891884685235,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 12,
+      "train_mse_per_rgb_coordinate": 0.00368717970144294,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.00459164254683596,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.04984858679752277,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 13,
+      "train_mse_per_rgb_coordinate": 0.003649543054945532,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004590033314215443,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.04989460630188137,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 14,
+      "train_mse_per_rgb_coordinate": 0.0035985589321242462,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004602938876861268,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.04990591453444591,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 15,
+      "train_mse_per_rgb_coordinate": 0.003575299624013861,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004599596475447577,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05116590411123506,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 16,
+      "train_mse_per_rgb_coordinate": 0.0035407706040265054,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004561562817913865,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.05038632654245951,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 17,
+      "train_mse_per_rgb_coordinate": 0.003515202726606607,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004664948222918906,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.04886181706346885,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 18,
+      "train_mse_per_rgb_coordinate": 0.003480503402393972,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004443084618121578,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.047687573057528805,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 19,
+      "train_mse_per_rgb_coordinate": 0.0034577137370521253,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.00454899864488318,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.051452633881747256,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    },
+    {
+      "epoch": 20,
+      "train_mse_per_rgb_coordinate": 0.003449257147370237,
+      "validation": {
+        "model_mse_per_rgb_coordinate": 0.004478332784160455,
+        "copy_current_mse_per_rgb_coordinate": 0.006501033202120306,
+        "moving_region_fraction_of_pixels": 0.07430599647266314,
+        "moving_region_model_mse_per_coordinate": 0.0480827443604577,
+        "moving_region_copy_mse_per_coordinate": 0.08385972023836455,
+        "triplets": 315,
+        "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+      }
+    }
+  ],
+  "wall_seconds": 33.29315990000032,
+  "scope_limit": "one predicted frame on author-filtered real clips, not an unrolled video, not a calibrated physical simulator; low MSE may reward static background or blurry averages"
+}

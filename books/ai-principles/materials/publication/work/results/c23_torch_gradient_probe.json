@@ -1,0 +1,40 @@
+{
+  "torch_version": "2.11.0+cu128",
+  "dtype": "float64",
+  "device": "cpu",
+  "scope": "C21 two-step courier, frozen branch weights at theta=0; reward constants are not differentiated; only chosen-action log probabilities carry derivatives",
+  "branch_probabilities_under_old_policy": [
+    0.375,
+    0.125,
+    0.5
+  ],
+  "returns": [
+    3.0,
+    -3.0,
+    4.0
+  ],
+  "baseline": 2.75,
+  "expected_negative_surrogate_loss": -0.0,
+  "before_step": {
+    "theta": 0.0,
+    "p_express": 0.5,
+    "exact_objective": 2.75
+  },
+  "loss_gradient_theta": 0.625,
+  "after_optimizer_step": {
+    "theta": -0.125,
+    "p_express": 0.46879062662624377,
+    "exact_objective": 2.8280234334343906
+  },
+  "single_lucky_fast_event": {
+    "first_action": "express",
+    "return": 3.0,
+    "sample_loss_gradient_theta": -0.125,
+    "meaning": "a positive sampled advantage can move opposite to the exact expected gradient"
+  },
+  "constant_reported_loss": {
+    "value": 1.0,
+    "requires_grad": false,
+    "backward_error_type": "RuntimeError"
+  }
+}

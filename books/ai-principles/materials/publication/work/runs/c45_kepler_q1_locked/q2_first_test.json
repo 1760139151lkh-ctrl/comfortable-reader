@@ -1,0 +1,45 @@
+{
+  "scope": "First Q2 evaluation with documented four-day quality-coverage amendment; Q1 models unchanged",
+  "pretest_decision": "work/verification/C45_kepler_pretest_decision.md",
+  "q1_report_sha256": "97065409b1c6fb085154bfdff993a9734378a277b3c1cc59f3df5c72b6a91eaa",
+  "q1_code_sha256": "8a1648a53870bf232afc021c6c98842609887c262fc42b93132243c736adcce9",
+  "q2_evaluator_sha256": "60033a10d05890c3a5ee3fd6a36027b1e79d004b6fbab5b6cebf42fd82c4568b",
+  "q2": {
+    "quarter": 2,
+    "bjd_reference": 2454833.0,
+    "time_system": "TDB",
+    "rows_all": 4354,
+    "rows_finite": 4070,
+    "rows_quality_nonzero": 2317,
+    "file_sha256": "2a10ce0fa87e8a757e6d66a740669bcf94a704eecf0646bbf898ad91b402fc08"
+  },
+  "calibration_days": 4.0,
+  "calibration_n": 55,
+  "calibration_median_e_per_s": 1041075.0625,
+  "scored_time_range_bkjd": [
+    178.2042357741666,
+    258.40613196567574
+  ],
+  "metrics": {
+    "n": 1982,
+    "predicted_transit_n": 131,
+    "other_n": 1851,
+    "observed_mean_transit": 0.9940623557132351,
+    "observed_mean_other": 0.9998841755152386,
+    "rmse": {
+      "constant": 0.00155197165901196,
+      "sinusoid": 0.0014314997549863873,
+      "box": 0.0005646406241967814
+    },
+    "rmse_predicted_transit": {
+      "constant": 0.0057313704701747676,
+      "sinusoid": 0.004933989006797642,
+      "box": 0.0013724881134510815
+    },
+    "rmse_other": {
+      "constant": 0.0005042817177352845,
+      "sinusoid": 0.0006865227346871374,
+      "box": 0.00045614333048670647
+    }
+  }
+}

@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十七章　具体实例：从问题目标反推方法</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十七章-具体实例从问题目标反推方法">第十七章　具体实例：从问题目标反推方法</h1>
+<p>“应该用有限元还是元胞自动机”不能只看题目里有没有网格，而要先问目标是什么。下面用几个并列例子把这个判断过程固定下来。</p>
+<h2 id="171-加热一块金属板">17.1 加热一块金属板</h2>
+<p>若金属板是规则矩形，材料均匀，边界条件简单，目标是得到温度随时间变化，二维有限差分往往直接、便宜。</p>
+<p>若金属板有孔洞、弯曲边界、多个材料区域，目标是得到孔洞边缘的局部温度和热流，有限元更容易使用非结构网格并处理局部参数。</p>
+<p>若问题把金属看成许多会碰撞、跳跃的微观粒子，目标是观察离散粒子规则产生的扩散，则应建立粒子模型或元胞模型。它可能在极限下产生热方程，但热方程不是它的起点。</p>
+<p>三个问题看起来都叫“热传导”，真正的输入、未知量和误差标准却不同。</p>
+<h2 id="172-桥梁结构">17.2 桥梁结构</h2>
+<p>如果只想用一根梁的总长、截面和材料参数估计总承载力，低维梁模型可能已经足够。</p>
+<p>如果要知道复杂连接处的三维位移、应力集中、应变和屈曲风险，未知量是空间分布</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>几何又不规则，有限元通常是自然选择。</p>
+<p>用元胞自动机表示“每个小块是否断裂”也可以作为损伤演化的微观模型，但它直接给出的通常是离散损伤状态，不能自动替代连续弹性场和力学边界条件。</p>
+<h2 id="173-不规则湖泊的污染扩散">17.3 不规则湖泊的污染扩散</h2>
+<p>若只关心全湖平均浓度，可以用一个常微分方程：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><mi>C</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mo>−</mo><mi>k</mi><mi>C</mi><mo>.</mo></mrow></math></div>
+<p>若关心污染物在弯曲岸线、入水口和局部回流区的浓度</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>就需要空间场模型。规则矩形区域可以用有限差分；不规则边界和局部扩散系数更适合有限元或有限体积法。</p>
+<p>若研究的是每一条鱼的离散移动、避障和觅食规则，则是个体模型或元胞/网络模型。平均浓度方程是这些微观行为的可能宏观近似，而不是自动成立的同义改写。</p>
+<h2 id="174-人群传播">17.4 人群传播</h2>
+<p>若每个元胞表示“易感、感染、康复”三种状态，感染只在邻域内传播，这是一个离散状态局部动力系统。</p>
+<p>若把人群密度看作连续函数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>r</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span>，并写出反应扩散方程，则可以使用有限元或有限差分。</p>
+<p>若数据来自真实社交网络，空间邻域可能不再是几何网格，而是图的邻接关系。此时“空间离散”更准确地说是“网络结构离散”，仍然可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msup><mi>X</mi><mi>n</mi></msup><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>但它未必是规则格点上的经典元胞自动机。</p>
+<h2 id="175-一个方法选择的最小问卷">17.5 一个方法选择的最小问卷</h2>
+<p>面对新问题，可以先回答五个问题：</p>
+<ol>
+<li>原始模型的状态是一个数、连续场、网格值、图上的节点状态，还是有限状态元胞？</li>
+<li>时间是连续演化、固定步长，还是事件驱动？</li>
+<li>空间几何是否规则？边界是否复杂？材料是否分区？</li>
+<li>目标是逼近已知方程，还是研究局部规则的涌现行为？</li>
+<li>最终要验证的是收敛误差、守恒量、模式统计，还是实验观测？</li>
+</ol>
+<p>如果第一和第四个问题的答案是“连续场”和“逼近微分方程”，有限元、有限差分或有限体积法才是主候选；如果答案是“有限状态局部规则”和“涌现行为”，元胞自动机更自然。</p>
+</body></html>

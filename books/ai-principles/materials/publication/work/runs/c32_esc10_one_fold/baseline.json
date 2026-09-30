@@ -1,0 +1,47 @@
+{
+  "task": "ESC-10 non-speech sound event classification, author one-fold split",
+  "upstream_archive_sha256": "661183a6f53ef04f12c9bd618fed0ddc1713280d6c94a5a5431e844ba6f6a21f",
+  "feature_manifest_sha256": "2987f369010c029938e27bb613407a2915ddab5abfd264fe0711bda5e2e4cb38",
+  "train_count": 240,
+  "validation_count": 80,
+  "test_count_read": 0,
+  "feature": "per-clip temporal mean and std of each of 80 log-mel bands",
+  "method": "train-only StandardScaler + multinomial logistic regression",
+  "class_names": [
+    "chainsaw",
+    "clock_tick",
+    "crackling_fire",
+    "crying_baby",
+    "dog",
+    "helicopter",
+    "rain",
+    "rooster",
+    "sea_waves",
+    "sneezing"
+  ],
+  "candidate_C": [
+    {
+      "C": 0.01,
+      "validation_mean_negative_log_probability": 0.9976238012313843,
+      "validation_accuracy": 0.7875
+    },
+    {
+      "C": 0.1,
+      "validation_mean_negative_log_probability": 0.6091786623001099,
+      "validation_accuracy": 0.825
+    },
+    {
+      "C": 1.0,
+      "validation_mean_negative_log_probability": 0.5882841944694519,
+      "validation_accuracy": 0.7875
+    },
+    {
+      "C": 10.0,
+      "validation_mean_negative_log_probability": 0.9711757898330688,
+      "validation_accuracy": 0.7625
+    }
+  ],
+  "selected_C_by_validation_nll": 1.0,
+  "selected_validation_nll": 0.5882841944694519,
+  "weights_sha256": "e2f65e465fddbae5ff73b547094e07cdfdd232d696e4a10ec21032751e7ef9fe"
+}

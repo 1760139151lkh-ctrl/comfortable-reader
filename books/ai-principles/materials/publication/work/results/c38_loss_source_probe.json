@@ -1,0 +1,28 @@
+{
+  "scope": "one actual v3 train title trajectory, frozen chosen action model, two gradient calculations, no optimizer step",
+  "model_sha256": "e000f24e5422fc5a0d2e1712b50229b8b1425930c9e154ac345eb85f8226a95d",
+  "manifest_sha256": "61062747975d022a851d1fadb7c303bbd2b4597f572bd5f4ee99424bea53cbbe",
+  "question": "What is the title of WikiText article 465?",
+  "assistant_action": "call title(465)",
+  "tool_return": "Kakapo",
+  "assistant_final": "Kakapo",
+  "segments_token_counts": {
+    "user_and_role_prefix_plus_BOS": 50,
+    "assistant_call": 8,
+    "tool_return_plus_role_prefix": 7,
+    "assistant_final": 3
+  },
+  "tool_value_token_ids_in_input": [
+    449,
+    4156,
+    201
+  ],
+  "tool_value_target_positions_all_masked_in_assistant_objective": true,
+  "assistant_loss_nll": 0.26956120133399963,
+  "assistant_targets": 11,
+  "whole_trace_loss_nll": 7.457181930541992,
+  "whole_trace_targets": 67,
+  "output_head_gradient_cosine": 0.19002319872379303,
+  "output_head_gradient_difference_l2": 3.2582497596740723,
+  "note": "masking a tool-return target does not remove those token IDs from the causal input to the final answer; full-trace LM is another legal objective with different gradients"
+}

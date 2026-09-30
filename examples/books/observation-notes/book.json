@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "id": "urn:uuid:030dc1c0-e06c-4ba4-a669-5f33b8374307",
+  "slug": "observation-notes",
+  "revision": "0.1.1",
+  "revisionModified": "2026-09-27T00:00:00Z",
+  "language": "zh-CN",
+  "title": "从观察到有限的判断",
+  "description": "从一杯水的读数出发，区分观察、解释与预测的范围；一部无需实验也完整可读的小书。",
+  "authorship": "舒适阅读书库创作示例；AI 辅助编写；合成数据，不是现实测量。",
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "scope": "authoring_example"
+  },
+  "importProvenance": {
+    "sourceKind": "markdown",
+    "sourceSha256": null,
+    "humanReview": "required"
+  },
+  "chapters": [
+    {
+      "id": "c01",
+      "title": "先把观察说清楚",
+      "source": "chapters/01.md"
+    },
+    {
+      "id": "c02",
+      "title": "从记录走向一个有限的判断",
+      "source": "chapters/02.md"
+    }
+  ],
+  "resources": [],
+  "sources": [],
+  "activities": [],
+  "example": true,
+  "author": "舒适阅读书库项目"
+}

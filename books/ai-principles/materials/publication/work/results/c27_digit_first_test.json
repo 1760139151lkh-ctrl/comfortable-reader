@@ -1,0 +1,493 @@
+{
+  "scope": "test opened once after validation-selected checkpoint; free full-vocab greedy with EOS requirement; wording and hundreds-digit changes predeclared",
+  "task_manifest_sha256": "63cba85e04c38cc0aca0a76bb1465523883f139617ab34f8ff86b625c3ea5ab7",
+  "start_model_identity": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c25_sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+    "c25_full_mix_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced"
+  },
+  "selected_checkpoint_sha256": "02be020308fabdc0b7ea05f800ac424d8c062e525130f91cae9aa30825464115",
+  "selected_step": 2400,
+  "results": {
+    "start_c25_full_mix": {
+      "test_same_template_nll": {
+        "nll": 6.444175415039062,
+        "targets": 600
+      },
+      "test_same_template_free": {
+        "records": 150,
+        "exact_answer_and_eos": 0,
+        "syntactically_three_spaced_digits": 0,
+        "numerically_correct_if_syntax_valid": 0,
+        "eos_within_limit": 43,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+7",
+            "expected": "0 0 7",
+            "generated": "2.",
+            "eos": true,
+            "token_ids": [
+              20,
+              16,
+              2
+            ]
+          },
+          {
+            "input_digits": "000+8",
+            "expected": "0 0 8",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "001+6",
+            "expected": "0 0 7",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "002+2",
+            "expected": "0 0 4",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "002+4",
+            "expected": "0 0 6",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          }
+        ]
+      },
+      "same_numbers_paraphrase_free": {
+        "records": 150,
+        "exact_answer_and_eos": 0,
+        "syntactically_three_spaced_digits": 0,
+        "numerically_correct_if_syntax_valid": 0,
+        "eos_within_limit": 18,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+7",
+            "expected": "0 0 7",
+            "generated": "3.",
+            "eos": true,
+            "token_ids": [
+              21,
+              16,
+              2
+            ]
+          },
+          {
+            "input_digits": "000+8",
+            "expected": "0 0 8",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "001+6",
+            "expected": "0 0 7",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "002+2",
+            "expected": "0 0 4",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "002+4",
+            "expected": "0 0 6",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          }
+        ]
+      },
+      "one_more_hundred_ood_free": {
+        "records": 100,
+        "exact_answer_and_eos": 0,
+        "syntactically_three_spaced_digits": 0,
+        "numerically_correct_if_syntax_valid": 0,
+        "eos_within_limit": 27,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+0",
+            "expected": "1 0 0",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          },
+          {
+            "input_digits": "001+3",
+            "expected": "1 0 4",
+            "generated": "The following are the most of the",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "input_digits": "002+6",
+            "expected": "1 0 8",
+            "generated": "The following are the most of the",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "input_digits": "003+9",
+            "expected": "1 1 2",
+            "generated": "The following are the most of the",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "input_digits": "004+2",
+            "expected": "1 0 6",
+            "generated": "The following are the most popular,",
+            "eos": false,
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14
+            ]
+          }
+        ]
+      }
+    },
+    "selected_math_sft": {
+      "test_same_template_nll": {
+        "nll": 0.0393427237868309,
+        "targets": 600
+      },
+      "test_same_template_free": {
+        "records": 150,
+        "exact_answer_and_eos": 146,
+        "syntactically_three_spaced_digits": 150,
+        "numerically_correct_if_syntax_valid": 146,
+        "eos_within_limit": 150,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+7",
+            "expected": "0 0 7",
+            "generated": "0 0 7",
+            "eos": true,
+            "token_ids": [
+              18,
+              861,
+              694,
+              2
+            ]
+          },
+          {
+            "input_digits": "000+8",
+            "expected": "0 0 8",
+            "generated": "0 0 8",
+            "eos": true,
+            "token_ids": [
+              18,
+              861,
+              737,
+              2
+            ]
+          },
+          {
+            "input_digits": "001+6",
+            "expected": "0 0 7",
+            "generated": "0 0 7",
+            "eos": true,
+            "token_ids": [
+              18,
+              861,
+              694,
+              2
+            ]
+          },
+          {
+            "input_digits": "002+2",
+            "expected": "0 0 4",
+            "generated": "0 0 4",
+            "eos": true,
+            "token_ids": [
+              18,
+              861,
+              558,
+              2
+            ]
+          },
+          {
+            "input_digits": "002+4",
+            "expected": "0 0 6",
+            "generated": "0 0 6",
+            "eos": true,
+            "token_ids": [
+              18,
+              861,
+              670,
+              2
+            ]
+          }
+        ]
+      },
+      "same_numbers_paraphrase_free": {
+        "records": 150,
+        "exact_answer_and_eos": 10,
+        "syntactically_three_spaced_digits": 69,
+        "numerically_correct_if_syntax_valid": 10,
+        "eos_within_limit": 150,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+7",
+            "expected": "0 0 7",
+            "generated": "0 1 7",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              694,
+              2
+            ]
+          },
+          {
+            "input_digits": "000+8",
+            "expected": "0 0 8",
+            "generated": "0 1",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              2
+            ]
+          },
+          {
+            "input_digits": "001+6",
+            "expected": "0 0 7",
+            "generated": "0 1 6",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              670,
+              2
+            ]
+          },
+          {
+            "input_digits": "002+2",
+            "expected": "0 0 4",
+            "generated": "0 2 2",
+            "eos": true,
+            "token_ids": [
+              18,
+              354,
+              354,
+              2
+            ]
+          },
+          {
+            "input_digits": "002+4",
+            "expected": "0 0 6",
+            "generated": "0 6",
+            "eos": true,
+            "token_ids": [
+              18,
+              670,
+              2
+            ]
+          }
+        ]
+      },
+      "one_more_hundred_ood_free": {
+        "records": 100,
+        "exact_answer_and_eos": 0,
+        "syntactically_three_spaced_digits": 100,
+        "numerically_correct_if_syntax_valid": 0,
+        "eos_within_limit": 100,
+        "max_new_tokens": 8,
+        "examples": [
+          {
+            "input_digits": "000+0",
+            "expected": "1 0 0",
+            "generated": "0 1 0",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              861,
+              2
+            ]
+          },
+          {
+            "input_digits": "001+3",
+            "expected": "1 0 4",
+            "generated": "0 1 4",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              558,
+              2
+            ]
+          },
+          {
+            "input_digits": "002+6",
+            "expected": "1 0 8",
+            "generated": "0 1 8",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              737,
+              2
+            ]
+          },
+          {
+            "input_digits": "003+9",
+            "expected": "1 1 2",
+            "generated": "0 2 2",
+            "eos": true,
+            "token_ids": [
+              18,
+              354,
+              354,
+              2
+            ]
+          },
+          {
+            "input_digits": "004+2",
+            "expected": "1 0 6",
+            "generated": "0 1 6",
+            "eos": true,
+            "token_ids": [
+              18,
+              310,
+              670,
+              2
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

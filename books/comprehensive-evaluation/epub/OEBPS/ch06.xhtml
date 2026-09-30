@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>6. 熵权法：让差异更大的指标获得更高权重</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="6-熵权法让差异更大的指标获得更高权重">6. 熵权法：让差异更大的指标获得更高权重</h2>
+<p>熵权法的直觉可以压缩成一句话：</p>
+<blockquote>
+<p>一列指标若在所有对象上几乎一样，就很难用它区分对象；若差异明显，它在当前样本中提供的区分信息更多。</p>
+</blockquote>
+<p>这里借用了信息熵的形式。分布越均匀，熵越大；分布越集中，熵越小。</p>
+<h3 id="61-完整计算步骤">6.1 完整计算步骤</h3>
+<p>设所有指标已经同向化并变为非负矩阵 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Z</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow></math></span>。对每一列计算比例：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi></mrow></msubsup><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>于是对固定指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi></mrow></math></span>，有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow></math></span>。该指标的熵为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>e</mi><mi>j</mi></msub><mo>=</mo><mo>−</mo><mi>k</mi><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi></mrow></munderover><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mi>ln</mi><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>,</mo><mi>k</mi><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>ln</mi><mi>m</mi></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>规定 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn><mi>ln</mi><mn>0</mn><mo>=</mo><mn>0</mn></mrow></math></span>。系数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi></mrow></math></span> 把熵归一化到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo></mrow></math></span>。定义差异系数：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>e</mi><mi>j</mi></msub><mo>,</mo></mrow></math></div>
+<p>最后归一化得到权重：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><msub><mi>d</mi><mi>j</mi></msub></mrow><mrow><msubsup><mo>∑</mo><mrow><mi>ℓ</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><msub><mi>d</mi><mrow><mi>ℓ</mi></mrow></msub></mrow></mfrac><mo>.</mo></mrow></math></div>
+<h3 id="62-一个能手算完的例子">6.2 一个能手算完的例子</h3>
+<p>三个对象 A、B、C 在两个同向化指标上的数值为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Z</mi><mo>=</mo><mo>[</mo><mtable><mtr><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0.5</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd><mtd><mn>1</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>第一列之和为 1.5，第二列之和为 1，所以：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>/</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo>/</mo><mn>3</mn><msup><mo stretchy="false">)</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>,</mo><msub><mi>p</mi><mn>2</mn></msub><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>.</mo></mrow></math></div>
+<p>因为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>m</mi><mo>=</mo><mn>3</mn></mrow></math></span>，所以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mo>/</mo><mi>ln</mi><mn>3</mn></mrow></math></span>。代入可得：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>e</mi><mn>1</mn></msub><mo>=</mo><mo>−</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>ln</mi><mn>3</mn></mrow></mfrac><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><mfrac><mn>1</mn><mn>3</mn></mfrac><mi>ln</mi><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>+</mo><mfrac><mn>2</mn><mn>3</mn></mfrac><mi>ln</mi><mfrac><mn>2</mn><mn>3</mn></mfrac><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>0.579</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>e</mi><mn>2</mn></msub><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>于是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>≈</mo><mn>0.421</mn><mo>,</mo><msub><mi>d</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mn>1</mn></msub><mo>≈</mo><mn>0.296</mn><mo>,</mo><msub><mi>w</mi><mn>2</mn></msub><mo>≈</mo><mn>0.704</mn><mo>.</mo></mrow></math></div>
+<p>第二列的差异最极端：只有 C 得到全部比例，所以熵最低、差异系数最高、权重最大。</p>
+<h3 id="63-为什么熵越大权重反而越小">6.3 为什么熵越大，权重反而越小？</h3>
+<p>若一列完全均匀：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mrow><mn>1</mn><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>p</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mo>=</mo><mo>⋯</mo><mo>=</mo><msub><mi>p</mi><mrow><mi>m</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><mo>,</mo></mrow></math></div>
+<p>则：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>e</mi><mi>j</mi></msub><mo>=</mo><mo>−</mo><mfrac><mn>1</mn><mrow><mi>ln</mi><mi>m</mi></mrow></mfrac><mi>m</mi><mo>·</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><mi>ln</mi><mfrac><mn>1</mn><mi>m</mi></mfrac><mo>=</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>于是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>。所有对象在该列完全相同，它对当前排序确实没有贡献。</p>
+<p>反过来，若一个对象占据全部比例，其余为 0，则 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>e</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow></math></span>。这列对区分对象最有力。</p>
+<h3 id="64-熵权法的边界情况">6.4 熵权法的边界情况</h3>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>0</mn></mrow></math></span>，说明该列全为 0，比例无法定义。它在当前样本中没有区分信息，通常令 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>，并在报告中说明，而不是加一个任意小常数后假装问题消失。</p>
+<p>若所有指标都没有差异，则所有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>，最终分母也为 0。此时数据根本不支持排序，正确输出是“无法仅凭这些指标区分对象”，而不是强行给每列相等权重再排出名次。</p>
+<p>极差标准化会把每列最小值压成 0，样本量很小时可能放大边界效应。熵权也对离群值敏感：一个异常大的观测可能让分布骤然集中，从而获得很大权重。</p>
+<p>另外，有些实现为避免 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ln</mi><mn>0</mn></mrow></math></span> 而把 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 改成 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><mi>ε</mi></mrow></math></span>。这是数值工程选择，会轻微改变结果。更清楚的实现是直接按约定把 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn><mi>ln</mi><mn>0</mn></mrow></math></span> 记为 0。</p>
+<h3 id="65-熵权法能说什么不能说什么">6.5 熵权法能说什么，不能说什么？</h3>
+<p>它能说：“在这批对象中，指标 2 比指标 1 更能拉开差距。”</p>
+<p>它不能单独说：“指标 2 在现实中比指标 1 更值得重视。”</p>
+<p>当样本改变时：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>,</mo><msub><mi>e</mi><mi>j</mi></msub><mo>,</mo><msub><mi>d</mi><mi>j</mi></msub><mo>,</mo><msub><mi>w</mi><mi>j</mi></msub></mrow></math></div>
+<p>都可能改变。因此熵权是一种<strong>样本依赖权重</strong>。这不是缺陷本身，但必须被正确解释。</p>
+<hr/>
+</body></html>

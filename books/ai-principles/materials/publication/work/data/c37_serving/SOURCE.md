@@ -1,0 +1,7 @@
+# 第三十七章的实际被服务模型
+
+服务从`work/results/causal_lm_best.pt`取得**第十九章本书自己从随机权重、WikiText-2 raw-v1的600篇训练文章训练四轮**的同一4,930,304参数因果Transformer。现行原检查点59231395字节、SHA256 `e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f`；它在C18现行资料清单SHA `3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1`上训练，tokenizer SHA `5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4`。起点、旧资料许可分歧、已有测试/弱自由生成在C18/C19正文及`work/verification/C19_causal_training_protocol.md`，不能因为本章加了服务就称语言能力改善。
+
+`work/code/c37_export_serving_weights.py`核现行训练收据/资料/模型形状并只导出固定模型权重和身份，不导出AdamW、随机生成器、训练轮次游标；模型文件`c19_model_only.pt`19737098字节，SHA256 `d22a0799e70c070c29d292cbb527d748c5b28089c3ce88632fa990490c6cff7c`。51个模型状态张量与原检查点逐位相同，真训练块16位置前向logits最大差0；[导出收据](export_receipt.json)。这使每次启动推断服务少读约39.5MB的训练恢复材料，不是量化或蒸馏，参数dtype仍FP32。
+
+本章只在本机服务、计时和诊断；没有下载外部强基座、重新训练或把书中弱模型变成有可靠事实能力的助手。若以后外发模型、词表或生成原文，应重新核WikiText/Flickr无关的实际语料与版权条款；这份本机试验不自动授权再分发。

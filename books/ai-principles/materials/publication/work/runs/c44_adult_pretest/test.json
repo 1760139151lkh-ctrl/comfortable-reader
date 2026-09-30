@@ -1,0 +1,188 @@
+{
+  "training_report_sha256": "d8503e5f0b95837916a7563a283898adf098c3e0b6aa7d4399cf393da6828483",
+  "official_test_source_sha256": "a2a9044bc167a35b2361efbabec64e89d69ce82d9790d2980119aac5fd7e9c05",
+  "first_chapter_test_after_model_and_threshold_selection": true,
+  "test_rows": 16281,
+  "positive_label": 3846,
+  "global_threshold_0_5": {
+    "overall": {
+      "n": 16281,
+      "accuracy": 0.8523432221608009,
+      "predicted_positive": 3128,
+      "selection_rate": 0.19212579079909098,
+      "nll_nats_unchanged_by_threshold": 0.3188385659787144,
+      "roc_auc_unchanged_by_threshold": 0.9046982844331868
+    },
+    "by_group": {
+      "Female": {
+        "n": 5421,
+        "actual_positive": 590,
+        "label_rate": 0.10883600811658366,
+        "threshold": 0.5,
+        "predicted_positive": 427,
+        "selection_rate": 0.07876775502674783,
+        "tp": 318,
+        "fp": 109,
+        "tn": 4722,
+        "fn": 272,
+        "tpr_given_label_positive": 0.5389830508474577,
+        "fpr_given_label_negative": 0.022562616435520596,
+        "ppv_given_predicted_positive": 0.7447306791569087,
+        "accuracy": 0.9297177642501383
+      },
+      "Male": {
+        "n": 10860,
+        "actual_positive": 3256,
+        "label_rate": 0.2998158379373849,
+        "threshold": 0.5,
+        "predicted_positive": 2701,
+        "selection_rate": 0.24871086556169428,
+        "tp": 1967,
+        "fp": 734,
+        "tn": 6870,
+        "fn": 1289,
+        "tpr_given_label_positive": 0.6041154791154791,
+        "fpr_given_label_negative": 0.09652814308258811,
+        "ppv_given_predicted_positive": 0.7282487967419474,
+        "accuracy": 0.813720073664825
+      }
+    }
+  },
+  "validation_chosen_group_thresholds": {
+    "overall": {
+      "n": 16281,
+      "accuracy": 0.8249493274368896,
+      "predicted_positive": 5070,
+      "selection_rate": 0.3114059332964806,
+      "nll_nats_unchanged_by_threshold": 0.3188385659787144,
+      "roc_auc_unchanged_by_threshold": 0.9046982844331868
+    },
+    "by_group": {
+      "Female": {
+        "n": 5421,
+        "actual_positive": 590,
+        "label_rate": 0.10883600811658366,
+        "threshold": 0.24017917050739884,
+        "predicted_positive": 842,
+        "selection_rate": 0.15532189632909058,
+        "tp": 442,
+        "fp": 400,
+        "tn": 4431,
+        "fn": 148,
+        "tpr_given_label_positive": 0.7491525423728813,
+        "fpr_given_label_negative": 0.0827985924239288,
+        "ppv_given_predicted_positive": 0.5249406175771971,
+        "accuracy": 0.8989116399188342
+      },
+      "Male": {
+        "n": 10860,
+        "actual_positive": 3256,
+        "label_rate": 0.2998158379373849,
+        "threshold": 0.30364606584250825,
+        "predicted_positive": 4228,
+        "selection_rate": 0.3893186003683241,
+        "tp": 2591,
+        "fp": 1637,
+        "tn": 5967,
+        "fn": 665,
+        "tpr_given_label_positive": 0.7957616707616708,
+        "fpr_given_label_negative": 0.2152814308258811,
+        "ppv_given_predicted_positive": 0.6128192999053926,
+        "accuracy": 0.7880294659300184
+      }
+    }
+  },
+  "baseline_race_coded_groups_descriptive_only": {
+    "overall": {
+      "n": 16281,
+      "accuracy": 0.8523432221608009,
+      "predicted_positive": 3128,
+      "selection_rate": 0.19212579079909098,
+      "nll_nats_unchanged_by_threshold": 0.3188385659787144,
+      "roc_auc_unchanged_by_threshold": 0.9046982844331868
+    },
+    "by_group": {
+      "Amer-Indian-Eskimo": {
+        "n": 159,
+        "actual_positive": 19,
+        "label_rate": 0.11949685534591195,
+        "threshold": 0.5,
+        "predicted_positive": 14,
+        "selection_rate": 0.0880503144654088,
+        "tp": 10,
+        "fp": 4,
+        "tn": 136,
+        "fn": 9,
+        "tpr_given_label_positive": 0.5263157894736842,
+        "fpr_given_label_negative": 0.02857142857142857,
+        "ppv_given_predicted_positive": 0.7142857142857143,
+        "accuracy": 0.9182389937106918
+      },
+      "Asian-Pac-Islander": {
+        "n": 480,
+        "actual_positive": 133,
+        "label_rate": 0.27708333333333335,
+        "threshold": 0.5,
+        "predicted_positive": 116,
+        "selection_rate": 0.24166666666666667,
+        "tp": 87,
+        "fp": 29,
+        "tn": 318,
+        "fn": 46,
+        "tpr_given_label_positive": 0.6541353383458647,
+        "fpr_given_label_negative": 0.08357348703170028,
+        "ppv_given_predicted_positive": 0.75,
+        "accuracy": 0.84375
+      },
+      "Black": {
+        "n": 1561,
+        "actual_positive": 179,
+        "label_rate": 0.11467008327994875,
+        "threshold": 0.5,
+        "predicted_positive": 138,
+        "selection_rate": 0.08840486867392697,
+        "tp": 87,
+        "fp": 51,
+        "tn": 1331,
+        "fn": 92,
+        "tpr_given_label_positive": 0.4860335195530726,
+        "fpr_given_label_negative": 0.03690303907380608,
+        "ppv_given_predicted_positive": 0.6304347826086957,
+        "accuracy": 0.9083920563741191
+      },
+      "Other": {
+        "n": 135,
+        "actual_positive": 25,
+        "label_rate": 0.18518518518518517,
+        "threshold": 0.5,
+        "predicted_positive": 14,
+        "selection_rate": 0.1037037037037037,
+        "tp": 12,
+        "fp": 2,
+        "tn": 108,
+        "fn": 13,
+        "tpr_given_label_positive": 0.48,
+        "fpr_given_label_negative": 0.01818181818181818,
+        "ppv_given_predicted_positive": 0.8571428571428571,
+        "accuracy": 0.8888888888888888
+      },
+      "White": {
+        "n": 13946,
+        "actual_positive": 3490,
+        "label_rate": 0.2502509680195038,
+        "threshold": 0.5,
+        "predicted_positive": 2846,
+        "selection_rate": 0.20407285243080453,
+        "tp": 2089,
+        "fp": 757,
+        "tn": 9699,
+        "fn": 1401,
+        "tpr_given_label_positive": 0.598567335243553,
+        "fpr_given_label_negative": 0.07239862280030604,
+        "ppv_given_predicted_positive": 0.7340126493323963,
+        "accuracy": 0.8452602896887996
+      }
+    }
+  },
+  "scope": "original 1994 source random test split, row-weighted; label and sex/race categories as in file, no individual decisions or population/causal fairness inference"
+}

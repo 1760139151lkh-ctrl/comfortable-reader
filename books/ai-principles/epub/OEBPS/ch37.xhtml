@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN"><head><meta charset="utf-8"/><title>第三十七章　训练好的模型怎样接住一次请求</title><link rel="stylesheet" type="text/css" href="style.css"/></head><body><h1 id="sec-37-001">第三十七章　训练好的模型怎样接住一次请求</h1>
+<p>第三十六章末，我们手上已有不同的模型权重：有的为论文节点报类别，有的看图，有的接续文章。它们能在实验脚本里算出结果，还不能因此说“用户发来一句话，系统就能稳妥地回话”。我们先挑一个来源最清楚的对象：第十九章在这台电脑上从随机参数开始、用真实 WikiText 文章训练四轮的语言模型。用户给它一句开头，它要逐个选择后续片段；如果同时来了几个人，机器还要决定怎样分配计算和内存。</p>
+<p>本章把这种<strong>训练结束后的计算</strong>叫作推断，把一次加载、接收输入、生成并送回结果的程序叫作推断服务。它处理的是已有能力如何被使用：生成何时停、哪些旧计算可以留下、多个请求怎样同跑、数字压得更短会失去什么。服务不会重新教会模型历史事实，也不会使它自动懂工具。带着这个分界看一条实际运行记录，我们才不会把流畅的接口误认作模型学到了新本领。</p>
+<p><a id="thirtyseventh-weight-origin"/></p>
+<h2 id="sec-37-002">先确认被请来回答的是谁</h2>
+<p>第十九章的模型是四层、每层四个读取头、活动宽192的因果 Transformer；一次前向最多看128个分词位置，词表8192项，共 <strong>4,930,304</strong> 个可训练参数。它先由第十八章从训练文章拟合的字节级分词器把文字变成编号。训练检查点除了权重，还保存 AdamW 的两份历史数、训练步数和随机状态；那些对<strong>接着训练</strong>必要，对固定权重回答请求没有作用。<a href="ch19.xhtml#nineteenth-model">第十九章的模型与保存过程</a></p>
+<p>我们先核对检查点与现行文章数据、分词器的身份，再导出只含51个模型状态张量的服务文件。原恢复文件为59,231,395字节，服务文件为19,737,098字节；所有模型张量逐位相同，同一真实训练块的16个位置在相同FP32计算下输出分数最大差为零。这一步叫<strong>只导出推断所需权重</strong>，没有量化、蒸馏或继续训练。<a href="res-code.xhtml#res-a1b384eef5b9724b">导出程序</a>、<a href="res-data.xhtml#res-af23afa39f27f5bb">模型来源卡与收据</a></p>
+<p>服务启动时加载的是这份固定文件及原分词器，调用 <code>model.eval()</code>，让训练期的随机丢弃等行为关闭；预测被包在 <code>torch.inference_mode()</code> 中，不建立求导图，也没有 <code>backward()</code> 或优化器 <code>step()</code>。这些动作节省了不需要的训练计算，但不能代替确认权重属于哪次训练。原模型的验证和已打开的测试成绩仍归第十九章；本章新增的毫秒数不是新的语言能力分数。<a href="res-verification.xhtml#res-c67fb8cd839f0f8c">本章实际运行口径</a></p>
+<p><a id="thirtyseventh-history-start"/></p>
+<h2 id="sec-37-003">2017年的并行计算，遇到逐词回答时变了什么</h2>
+<p>上一章的图研究走到2025年；为了追踪今天这台推断服务的设计，我们沿另一条<strong>已经出现的语言模型路线回到2017年</strong>，不是说图学习之后才有语言生成。第十七章构造 Transformer 时，给定一整条正确目标序列，训练者知道每个位置的前缀，可以把许多位置放进同一次矩阵运算；因果遮罩只阻止第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 处偷看第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></math></span> 处以后。2017年原论文的解码器已经有这种遮罩，也在真正翻译时一个词一个词地产生译文。<a href="https://papers.nips.cc/paper_files/paper/2017/file/3f5ee243547dee91fbd053c1c4a845aa-Paper.pdf">Transformer原论文，§3.1—3.5</a></p>
+<p>这两个时刻的信息条件不同。训练时整句目标来自资料，我们虽不让早位置看晚位置，却<strong>可以在机器里同时摆好所有早位置</strong>；用户实际请求时，下一个词尚不存在。若把当前前缀写成 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>t</mi></msub></mrow></math></span>，模型给的是条件分布 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>x</mi><mrow><mn>1</mn><mi>:</mi><mi>t</mi></mrow></msub><mo stretchy="false">)</mo></mrow></math></span>。只有先选出 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></math></span>，下一次分布 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mi>θ</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>∣</mo><msub><mi>x</mi><mrow><mn>1</mn><mi>:</mi><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo></mrow></math></span> 才有输入。把训练能并行计算所有已知位置，误说成推断可以一次吐出一整条尚未选出的自由回答，会把服务成本看轻。</p>
+<p>2018年的生成式预训练仍把已学表示接到具体下游任务。2019年的GPT-2研究换用更大、更杂的网页文字和至15亿参数的模型，尝试让任务要求也作为文字前缀输入，在不为每道题另改权重时直接续写答案；原报告同时显示各项任务成绩并不齐整。2020年的GPT-3再把大型模型的少样本前缀使用当作研究重点。于是，“同一份已训权重面对许多不同新前缀”成为愈发重要的场景。这条变化并未使上面的条件概率乘法失效；模型再大，自由续写仍按已生成片段逐次条件化。我们今天用4.93百万参数的本地模型，不借那些外部大模型的语言质量；但同样面对“重复处理已有前缀”的算账问题。<a href="https://cdn.openai.com/research-covers/language-unsupervised/language_understanding_paper.pdf">2018生成式预训练原报告</a>；<a href="https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf">2019 GPT-2原报告</a>；<a href="https://arxiv.org/abs/2005.14165">2020 GPT-3论文</a></p>
+<p><a id="thirtyseventh-choice"/></p>
+<h2 id="sec-37-004">分数不直接等于一句话：选择和停止都要由程序规定</h2>
+<p>服务收到 <code>The city of</code>，先在最左侧加一个本书约定的 BOS 编号，然后把真实文字分成片段。模型最后一个位置输出8192个分数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>z</mi><mi>j</mi></msub></mrow></math></span>。与第十九章训练的下一片段损失同源，先用 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><msup><mi>e</mi><mrow><msub><mi>z</mi><mi>j</mi></msub></mrow></msup><mo>/</mo><msub><mo>∑</mo><mi>k</mi></msub><msup><mi>e</mi><mrow><msub><mi>z</mi><mi>k</mi></msub></mrow></msup></mrow></math></span> 把它们变成概率；但概率表本身没有说本次一定选哪项。<strong>贪心生成</strong>每次选分数最大的合法编号。训练用的PAD和表示“片段开始”的BOS不能作为普通下一个片段，程序把它们的候选分数设为负无穷。它于是可能从 <code>The city of</code> 接出 “the United States”，继续又走进 “the first time of the first time” 的循环；该重复确实出现在<a href="res-results.xhtml#res-cba80746550b8336">本机缓存对照</a>中，而不是作者为展示弱点杜撰的句子。</p>
+<p>也可以不总挑最大项。现行程序另有一个明确选择：只留下分数最高的40个候选，再以温度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>=</mo><mn>0.8</mn></mrow></math></span> 形成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>P</mi><mi>T</mi></msub><mo stretchy="false">(</mo><mi>j</mi><mo>∣</mo><mi>h</mi><mo>,</mo><mtext> </mtext><mi>j</mi><mo>∈</mo><mi>K</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>exp</mi><mspace width=".1667em"/><mo stretchy="false">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>/</mo><mi>T</mi><mo stretchy="false">)</mo></mrow><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>k</mi><mo>∈</mo><mi>K</mi></mrow></munder><mi>exp</mi><mspace width=".1667em"/><mo stretchy="false">(</mo><msub><mi>z</mi><mi>k</mi></msub><mo>/</mo><mi>T</mi><mo stretchy="false">)</mo></mrow></mfrac><mo>,</mo><mspace width="2em"/><mi>K</mi><mo>=</mo><mtext>当前分数最高的40项</mtext><mo>.</mo></mrow></math></div>
+<p>当 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>&lt;</mo><mn>1</mn></mrow></math></span> 时，较高与较低分数之差在指数里被放大，分布更偏向高分项；这不代表每次都选同一项，抽样还受随机种子影响。<strong>top40</strong>又把其它候选概率设为零，它改变了原模型全部8192项的抽样分布。实验与服务会把 <code>greedy</code> 和 <code>sample_top40</code> 的身份一起返回，不把某次更通顺的偶然样本称作模型已被训练改善。<a href="res-code.xhtml#res-0c7ebc8fd4c10f8c">生成选择的实码</a></p>
+<p>每选出一项，就把它接回前缀，重新求下一个分布。若选中了 EOS（文章结束的专用编号），回答在此终止；若一直没有EOS，程序最多只追加请求上限内的片段。本地服务把上限限制在1到64。<code>max_new_tokens=12</code> 意思是<strong>最多选12个编号</strong>，不保证它会构成一整句，亦不保证模型已表达完意思。与此不同，网页界面的“遇到某个字符串就停”可能切在几个token组成的文本中间；这份本机服务没有实现自定义停词，不应拿它作已完成的停止规则。<a href="code-48a7b0394f14.xhtml#code-source">本地服务的输入检查</a></p>
+<p>如果第一项随机选错了，第二项的分布会以<strong>这个实际选出的编号</strong>为条件，而不会偷偷回到训练资料的正确句子。这正是第十六章翻译里教师前缀和自己生成前缀的区别、以及第十九章同时报告给定原文的NLL与自由续文的理由。换一种温度可能使一条样本较少循环，也可能使另一条更散乱；只有新任务上相称的评价才能支持能力结论。</p>
+<p><a id="thirtyseventh-kv-derive"/></p>
+<h2 id="sec-37-005">为什么旧词的两份向量值得留下</h2>
+<p>先看第十七章已经教过的一头自读取。第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 层第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 个位置的输入活动为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>h</mi><mi>t</mi><mrow><mi>ℓ</mi><mo>−</mo><mn>1</mn></mrow></msubsup></mrow></math></span>。同一层的三种线性变换给</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>q</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>=</mo><msubsup><mi>W</mi><mi>Q</mi><mi>ℓ</mi></msubsup><msubsup><mi>h</mi><mi>t</mi><mrow><mi>ℓ</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo>,</mo><mspace width="2em"/><msubsup><mi>k</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>=</mo><msubsup><mi>W</mi><mi>K</mi><mi>ℓ</mi></msubsup><msubsup><mi>h</mi><mi>t</mi><mrow><mi>ℓ</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo>,</mo><mspace width="2em"/><msubsup><mi>v</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>=</mo><msubsup><mi>W</mi><mi>V</mi><mi>ℓ</mi></msubsup><msubsup><mi>h</mi><mi>t</mi><mrow><mi>ℓ</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo>.</mo></mrow></math></div>
+<p>这里 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi></mrow></math></span> 是<strong>这次要找什么</strong>，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi></mrow></math></span> 是每个可读位置供匹配的键，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>v</mi></mrow></math></span> 是被读取的值；四头各宽48。新位置 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 的读取把当前查询同左侧键逐个比较，再按分数给值加权：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>a</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≤</mo><mi>t</mi></mrow></munder><mfrac><mrow><mi>exp</mi><mspace width=".1667em"/><mo stretchy="false">(</mo><msubsup><mi>q</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>·</mo><msubsup><mi>k</mi><mi>j</mi><mi>ℓ</mi></msubsup><mo>/</mo><msqrt><mrow><mn>48</mn></mrow></msqrt><mo stretchy="false">)</mo></mrow><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>r</mi><mo>≤</mo><mi>t</mi></mrow></munder><mi>exp</mi><mspace width=".1667em"/><mo stretchy="false">(</mo><msubsup><mi>q</mi><mi>t</mi><mi>ℓ</mi></msubsup><mo>·</mo><msubsup><mi>k</mi><mi>r</mi><mi>ℓ</mi></msubsup><mo>/</mo><msqrt><mrow><mn>48</mn></mrow></msqrt><mo stretchy="false">)</mo></mrow></mfrac><msubsup><mi>v</mi><mi>j</mi><mi>ℓ</mi></msubsup><mo>.</mo></mrow></math></div>
+<p>余下还有输出投影、残差相加、归一化与逐位置前馈层；这些在第十九章的四层实现里依次发生。公式把本次必须新算的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>q</mi><mi>t</mi></msub><mo>,</mo><msub><mi>k</mi><mi>t</mi></msub><mo>,</mo><msub><mi>v</mi><mi>t</mi></msub></mrow></math></span> 与过去位置已有的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>k</mi><mi>j</mi></msub><mo>,</mo><msub><mi>v</mi><mi>j</mi></msub></mrow></math></span> 分开。过去位置为何能够留？因果遮罩规定第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>j</mi><mo>&lt;</mo><mi>t</mi></mrow></math></span> 处从未读过后来的第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 项；在<strong>同一权重、同一位置编号、推断模式</strong>下，新项到来不会倒过来改变旧项的层输入。于是旧项在每一层算好的K、V可以保存，下一步只为新位置算查询、键和值，再向旧K/V读取。这是 <strong>KV缓存</strong>，不是给模型新增外部记忆，也不是把之前的回答写进参数。<a href="code-0f043af7fa7a.xhtml#code-source">C17多头读取源码</a>与<a href="res-code.xhtml#res-0c7ebc8fd4c10f8c">本章逐层缓存实现</a></p>
+<p>一个细节决定缓存里究竟该保存哪一张量：第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 层K/V来自该层<strong>注意力以前</strong>的输入；它已包含更早层对左侧的读取，却不是该层残差归一后的最终输出。本机 <code>prefill</code> 逐层先记下 <code>read.k(x)</code>、<code>read.v(x)</code>，再使当前层读取/前馈得到下一层输入。<code>decode_one</code> 对新token在每一层做同样顺序，把它的K/V附在该层旧项后面。若只存最末层的一个隐向量，或者在错误的残差位置取K/V，下一步的注意力公式就不是原来的模型了。保存什么是模型结构给出的，不是“开缓存”这个开关替我们决定。<a href="res-code.xhtml#res-0c7ebc8fd4c10f8c">缓存完整实现</a></p>
+<p>若没有缓存，长度为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 的前缀在每次生成时又通过四层，注意力需要重做前缀中许多旧位置之间的比较。只算一个新位置时，当前查询仍要同约 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 个键比较，不能凭缓存把读过去的代价变成常数；但旧位置的Q/K/V、前馈和它们互相读取不必重复。忽略常数、宽度和硬件组织，一次全前缀注意力含约 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>n</mi><mn>2</mn></msup></mrow></math></span> 个位置配对，下一token的缓存读取约 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 个；与此同时每个新位置的线性投影和前馈仍要算。对于本书最多128位的小模型，Python循环、分配新张量、GPU调用都可能比这个渐近式更显眼，真实速度只能测。</p>
+<p><a id="thirtyseventh-memory"/></p>
+<h2 id="sec-37-006">省了重算，却要为每个尚未完成的请求留地方</h2>
+<p>本机每层四个头乘每头48维，所有头的K合起来宽192，V也宽192。FP32一个数占4字节，所以一位前缀在四层占</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>2</mn><mspace width="0.278em"/><mtext>(K、V)</mtext><mo>×</mo><mn>4</mn><mspace width="0.278em"/><mtext>层</mtext><mo>×</mo><mn>192</mn><mspace width="0.278em"/><mtext>维</mtext><mo>×</mo><mn>4</mn><mspace width="0.278em"/><mtext>字节</mtext><mo>=</mo><mn>6144</mn><mspace width="0.278em"/><mtext>字节</mtext><mo>.</mo></mrow></math></div>
+<p>128位满窗口就是786,432字节，约0.75MiB。若同时有八个都留满窗口的请求，光这批K/V数值就约6MiB；另有模型权重、输入/输出、临时注意力矩阵、框架分配器和服务本身。我们的19.74MB磁盘权重文件大小也<strong>不是</strong>GPU模型占用的完整报告。第十九章保存训练检查点时的AdamW内存，更不能机械加到不继续训练的服务内存。以明确对象分别算，才能知道一个服务何时受计算、内存容量或搬运速度限制。</p>
+<p>前面跟语言使用史走到2020年，这里沿<strong>缓存代价</strong>这条并行线回看2019年。Shazeer提出多查询注意力时，面对的是增量生成时每个请求每个位置的K/V增长与<strong>内存带宽</strong>问题：带宽限制的是单位时间能从存放K/V的设备内存搬来多少字节；大量请求反复读旧K/V时，这笔搬运可能妨碍继续生成。多个查询头可共享一套K/V，而不只是给现有缓存换个存放目录。<a href="https://arxiv.org/abs/1911.02150">2019多查询原论文</a></p>
+<p>2022年FlashAttention又处理另一笔账：一次注意力计算的矩阵如何分块，以减少GPU较慢的外部显存与片上存储之间的反复搬运，同时保持所讨论的精确注意力结果。<a href="https://arxiv.org/abs/2205.14135">FlashAttention原论文</a> 它与“下一步保留过去K/V”可以共存，却不是同一个问题：前者优化一次注意力的执行方式，后者避免下一步重新做旧位置计算。本机代码仍用普通矩阵乘/softmax和逐步 <code>torch.cat</code>，没有手写FlashAttention内核或分页式缓存，不把原论文的收益算进本章速度。</p>
+<p>2023年的分组查询注意力再回到“每次要搬多少K/V”这条线，让若干查询头共用一组K/V作为全共享与各头独有之间的取舍，还研究怎样从原多头检查点迁移并继续训练。<a href="https://arxiv.org/abs/2305.13245">GQA原论文</a> 我们的四头检查点四套K/V彼此有不同学得的投影，不能在不改参数和验证的情况下直接令它们共享，然后声称仍是原模型。历史在这里改变的是<strong>可训练结构和服务成本之间的选择</strong>，不是给任何旧文件附一个新缩写。</p>
+<p><a id="thirtyseventh-window"/></p>
+<h2 id="sec-37-007">一个看似合理的“只删最旧缓存”，为什么在这里改了模型</h2>
+<p>第十九章模型最多接受128位。它原来的无缓存生成遇到更长前缀时，取<strong>最后128位</strong>重做前向；固定正弦位置向量从这一小块的第0位重新编号。假设原窗口为编号0到127的128项，选出新项后，原编号0被扔掉，其余127项现在须按<strong>新窗口编号0到126</strong>进入模型。若只从缓存数组删掉最旧K/V，把其余127项原值照留，它们仍带着旧的位置编码；更深层旧活动还曾读取过被扔掉的那项。即使正弦位置公式是固定的，也不能只把旧K/V张量的一列数字改个名字就使它们成为新前向的K/V。</p>
+<p>本章为了<strong>忠于这份具体C19模型</strong>，在窗口未满时逐项追加K/V，满128位后每产生下一项就对新窗口重新计算一次。120位提示再生16项，在这次16步里有7次重建。若故意采用“仅弹出旧K/V”的错误办法，新一次分数的最大绝对差约 <strong>0.2184</strong>；正确重建与FP32全前缀路线在同组贪心输出上逐项相同，窗口内各测点的logit最大差约 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>9.54</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup></mrow></math></span>。FP32在这里表示每个浮点数用32位存储和计算；第十九章当时的CUDA自由生成曾启用BF16混合精度，本章的两条对照路线都固定为FP32，所以“逐项相同”只是在<strong>本章同数值条件</strong>下的核验。小差来自不同计算顺序，本次贪心选择没翻转，不能宣称所有温度抽样、所有硬件都必逐位相等。<a href="res-results.xhtml#res-cba80746550b8336">窗口与错误路线的核验</a></p>
+<p>决定走哪条路的代码就在生成循环里。<code>cache[0][0].shape[2]</code> 是第一层K的<strong>位置数</strong>，各层本来同长；<code>window</code> 是包含刚选出的token、最多128位的当前输入，<code>chosen</code> 是那枚新token：</p>
+<pre><code class="language-python">if cache[0][0].shape[2] == model.cfg.context:
+    logits, cache = prefill(model, window)  # 新窗口从位置0重新计算
+else:
+    logits, cache = decode_one(model, chosen, cache)  # 仅追加一位K/V
+</code></pre>
+<p>这段来自<a href="res-code.xhtml#res-0c7ebc8fd4c10f8c">当前生成程序</a>，不是一个可无条件套到其它位置编码模型上的“通用缓存开关”。若替换C19的位置规则、注意力结构或可见性，就要重新证明旧活动在新输入下是否不变，再决定能否直接保留缓存。</p>
+<p>这里也说明“上下文窗口”和“缓存”没有自动绑定为同一种长期记忆。窗口是模型这次<strong>能读取的输入范围</strong>；缓存是为眼下前缀保留的中间计算；参数存的是训练留下的可调数。第四十章若要讨论跨会话检索与用户事实，不能把今天这0.75MiB K/V当成已会校正、删除、溯源的持久记忆。</p>
+<p><a id="thirtyseventh-prefill"/></p>
+<h2 id="sec-37-008">先通读提示，再逐项续写：两段工作各怕什么</h2>
+<p>服务接到一个新的前缀时，先让模型在其中所有位置算一遍，并保存各层K/V；这段叫 <strong>prefill</strong>（预填），它要真正读进提示，而不是先发一个空回答。其后每选一个新片段，只算这个新位置并读已有K/V，叫 <strong>decode</strong>（逐项解码）。这些名字讲的是一次推断的计算阶段；和把原文字节解成Unicode、把token编号解回文字，不是同一个“解码”。</p>
+<p>如果用户给的提示很长而只要一个字，可能主要等在prefill；如果提示很短却要求一千字，许多顺序decode会成为主要耗时。为比较服务，常分别看<strong>到首个输出片段的时间</strong>、后续每片段时间、整条请求完成时间，以及所有请求合计每秒产出多少片段。第一项的理想计时应包括接收、排队、分词、prefill、第一次选择及发出片段；只报GPU里某一层的时间会漏掉用户实际等待。我们本机HTTP接口一次生成完才送回整份JSON，并不流式发首项，因此没有给用户端实测“首字出现时间”；下表的prefill只是模型内部一个可分离的阶段。<a href="res-verification.xhtml#res-c67fb8cd839f0f8c">本机计时方法</a></p>
+<p>同一RTX 5090 Laptop GPU上，我们先预热，每段计时前后都让GPU同步——GPU接到指令与完成运算不是同一时刻，若不等它算完，就可能只量到CPU发指令的时间。固定每次追加16个片段，取七次中位：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">已有提示长度</th>
+<th style="text-align:right">每项重算完整前缀</th>
+<th style="text-align:right">保存K/V再续写</th>
+<th style="text-align:right">缓存路线中因满128位重建</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">16位</td>
+<td style="text-align:right">43.75 ms</td>
+<td style="text-align:right">30.69 ms</td>
+<td style="text-align:right">0次</td>
+</tr>
+<tr>
+<td style="text-align:right">64位</td>
+<td style="text-align:right">43.74 ms</td>
+<td style="text-align:right">31.10 ms</td>
+<td style="text-align:right">0次</td>
+</tr>
+<tr>
+<td style="text-align:right">120位</td>
+<td style="text-align:right">50.54 ms</td>
+<td style="text-align:right">33.14 ms</td>
+<td style="text-align:right">7次</td>
+</tr>
+</tbody>
+</table>
+<p>表中每项是<strong>整条提示加16项生成</strong>所需时间，并非每个token各花这么多毫秒。另把“读16/64/120位提示”和“已有提示后再算一项”拆开，缓存prefill约 <strong>1.85/1.96/1.98ms</strong>，缓存下一项约 <strong>1.73/1.30/1.70ms</strong>。这些毫秒数并不随提示长度完美单调：模型很小、窗口仅128，调用开销和机器波动可与计算差同量级；三组数字不能外推出一台服务器服务长文的大模型速度。<a href="res-results.xhtml#res-158a7fd96a2ff46f">完整样本及同步方式</a></p>
+<p>2024年的DistServe研究把prefill与decode在<strong>多GPU、具体到首项和后续片段延迟约束</strong>下分开安排，原因正是二者的计算和批处理压力会相互干扰；论文也必须核跨设备运送K/V的代价。<a href="https://www.usenix.org/conference/osdi24/presentation/zhong-yinmin">DistServe原论文</a> 这仍不是“永远分开”的定论。2025年的TaiChi预稿比较两类延迟要求：若最在意首项到达与最在意后续每项，合放或分开各有合适条件，并设计混合的资源安排；这些是其研究中的多GPU服务条件，不是本机已做的优化。<a href="https://arxiv.org/abs/2508.01989">TaiChi原预稿</a> 我们这里只有一张GPU，拆出的毫秒数帮助认识两种负担，不是叫读者现在凭空把笔记本变成两机集群。是否分设备、何时合在一起，取决于请求长度、带宽和延迟目标，不由一个技术名称决定。</p>
+<p><a id="thirtyseventh-batching"/></p>
+<h2 id="sec-37-009">八个人同时等回复：机器快与每个人等得短并不是一个数</h2>
+<p>已有缓存仍可能使GPU每次只为<strong>一个</strong>新位置做很小的矩阵运算。若八条请求的提示同样长、都已准备好、都要再生16项，我们可以把它们放到张量的<strong>批次轴</strong>：同一次四层计算为八条各做自己的查询，输出仍各归各的请求，K/V也按八条分别保存。这叫显式<strong>批处理</strong>。它不是让八个人的提示互相读取；因果遮罩管同一序列的先后，批次轴上的请求没有交叉注意力。</p>
+<p>离线同条件计时，一条一条运行八次缓存，共128输出片段的中位约 <strong>257ms</strong>，合计每秒约 <strong>498</strong> 个输出片段；八条放在一次等长批里，中位约 <strong>29.4ms</strong>，合计每秒约 <strong>4349</strong> 个。两个“每秒”都把<strong>所有请求</strong>的新片段相加，不能说每位用户自己每秒得到4349项。在这里八条同时到达、等长、都固定跑16步，批里的八位大致同一时刻结束；若串行处理，最后一位要等前七位先完成。换成第一位到得早、第二位晚到、有人两步EOS结束、有人要长文，等待和GPU利用率都会变，结果不能由29.4ms直接决定。<a href="res-results.xhtml#res-158a7fd96a2ff46f">八条真实微实验</a></p>
+<p>从上节2023年的注意力结构回看<strong>请求调度这条并行线的2022年</strong>。ORCA研究注意到整条请求固定成一个大批时，短请求结束后仍可能等长请求，后来到的请求又进不来。它把调度单位改为<strong>一次生成迭代</strong>，并判断哪些运算适合一起成批。<a href="https://www.usenix.org/conference/osdi22/presentation/yu">ORCA原论文</a> 2023年的vLLM/PagedAttention则直面另一边：每条请求的K/V随长度长短动态增长，若为每条先占一大块或反复复制，共享设备的内存会被碎片和冗余吞掉；它用分页方式管理这些块。<a href="https://arxiv.org/abs/2309.06180">PagedAttention原论文</a> 一项解决什么时候把请求一起算，另一项解决增长的K/V住在哪里；两者都要在实际到达流里评价。我们实现的只是用户<strong>自己一次提交八条等长请求</strong>，不曾实现ORCA式连续调度、vLLM式分页或跨请求复用共同前缀。</p>
+<p>生成速度还有第三类候选。2023年的推测式解码研究让较小模型先提出若干候选，由目标模型并行核验，并用规定的接受/修正规则保持目标分布；它不是单纯“让小模型猜十个词，全部直接当大模型答案”。<a href="https://proceedings.mlr.press/v202/leviathan23a.html">推测式解码原论文</a> 本机没有第二个草稿模型和接受核验程序，因此它是服务史中另一种认真解决串行等待的路线，而非我们的实测成绩。</p>
+<p><a id="thirtyseventh-quantization"/></p>
+<h2 id="sec-37-010">文件短了一半，就一定算得更快、说得一样吗</h2>
+<p>同一权重的FP32服务文件已有19.74MB。再问一个不同的压缩问题：把某些实数矩阵近似地用较少位数保存和相乘，会省掉多少存储，又会改变多少输出？一个可解释的简化是为权重取一个尺度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo>&gt;</mo><mn>0</mn></mrow></math></span> 与整数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi></mrow></math></span>，使 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>w</mi><mo>≈</mo><mi>s</mi><mi>q</mi></mrow></math></span>。若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi></mrow></math></span> 只用8位保存，权重数值会发生舍入；输出分数经过多层相乘和非线性后可能变一点，最大概率项临近并列时甚至会翻转。尺度怎样选、输入活动是否也变成整数、在哪种硬件上执行，都影响答案。<strong>量化</strong>是这些具体近似与算子的设计，而不是把 <code>.pt</code> 文件改个后缀。</p>
+<p>我们用当前本机PyTorch 2.11还能运行的动态INT8接口，只转换25个 <code>nn.Linear</code>。所谓“动态”，是线性层调用时根据当前输入处理其激活的量化尺度；输入嵌入、LayerNorm、softmax、K/V缓存并没有因此变成INT8。量化状态另存为 <strong>9,729,461字节</strong>，相比前述FP32服务包少约一半；但两个文件的元数据形式也不完全相同，不能把文件比例说成<strong>整个服务内存</strong>比例。PyTorch官方当前文档保留这条旧API，同时建议新的量化实现转向torchao；本书只把它当可在这台CPU上核验的有限例子。<a href="https://docs.pytorch.org/docs/2.11/generated/torch.ao.quantization.quantize_dynamic.html">PyTorch 2.11接口</a>；<a href="res-results.xhtml#res-b5f03cc579091b70">量化运行记录</a></p>
+<p>先用现成验证集的前64块、7944个目标检查数值：FP32每目标负对数约 <strong>5.780105</strong>，该INT8支为 <strong>5.780782</strong>。差很小，却不等于每次续写都相同；三条固定提示的32项贪心续文，两条完全同，<code>The city of</code> 那条在后段分叉。再测这台机器CPU八线程上同一提示生成16项的中位时间：FP32约 <strong>14.07ms</strong>，INT8约 <strong>31.77ms</strong>，本次反而更慢。模型小、非线性层/嵌入未量化、旧CPU量化实现和转换开销都可能影响这组端到端结果；我们没有逐算子消融，不能武断给唯一原因。2022年公开、2023年发表的SmoothQuant还专门处理大模型激活中的难量化值与权重/激活间的尺度迁移，并非本机这25个线性层的旧接口实验。<a href="https://proceedings.mlr.press/v202/xiao23c.html">SmoothQuant原论文</a></p>
+<p>因此回答服务选择时，要同时问：文件或显存实际省了什么、同一验证任务的分数改变多少、生成在哪些提示会分叉、目标机器<strong>实际</strong>快不快。只报“INT8压缩2倍”漏了后三问；反过来，这台小CPU实验变慢，也不能否定其它硬件、模型尺度或不同量化方案的实测收益。</p>
+<p><a id="thirtyseventh-local-service"/></p>
+<h2 id="sec-37-011">把一次模型调用做成可检查的本机接口</h2>
+<p>到这里我们有同一份固定权重、可解释的生成规则和缓存条件，可以给它一个很小的本机入口。HTTP在这里仅是两个本机程序约定的“发请求、收回应”格式，JSON是请求与回应中的可读字段表；它们不负责模型推理。<a href="code-48a7b0394f14.xhtml#code-source">实际HTTP服务</a>只听 <code>127.0.0.1</code>，即这台电脑自己的回环地址。它启动时加载模型和词表一次；<code>GET /health</code> 回报是否就绪、权重来源哈希、原训练轮次和128位置上限。单条 <code>POST /generate</code> 收到文字，检查长度与选择方式，分词并把BOS放在前面，必要时只留最后128位，返回新增编号、解码文字、是否遇EOS、丢了多少输入位置以及模型内部耗时。若丢了输入，调用者至少能看见，并据此决定这条回答还能不能用于自己的任务。</p>
+<p>服务还接受 <code>POST /generate_batch</code>，但只允许<strong>一到八条且分词后等长</strong>的提示，明确采用贪心和相同的生成步数上限。不满足条件返回HTTP 400，并不暗中补PAD改变模型语义。各HTTP请求可以被不同handler接收，但实际推断由同一个锁串行进入模型；它不会把八个分别到达的请求自动并成一批。因此“能接并发连接”“一次显式批可提吞吐”“会连续调度并发请求”是三级不同的主张，我们的服务只实现前两者中的有限部分。</p>
+<p>实际在本机端口53467启动、发请求、关掉的记录里，热身后单条12项的模型内部耗时约 <strong>44ms</strong>，八条显式批各12项约 <strong>38ms</strong>。单条HTTP客户端墙钟却约55.5ms，批的客户端约63.9ms；它包含JSON处理和本地传递，不能把“模型里38ms”同“客户端55.5ms”跨口径硬比。首次请求曾耗几秒，热身亦接近一秒，这些冷启动读数不能拿来宣传缓存或批处理倍数。错误上限和异长批确实返回400，批第一条的贪心编号与单条相同，超长提示返回删去115位；服务已停止、没有留在后台。<a href="res-results.xhtml#res-4881f94111c46165">HTTP实际探针</a>与<a href="res-verification.xhtml#res-c67fb8cd839f0f8c">完整边界</a></p>
+<p>读者可在本机先独立复核缓存与计时，再开一个本地终端试服务。以下命令从本书活动包根目录运行，<code>--out</code>指定新的结果文件，不覆盖作者的首次运行收据；服务命令会一直运行，结束时在其终端按 <code>Ctrl+C</code>。</p>
+<pre><code class="language-powershell"># 当前目录：先按“随书实践准备”运行 Open-Lab.ps1
+python work/code/c37_cache_verify.py --out work/runs/c37_my_cache_check.json
+python work/code/c37_latency_bench.py --out work/runs/c37_my_latency.json
+python work/code/c37_local_server.py --port 53468
+</code></pre>
+<p>在第二个终端运行已写好的客户端探针，它会先请求模型身份，再发贪心、抽样、显式批及故意不合法的请求；每一步是否被接收、返回编号和耗时都写到新文件：</p>
+<pre><code class="language-powershell"># 当前目录：先按“随书实践准备”运行 Open-Lab.ps1
+python work/code/c37_local_service_probe.py --port 53468 --out work/runs/c37_my_http.json
+</code></pre>
+<p>若想改前缀而非只跑固定探针，可以在第二终端发送一条最简单的请求；先预测这次 <code>max_new_tokens=8</code> 是哪一种上限，再看 <code>ended_with_eos</code> 与实际新增编号数。这里的字符串和JSON由PowerShell准备，网络目的地仍是自己的回环地址：</p>
+<pre><code class="language-powershell">$body = @{prompt='The city of'; max_new_tokens=8; selection='greedy'} | ConvertTo-Json
+Invoke-RestMethod -Uri 'http://127.0.0.1:53468/generate' -Method Post -ContentType 'application/json' -Body $body
+</code></pre>
+<p>抽样温度也能直接改变，而不需要重训模型。下面两次用同一个提示和随机种子，只把最高40项的温度由0.8换成1.0；<strong>分布已经不同</strong>，同一个随机种子不强迫结果相同。先看新增编号，再看解码文字，避免只凭一条句子说哪种选择更懂事实。</p>
+<pre><code class="language-powershell">$cold = @{prompt='The city of'; max_new_tokens=12; selection='sample_top40'; seed=7; temperature=0.8} | ConvertTo-Json
+$warm = @{prompt='The city of'; max_new_tokens=12; selection='sample_top40'; seed=7; temperature=1.0} | ConvertTo-Json
+$a = Invoke-RestMethod -Uri 'http://127.0.0.1:53468/generate' -Method Post -ContentType 'application/json' -Body $cold
+$b = Invoke-RestMethod -Uri 'http://127.0.0.1:53468/generate' -Method Post -ContentType 'application/json' -Body $warm
+$a.new_token_ids
+$a.text
+$b.new_token_ids
+$b.text
+</code></pre>
+<p>本机同种子12项的两条实际序列已经分叉；把温度设为0则被服务拒绝，不会暗中把一个无定义的除法送进softmax。<a href="res-results.xhtml#res-2b739be8e6dd7644">温度变体的HTTP复核</a></p>
+<p>这个例子从固定权重一路走到了用户可发的请求，仍只做了“文字续写”。即使它哪天输出看似合法的 <code>{"tool":"multiply","args":[12,13]}</code>，本章服务也只是把那串字符作为<strong>文字</strong>送回，没有按其中内容调用乘法，更没有获得授权修改文件。下一章才研究模型怎样从带来源的示范或反馈学会<strong>何时发请求、用什么参数、如何利用返回</strong>；再后一章研究由宿主实际执行、失败后怎样恢复。能生成请求、学会正确选请求、允许并可靠地执行请求，是三个不同问题。<a href="res-other.xhtml#res-7761674fc44ab140">下一段的连续教学试样</a></p>
+<p><a id="thirtyseventh-practice"/></p>
+<h2 id="sec-37-012">自己换一个条件，检查究竟变了哪件事</h2>
+<ol>
+<li>现行模型四层、宽192，若一条请求保留64个FP32位置，光K/V载荷应有多少字节？如果提示位置不变、生成到第129个保留位置，仅把最旧一列K/V删去，为什么不能据“固定正弦位置可重算”断定仍与本模型原前向等价？</li>
+<li><code>The city of</code> 在贪心下出现循环。把抽样温度从0.8改成1.0，或把top40换成全词表，哪一项数学分布被改了？即使偶尔读到更好的句子，哪些事实依然没有证据？</li>
+<li>八条请求合批使合计输出token/s大幅增加。若第一条现在到、其余七条两秒后才到，服务为了合批让第一条等两秒，合计吞吐和第一位用户的等待可能怎样分别变化？本章微实验为什么没有替这种调度作结论？</li>
+<li>CPU INT8文件变小、64验证块NLL仅略增，却在这台CPU上变慢，且一条贪心续写后段改变。分别说出这四个观察在回答<strong>存储、平均预测、速度、单次文字</strong>的哪一问；它们是否互相矛盾？</li>
+</ol>
+<h3 id="sec-37-013">核对思路</h3>
+<ol>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>64</mn><mo>×</mo><mn>2</mn><mo>×</mo><mn>4</mn><mo>×</mo><mn>192</mn><mo>×</mo><mn>4</mn><mo>=</mo><mn>393216</mn></mrow></math></span>字节。满128后旧位置必须以新窗口从0开始，并可能失去对被删位置的旧层读取；原缓存中的K/V由旧位置、旧层输入产生，不能只改标签。现行程序重做prefill。</li>
+<li>温度改了留存40项之间的相对概率，取消top40还让原先排除的其余项重新有概率。参数、训练资料、独立任务能力都没在这次生成中改变，单条样本没有给出能力改善证据。</li>
+<li>等待可能使整批GPU算得快却使第一位用户晚两秒才收到整份回答；真正选择还取决于到达率、长度和延迟约束。本章只测同时到达、等长、固定16步，没有模拟晚到或自动排队。</li>
+<li>它们分别回答状态文件字节、这批已有验证目标的平均负对数、当前CPU实现的16步墙钟、具体前缀上的离散选择。近似误差很小仍能翻转近并列候选；文件短也不能迫使所有计算路径变快，四事并不矛盾。</li>
+</ol>
+</body></html>

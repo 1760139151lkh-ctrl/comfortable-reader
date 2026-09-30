@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十五章　有限差分、有限元、元胞自动机：同一外形，不同构造</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十五章-有限差分有限元元胞自动机同一外形不同构造">第十五章　有限差分、有限元、元胞自动机：同一外形，不同构造</h1>
+<h2 id="151-有限差分从导数出发">15.1 有限差分：从导数出发</h2>
+<p>有限差分通常先给出连续方程，再在网格上近似微分算子。例如二维热方程</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><mi>D</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msub><mi>u</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><mo>+</mo><msub><mi>u</mi><mrow><mi>y</mi><mi>y</mi></mrow></msub><mo fence="true" form="postfix" stretchy="true">)</mo></mrow></mrow></math></div>
+<p>在均匀网格上可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>+</mo><mi>r</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>−</mo><mn>4</mn><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow></math></div>
+<p>其中</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>r</mi><mo>=</mo><mfrac><mrow><mi>D</mi><mi>Δ</mi><mi>t</mi></mrow><mrow><msup><mi>h</mi><mn>2</mn></msup></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>它的外形确实是“中心格点根据自己和四个邻居更新”。但 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>u</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mi>n</mi></msubsup></mrow></math></span> 通常是实数，代表温度、浓度或压力；网格间距 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 和时间步长 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>t</mi></mrow></math></span> 也具有明确的数值分析意义。</p>
+<p>在二维、等间距、四邻域的显式热方程格式中，稳定性通常要求</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>0</mn><mo>≤</mo><mi>r</mi><mo>≤</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>.</mo></mrow></math></div>
+<p>例如 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>D</mi><mo>=</mo><mn>1</mn></mrow></math></span>、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>=</mo><mn>0.1</mn></mrow></math></span> 时，若取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>t</mi><mo>=</mo><mn>0.002</mn></mrow></math></span>，则 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>r</mi><mo>=</mo><mn>0.2</mn></mrow></math></span>，通常处在稳定范围内；若把时间步长增大到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.004</mn></mrow></math></span>，则 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>r</mi><mo>=</mo><mn>0.4</mn></mrow></math></span>，计算可能出现振荡和发散。这个限制不是元胞规则的“审美”，而是为了让离散解逼近原始热方程并保持稳定。</p>
+<p>有限差分关心的是：</p>
+<ul>
+<li>一致性：差分算子是否逼近原导数；</li>
+<li>稳定性：误差是否会被时间推进放大；</li>
+<li>收敛性：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 和 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Δ</mi><mi>t</mi></mrow></math></span> 变小时是否趋近连续解；</li>
+<li>误差阶：误差按什么速度下降。</li>
+</ul>
+<h2 id="152-元胞自动机规则本身就是研究对象">15.2 元胞自动机：规则本身就是研究对象</h2>
+<p>一维元胞自动机第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>90</mn></mrow></math></span> 号规则写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>⊕</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo>,</mo><mspace width="0.278em"/><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⊕</mo></mrow></math></span> 是异或。它不需要从热方程或波动方程推导出来。若初始时只有中心元胞为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>，不断迭代会出现类似谢尔宾斯基三角形的图案：</p>
+<pre><code class="language-text">        1
+       1 1
+      1   1
+     1 1 1 1
+    1       1
+   1 1     1 1
+</code></pre>
+<p>这里的重点不是网格加密后会不会逼近某个连续函数，而是一个极短的局部规则为什么会产生自相似结构。有限差分问的是“怎样用格子逼近连续世界”，第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>90</mn></mrow></math></span> 号元胞自动机问的是“这个离散世界自身会演化出什么”。</p>
+<h2 id="153-有限元局部积分整体求解">15.3 有限元：局部积分，整体求解</h2>
+<p>有限元在时间依赖问题中先写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo>,</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>U</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><msub><mi>φ</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>代入弱形式得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>M</mi><mover><mi>U</mi><mo>˙</mo></mover><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>+</mo><mi>K</mi><mi>U</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这里的未知量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>U</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span> 是连续实值系数。即使每个基函数只在局部支撑，真正的时间步也常常需要解一个整体方程组。例如后向欧拉给出</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>M</mi></mrow><mrow><mi>Δ</mi><mi>t</mi></mrow></mfrac><mo>+</mo><mi>K</mi><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><msup><mi>U</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mrow><mi>M</mi></mrow><mrow><mi>Δ</mi><mi>t</mi></mrow></mfrac><msup><mi>U</mi><mi>n</mi></msup><mo>+</mo><msup><mi>F</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>.</mo></mrow></math></div>
+<p>这与生命游戏“查看邻居后直接查表”不是同一操作。有限元矩阵稀疏，是因为基函数局部重叠；每个时间步求解整体方程，是因为所有自由度通过方程组共同满足弱平衡。</p>
+<h3 id="一个最小的一维算例">一个最小的一维算例</h3>
+<p>考虑</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>−</mo><msup><mi>u</mi><mi>″</mi></msup><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="0.278em"/><mn>0</mn><mo>&lt;</mo><mi>x</mi><mo>&lt;</mo><mn>1</mn><mo>,</mo><mspace width="0.278em"/><mi>u</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mi>u</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>用两个长度为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>=</mo><mn>1</mn><mo>/</mo><mn>2</mn></mrow></math></span> 的线性单元。组装后的内部节点刚度系数为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>K</mi><mrow><mtext>int</mtext></mrow></msub><mo>=</mo><mfrac><mrow><mn>2</mn></mrow><mrow><mi>h</mi></mrow></mfrac><mo>=</mo><mn>4</mn><mo>.</mo></mrow></math></div>
+<p>两个相邻单元各给内部节点贡献 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi><mo>/</mo><mn>2</mn></mrow></math></span> 的载荷，所以</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>F</mi><mrow><mtext>int</mtext></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>.</mo></mrow></math></div>
+<p>施加边界条件后只剩一个未知量：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>4</mn><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>,</mo><mspace width="0.278em"/><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><mfrac><mn>1</mn><mn>8</mn></mfrac><mo>=</mo><mn>0.125</mn><mo>.</mo></mrow></math></div>
+<p>这个问题的精确解是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><mi>x</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mrow><mn>2</mn></mrow></mfrac><mo>,</mo></mrow></math></div>
+<p>在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>=</mo><mn>1</mn><mo>/</mo><mn>2</mn></mrow></math></span> 处恰好也是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.125</mn></mrow></math></span>。这里节点系数确实等于节点处的函数值，但这个结果来自基函数、弱形式和组装，而不是一条“中心值由邻居查表得到”的有限状态规则。</p>
+<h2 id="154-三者最严格的对照">15.4 三者最严格的对照</h2>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>从什么出发</th>
+<th>未知量</th>
+<th>局部性的来源</th>
+<th>主要问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>有限差分</td>
+<td>连续微分方程和导数</td>
+<td>网格点值</td>
+<td>差分模板只看有限邻域</td>
+<td>离散解是否逼近原方程</td>
+</tr>
+<tr>
+<td>有限元</td>
+<td>弱形式和有限维函数空间</td>
+<td>基函数系数</td>
+<td>基函数支撑局部重叠</td>
+<td>离散空间能否逼近真实解</td>
+</tr>
+<tr>
+<td>元胞自动机</td>
+<td>局部状态规则</td>
+<td>有限状态元胞</td>
+<td>规则读取有限邻域</td>
+<td>反复迭代后会涌现什么行为</td>
+</tr>
+</tbody>
+</table>
+<p>三者都可能产生稀疏矩阵或局部更新，但“局部”在三者中的来源不同。有限差分的局部性来自差商模板；有限元的局部性来自基函数支撑和积分可加性；元胞自动机的局部性直接写进了模型规则。</p>
+<p>从广义角度看，如果把“元胞自动机”放宽为“每个格点根据有限邻域用统一规则并行更新”，那么实值显式有限差分确实可以被看作一种连续状态的格点动力系统。但标准术语中的经典元胞自动机通常还要求有限状态集合，因此不能把所有有限差分格式都直接叫作元胞自动机。</p>
+</body></html>

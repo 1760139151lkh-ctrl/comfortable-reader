@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十四章　三条轴：时间、空间与状态值</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十四章-三条轴时间空间与状态值">第十四章　三条轴：时间、空间与状态值</h1>
+<p>把“离散”拆成三个互相独立的轴，可以避免很多混淆。</p>
+<h2 id="141-时间是否离散">14.1 时间是否离散</h2>
+<p>连续时间变量写作 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span>，状态按照微分方程变化：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><mi>X</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>G</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>离散时间则使用步号 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msup><mi>X</mi><mi>n</mi></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>有限差分和有限元都可以只离散时间、只离散空间，或者两者都离散。时间连续还是离散，不是它们的定义。</p>
+<h2 id="142-空间是否离散">14.2 空间是否离散</h2>
+<p>连续空间中的位置 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 可以属于区间、平面或三维区域：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>∈</mo><mi>Ω</mi><mo>.</mo></mrow></math></div>
+<p>离散空间则只在网格点、图的顶点或格点集合上定义状态：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>i</mi><mo>∈</mo><mi>Λ</mi><mo>.</mo></mrow></math></div>
+<p>这里还要特别区分有限元。有限元的物理区域 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Ω</mi></mrow></math></span> 仍然是连续的；分片线性近似</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>U</mi><mi>j</mi></msub><msub><mi>φ</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>在每个单元内部对所有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>∈</mo><mi>Ω</mi></mrow></math></span> 都有定义。人们常说“有限元离散了空间”，更精确的意思是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>空间中的函数自由度被限制到有限维函数空间</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这与元胞自动机把空间直接看成一个个格点，并不是同一层面的离散。</p>
+<h2 id="143-状态取值是否连续">14.3 状态取值是否连续</h2>
+<p>连续状态通常满足</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>t</mi><mo>,</mo><mi>x</mi><mo stretchy="false">)</mo><mo>∈</mo><mi mathvariant="double-struck">R</mi><mspace width="1em"/><mtext>或</mtext><mspace width="1em"/><mi>u</mi><mo stretchy="false">(</mo><mi>t</mi><mo>,</mo><mi>x</mi><mo stretchy="false">)</mo><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>m</mi></msup><mo>.</mo></mrow></math></div>
+<p>温度可以是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>23.7418</mn></mrow></math></span>，位移可以是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.0032</mn></mrow></math></span>，这些都是连续数值。</p>
+<p>离散状态则可能是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo><mo>,</mo></mrow></math></div>
+<p>也可能是有限类别</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><mo>∈</mo><mo stretchy="false">{</mo><mtext>空地</mtext><mo>,</mo><mtext>树木</mtext><mo>,</mo><mtext>燃烧</mtext><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>因此</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>∈</mo><mi mathvariant="double-struck">R</mi></mrow></math></div>
+<p>完全可以表示“空间离散、时间连续、状态连续”的系统。空间位置的离散和状态取值的离散是两件不同的事。</p>
+<h2 id="144-同一热方程如何经过三个阶段">14.4 同一热方程如何经过三个阶段</h2>
+<p>从一维热方程开始：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><mi>D</mi><msub><mi>u</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>它属于“连续时间、连续空间、连续状态”。</p>
+<p>把空间网格化，令 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>=</mo><mi>i</mi><mi>h</mi></mrow></math></span>，用二阶差商近似 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>u</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub></mrow></math></span>，得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>D</mi></mrow><mrow><msup><mi>h</mi><mn>2</mn></msup></mrow></mfrac><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msub><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>−</mo><mn>2</mn><msub><mi>u</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>这时是“时间连续、空间离散、状态连续”的半离散系统。</p>
+<p>再用显式欧拉离散时间：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>u</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><mi>r</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>−</mo><mn>2</mn><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup><mo>+</mo><msubsup><mi>u</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="0.278em"/><mi>r</mi><mo>=</mo><mfrac><mrow><mi>D</mi><mi>Δ</mi><mi>t</mi></mrow><mrow><msup><mi>h</mi><mn>2</mn></msup></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>这时是“时间离散、空间离散、状态连续”的全离散格式。</p>
+<p>如果把每个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>u</mi><mi>i</mi><mi>n</mi></msubsup></mrow></math></span> 又强行限制为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>，再设计一个有限状态更新函数，它才开始接近经典元胞自动机。但仅仅把数字四舍五入成 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>，并不能自动产生一个有意义的元胞模型。</p>
+<h2 id="145-一张统一分类表">14.5 一张统一分类表</h2>
+<table>
+<thead>
+<tr>
+<th>模型或方法</th>
+<th>时间</th>
+<th>空间</th>
+<th>状态值</th>
+<th>定义性特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>经典偏微分方程</td>
+<td>连续</td>
+<td>连续</td>
+<td>连续</td>
+<td>连续场与微分算子</td>
+</tr>
+<tr>
+<td>空间半离散差分</td>
+<td>连续</td>
+<td>离散网格</td>
+<td>连续</td>
+<td>差商近似空间导数</td>
+</tr>
+<tr>
+<td>全离散有限差分</td>
+<td>离散</td>
+<td>离散网格</td>
+<td>通常连续</td>
+<td>差商加时间推进</td>
+</tr>
+<tr>
+<td>空间半离散有限元</td>
+<td>连续</td>
+<td>函数空间有限维化</td>
+<td>连续</td>
+<td>弱形式加有限维试探空间</td>
+</tr>
+<tr>
+<td>全离散有限元</td>
+<td>离散</td>
+<td>函数空间有限维化</td>
+<td>连续</td>
+<td>再加时间离散</td>
+</tr>
+<tr>
+<td>经典元胞自动机</td>
+<td>离散</td>
+<td>离散格点</td>
+<td>有限离散</td>
+<td>统一局部规则同步更新</td>
+</tr>
+<tr>
+<td>耦合映射格子</td>
+<td>离散</td>
+<td>离散格点</td>
+<td>连续</td>
+<td>局部耦合的实值映射</td>
+</tr>
+<tr>
+<td>连续时间格点模型</td>
+<td>连续</td>
+<td>离散</td>
+<td>可离散</td>
+<td>每个位置由随机跳变驱动</td>
+</tr>
+</tbody>
+</table>
+<p>这张表描述的是一个已经写出的数学模型在三个轴上的性质。它不能反过来单独定义有限差分和有限元，因为有限差分的定义性动作是“用差商近似导数”，有限元的定义性动作是“用弱形式和有限维函数空间求解”。</p>
+</body></html>

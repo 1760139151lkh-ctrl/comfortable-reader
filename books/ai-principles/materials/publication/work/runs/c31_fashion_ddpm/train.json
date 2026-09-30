@@ -1,0 +1,378 @@
+{
+  "scope": "official Fashion 28x28 original grayscale conditional denoising, C13 stratified old train/validation; 10 official classes intentionally loaded, null condition trained; no official test",
+  "source_identity": {
+    "official_manifest_sha256": "0e99922a3f8f8e173e6c8cd9b35c71f8b7456f866353e865bb8f0df4d6421060",
+    "train_images_sha256": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+    "train_labels_sha256": "a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845",
+    "c13_stratified_split_sha256": "ac870595933df8a373507f0728aa2d275645e05ac53a052556995c49fe43ea9b",
+    "train_count": 50000,
+    "validation_count": 10000,
+    "pixel_transform": "official grayscale uint8 /127.5 -1, no binarization",
+    "labels": "10 official Fashion classes enter conditional model; null condition randomly trained"
+  },
+  "mode": "small 300-step class-conditional DDPM epsilon predictor",
+  "timesteps": 300,
+  "beta_schedule": "linear 0.0001 to 0.05",
+  "bar_alpha_terminal": 0.0004790536009816845,
+  "q_terminal_conditioned_on_x0": "sqrt(bar_alpha_T)*x0+sqrt(1-bar_alpha_T)*normal; only approximately pure normal",
+  "train_target": "epsilon MSE at uniformly sampled step and real image, mean over batch/pixels; not exact unweighted negative log likelihood",
+  "null_condition_probability": 0.1,
+  "batch_size": 128,
+  "epochs_planned": 15,
+  "optimizer": "AdamW lr0.0003 weight_decay1e-4 gradient_clip1",
+  "initial_validation": {
+    "conditional_noise_mse": 1.301968939602375,
+    "early_middle_late_mse": [
+      1.2805966142295064,
+      1.306814258524727,
+      1.3188068149023293
+    ],
+    "early_middle_late_counts": [
+      690,
+      677,
+      681
+    ],
+    "validation_images": 2048
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_online_noise_mse": 0.11240475620269776,
+      "train_null_condition_count": 5003,
+      "validation": {
+        "conditional_noise_mse": 0.06702405959367752,
+        "early_middle_late_mse": [
+          0.16506050082220547,
+          0.02744268930821158,
+          0.007040863629654816
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 2,
+      "train_online_noise_mse": 0.06520672294974326,
+      "train_null_condition_count": 4930,
+      "validation": {
+        "conditional_noise_mse": 0.05829357332549989,
+        "early_middle_late_mse": [
+          0.14448973614236582,
+          0.02393470689148107,
+          0.005115306368658371
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 3,
+      "train_online_noise_mse": 0.05858015871047974,
+      "train_null_condition_count": 4967,
+      "validation": {
+        "conditional_noise_mse": 0.05525302956812084,
+        "early_middle_late_mse": [
+          0.13822259142778923,
+          0.021954199764189726,
+          0.004290195376162312
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 4,
+      "train_online_noise_mse": 0.05578106627225876,
+      "train_null_condition_count": 4944,
+      "validation": {
+        "conditional_noise_mse": 0.05203887913376093,
+        "early_middle_late_mse": [
+          0.13041768972424495,
+          0.021239578371738226,
+          0.0032426197404553363
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 5,
+      "train_online_noise_mse": 0.053771081960201264,
+      "train_null_condition_count": 5022,
+      "validation": {
+        "conditional_noise_mse": 0.05000524781644344,
+        "early_middle_late_mse": [
+          0.12592727343241375,
+          0.019984569736210246,
+          0.002924195743779954
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 6,
+      "train_online_noise_mse": 0.05231647633314133,
+      "train_null_condition_count": 5069,
+      "validation": {
+        "conditional_noise_mse": 0.04941244120709598,
+        "early_middle_late_mse": [
+          0.12491302870321964,
+          0.01944424694010567,
+          0.0027062169955865576
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 7,
+      "train_online_noise_mse": 0.051136746003627775,
+      "train_null_condition_count": 4998,
+      "validation": {
+        "conditional_noise_mse": 0.04842534870840609,
+        "early_middle_late_mse": [
+          0.12301425035449041,
+          0.018739172987959057,
+          0.002362496188121045
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 8,
+      "train_online_noise_mse": 0.05036284812092781,
+      "train_null_condition_count": 5041,
+      "validation": {
+        "conditional_noise_mse": 0.04776907293125987,
+        "early_middle_late_mse": [
+          0.12125385014907174,
+          0.018597864902177977,
+          0.0023129969375774197
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 9,
+      "train_online_noise_mse": 0.04889391403794289,
+      "train_null_condition_count": 5029,
+      "validation": {
+        "conditional_noise_mse": 0.04786078375764191,
+        "early_middle_late_mse": [
+          0.12141042066657025,
+          0.018598252860622885,
+          0.0024297767908212546
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 10,
+      "train_online_noise_mse": 0.04879451402544975,
+      "train_null_condition_count": 5071,
+      "validation": {
+        "conditional_noise_mse": 0.04625180410221219,
+        "early_middle_late_mse": [
+          0.11765158107315285,
+          0.01779846210951643,
+          0.002194635148834377
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 11,
+      "train_online_noise_mse": 0.048895533479452136,
+      "train_null_condition_count": 4875,
+      "validation": {
+        "conditional_noise_mse": 0.04628061759285629,
+        "early_middle_late_mse": [
+          0.11771259722502335,
+          0.01788177241074634,
+          0.0021366417495514677
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 12,
+      "train_online_noise_mse": 0.04805575791597366,
+      "train_null_condition_count": 5026,
+      "validation": {
+        "conditional_noise_mse": 0.04558441415429115,
+        "early_middle_late_mse": [
+          0.11566527062568112,
+          0.01762075504312839,
+          0.0023767867080440605
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 13,
+      "train_online_noise_mse": 0.04770698421955109,
+      "train_null_condition_count": 5012,
+      "validation": {
+        "conditional_noise_mse": 0.04476336226798594,
+        "early_middle_late_mse": [
+          0.11386842520340629,
+          0.017342323038391384,
+          0.0020049906960755543
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 14,
+      "train_online_noise_mse": 0.047851872758865356,
+      "train_null_condition_count": 4957,
+      "validation": {
+        "conditional_noise_mse": 0.044945149682462215,
+        "early_middle_late_mse": [
+          0.11425763696864032,
+          0.017350091275647614,
+          0.0021496100868159977
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 15,
+      "train_online_noise_mse": 0.04762727926015854,
+      "train_null_condition_count": 4963,
+      "validation": {
+        "conditional_noise_mse": 0.04482357366941869,
+        "early_middle_late_mse": [
+          0.11401345695274463,
+          0.017302957736230848,
+          0.002078254919132647
+        ],
+        "early_middle_late_counts": [
+          690,
+          677,
+          681
+        ],
+        "validation_images": 2048
+      }
+    }
+  ],
+  "selection": "minimum conditional fixed-noise/timestep MSE on first2048 C13 validation rows, not image quality",
+  "selected_epoch": 13,
+  "checkpoint": "work/runs/c31_fashion_ddpm/best.pt",
+  "checkpoint_sha256": "0199491a0ead650551cacfd6af9dfc05ab3295ff6ba30c26dbbc79bf99bcb32a",
+  "reverse_sampler": "300 ancestral Gaussian steps, posterior variance beta_t*(1-bar_alpha_(t-1))/(1-bar_alpha_t), final step deterministic; no image clipping inside chain",
+  "guidance_definition": "paper convention epsilon_w=(1+w)*epsilon_cond-w*epsilon_null; w0 ordinary class-conditional",
+  "samples": [
+    {
+      "name": "unconditional",
+      "label": 10,
+      "guidance_w": 0.0,
+      "path": "work/runs/c31_fashion_ddpm/samples_unconditional.npy",
+      "sha256": "9f4375a90c25cab161ed844f2c270872edaf04bd1a73c15b367e544decf252eb",
+      "raw_before_display_clip_min_max": [
+        -1.0878156423568726,
+        1.1746926307678223
+      ]
+    },
+    {
+      "name": "ankle_boot_w0",
+      "label": 9,
+      "guidance_w": 0.0,
+      "path": "work/runs/c31_fashion_ddpm/samples_ankle_boot_w0.npy",
+      "sha256": "9fc08e9f24007db120d9ca83788bad2f6858c3f9c76335067e4db7a22cf441ca",
+      "raw_before_display_clip_min_max": [
+        -1.0448651313781738,
+        1.2768194675445557
+      ]
+    },
+    {
+      "name": "ankle_boot_w2",
+      "label": 9,
+      "guidance_w": 2.0,
+      "path": "work/runs/c31_fashion_ddpm/samples_ankle_boot_w2.npy",
+      "sha256": "1ad1e06aab7fb34da830c199d007b5f4e1f4d61d91d3750830da5edc1a784897",
+      "raw_before_display_clip_min_max": [
+        -1.0441356897354126,
+        1.3257948160171509
+      ]
+    },
+    {
+      "name": "ankle_boot_w5",
+      "label": 9,
+      "guidance_w": 5.0,
+      "path": "work/runs/c31_fashion_ddpm/samples_ankle_boot_w5.npy",
+      "sha256": "39f02f8cdcb1e8e7239b6cec91f665fc8b419b004632bc8538b91cd481b004ef",
+      "raw_before_display_clip_min_max": [
+        -1.0536962747573853,
+        1.3916287422180176
+      ]
+    }
+  ],
+  "peak_gpu_allocated_bytes": 680821760,
+  "official_test_opened": false
+}

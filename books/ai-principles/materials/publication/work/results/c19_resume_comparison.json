@@ -1,0 +1,45 @@
+{
+  "scope": "两条真正执行的四轮同数据/同日程训练：第一条第1轮后退出并恢复，第二条不中断；比较最佳检查点及四轮验证。没有打开测试资料。",
+  "restored_directory": ".\\work\\runs\\c19_revision_20260924",
+  "continuous_directory": ".\\work\\runs\\c19_uninterrupted_20260924",
+  "restored_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "continuous_checkpoint_sha256": "b207706d0a756d6f2cf702b486b3fb0f0c371a4b20d9201629be94034f1186ee",
+  "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "global_step_each": 1336,
+  "restored_resume_event": true,
+  "model_tensor_count": 51,
+  "model_tensors_exactly_equal": 51,
+  "model_largest_parameter_abs_gap": 0.0,
+  "optimizer_largest_floating_abs_gap": 0.0,
+  "optimizer_nonfloating_differences": [],
+  "best_validation_nll_abs_gap": 4.1215168167241245e-08,
+  "validation_by_epoch": [
+    {
+      "epoch": 1,
+      "restored_nll": 6.354494316950359,
+      "continuous_nll": 6.3544945230262,
+      "abs_gap": 2.0607584083620623e-07
+    },
+    {
+      "epoch": 2,
+      "restored_nll": 5.985818612786462,
+      "continuous_nll": 5.985818791385524,
+      "abs_gap": 1.7859906265016434e-07
+    },
+    {
+      "epoch": 3,
+      "restored_nll": 5.847874336628129,
+      "continuous_nll": 5.847874240459403,
+      "abs_gap": 9.616872631568185e-08
+    },
+    {
+      "epoch": 4,
+      "restored_nll": 5.816161129656105,
+      "continuous_nll": 5.8161610884409365,
+      "abs_gap": 4.1215168167241245e-08
+    }
+  ],
+  "cpu_rng_exactly_equal": true,
+  "cuda_rng_exactly_equal": true,
+  "interpretation_limit": "小数差可能来自GPU浮点执行顺序；该比较核轮界恢复是否延续同一设置和近似轨迹，不证明所有断电时刻、机器或库版本逐位相同。"
+}

@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十三章　先把“系统”定义清楚：局部规则也是方程</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十三章-先把系统定义清楚局部规则也是方程">第十三章　先把“系统”定义清楚：局部规则也是方程</h1>
+<p>前面的章节一直在回答“有限元如何近似一个连续问题”。但读者很容易在这里产生一个合理的联想：</p>
+<blockquote>
+<p>有限元、有限差分和元胞自动机，似乎都把空间切成小块，再用附近的信息更新每个位置。它们是不是同一种方法？</p>
+</blockquote>
+<p>这个联想抓住了共同的外形，却还没有抓住严格的分类标准。要把区别说清楚，最好先暂时忘掉“谁把离散规则当作基本规律”这句话，从最底层定义“系统”。</p>
+<h2 id="131-任何动力系统都从两样东西开始">13.1 任何动力系统都从两样东西开始</h2>
+<p>数学上，一个动力系统最核心的对象只有两样：</p>
+<ol>
+<li>系统在某一时刻可能处于什么状态；</li>
+<li>状态按照什么规律变化。</li>
+</ol>
+<p>离散时间系统可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msup><mi>X</mi><mi>n</mi></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>连续时间系统可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><mi>X</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>G</mi><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这里的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>X</mi></mrow></math></span> 可以是一个数、一个有限维向量、一个函数，也可以是整个空间里所有位置的状态集合。</p>
+<p>如果把所有格点的状态放在一起，例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mi>n</mi></msup><mo>=</mo><mo stretchy="false">(</mo><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><msub><mo stretchy="false">)</mo><mrow><mi>i</mi><mo>∈</mo><mi>Λ</mi></mrow></msub><mo>,</mo></mrow></math></div>
+<p>那么只要给定</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msup><mi>X</mi><mi>n</mi></msup><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>就已经定义了一个完整的系统。用一句话压缩就是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>系统</mtext><mo>=</mo><mtext>状态空间</mtext><mo>+</mo><mtext>演化映射</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>因此，有限差分得到的离散方程当然可以被当作某个离散世界的基本规律；生命游戏的生存规则也当然是一种离散方程。把“它原本是为了近似连续方程”当作通常背景是有用的，但不能把它当成数学上的本质边界。</p>
+<h2 id="132-局部性是结构不是系统的定义">13.2 局部性是结构，不是“系统”的定义</h2>
+<p>许多物理系统具有局部相互作用，例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><mi>f</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mo>−</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo>,</mo><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><mo>,</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mo>+</mo><mn>1</mn></mrow><mi>n</mi></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>但系统也可以是非局部的。例如每个位置都根据全体位置的平均值更新：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><mi>N</mi></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msubsup><mi>x</mi><mi>j</mi><mi>n</mi></msubsup><mo>.</mo></mrow></math></div>
+<p>它仍然是一个完全合法的动力系统，只是更新所依赖的范围不是有限邻域。</p>
+<p>还可以有全局约束，例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>N</mi></mrow></munderover><msub><mi>x</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>所以“系统由局部组成”是很多自然模型的重要结构，却不是系统的定义。元胞自动机、许多偏微分方程和显式有限差分格式都具有局部性；但局部性本身并不能把三者变成同一个对象。</p>
+<h2 id="133-生命游戏当然就是离散方程">13.3 生命游戏当然就是离散方程</h2>
+<p>设二维格点上的元胞状态为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span> 表示活细胞，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span> 表示死细胞。取中心格点周围的八个位置为邻域，记活邻居数量为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>m</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>=</mo><munder><mo>∑</mo><mrow><mo stretchy="false">(</mo><mi>p</mi><mo>,</mo><mi>q</mi><mo stretchy="false">)</mo><mo>∈</mo><mi>N</mi><mo stretchy="false">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo stretchy="false">)</mo></mrow></munder><msubsup><mi>x</mi><mrow><mi>p</mi><mo>,</mo><mi>q</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>.</mo></mrow></math></div>
+<p>生命游戏的规则可以用三句话写成：</p>
+<ul>
+<li>若当前是活细胞，且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>m</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup></mrow></math></span> 为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>3</mn></mrow></math></span>，下一时刻仍存活；</li>
+<li>若当前是死细胞，且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>m</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>=</mo><mn>3</mn></mrow></math></span>，下一时刻复活；</li>
+<li>其他情况下一时刻死亡。</li>
+</ul>
+<p>也可以把它压缩成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><mi>f</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>x</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo>,</mo><msubsup><mi>m</mi><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow><mrow><mi>n</mi></mrow></msubsup><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>这当然是一个方程，只不过它的状态取有限离散值，时间按步推进，函数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span> 是分段逻辑函数。</p>
+<p>看一个局部计算就很直观。若某个活细胞的八邻域中恰好有三个活细胞，</p>
+<pre><code class="language-text">0 1 0
+1 1 0
+0 1 0
+</code></pre>
+<p>中间的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span> 看到三个活邻居，因此下一步仍为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span>。如果同一个中心细胞只看到一个活邻居，它就会因为“孤独”变成 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span>；若看到四个以上，则因为“拥挤”变成 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn></mrow></math></span>。规则没有因此失去方程身份，它只是从代数运算换成了有限状态的逻辑映射。</p>
+<p>所以，生命游戏和显式有限差分之间没有本体论上的鸿沟。二者都可以写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>下一时刻的局部状态</mtext><mo>=</mo><mtext>当前邻域状态的函数</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>真正要问的是：状态空间是什么、邻域如何选、更新是否同步、原问题怎样解释，以及我们要研究的是数值逼近误差还是规则自身的涌现行为。</p>
+<h2 id="134-经典元胞自动机的严格定义">13.4 经典元胞自动机的严格定义</h2>
+<p>一个经典的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>d</mi></mrow></math></span> 维确定性元胞自动机通常包含以下数据。</p>
+<h3 id="1格点空间">（1）格点空间</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Λ</mi><mo>=</mo><msup><mi mathvariant="double-struck">Z</mi><mi>d</mi></msup><mo>.</mo></mrow></math></div>
+<p>每一个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi><mo>∈</mo><mi>Λ</mi></mrow></math></span> 是一个元胞位置，因此空间本身是离散的。</p>
+<h3 id="2有限状态集合">（2）有限状态集合</h3>
+<p>设</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><msub><mi>a</mi><mi>q</mi></msub><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>每个元胞状态属于 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span>。例如二值生命游戏使用 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow></math></span>，森林火灾模型可以使用</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>=</mo><mo stretchy="false">{</mo><mtext>空地</mtext><mo>,</mo><mtext>树木</mtext><mo>,</mo><mtext>燃烧</mtext><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>整个系统的一个构型是一个映射</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>c</mi><mi>:</mi><msup><mi mathvariant="double-struck">Z</mi><mi>d</mi></msup><mi>⟶</mi><mi>A</mi><mo>.</mo></mrow></math></div>
+<h3 id="3有限邻域">（3）有限邻域</h3>
+<p>选择有限集合</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>N</mi><mo>=</mo><mo stretchy="false">{</mo><msub><mi>n</mi><mn>1</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><msub><mi>n</mi><mi>k</mi></msub><mo stretchy="false">}</mo><mo>⊂</mo><msup><mi mathvariant="double-struck">Z</mi><mi>d</mi></msup><mo>.</mo></mrow></math></div>
+<p>位置 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 的邻域位置就是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi><mo>+</mo><msub><mi>n</mi><mn>1</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><mi>i</mi><mo>+</mo><msub><mi>n</mi><mi>k</mi></msub></mrow></math></span>。</p>
+<h3 id="4局部更新函数">（4）局部更新函数</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mi>:</mi><msup><mi>A</mi><mi>k</mi></msup><mi>⟶</mi><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>它读取邻域内 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi></mrow></math></span> 个状态，输出中心元胞下一时刻的状态。</p>
+<h3 id="5同步的全局更新">（5）同步的全局更新</h3>
+<p>定义全局映射</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mi>:</mi><msup><mi>A</mi><mrow><msup><mi mathvariant="double-struck">Z</mi><mi>d</mi></msup></mrow></msup><mi>⟶</mi><msup><mi>A</mi><mrow><msup><mi mathvariant="double-struck">Z</mi><mi>d</mi></msup></mrow></msup><mo>,</mo></mrow></math></div>
+<p>满足</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>c</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><mi>c</mi><mo stretchy="false">(</mo><mi>i</mi><mo>+</mo><msub><mi>n</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>,</mo><mo>⋯</mo><mo>,</mo><mi>c</mi><mo stretchy="false">(</mo><mi>i</mi><mo>+</mo><msub><mi>n</mi><mi>k</mi></msub><mo stretchy="false">)</mo><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>系统按</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>c</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msup><mi>c</mi><mi>n</mi></msup><mo stretchy="false">)</mo></mrow></math></div>
+<p>演化。经典定义通常还要求空间各点使用同一个局部规则，并且所有元胞同步更新。异步元胞自动机、概率元胞自动机、连续状态元胞自动机都是在这些条件上做了扩展。</p>
+<h2 id="135-元胞和有限元单元不是同一个角色">13.5 “元胞”和有限元“单元”不是同一个角色</h2>
+<p>名称相近很容易造成误解。</p>
+<p>有限元中的单元，例如三角形 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>T</mi><mi>e</mi></msub></mrow></math></span>，主要承担几何分块、基函数限制、数值积分和局部矩阵计算的任务。单元本身通常不是一个独立的状态载体。</p>
+<p>元胞自动机中的元胞则直接携带状态：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mi>n</mi></msubsup><mo>∈</mo><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>它在每个时间步按照局部规则更新。于是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>有限元单元</mtext><mo>≠</mo><mtext>元胞自动机元胞</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>二者都把空间分块，但分块之后承担的数学角色完全不同：一个服务于函数空间和积分，一个服务于局部状态和演化。</p>
+</body></html>

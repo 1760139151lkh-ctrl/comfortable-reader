@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第四章　对象语言、元语言与符号约定</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第四章-对象语言元语言与符号约定">第四章　对象语言、元语言与符号约定</h2>
+<h3 id="41-两层语言">4.1 两层语言</h3>
+<p>当写</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo>→</mo><mi>q</mi></mrow></math></div>
+<p>时，写的是命题逻辑对象语言中的公式；当写</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>⊧</mo><mo stretchy="false">(</mo><mi>p</mi><mo>→</mo><mi>q</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>或说“<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>→</mo><mi>q</mi></mrow></math></span> 是公式”时，则在元语言中谈论它。固定约定如下。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>层次</th>
+<th>本书中的作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>→</mo><mo>,</mo><mo>↔</mo></mrow></math></span></td>
+<td>对象语言</td>
+<td>公式构造器</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>¬</mi><mo>,</mo><mo>∧</mo><mo>,</mo><mo>∨</mo><mo>,</mo><mo>∀</mo><mo>,</mo><mo>∃</mo></mrow></math></span></td>
+<td>对象语言</td>
+<td>公式构造器</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⊧</mo></mrow></math></span></td>
+<td>元语言</td>
+<td>满足、语义蕴涵、有效性</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub></mrow></math></span></td>
+<td>元语言</td>
+<td>指定演算中的可推导性</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⇒</mo><mo>,</mo><mo>⇔</mo></mrow></math></span></td>
+<td>本书的元语言排版</td>
+<td>分别表示“推出”和“当且仅当”</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>≡</mo></mrow></math></span></td>
+<td>元语言</td>
+<td>已声明范围内的语义/逻辑等价</td>
+</tr>
+</tbody>
+</table>
+<p>不同教材的记号可能不同：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⇒</mo></mrow></math></span> 有时也被当作条件符号，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>≡</mo></mrow></math></span> 有时表示字面相同。因此先看约定，不能只看箭头形状。</p>
+<h3 id="42-类型纪律">4.2 类型纪律</h3>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>,</mo><mi>q</mi><mo>,</mo><mi>r</mi></mrow></math></span>：命题逻辑的原子句子字母；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi></mrow></math></span>：一阶变量；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi><mo>,</mo><mi>u</mi></mrow></math></span>：项；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi><mo>,</mo><mi>ψ</mi></mrow></math></span>：一阶公式；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>R</mi><mo>,</mo><mi>Q</mi></mrow></math></span>：谓词符号；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="script">M</mi></mrow></math></span>：结构；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi></mrow></math></span>：变量赋值；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>,</mo><mi>S</mi><mo>,</mo><mi>Γ</mi></mrow></math></span>：理论、背景理论、前提集合。</li>
+</ul>
+<p>自然语言里的“命题”是可断言真假的内容；sentence 是没有自由变量的形式句子。句子在给定结构中得到真值时，可以承载一个命题内容；它们不是同一种对象。</p>
+</body></html>

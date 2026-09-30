@@ -1,0 +1,170 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>五、第四步：把“模型家族”落成一个具体数学模型</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="五第四步把模型家族落成一个具体数学模型">五、第四步：把“模型家族”落成一个具体数学模型</h1>
+<p>前三步结束时，你只知道：</p>
+<ul>
+<li>题目要干什么；</li>
+<li>系统具有什么结构；</li>
+<li>大概应该选择哪类模型。</li>
+</ul>
+<p>但这时还没有真正完成建模。</p>
+<p>例如你判断一道题属于“混合整数规划”，这只相当于说：</p>
+<blockquote>
+<p>我准备用一种含连续变量和整数变量的优化语言描述它。</p>
+</blockquote>
+<p>具体变量是什么、约束是什么、目标是什么，仍然需要你亲手建立。</p>
+<p>这一阶段要完成六件事。</p>
+<h2 id="1-确定研究对象和索引集合">1. 确定研究对象和索引集合</h2>
+<p>先回答“有哪些东西需要被编号”。</p>
+<p>例如车辆路径问题中：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></math></span>：地点；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi></mrow></math></span>：车辆；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span>：时间段；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi></mrow></math></span>：货物种类。</li>
+</ul>
+<p>写成集合就是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>i</mi><mo>,</mo><mi>j</mi><mo>∈</mo><mi>V</mi><mo>,</mo><mspace width="2em"/><mi>k</mi><mo>∈</mo><mi>K</mi><mo>,</mo><mspace width="2em"/><mi>t</mi><mo>∈</mo><mi>T</mi><mo>.</mo></mrow></math></div>
+<p>索引集合的作用不是形式漂亮，而是把现实对象分门别类，使后面的变量和约束能够被准确书写。</p>
+<hr/>
+<h2 id="2-区分五种量">2. 区分五种量</h2>
+<p>这是整个建模过程中特别关键的一刀。</p>
+<h3 id="已知数据">已知数据</h3>
+<p>题目直接给出的量，例如：</p>
+<ul>
+<li>地点之间的距离 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span>；</li>
+<li>每个客户的需求量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>q</mi><mi>i</mi></msub></mrow></math></span>；</li>
+<li>车辆容量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi></mrow></math></span>。</li>
+</ul>
+<h3 id="参数">参数</h3>
+<p>被模型视为固定，但可能需要通过数据估计的量，例如：</p>
+<ul>
+<li>单位运输成本；</li>
+<li>需求分布参数；</li>
+<li>故障率；</li>
+<li>服务率。</li>
+</ul>
+<h3 id="决策变量">决策变量</h3>
+<p>你能够主动选择的量，例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi><mi>k</mi></mrow></msub><mo>=</mo><mrow><mo fence="true" form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left"><mn>1</mn><mo>,</mo></mtd><mtd columnalign="left"><mtext>车辆 </mtext><mi>k</mi><mtext> 从 </mtext><mi>i</mi><mtext> 行驶到 </mtext><mi>j</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left"><mn>0</mn><mo>,</mo></mtd><mtd columnalign="left"><mtext>否则</mtext><mo>.</mo></mtd></mtr></mtable></mrow></mrow></math></div>
+<h3 id="状态变量">状态变量</h3>
+<p>描述系统当前状况的量，例如：</p>
+<ul>
+<li>当前库存；</li>
+<li>当前设备健康度；</li>
+<li>当前车辆位置；</li>
+<li>当前感染人数。</li>
+</ul>
+<h3 id="随机变量或外生变量">随机变量或外生变量</h3>
+<p>影响系统，但不由决策者直接控制，例如：</p>
+<ul>
+<li>未来需求；</li>
+<li>天气；</li>
+<li>顾客到达；</li>
+<li>机器故障；</li>
+<li>市场价格。</li>
+</ul>
+<p>你可以把它们记成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>数据告诉我已经知道什么，参数描述规律，状态描述现在，决策表示我能做什么，随机变量表示世界会对我做什么。</mtext></mrow></menclose></mrow></math></div>
+<hr/>
+<h2 id="3-写出系统关系">3. 写出系统关系</h2>
+<p>数学模型真正的骨架，不是目标函数，而是系统中那些“必须成立”的关系。</p>
+<p>常见关系包括：</p>
+<h3 id="守恒关系">守恒关系</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>流入</mtext><mo>−</mo><mtext>流出</mtext><mo>=</mo><mtext>库存变化</mtext><mo>.</mo></mrow></math></div>
+<p>例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>I</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>I</mi><mi>t</mi></msub><mo>+</mo><msub><mi>q</mi><mi>t</mi></msub><mo>−</mo><msub><mi>d</mi><mi>t</mi></msub><mo>.</mo></mrow></math></div>
+<h3 id="容量关系">容量关系</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>≤</mo><mi>C</mi><mo>.</mo></mrow></math></div>
+<h3 id="逻辑关系">逻辑关系</h3>
+<p>例如“只有建立仓库后，才能从该仓库发货”：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>≤</mo><mi>M</mi><msub><mi>y</mi><mi>i</mi></msub><mo>.</mo></mrow></math></div>
+<h3 id="状态转移关系">状态转移关系</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>,</mo><msub><mi>ξ</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<h3 id="物理或机理关系">物理或机理关系</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><mi>x</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<h3 id="概率关系">概率关系</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>X</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>j</mi><mo>∣</mo><msub><mi>X</mi><mi>t</mi></msub><mo>=</mo><mi>i</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>p</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>这一步的本质是：</p>
+<blockquote>
+<p>把现实世界中不能被违反的规则翻译成数学关系。</p>
+</blockquote>
+<hr/>
+<h2 id="4-定义好坏的标准">4. 定义“好坏”的标准</h2>
+<p>模型必须知道什么叫“更好”。</p>
+<p>例如：</p>
+<ul>
+<li>成本最低；</li>
+<li>利润最高；</li>
+<li>等待时间最短；</li>
+<li>风险最小；</li>
+<li>公平性最好；</li>
+<li>服务覆盖率最高。</li>
+</ul>
+<p>于是形成目标函数：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>x</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>或</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>max</mo><mi>x</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>如果有多个目标：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msub><mi>f</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><msub><mi>f</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>f</mi><mi>m</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mo>.</mo></mrow></math></div>
+<p>这时还要思考：</p>
+<ul>
+<li>某个目标是否应该改成硬约束？</li>
+<li>各目标是否可以加权？</li>
+<li>是否需要找 Pareto 前沿？</li>
+<li>是否存在不可牺牲的底线？</li>
+</ul>
+<p>例如“安全第一、成本第二”通常不适合简单写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><mo stretchy="false">(</mo><mi>α</mi><mo>·</mo><mtext>成本</mtext><mo>−</mo><mi>β</mi><mo>·</mo><mtext>安全</mtext><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>更可能写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><mtext>成本</mtext></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>s.t.</mtext><mspace width="1em"/><mtext>安全水平</mtext><mo>≥</mo><msub><mi>S</mi><mn>0</mn></msub><mo>.</mo></mrow></math></div>
+<p>所以，目标函数实际上包含了决策者的价值判断。</p>
+<hr/>
+<h2 id="5-写清变量取值范围">5. 写清变量取值范围</h2>
+<p>例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>≥</mo><mn>0</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><mi mathvariant="double-struck">Z</mi><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo><mo>,</mo></mrow></math></div>
+<p>或者</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo><mo>∈</mo><mi>U</mi><mo>.</mo></mrow></math></div>
+<p>变量取值范围不是最后随手补上的条件，它决定了问题的基本性质。</p>
+<p>例如把</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo></mrow></math></div>
+<p>放松成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>0</mn><mo>≤</mo><msub><mi>x</mi><mi>i</mi></msub><mo>≤</mo><mn>1</mn><mo>,</mo></mrow></math></div>
+<p>问题就可能从整数规划变成线性规划，难度和意义都会发生变化。</p>
+<hr/>
+<h2 id="6-明确模型假设">6. 明确模型假设</h2>
+<p>假设不是为了应付论文格式，而是说明：</p>
+<blockquote>
+<p>我们为了使问题可分析，主动忽略了哪些现实细节。</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>车辆速度恒定；</li>
+<li>需求服从某个分布；</li>
+<li>各时期需求相互独立；</li>
+<li>运输途中不发生故障；</li>
+<li>忽略极端天气；</li>
+<li>不考虑人员临时请假。</li>
+</ul>
+<p>一个好假设应当满足：</p>
+<ol>
+<li>能显著降低复杂度；</li>
+<li>不破坏问题的主要矛盾；</li>
+<li>能被解释或检验；</li>
+<li>后续可以逐步放宽。</li>
+</ol>
+<p>到这里，你才真正得到一个具体模型。</p>
+<p>对于静态优化问题，它可能是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>x</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mi>;</mi><mi>θ</mi><mo stretchy="false">)</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>s.t.</mtext><mspace width="1em"/><msub><mi>g</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mi>;</mi><mi>θ</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo>,</mo><mspace width="2em"/><msub><mi>h</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mi>;</mi><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="2em"/><mi>x</mi><mo>∈</mo><mi>X</mi><mo>.</mo></mrow></math></div>
+<p>对于动态问题，它可能是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>,</mo><msub><mi>ξ</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>π</mi></msub><mi mathvariant="double-struck">E</mi><mrow><mo fence="true" form="prefix" stretchy="true">[</mo><msubsup><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi></mrow></msubsup><msub><mi>c</mi><mi>t</mi></msub><mo stretchy="false">(</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo fence="true" form="postfix" stretchy="true">]</mo></mrow><mo>.</mo></mrow></math></div>
+<p>因此：</p>
+<blockquote>
+<p><strong>选择模型家族，只是决定使用哪一种语言；建立具体模型，才是用这种语言把现实完整地说出来。</strong></p>
+</blockquote>
+<hr/>
+</body></html>

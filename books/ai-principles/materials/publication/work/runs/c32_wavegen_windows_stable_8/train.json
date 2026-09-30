@@ -1,0 +1,82 @@
+{
+  "task": "unconditional next-sample waveform generation at 8 kHz, not text-to-speech",
+  "source_manifest_sha256": "aaeea5d654cdc6015bf2439b8a81ab3d9637cdbc03c00059305842c93f5ccc45",
+  "code_sha256": "c3b000d09221766aed89bbc64777404676dadeaa1d7e55a7e857c0de65ee40a3",
+  "speaker": "1272",
+  "train_chapters": [
+    "128104",
+    "141231"
+  ],
+  "validation_chapters": [
+    "135031"
+  ],
+  "train_sequences": 5373,
+  "validation_sequences": 2091,
+  "sequence_samples": 512,
+  "parameters": 320640,
+  "architecture": "256-code embedding64, two-layer GRU width160, 256-way next-sample softmax",
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "cudnn_enabled": false,
+  "sample_rate": 8000,
+  "uniform_nll_per_sample": 5.545177444479562,
+  "train_unigram_validation_nll_per_sample": 5.279676224510032,
+  "initial_validation_nll_per_sample": 5.5483724009414885,
+  "best_epoch_by_validation_nll": 8,
+  "best_validation_nll_per_sample": 3.0673226128919793,
+  "best_checkpoint_sha256": "03b7bcab7e68167c78e6beaff9e3dd56ed8c433b0646a72e0ed7f7ecd7be6acc",
+  "epochs": 8,
+  "batch_size": 32,
+  "history": [
+    {
+      "epoch": 1,
+      "train_nll_per_sample": 3.986410402972095,
+      "validation_nll_per_sample": 3.707384829199639,
+      "elapsed_seconds": 62.14998799993191
+    },
+    {
+      "epoch": 2,
+      "train_nll_per_sample": 3.3004974935965765,
+      "validation_nll_per_sample": 3.393694499529816,
+      "elapsed_seconds": 62.572872500051744
+    },
+    {
+      "epoch": 3,
+      "train_nll_per_sample": 3.128872612967918,
+      "validation_nll_per_sample": 3.25400402738625,
+      "elapsed_seconds": 62.270636700093746
+    },
+    {
+      "epoch": 4,
+      "train_nll_per_sample": 3.044138357800388,
+      "validation_nll_per_sample": 3.1846219267587466,
+      "elapsed_seconds": 62.89438399998471
+    },
+    {
+      "epoch": 5,
+      "train_nll_per_sample": 2.990336892104739,
+      "validation_nll_per_sample": 3.138367908756907,
+      "elapsed_seconds": 63.84472519997507
+    },
+    {
+      "epoch": 6,
+      "train_nll_per_sample": 2.951396875889102,
+      "validation_nll_per_sample": 3.107557784764177,
+      "elapsed_seconds": 63.34147719992325
+    },
+    {
+      "epoch": 7,
+      "train_nll_per_sample": 2.9228084660233145,
+      "validation_nll_per_sample": 3.085628987498856,
+      "elapsed_seconds": 62.490609999978915
+    },
+    {
+      "epoch": 8,
+      "train_nll_per_sample": 2.9005631708730517,
+      "validation_nll_per_sample": 3.0673226128919793,
+      "elapsed_seconds": 64.62394870002754
+    }
+  ],
+  "test_split_loaded": false,
+  "wall_seconds": 504.25954220001586
+}

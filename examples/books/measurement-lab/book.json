@@ -1,0 +1,172 @@
+{
+  "schemaVersion": 1,
+  "id": "urn:uuid:6e1a747e-8eb9-5bb5-8816-54da4fe9b042",
+  "slug": "measurement-lab",
+  "revision": "0.1.1",
+  "revisionModified": "2026-09-27T00:00:00Z",
+  "language": "zh-CN",
+  "title": "从三次测量到一条可检验的直线",
+  "description": "用三条自造数据看清预测、误差、梯度和参数更新，随后检验一条新记录会改变什么。",
+  "authorship": "舒适阅读书库创作示例；AI 辅助编写；合成数据，不是现实测量。",
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "scope": "authoring_example"
+  },
+  "chapters": [
+    {
+      "id": "c01",
+      "title": "一条直线怎样从数据中改变",
+      "source": "chapters/01.md",
+      "question": "改学习率之前，先猜一次更新会怎样改变两项参数。"
+    },
+    {
+      "id": "c02",
+      "title": "第四条记录出现以后",
+      "source": "chapters/02.md",
+      "question": "一条与原直线冲突的记录，能证明什么，又不能证明什么？"
+    }
+  ],
+  "resources": [
+    {
+      "id": "three-points",
+      "kind": "data",
+      "title": "三次课堂测量",
+      "path": "data/three-points.csv",
+      "description": "人工构造的三条数值记录；仅用于推导与练习。",
+      "minimumUnit": "file",
+      "rights": "approved",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "outlier-points",
+      "kind": "data",
+      "title": "添加第四条记录的变体",
+      "path": "data/with-outlier.csv",
+      "description": "在同一三条记录后增加 (2, 9)，观察共享参数怎样被改变。",
+      "minimumUnit": "file",
+      "rights": "approved",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "python-fit",
+      "kind": "code",
+      "title": "可独立运行的 Python 版本",
+      "path": "code/fit_line.py",
+      "description": "标准库实现；与浏览器计算独立，运行前先检查解释器与代码权限。",
+      "minimumUnit": "file",
+      "downloadChunkBytes": 1024,
+      "rights": "approved",
+      "license": "MIT"
+    },
+    {
+      "id": "fit-history-video",
+      "kind": "video",
+      "title": "作者预先生成的参数变化短片",
+      "path": "media/fit-history.webm",
+      "mediaType": "video/webm",
+      "description": "由本书实际 Python 更新轨迹绘成的31帧静音画面；播放8帧/秒。这是作者已有记录，点击播放不会重新训练。",
+      "minimumUnit": "file",
+      "rights": "approved",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "sources": [
+    {
+      "id": "construction",
+      "title": "本书的三次课堂测量",
+      "creator": "示例内容编写者",
+      "year": "2026",
+      "kind": "teaching_construction",
+      "url": null,
+      "locator": "第一章数据表",
+      "supports": "数据是明确的人造例子，不是外部实验的测量。"
+    },
+    {
+      "id": "python-argparse",
+      "title": "argparse：Python 命令行参数文档",
+      "creator": "Python Software Foundation",
+      "year": "持续更新",
+      "kind": "external_reference",
+      "url": "https://docs.python.org/3/library/argparse.html",
+      "locator": "ArgumentParser / add_argument",
+      "supports": "参考程序用标准库读取步长、次数和输入文件；网站不复制该文档。"
+    }
+  ],
+  "activities": [
+    {
+      "id": "fit-three",
+      "chapter": "c01",
+      "anchor": "first-update",
+      "title": "亲手更新一条线",
+      "question": "同一数据上，步长变动怎样改变这次更新？",
+      "capability": "least-squares@1",
+      "required": [
+        "three-points"
+      ],
+      "optional": [
+        "python-fit"
+      ],
+      "parameters": {
+        "rate": {
+          "type": "number",
+          "label": "步长",
+          "default": 0.12,
+          "min": 0.01,
+          "max": 0.3
+        },
+        "steps": {
+          "type": "integer",
+          "label": "更新次数",
+          "default": 30,
+          "min": 1,
+          "max": 200
+        }
+      },
+      "observe": "每步的旧参数、平均平方误差、梯度和新参数；结束时比较数据点与预测直线。",
+      "outputs": [
+        "trace",
+        "plot",
+        "summary"
+      ]
+    },
+    {
+      "id": "fit-outlier",
+      "chapter": "c01",
+      "anchor": "try-variant",
+      "title": "换一份有冲突的记录",
+      "question": "把 (2, 9) 加进去，原来三点上的误差会怎样？",
+      "capability": "least-squares@1",
+      "required": [
+        "outlier-points"
+      ],
+      "optional": [
+        "python-fit"
+      ],
+      "parameters": {
+        "rate": {
+          "type": "number",
+          "label": "步长",
+          "default": 0.12,
+          "min": 0.01,
+          "max": 0.3
+        },
+        "steps": {
+          "type": "integer",
+          "label": "更新次数",
+          "default": 30,
+          "min": 1,
+          "max": 200
+        }
+      },
+      "observe": "同一条规则需要照顾四条记录，不能只看最后一个点。",
+      "outputs": [
+        "trace",
+        "plot",
+        "summary"
+      ]
+    }
+  ],
+  "example": true,
+  "author": "舒适阅读书库项目"
+}

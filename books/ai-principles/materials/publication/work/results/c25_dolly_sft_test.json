@@ -1,0 +1,398 @@
+{
+  "scope": "one-time held-out Dolly sft_v2 response-only test after three arms independently selected epochs by validation; free generations use four test prompts fixed by source order/category before viewing answers; no test-based model change",
+  "data_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+  "test_arrays_sha256": "882bb9df629eb40c63fc03c84554f62faf4bdbb3e9b501533b0833568c06c042",
+  "base_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "model_selection": "each arm selected its own best epoch by validation response NLL; no arm or setting chosen by this test file",
+  "run_summaries": {
+    "full": {
+      "path": "work/runs/c25_full_trial/train.json",
+      "sha256": "1f3d37851c895127656f4c8ef06ce6e71970e7521a3f2b62c3c84c8186a76d31",
+      "checkpoint_sha256": "204e28ca55736d20d3671ce4a4e972c089d2c14ffde5bdec234701da91b30087",
+      "trainable_parameters": 4930304
+    },
+    "lora": {
+      "path": "work/runs/c25_lora_trial/train.json",
+      "sha256": "e053f3fdb03ee515f871dbea2ef33be2889233a7544a082fcfe2e78a32676e70",
+      "checkpoint_sha256": "cc097be902fc9870b2ec0982283e7310014d59b41d9b60fb494cab00a620f2e1",
+      "trainable_parameters": 76544
+    },
+    "full-mix": {
+      "path": "work/runs/c25_full_mix_trial/train.json",
+      "sha256": "83c450051cb7b048a85dc9a222e948f5e9d06a3d4785755643b3a1666b65314c",
+      "checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced",
+      "trainable_parameters": 4930304
+    }
+  },
+  "test_prompt_selection": "first test record for each distinct category in source order, stop after four categories; independent of response content",
+  "test_prompt_source_rows": [
+    19,
+    98,
+    142,
+    167
+  ],
+  "results": {
+    "base": {
+      "test": {
+        "response_nll": 7.889023577546844,
+        "response_targets_including_eos": 29566,
+        "records": 691,
+        "categories": {
+          "brainstorming": {
+            "records": 108,
+            "targets": 5812,
+            "response_nll": 8.391593546516225
+          },
+          "classification": {
+            "records": 164,
+            "targets": 4665,
+            "response_nll": 8.98042560180795
+          },
+          "closed_qa": {
+            "records": 11,
+            "targets": 150,
+            "response_nll": 7.32743901570638
+          },
+          "creative_writing": {
+            "records": 19,
+            "targets": 1074,
+            "response_nll": 7.475082347734903
+          },
+          "general_qa": {
+            "records": 104,
+            "targets": 7074,
+            "response_nll": 7.3575228145643585
+          },
+          "information_extraction": {
+            "records": 8,
+            "targets": 101,
+            "response_nll": 8.263312802456394
+          },
+          "open_qa": {
+            "records": 276,
+            "targets": 10619,
+            "response_nll": 7.542786499506247
+          },
+          "summarization": {
+            "records": 1,
+            "targets": 71,
+            "response_nll": 6.69475243796765
+          }
+        }
+      },
+      "free_generations": [
+        {
+          "source_row": 19,
+          "category": "classification",
+          "prompt": "Instruction:\nIdentify which instrument is string or percussion: Cantaro, Gudok\nResponse:\n",
+          "reference_response": "Gudok is string, Cantaro is percussion.",
+          "continuation": "i , and the first time of the first time of the first time of the first time of the first time of the first time of the first time . \n = = = = = = = = = = \n The first time of the",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 98,
+          "category": "brainstorming",
+          "prompt": "Instruction:\nList 6 different types of rain in Seattle\nResponse:\n",
+          "reference_response": "1. Mist\n2. Drizzle\n3. Sleet\n4. Downpour\n5. Freezing Rain\n6. Sun Shower",
+          "continuation": "i , and the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 142,
+          "category": "general_qa",
+          "prompt": "Instruction:\nIn SQL, how can I filter table rows based on a column condition?\nResponse:\n",
+          "reference_response": "SELECT <columns> FROM <table> WHERE <column> == <condition>",
+          "continuation": " of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 167,
+          "category": "open_qa",
+          "prompt": "Instruction:\nName the three best professional sports teams based in California.\nResponse:\n",
+          "reference_response": "The best professional sports teams based in California are the Los Angeles Dodgers, the Golden State Warriors, and the San Francisco 49ers.",
+          "continuation": " , and the first time . \n = = = = = \n The first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        }
+      ],
+      "validation_selected_epoch": null,
+      "validation_response_nll_before_test": 8.039782446076549,
+      "old_wikitext_validation_nll_before_test": 5.816160964795432
+    },
+    "full": {
+      "test": {
+        "response_nll": 5.507748157723398,
+        "response_targets_including_eos": 29566,
+        "records": 691,
+        "categories": {
+          "brainstorming": {
+            "records": 108,
+            "targets": 5812,
+            "response_nll": 5.492371483498906
+          },
+          "classification": {
+            "records": 164,
+            "targets": 4665,
+            "response_nll": 5.077075368875093
+          },
+          "closed_qa": {
+            "records": 11,
+            "targets": 150,
+            "response_nll": 5.4833506457010905
+          },
+          "creative_writing": {
+            "records": 19,
+            "targets": 1074,
+            "response_nll": 5.543986286752939
+          },
+          "general_qa": {
+            "records": 104,
+            "targets": 7074,
+            "response_nll": 5.586807240730698
+          },
+          "information_extraction": {
+            "records": 8,
+            "targets": 101,
+            "response_nll": 5.7436098721948
+          },
+          "open_qa": {
+            "records": 276,
+            "targets": 10619,
+            "response_nll": 5.6425974189657
+          },
+          "summarization": {
+            "records": 1,
+            "targets": 71,
+            "response_nll": 6.18584990165603
+          }
+        }
+      },
+      "free_generations": [
+        {
+          "source_row": 19,
+          "category": "classification",
+          "prompt": "Instruction:\nIdentify which instrument is string or percussion: Cantaro, Gudok\nResponse:\n",
+          "reference_response": "Gudok is string, Cantaro is percussion.",
+          "continuation": "The is string, Ta is string, Ta is string, Ta is string, Ta is string, Ta is string, Ta is string, Ta is string,",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 98,
+          "category": "brainstorming",
+          "prompt": "Instruction:\nList 6 different types of rain in Seattle\nResponse:\n",
+          "reference_response": "1. Mist\n2. Drizzle\n3. Sleet\n4. Downpour\n5. Freezing Rain\n6. Sun Shower",
+          "continuation": "The following are the United States of the United States of the United States of the United States of the United States of the United States of the United States of the United States of the United States of the United States of the United States of",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 142,
+          "category": "general_qa",
+          "prompt": "Instruction:\nIn SQL, how can I filter table rows based on a column condition?\nResponse:\n",
+          "reference_response": "SELECT <columns> FROM <table> WHERE <column> == <condition>",
+          "continuation": "The is a great of the most popular of the most of the most of the most of the most of the most of the most of the most of the world.",
+          "new_token_count": 35,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 167,
+          "category": "open_qa",
+          "prompt": "Instruction:\nName the three best professional sports teams based in California.\nResponse:\n",
+          "reference_response": "The best professional sports teams based in California are the Los Angeles Dodgers, the Golden State Warriors, and the San Francisco 49ers.",
+          "continuation": "The following are the most of the United States, the United States, the United States, the United States, the United States, the United States, the United States, the United States, the United States, the United States, the",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        }
+      ],
+      "validation_selected_epoch": 3,
+      "validation_response_nll_before_test": 5.500846387502134,
+      "old_wikitext_validation_nll_before_test": 6.666041923711933
+    },
+    "lora": {
+      "test": {
+        "response_nll": 5.782292655362156,
+        "response_targets_including_eos": 29566,
+        "records": 691,
+        "categories": {
+          "brainstorming": {
+            "records": 108,
+            "targets": 5812,
+            "response_nll": 5.790212903117936
+          },
+          "classification": {
+            "records": 164,
+            "targets": 4665,
+            "response_nll": 5.438210924032034
+          },
+          "closed_qa": {
+            "records": 11,
+            "targets": 150,
+            "response_nll": 5.59357655843099
+          },
+          "creative_writing": {
+            "records": 19,
+            "targets": 1074,
+            "response_nll": 5.790932085260999
+          },
+          "general_qa": {
+            "records": 104,
+            "targets": 7074,
+            "response_nll": 5.829047466220915
+          },
+          "information_extraction": {
+            "records": 8,
+            "targets": 101,
+            "response_nll": 5.833675308982925
+          },
+          "open_qa": {
+            "records": 276,
+            "targets": 10619,
+            "response_nll": 5.8955194688986134
+          },
+          "summarization": {
+            "records": 1,
+            "targets": 71,
+            "response_nll": 6.343534657652949
+          }
+        }
+      },
+      "free_generations": [
+        {
+          "source_row": 19,
+          "category": "classification",
+          "prompt": "Instruction:\nIdentify which instrument is string or percussion: Cantaro, Gudok\nResponse:\n",
+          "reference_response": "Gudok is string, Cantaro is percussion.",
+          "continuation": "The",
+          "new_token_count": 3,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 98,
+          "category": "brainstorming",
+          "prompt": "Instruction:\nList 6 different types of rain in Seattle\nResponse:\n",
+          "reference_response": "1. Mist\n2. Drizzle\n3. Sleet\n4. Downpour\n5. Freezing Rain\n6. Sun Shower",
+          "continuation": "The",
+          "new_token_count": 3,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 142,
+          "category": "general_qa",
+          "prompt": "Instruction:\nIn SQL, how can I filter table rows based on a column condition?\nResponse:\n",
+          "reference_response": "SELECT <columns> FROM <table> WHERE <column> == <condition>",
+          "continuation": "Theer, and the world.",
+          "new_token_count": 9,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 167,
+          "category": "open_qa",
+          "prompt": "Instruction:\nName the three best professional sports teams based in California.\nResponse:\n",
+          "reference_response": "The best professional sports teams based in California are the Los Angeles Dodgers, the Golden State Warriors, and the San Francisco 49ers.",
+          "continuation": "The Tar is a bind of the world.",
+          "new_token_count": 13,
+          "ended_with_eos": true
+        }
+      ],
+      "validation_selected_epoch": 3,
+      "validation_response_nll_before_test": 5.782896005344342,
+      "old_wikitext_validation_nll_before_test": 6.715642599563757
+    },
+    "full-mix": {
+      "test": {
+        "response_nll": 5.500318507481144,
+        "response_targets_including_eos": 29566,
+        "records": 691,
+        "categories": {
+          "brainstorming": {
+            "records": 108,
+            "targets": 5812,
+            "response_nll": 5.491067419688782
+          },
+          "classification": {
+            "records": 164,
+            "targets": 4665,
+            "response_nll": 5.069857338335992
+          },
+          "closed_qa": {
+            "records": 11,
+            "targets": 150,
+            "response_nll": 5.459898935953776
+          },
+          "creative_writing": {
+            "records": 19,
+            "targets": 1074,
+            "response_nll": 5.545230254558655
+          },
+          "general_qa": {
+            "records": 104,
+            "targets": 7074,
+            "response_nll": 5.578594954094039
+          },
+          "information_extraction": {
+            "records": 8,
+            "targets": 101,
+            "response_nll": 5.72406279686654
+          },
+          "open_qa": {
+            "records": 276,
+            "targets": 10619,
+            "response_nll": 5.632009622706948
+          },
+          "summarization": {
+            "records": 1,
+            "targets": 71,
+            "response_nll": 6.1332900356239
+          }
+        }
+      },
+      "free_generations": [
+        {
+          "source_row": 19,
+          "category": "classification",
+          "prompt": "Instruction:\nIdentify which instrument is string or percussion: Cantaro, Gudok\nResponse:\n",
+          "reference_response": "Gudok is string, Cantaro is percussion.",
+          "continuation": "St is string, and is string, and is string, and is string, and is string, and is string, and is string.",
+          "new_token_count": 37,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 98,
+          "category": "brainstorming",
+          "prompt": "Instruction:\nList 6 different types of rain in Seattle\nResponse:\n",
+          "reference_response": "1. Mist\n2. Drizzle\n3. Sleet\n4. Downpour\n5. Freezing Rain\n6. Sun Shower",
+          "continuation": "The following are the world, and the world.",
+          "new_token_count": 12,
+          "ended_with_eos": true
+        },
+        {
+          "source_row": 142,
+          "category": "general_qa",
+          "prompt": "Instruction:\nIn SQL, how can I filter table rows based on a column condition?\nResponse:\n",
+          "reference_response": "SELECT <columns> FROM <table> WHERE <column> == <condition>",
+          "continuation": "The is a great of the most popular of the most popular of the most of the most of the most of the most of the most of the most of the most of the most of the most of the most of the most of the",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        },
+        {
+          "source_row": 167,
+          "category": "open_qa",
+          "prompt": "Instruction:\nName the three best professional sports teams based in California.\nResponse:\n",
+          "reference_response": "The best professional sports teams based in California are the Los Angeles Dodgers, the Golden State Warriors, and the San Francisco 49ers.",
+          "continuation": "The following are the most of the world of the world of the world of the world of the world of the world of the world of the world of the world of the world of the world of the world of the world of the world",
+          "new_token_count": 48,
+          "ended_with_eos": false
+        }
+      ],
+      "validation_selected_epoch": 3,
+      "validation_response_nll_before_test": 5.492693432379673,
+      "old_wikitext_validation_nll_before_test": 5.942112389477405
+    }
+  }
+}

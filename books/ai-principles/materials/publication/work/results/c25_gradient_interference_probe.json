@@ -1,0 +1,19 @@
+{
+  "scope": "C19 pretrained checkpoint, first 64 Dolly train records and first 64 WikiText train blocks; two gradients at same fixed weights, no update, no validation/test opened",
+  "base_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+  "sft_source_row_first_last": [
+    3,
+    165
+  ],
+  "sft_response_targets": 2396,
+  "wiki_targets": 8178,
+  "sft_loss": 7.968186855316162,
+  "wiki_loss": 5.732821941375732,
+  "new_gradient_norm": 5.503652572631836,
+  "old_gradient_norm": 0.9318787455558777,
+  "gradient_dot": 1.3031476736068726,
+  "gradient_cosine": 0.2540874508398851,
+  "plain_SGD_first_order_old_loss_change_for_rate_0_0002": -0.0002606295347213745,
+  "caution": "single batch at base weights and plain SGD local approximation; actual three-epoch AdamW forgetting has more causes"
+}

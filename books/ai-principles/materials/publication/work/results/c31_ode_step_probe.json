@@ -1,0 +1,50 @@
+{
+  "scope": "analytic one-dimensional ODE numerical-method check, not a trained image flow",
+  "ode": "dx/dt=t*x, x(0)=1",
+  "exact_x1": 1.6487212707001282,
+  "rows": [
+    {
+      "steps": 4,
+      "method": "euler",
+      "function_evaluations": 4,
+      "value_at_1": 1.41943359375,
+      "absolute_error": 0.2292876769501282
+    },
+    {
+      "steps": 4,
+      "method": "heun",
+      "function_evaluations": 8,
+      "value_at_1": 1.6422856338322163,
+      "absolute_error": 0.006435636867911931
+    },
+    {
+      "steps": 16,
+      "method": "euler",
+      "function_evaluations": 16,
+      "value_at_1": 1.583386131297778,
+      "absolute_error": 0.06533513940235025
+    },
+    {
+      "steps": 16,
+      "method": "heun",
+      "function_evaluations": 32,
+      "value_at_1": 1.6484145232663874,
+      "absolute_error": 0.00030674743374081714
+    },
+    {
+      "steps": 64,
+      "method": "euler",
+      "function_evaluations": 64,
+      "value_at_1": 1.6317671739547808,
+      "absolute_error": 0.016954096745347425
+    },
+    {
+      "steps": 64,
+      "method": "heun",
+      "function_evaluations": 128,
+      "value_at_1": 1.6487038775012441,
+      "absolute_error": 1.7393198884052552e-05
+    }
+  ],
+  "limitation": "Heun better on this smooth known field; no automatic ranking for a learned high-dimensional field or fixed wall-clock budget"
+}

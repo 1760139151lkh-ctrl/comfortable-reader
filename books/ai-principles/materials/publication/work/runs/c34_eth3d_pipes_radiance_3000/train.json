@@ -1,0 +1,141 @@
+{
+  "identity": "author small view-independent differentiable 3D radiance GRID from random parameters on ETH3D real pipes; not original MLP NeRF, not laser scan mesh",
+  "source_manifest_sha256": "b6b5500cd1d7d55511a0dd0d23ab3e4ac6ada6eb351f85523fa05e80baa7c4e6",
+  "train_view_indices": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    13
+  ],
+  "validation_view_index": 3,
+  "test_view_index": 10,
+  "test_image_pixels_opened_only_after_best_validation_step": true,
+  "caveat": "all 14 source images were previously viewed by the author in an orientation montage; test is model-held-out, not wholly unseen source to the author",
+  "camera_intrinsics_at_training_resolution": {
+    "fx": 143.38749196141478,
+    "fy": 143.26413668196088,
+    "cx": 130.38456591639869,
+    "cy": 85.96733880705143
+  },
+  "world_aabb": {
+    "min": [
+      -6.929383182525635,
+      -1.261835503578186,
+      -1.2882156848907471
+    ],
+    "max": [
+      4.739149475097657,
+      3.552385139465332,
+      2.0237420082092283
+    ]
+  },
+  "grid_side": 96,
+  "ray_samples": 48,
+  "near_far_world_distance": [
+    0.15,
+    8.0
+  ],
+  "model_trainable_parameters": 3538944,
+  "device": "cuda",
+  "steps_planned_and_completed": 3000,
+  "initial_validation_fixed_rays_mse": 0.1162922332684199,
+  "best_step_by_validation_fixed_rays": 500,
+  "best_validation_fixed_rays_mse": 0.04970300942659378,
+  "validation_full_mse": 0.050267244109722956,
+  "test_full_mse": 0.03603590652468082,
+  "validation_psnr_db": 12.987149242158964,
+  "test_psnr_db": 14.432645482898568,
+  "nearest_camera_copy": {
+    "3": {
+      "train_view_index": 6,
+      "same_pixel_copy_mse": 0.1345805674791336,
+      "camera_center_distance": 0.1092302688618983
+    },
+    "10": {
+      "train_view_index": 1,
+      "same_pixel_copy_mse": 0.040497008711099625,
+      "camera_center_distance": 0.27799861726706054
+    }
+  },
+  "history": [
+    {
+      "step": 1,
+      "train_batch_mse": 0.08866743743419647,
+      "validation_fixed_rays_mse": 0.11472071210543315
+    },
+    {
+      "step": 250,
+      "train_batch_mse": 0.004755024798214436,
+      "validation_fixed_rays_mse": 0.051510353883107506
+    },
+    {
+      "step": 500,
+      "train_batch_mse": 0.0030187107622623444,
+      "validation_fixed_rays_mse": 0.04970300942659378
+    },
+    {
+      "step": 750,
+      "train_batch_mse": 0.0019992487505078316,
+      "validation_fixed_rays_mse": 0.0497372051080068
+    },
+    {
+      "step": 1000,
+      "train_batch_mse": 0.0016669629840180278,
+      "validation_fixed_rays_mse": 0.05057559162378311
+    },
+    {
+      "step": 1250,
+      "train_batch_mse": 0.001374204526655376,
+      "validation_fixed_rays_mse": 0.05170735468467077
+    },
+    {
+      "step": 1500,
+      "train_batch_mse": 0.0010021788766607642,
+      "validation_fixed_rays_mse": 0.05261976271867752
+    },
+    {
+      "step": 1750,
+      "train_batch_mse": 0.0009995454456657171,
+      "validation_fixed_rays_mse": 0.05292448649803797
+    },
+    {
+      "step": 2000,
+      "train_batch_mse": 0.0008443933329544961,
+      "validation_fixed_rays_mse": 0.05257885158061981
+    },
+    {
+      "step": 2250,
+      "train_batch_mse": 0.0007781605236232281,
+      "validation_fixed_rays_mse": 0.05297980705897013
+    },
+    {
+      "step": 2500,
+      "train_batch_mse": 0.0007696665707044303,
+      "validation_fixed_rays_mse": 0.052249143520991005
+    },
+    {
+      "step": 2750,
+      "train_batch_mse": 0.0006685515400022268,
+      "validation_fixed_rays_mse": 0.051600503424803414
+    },
+    {
+      "step": 3000,
+      "train_batch_mse": 0.0007806988433003426,
+      "validation_fixed_rays_mse": 0.051484448214372
+    }
+  ],
+  "wall_seconds": 8.512478600023314,
+  "cuda_peak_allocated_bytes": 112182784,
+  "best_checkpoint_sha256": "7230a384aa51e1d40abc2c4ed3d96153c0be0ac31e1db01ec26bb4fea7320c3a",
+  "heldout_renders_sha256": "bbf69094349e676bd858e020e10c8f6ca2ee97a6a405dd0dc40141b6c7811c7b",
+  "figure_sha256": "fcee813991e45fc3b1ee2ac07c93161b7d17fbcf430ef304c6a148f7a36f914b",
+  "limits": "view interpolation/extrapolation only on this captured static scene and known camera poses; grid is fixed-resolution, view-independent RGB and does not yield editable mesh or physical material parameters; no official ETH3D novel-view score claimed"
+}

@@ -1,0 +1,47 @@
+{
+  "approved": true,
+  "decisionDate": "2026-09-28",
+  "repositoryOwner": "1760139151lkh-ctrl",
+  "repositoryName": "comfortable-reader",
+  "codeLicense": "MIT",
+  "bookLicense": "CC-BY-4.0",
+  "books": {
+    "urn:uuid:78b6d831-ed10-5898-aa6a-1ce76df94fbb": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/ai-principles/RIGHTS.md"
+    },
+    "urn:uuid:a3dce963-7a1b-54ec-b175-d997057d6e7f": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/mathematical-equivalence/RIGHTS.md"
+    },
+    "urn:uuid:c300acc2-d256-5566-b0e4-f2e0b3eeb45b": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/intelligent-optimization/RIGHTS.md"
+    },
+    "urn:uuid:2ac7f433-6658-56c0-8224-5a177d4bdfd8": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/finite-element-method/RIGHTS.md"
+    },
+    "urn:uuid:46718883-ae34-5fdd-b8ab-9940d995383a": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/fuzzy-programming/RIGHTS.md"
+    },
+    "urn:uuid:58f42a14-b62e-5c5f-b242-b89b7957ac61": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/comprehensive-evaluation/RIGHTS.md"
+    },
+    "urn:uuid:c79fe35a-6b76-58ca-9140-d6e04bfb0a7d": {
+      "revision": "1.0.0",
+      "license": "CC-BY-4.0",
+      "exceptions": "books/operations-research/RIGHTS.md"
+    }
+  },
+  "scope": "Original code, skill, teaching books and explicitly cleared materials. Each third-party exception retains its own license; personal records are excluded.",
+  "releaseTag": "v0.5.1"
+}

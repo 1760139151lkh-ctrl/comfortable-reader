@@ -1,0 +1,16 @@
+{
+  "scope": "same C19 base checkpoint, same Dolly training row and forward pass; only loss labels differ; no optimizer step or test data opened",
+  "base_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+  "source_row": 3,
+  "visible_input_positions_in_both": 53,
+  "prompt_targets_added_only_to_full_text_objective": 43,
+  "response_plus_eos_targets_in_both": 10,
+  "full_text_scored_targets": 53,
+  "response_only_nll": 6.986241817474365,
+  "full_text_nll": 9.372647285461426,
+  "output_weight_gradient_norm_full_text": 2.5799896717071533,
+  "output_weight_gradient_norm_response_only": 4.999258518218994,
+  "output_weight_gradient_cosine": 0.4931934177875519,
+  "optimizer_step_executed": false
+}

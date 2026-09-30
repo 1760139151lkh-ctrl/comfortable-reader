@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "sourceFormat": "epub-source@1",
+  "id": "urn:uuid:2ac7f433-6658-56c0-8224-5a177d4bdfd8",
+  "slug": "finite-element-method",
+  "title": "有限元方法：从直觉到可靠计算",
+  "author": "舒适阅读书库项目",
+  "authorship": "由项目维护者使用 ChatGPT / Codex 辅助编写和整理；原文所述来源和参考实验各自保留身份。",
+  "description": "从微分方程和弱形式，到基函数、矩阵组装、误差与可检验的计算。",
+  "revision": "1.0.0",
+  "revisionModified": "2026-09-28T00:00:00Z",
+  "language": "zh-CN",
+  "example": false,
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "attribution": "舒适阅读书库项目 / 1760139151lkh-ctrl",
+    "exceptions": "RIGHTS.md"
+  },
+  "epubSource": {
+    "root": "epub",
+    "files": [
+      "META-INF/container.xml",
+      "OEBPS/ch00.xhtml",
+      "OEBPS/ch01.xhtml",
+      "OEBPS/ch02.xhtml",
+      "OEBPS/ch03.xhtml",
+      "OEBPS/ch04.xhtml",
+      "OEBPS/ch05.xhtml",
+      "OEBPS/ch06.xhtml",
+      "OEBPS/ch07.xhtml",
+      "OEBPS/ch08.xhtml",
+      "OEBPS/ch09.xhtml",
+      "OEBPS/ch10.xhtml",
+      "OEBPS/ch11.xhtml",
+      "OEBPS/ch12.xhtml",
+      "OEBPS/ch13.xhtml",
+      "OEBPS/ch14.xhtml",
+      "OEBPS/ch15.xhtml",
+      "OEBPS/ch16.xhtml",
+      "OEBPS/ch17.xhtml",
+      "OEBPS/ch18.xhtml",
+      "OEBPS/ch19.xhtml",
+      "OEBPS/content.opf",
+      "OEBPS/nav.xhtml",
+      "OEBPS/publication.xhtml",
+      "OEBPS/style.css"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c00",
+      "title": "有限元方法：从直觉到可靠计算",
+      "href": "ch00.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c01",
+      "title": "第一章　有限元究竟在解决什么问题",
+      "href": "ch01.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c02",
+      "title": "第二章　弱形式为什么会被问题逼出来",
+      "href": "ch02.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c03",
+      "title": "第三章　从无限维函数到有限个未知数",
+      "href": "ch03.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c04",
+      "title": "第四章　Galerkin 方法如何自动产生矩阵",
+      "href": "ch04.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c05",
+      "title": "第五章　一个三角形的局部刚度矩阵",
+      "href": "ch05.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c06",
+      "title": "第六章　刚度矩阵为什么叫“刚度”",
+      "href": "ch06.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c07",
+      "title": "第七章　局部矩阵为什么能够组装成整体矩阵",
+      "href": "ch07.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c08",
+      "title": "第八章　有限元为什么可靠",
+      "href": "ch08.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c09",
+      "title": "第九章　从最佳逼近到真正收敛",
+      "href": "ch09.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c10",
+      "title": "第十章　理论可靠不等于一次计算就可信",
+      "href": "ch10.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c11",
+      "title": "第十一章　什么时候应该想到有限元",
+      "href": "ch11.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c12",
+      "title": "第十二章　为什么不让其他方法直接解",
+      "href": "ch12.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c13",
+      "title": "第十三章　先把“系统”定义清楚：局部规则也是方程",
+      "href": "ch13.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c14",
+      "title": "第十四章　三条轴：时间、空间与状态值",
+      "href": "ch14.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c15",
+      "title": "第十五章　有限差分、有限元、元胞自动机：同一外形，不同构造",
+      "href": "ch15.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c16",
+      "title": "第十六章　微观规则与连续方程：两种相反的方向",
+      "href": "ch16.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c17",
+      "title": "第十七章　具体实例：从问题目标反推方法",
+      "href": "ch17.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c18",
+      "title": "第十八章　验证与边界：不要把“看起来像”当成“数学等价”",
+      "href": "ch18.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c19",
+      "title": "第十九章　结语　把整条逻辑重新压缩一次",
+      "href": "ch19.xhtml",
+      "essential": []
+    }
+  ],
+  "resources": [],
+  "sources": [],
+  "activities": []
+}

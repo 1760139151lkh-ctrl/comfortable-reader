@@ -1,0 +1,9 @@
+{
+  "approved": false,
+  "repositoryOwner": "",
+  "repositoryName": "comfortable-reader",
+  "codeLicense": "",
+  "bookLicense": "",
+  "books": {},
+  "note": "Review actual ownership and every selected revision/resource before creating release-rights.json. This example grants no permission."
+}

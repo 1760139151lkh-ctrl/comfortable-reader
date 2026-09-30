@@ -1,0 +1,67 @@
+{
+  "origin": "v1 real titles/questions and same validation/test records; v3 author-simulated alternate catalog snapshots and balanced direct copy; BPE segment alignment changed",
+  "format_version": 3,
+  "v1_manifest_sha256": "7783451346f1fbaa3f9f1d2fc6fdff33aac1eb4928d51d9ae4cda25ca03a1a62",
+  "parent_c25_full_mix_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced",
+  "article_index_sha256": "dfe3d141f679ef6b5a28267cbd03d83b16882dc6c1a10dfe9c85747d3965857d",
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "seed": 20260928,
+  "context_positions": 128,
+  "augmentation": {
+    "simulated_train_catalog_rows": 1140,
+    "direct_word_repetition_rows": 224,
+    "numeric_direct_rows": 200,
+    "alternate_title_values_only_from_v1_train": true
+  },
+  "split_identity": "validation/test JSONL byte-identical to v1; only v3 training scenarios and token-segment representation change",
+  "model_input": "BOS + tokenized [Tools+Q+A:] + tokenized [' '+assistant first line] + tokenized [T: observation + A:] + tokenized [' '+assistant final line]",
+  "loss_target": "only assistant first/final token targets score; tool return visible, target masked; leading space included in assistant-produced segment so ByteLevel IDs can match observed word IDs",
+  "tool_definition": "Tools: mul(a,b) computes product; title(id) reads WikiText article title.",
+  "stats": {
+    "train": {
+      "rows": 2480,
+      "kinds": {
+        "multiply": 600,
+        "title": 1330,
+        "direct": 480,
+        "missing": 70
+      },
+      "max_input_positions": 85,
+      "assistant_first_targets": 19032,
+      "observation_visible_unscored_tokens": 17607,
+      "assistant_final_targets": 9187
+    },
+    "validation": {
+      "rows": 167,
+      "kinds": {
+        "multiply": 100,
+        "title": 40,
+        "direct": 12,
+        "missing": 15
+      },
+      "max_input_positions": 85,
+      "assistant_first_targets": 1550,
+      "observation_visible_unscored_tokens": 1319,
+      "assistant_final_targets": 609
+    },
+    "test": {
+      "rows": 167,
+      "kinds": {
+        "multiply": 100,
+        "title": 40,
+        "direct": 12,
+        "missing": 15
+      },
+      "max_input_positions": 81,
+      "assistant_first_targets": 1555,
+      "observation_visible_unscored_tokens": 1336,
+      "assistant_final_targets": 626
+    }
+  },
+  "files": {
+    "test.jsonl": "6170d497928d4f2cfbb1df565caa6db8c7f4910e2035112613df2e4a9a7c72f4",
+    "title_catalog.json": "eaeb9f628e55abe96122d922d7270489b332bf937f1e02df7bc5240c03b1da7e",
+    "train.jsonl": "e577791d96ee5e11cfc070ec5a31b7f8b91048fac88d5119ea1610399a72b2b5",
+    "validation.jsonl": "4cf78d37886c6c29105e82b3e855db00f302488df70ba91cdba7e5044871ebc5"
+  }
+}

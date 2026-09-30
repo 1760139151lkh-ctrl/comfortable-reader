@@ -1,0 +1,28 @@
+{
+  "scope": "one CoVal source pair, actual human vote counts, no response/rationale/annotator text copied; BT likelihood hand check not user aesthetics",
+  "source_sha256": "e107b7d233baedbc8c1b9c3f9aef9739592b93f6f202b9e4503b9cd3ca00d759",
+  "prompt_id": "6b346e96-a9ba-5297-9c7e-d033c9753c53",
+  "topic": "whether people should stop eating beef; candidate A weighs several factors, B emphasizes individual choice",
+  "comparisons": {
+    "world": {
+      "A_over_B": 8,
+      "B_over_A": 3,
+      "ties_excluded": 3,
+      "empirical_A_share_among_non_ties": 0.7272727272727273,
+      "MLE_score_difference_A_minus_B": 0.9808292530117262,
+      "model_probability_at_MLE": 0.7272727272727273,
+      "log_likelihood_derivative_at_MLE": 0.0,
+      "probability_after_add_three_to_both_scores": 0.7272727272727273
+    },
+    "personal": {
+      "A_over_B": 7,
+      "B_over_A": 6,
+      "ties_excluded": 1,
+      "empirical_A_share_among_non_ties": 0.5384615384615384,
+      "MLE_score_difference_A_minus_B": 0.15415067982725836,
+      "model_probability_at_MLE": 0.5384615384615384,
+      "log_likelihood_derivative_at_MLE": 0.0,
+      "probability_after_add_three_to_both_scores": 0.5384615384615384
+    }
+  }
+}

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>9. 灰色关联分析：比较变化形态与参考序列的接近程度</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="9-灰色关联分析比较变化形态与参考序列的接近程度">9. 灰色关联分析：比较变化形态与参考序列的接近程度</h2>
+<p>灰色关联分析适用于样本不大、分布假设较少，希望比较各序列与参考状态在各指标上接近程度的场景。</p>
+<p>设参考序列为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>X</mi><mn>0</mn></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>,</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>对象 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 的比较序列为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>X</mi><mi>i</mi></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>,</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mn>2</mn><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>标准化后计算绝对差：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>Δ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">|</mo><msub><mi>x</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo stretchy="false">|</mo><mo>.</mo></mrow></math></div>
+<p>令：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>Δ</mi><mrow><mo>min</mo></mrow></msub><mo>=</mo><msub><mo>min</mo><mrow><mi>i</mi><mo>,</mo><mi>k</mi></mrow></msub><msub><mi>Δ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>,</mo><msub><mi>Δ</mi><mrow><mo>max</mo></mrow></msub><mo>=</mo><msub><mo>max</mo><mrow><mi>i</mi><mo>,</mo><mi>k</mi></mrow></msub><msub><mi>Δ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi></mrow></math></span> 个指标上的关联系数为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>ξ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><msub><mi>Δ</mi><mrow><mo>min</mo></mrow></msub><mo>+</mo><mi>ρ</mi><msub><mi>Δ</mi><mrow><mo>max</mo></mrow></msub></mrow><mrow><msub><mi>Δ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>+</mo><mi>ρ</mi><msub><mi>Δ</mi><mrow><mo>max</mo></mrow></msub></mrow></mfrac><mo>,</mo><mn>0</mn><mo>&lt;</mo><mi>ρ</mi><mo>&lt;</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ρ</mi></mrow></math></span> 称为分辨系数，常取 0.5。它是人为参数：越小，差异的分辨作用越强，但也可能使结果对微小差异更敏感。</p>
+<p>最后合成关联度：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>γ</mi><mi>i</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>w</mi><mi>k</mi></msub><msub><mi>ξ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>γ</mi><mi>i</mi></msub></mrow></math></span> 越大，说明对象与参考序列越接近。</p>
+<h3 id="91-参考序列不是凭空出现的">9.1 参考序列不是凭空出现的</h3>
+<p>常见选择有：</p>
+<ul>
+<li>每列最大值组成的理想序列；</li>
+<li>政策目标或行业标准；</li>
+<li>某个标杆对象；</li>
+<li>时间序列研究中的母序列。</li>
+</ul>
+<p>选择不同参考序列，就在回答不同问题。接近“当前样本最好值”和接近“长期规划目标”不是同一件事。</p>
+<h3 id="92-它与-topsis-有什么区别">9.2 它与 TOPSIS 有什么区别？</h3>
+<p>TOPSIS 把所有指标的偏差合成为整体几何距离，并同时考虑正、负理想点。灰色关联分析先把每个局部差异转成关联系数，再加权平均，通常只围绕一个参考序列。</p>
+<p>二者都依赖标准化、权重和参考状态，但对局部偏差的响应不同。灰色关联度也不是统计学中的相关系数，更不能自动说明因果关系。</p>
+<hr/>
+</body></html>

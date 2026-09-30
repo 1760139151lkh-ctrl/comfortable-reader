@@ -1,0 +1,26 @@
+{
+  "scope": "Empirical diagonal mean of per-example old-math response-loss squared gradients; not exact Hessian or posterior",
+  "math_checkpoint_sha256": "02be020308fabdc0b7ea05f800ac424d8c062e525130f91cae9aa30825464115",
+  "math_manifest_sha256": "63cba85e04c38cc0aca0a76bb1465523883f139617ab34f8ff86b625c3ea5ab7",
+  "code_manifest_sha256": "ccc917c77bb91c49047d51bc77e6e7f6aab80da297cc4f7947b613cae2b0b908",
+  "sample_seed": 4601,
+  "old_math_train_examples": 96,
+  "old_math_response_targets_per_example": 4,
+  "parameter_count": 4930304,
+  "importance_raw_mean": 3.520206064422382e-07,
+  "importance_normalized_quantiles": [
+    0.0,
+    7.87351538134029e-11,
+    1.447123646736146,
+    17.457035999297986,
+    88.69095073699779,
+    3345.17431640625
+  ],
+  "first_code_train_batch_nll": 15.841170310974121,
+  "first_code_gradient_rms": 0.017911389470100403,
+  "first_code_gradient_norm": 39.770965576171875,
+  "importance_path": "work/runs/c46_importance_first/importance.pt",
+  "importance_sha256": "a64947e0f24b02325c05331366dffa516a2649dd0130551117d319ee5f267766",
+  "code_sha256": "e2b2c0a7e776518aa98a01da5fd5a372c2720a8ee42c01b74b723c19c53835bc",
+  "device": "cuda"
+}

@@ -1,0 +1,5 @@
+# C34真实多视角场景：ETH3D pipes
+
+- [ETH3D官方数据页](https://eth3d.ethz.ch/datasets)列高分辨训练场景`pipes`的14张室内实拍去畸变照片包，原下载`pipes_dslr_undistorted.7z`145321540字节/SHA256`718981351c14e84759fcc73215e7251fce93d6e9ea1fe24f9e15f1028232c12c`，`download_manifest.json`记录官方HTTPS路径。本机安全解出的常规文件仅14 JPG和三份COLMAP文本校准，148960523未压缩字节，各SHA见`extraction_manifest.json`。官方主页对站内资料标**CC BY-NC-SA 4.0**；本地书可引用并注明来源，若外发图片/衍生品仍按许可核署名和用途。
+- [官方文档](https://eth3d.ethz.ch/documentation)定义`cameras.txt`为内参，`images.txt`每张图的四元数旋转/平移为**世界点到相机局部坐标**的变换，`points3D.txt`是匹配求出的稀疏三维点，**不是独立激光扫描真值**。本包针孔相机原尺寸6220×4141，fx3430.27/fy3429.23、主点(3119.2,2057.75)，14个外参/2473稀疏SfM点。`prepare_c34_pipes_views.py`严格按原校准读入，用区域平均缩到518×345并同步按横纵比例缩内参；不把缩小图的焦距继续写成3430像素。`views_518/manifest.json`保留原JPG/缩图SHA、姿态、内参、稀疏点范围，`pipes_fourteen_views_and_camera_centers.png`已本机目视。
+- 14张真照片确实见到同一室内管道/橙色柜门/墙角从不同位置出现，也有长廊另一朝向；相机不全都看同一块表面。本章会按**视角编号**分训练/验证/测试，必须明确哪张给模型梯度，哪张只用于选择或评价。给定相机姿态不等于模型自己从像素发现了相机；SfM配准来源在官方原件中，不冒成本机随机网络能力。网站另有`pipes_scan_clean.7z`激光扫描归档，但本次尚未下载/使用；不要把包里的SfM `points3D`称为扫描真值。

@@ -1,0 +1,21 @@
+{
+  "identity": "frozen t-5,t -> t+5 pixel model on Penn official test clips previously accessed in other C33 tasks, not globally first-blind",
+  "source_archive_sha256": "e3e41bd99deb7b3beb9785f78b209de272bb0fa60ff4432ffa88118907a797de",
+  "motion_manifest_sha256": "25f751175efa6125050813e9d7cab6eae9e1ae309a3b033b46b586ccdf34612b",
+  "train_report_sha256": "001e8cd22100e306e1ec19d2e135157e6f0a3912bcdcd4cbc7d53cdcc52a96ef",
+  "checkpoint_sha256": "c836e5bec43a3e4a137939ac025cffbeb50c7d0535ff5b735b8dddfe52f723f8",
+  "selected_epoch_from_prior_validation": 18,
+  "official_test_video_count": 1068,
+  "eligible_test_videos": 370,
+  "eligible_triplets": 1228,
+  "metrics": {
+    "model_mse_per_rgb_coordinate": 0.004092272875722894,
+    "copy_current_mse_per_rgb_coordinate": 0.005797805384597843,
+    "moving_region_fraction_of_pixels": 0.06995311934491495,
+    "moving_region_model_mse_per_coordinate": 0.04582109699324796,
+    "moving_region_copy_mse_per_coordinate": 0.07898396696574915,
+    "triplets": 1228,
+    "moving_mask_definition": "mean RGB absolute difference between actual future and current >0.08; diagnostic uses truth after prediction, not a model input"
+  },
+  "limits": "derived selection only clips with visible monotonic right-wrist motion; no natural source FPS, one deterministic future frame, MSE may reward blur; test source already used by direction/action branches"
+}

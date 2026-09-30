@@ -1,0 +1,1283 @@
+{
+  "purpose": "local EN-to-FR short sentence conditional translation; three alternatives, not historical WMT14 reproduction",
+  "source_manifest": "data/tatoeba_fra_eng/manifest.json",
+  "source_manifest_sha256": "a593dfbb42532113302c012613df5a3ee22902d30d146ef2541497f1c7661b02",
+  "source_zip_sha256": "9e35994767f7307dc1fa9d5efcc36681f3756a1bdaaa02c1381b3eb11461261e",
+  "split_counts": {
+    "train": 189037,
+    "validation": 24015,
+    "test": 23175
+  },
+  "vocab_size_source": 8004,
+  "vocab_size_target": 8004,
+  "source_unknown_fraction_test": 0.010815104484907736,
+  "target_unknown_fraction_test": 0.024433399602385684,
+  "special_ids": {
+    "<pad>": 0,
+    "<unk>": 1,
+    "<bos>": 2,
+    "<eos>": 3
+  },
+  "training": {
+    "seed": 20260924,
+    "embedding": 64,
+    "hidden": 128,
+    "batch": 256,
+    "max_epochs": 8,
+    "early_stop_patience": 2,
+    "optimizer": "Adam",
+    "learning_rate": 0.001,
+    "gradient_clip_norm": 1.0,
+    "teacher_forcing": "decoder input BOS + reference y[:-1]; target y + EOS; PAD excluded from loss"
+  },
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "torch_version": "2.11.0+cu128",
+  "python_version": "3.13.14",
+  "arms": {
+    "fixed_forward": {
+      "parameters": 3279684,
+      "epochs_run": 8,
+      "history": [
+        {
+          "epoch": 1,
+          "online_train_nll": 3.741565135026445,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 2.715254240635789,
+            "teacher_forced_perplexity_on_mapped_french": 15.108450765772961,
+            "teacher_forced_top1_accuracy": 0.49558567146746363
+          }
+        },
+        {
+          "epoch": 2,
+          "online_train_nll": 2.4666773765734367,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 2.173951772050105,
+            "teacher_forced_perplexity_on_mapped_french": 8.792963259873694,
+            "teacher_forced_top1_accuracy": 0.5651886395451696
+          }
+        },
+        {
+          "epoch": 3,
+          "online_train_nll": 2.049276795342191,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.8998070559611686,
+            "teacher_forced_perplexity_on_mapped_french": 6.684604563243613,
+            "teacher_forced_top1_accuracy": 0.6024012573106948
+          }
+        },
+        {
+          "epoch": 4,
+          "online_train_nll": 1.8037582218783461,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.717736787261765,
+            "teacher_forced_perplexity_on_mapped_french": 5.571903779880713,
+            "teacher_forced_top1_accuracy": 0.6322838567833802
+          }
+        },
+        {
+          "epoch": 5,
+          "online_train_nll": 1.6405901955664526,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.6077667811093013,
+            "teacher_forced_perplexity_on_mapped_french": 4.991651321188278,
+            "teacher_forced_top1_accuracy": 0.6483265916059052
+          }
+        },
+        {
+          "epoch": 6,
+          "online_train_nll": 1.5251174992445604,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.5264622383588455,
+            "teacher_forced_perplexity_on_mapped_french": 4.601867679425912,
+            "teacher_forced_top1_accuracy": 0.6616296945181597
+          }
+        },
+        {
+          "epoch": 7,
+          "online_train_nll": 1.437815548969842,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.4642580407285748,
+            "teacher_forced_perplexity_on_mapped_french": 4.324333570340576,
+            "teacher_forced_top1_accuracy": 0.6709908192272349
+          }
+        },
+        {
+          "epoch": 8,
+          "online_train_nll": 1.3690087965238307,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.4290029259259744,
+            "teacher_forced_perplexity_on_mapped_french": 4.174534795746564,
+            "teacher_forced_top1_accuracy": 0.6758474394318055
+          }
+        }
+      ],
+      "selected_epoch": 8,
+      "selected_validation_nll": 1.4290029259259744,
+      "first_batch_trace": {
+        "prepared_training_row": 127351,
+        "source_ids": [
+          79,
+          147,
+          6,
+          5,
+          78,
+          103,
+          11,
+          166,
+          1149,
+          122,
+          3
+        ],
+        "decoder_input_ids": [
+          2,
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45
+        ],
+        "decoder_target_ids": [
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45,
+          3
+        ],
+        "active_target_steps": 12,
+        "first_batch_mean_loss": 9.020442008972168,
+        "pre_clip_gradient_norm": 0.5200821161270142
+      },
+      "train_seconds_excluding_data_loading": 59.212666400009766,
+      "peak_cuda_allocated_mib": 804.45654296875,
+      "checkpoint": "results/tatoeba_fixed_forward_best.pt",
+      "checkpoint_sha256": "28b006946c3aab1214dd820b3643c291d6dfb178de6eacd36906faa84801c9ea",
+      "test_teacher_forced": {
+        "target_tokens_including_eos": 224375,
+        "mean_teacher_forced_nll_nats": 1.4340519607416435,
+        "teacher_forced_perplexity_on_mapped_french": 4.1956654671273546,
+        "teacher_forced_top1_accuracy": 0.6774863509749304,
+        "source_length_bins": {
+          "2-5": {
+            "targets": 29396,
+            "mean_nll": 1.1333689522558303
+          },
+          "6-10": {
+            "targets": 150720,
+            "mean_nll": 1.3608544200089328
+          },
+          "11-18": {
+            "targets": 44259,
+            "mean_nll": 1.883027553224362
+          }
+        }
+      },
+      "test_greedy": {
+        "unique_source_sentences": 16858,
+        "exact_match_to_any_reference": 0.08963103571004864,
+        "mean_best_normalized_token_edit_similarity": 0.5327907615562358,
+        "source_length_bins": {
+          "2-5": {
+            "sources": 2852,
+            "exact_match": 0.18688639551192146,
+            "mean_edit_similarity": 0.6185190452371339
+          },
+          "6-10": {
+            "sources": 11567,
+            "exact_match": 0.08230310365695513,
+            "mean_edit_similarity": 0.5402334461421078
+          },
+          "11-18": {
+            "sources": 2439,
+            "exact_match": 0.01066010660106601,
+            "mean_edit_similarity": 0.39724890109587896
+          }
+        },
+        "first_twelve_sources_before_looking_at_predictions": [
+          {
+            "source": "Fire!",
+            "reference_first": [
+              "au",
+              "feu",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "lance",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.33333333333333337
+          },
+          {
+            "source": "Hello!",
+            "reference_first": [
+              "bonjour",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "I see.",
+            "reference_first": [
+              "je",
+              "comprends",
+              "."
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "vois",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "I try.",
+            "reference_first": [
+              "j",
+              "'",
+              "essaye",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "j",
+              "'",
+              "essaie",
+              "de",
+              "moi",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "Oh no!",
+            "reference_first": [
+              "oh",
+              "non",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "aucun",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.33333333333333337
+          },
+          {
+            "source": "Got it!",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "pigé",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "c",
+              "'",
+              "est",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.4
+          },
+          {
+            "source": "I fled.",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "fui",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "suis",
+              "allée",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.19999999999999996
+          },
+          {
+            "source": "I knit.",
+            "reference_first": [
+              "je",
+              "tricote",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "me",
+              "suis",
+              "<unk>",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.4
+          },
+          {
+            "source": "Call me.",
+            "reference_first": [
+              "appelle",
+              "-",
+              "moi",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "appelle",
+              "-",
+              "moi",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          },
+          {
+            "source": "Come in.",
+            "reference_first": [
+              "entrez",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "venez",
+              "dans",
+              "la",
+              "camionnette",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.19999999999999996
+          },
+          {
+            "source": "Goodbye!",
+            "reference_first": [
+              "adieu",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "I'm hit!",
+            "reference_first": [
+              "je",
+              "suis",
+              "touché",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "suis",
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          }
+        ],
+        "limits": "Multiple references per exact English source included; other valid translations may be absent. UNK output never equals a real unseen French word. Exact match and edit similarity are reference-based, not human semantic adequacy."
+      }
+    },
+    "fixed_reversed": {
+      "parameters": 3279684,
+      "epochs_run": 8,
+      "history": [
+        {
+          "epoch": 1,
+          "online_train_nll": 3.657012173329569,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 2.668178089174509,
+            "teacher_forced_perplexity_on_mapped_french": 14.413684807784167,
+            "teacher_forced_top1_accuracy": 0.5039720368605021
+          }
+        },
+        {
+          "epoch": 2,
+          "online_train_nll": 2.44430337333769,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 2.1775701510689074,
+            "teacher_forced_perplexity_on_mapped_french": 8.824837164804553,
+            "teacher_forced_top1_accuracy": 0.5639304700315186
+          }
+        },
+        {
+          "epoch": 3,
+          "online_train_nll": 2.061251289941065,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.9318045952273024,
+            "teacher_forced_perplexity_on_mapped_french": 6.901954243698059,
+            "teacher_forced_top1_accuracy": 0.5973771674438977
+          }
+        },
+        {
+          "epoch": 4,
+          "online_train_nll": 1.828953758218268,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.7551740885634726,
+            "teacher_forced_perplexity_on_mapped_french": 5.7844546617101535,
+            "teacher_forced_top1_accuracy": 0.6241036078976975
+          }
+        },
+        {
+          "epoch": 5,
+          "online_train_nll": 1.6694867400198738,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.644163541476284,
+            "teacher_forced_perplexity_on_mapped_french": 5.176678019025243,
+            "teacher_forced_top1_accuracy": 0.6411082197545496
+          }
+        },
+        {
+          "epoch": 6,
+          "online_train_nll": 1.5527234421447453,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.5587778508891994,
+            "teacher_forced_perplexity_on_mapped_french": 4.753008808540238,
+            "teacher_forced_top1_accuracy": 0.6543082644131262
+          }
+        },
+        {
+          "epoch": 7,
+          "online_train_nll": 1.464532700560249,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.4960853693880218,
+            "teacher_forced_perplexity_on_mapped_french": 4.464179207792492,
+            "teacher_forced_top1_accuracy": 0.6648974999785295
+          }
+        },
+        {
+          "epoch": 8,
+          "online_train_nll": 1.3937898185681425,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.4586964993011697,
+            "teacher_forced_perplexity_on_mapped_french": 4.300350363660134,
+            "teacher_forced_top1_accuracy": 0.6700418244746176
+          }
+        }
+      ],
+      "selected_epoch": 8,
+      "selected_validation_nll": 1.4586964993011697,
+      "first_batch_trace": {
+        "prepared_training_row": 127351,
+        "source_ids": [
+          122,
+          1149,
+          166,
+          11,
+          103,
+          78,
+          5,
+          6,
+          147,
+          79,
+          3
+        ],
+        "decoder_input_ids": [
+          2,
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45
+        ],
+        "decoder_target_ids": [
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45,
+          3
+        ],
+        "active_target_steps": 12,
+        "first_batch_mean_loss": 9.01369857788086,
+        "pre_clip_gradient_norm": 0.5042179822921753
+      },
+      "train_seconds_excluding_data_loading": 57.61281089996919,
+      "peak_cuda_allocated_mib": 817.451171875,
+      "checkpoint": "results/tatoeba_fixed_reversed_best.pt",
+      "checkpoint_sha256": "fb45ba274ef353b1663a46fd1e423ea0eda329c5432c5567c4b9f208f391d9e4",
+      "test_teacher_forced": {
+        "target_tokens_including_eos": 224375,
+        "mean_teacher_forced_nll_nats": 1.4579210736202994,
+        "teacher_forced_perplexity_on_mapped_french": 4.297017054085358,
+        "teacher_forced_top1_accuracy": 0.6720356545961003,
+        "source_length_bins": {
+          "2-5": {
+            "targets": 29396,
+            "mean_nll": 1.149353307085729
+          },
+          "6-10": {
+            "targets": 150720,
+            "mean_nll": 1.3881809255879396
+          },
+          "11-18": {
+            "targets": 44259,
+            "mean_nll": 1.9003597026721437
+          }
+        }
+      },
+      "test_greedy": {
+        "unique_source_sentences": 16858,
+        "exact_match_to_any_reference": 0.08328390081860244,
+        "mean_best_normalized_token_edit_similarity": 0.5214784970754062,
+        "source_length_bins": {
+          "2-5": {
+            "sources": 2852,
+            "exact_match": 0.1844319775596073,
+            "mean_edit_similarity": 0.6151358741383233
+          },
+          "6-10": {
+            "sources": 11567,
+            "exact_match": 0.07348491397942422,
+            "mean_edit_similarity": 0.5271515268336957
+          },
+          "11-18": {
+            "sources": 2439,
+            "exact_match": 0.011480114801148012,
+            "mean_edit_similarity": 0.3850575152805455
+          }
+        },
+        "first_twelve_sources_before_looking_at_predictions": [
+          {
+            "source": "Fire!",
+            "reference_first": [
+              "au",
+              "feu",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.33333333333333337
+          },
+          {
+            "source": "Hello!",
+            "reference_first": [
+              "bonjour",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "bonjour",
+              "!"
+            ],
+            "exact_any": true,
+            "best_edit_similarity": 1.0
+          },
+          {
+            "source": "I see.",
+            "reference_first": [
+              "je",
+              "comprends",
+              "."
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "vois",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "I try.",
+            "reference_first": [
+              "j",
+              "'",
+              "essaye",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "suis",
+              "en",
+              "train",
+              "de",
+              "réessayer",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.1428571428571429
+          },
+          {
+            "source": "Oh no!",
+            "reference_first": [
+              "oh",
+              "non",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "oh",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "Got it!",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "pigé",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "c",
+              "'",
+              "est",
+              "affreux",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.4
+          },
+          {
+            "source": "I fled.",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "fui",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "me",
+              "suis",
+              "<unk>",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.19999999999999996
+          },
+          {
+            "source": "I knit.",
+            "reference_first": [
+              "je",
+              "tricote",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "me",
+              "suis",
+              "<unk>",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.4
+          },
+          {
+            "source": "Call me.",
+            "reference_first": [
+              "appelle",
+              "-",
+              "moi",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "appelle",
+              "-",
+              "moi",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          },
+          {
+            "source": "Come in.",
+            "reference_first": [
+              "entrez",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "entrez",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "Goodbye!",
+            "reference_first": [
+              "adieu",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "à",
+              "quoi",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.33333333333333337
+          },
+          {
+            "source": "I'm hit!",
+            "reference_first": [
+              "je",
+              "suis",
+              "touché",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "suis",
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          }
+        ],
+        "limits": "Multiple references per exact English source included; other valid translations may be absent. UNK output never equals a real unseen French word. Exact match and edit similarity are reference-based, not human semantic adequacy."
+      }
+    },
+    "soft_read": {
+      "parameters": 3312580,
+      "epochs_run": 8,
+      "history": [
+        {
+          "epoch": 1,
+          "online_train_nll": 3.6294689688550044,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 2.475409890133595,
+            "teacher_forced_perplexity_on_mapped_french": 11.88657830587405,
+            "teacher_forced_top1_accuracy": 0.5382174357388847
+          }
+        },
+        {
+          "epoch": 2,
+          "online_train_nll": 2.1417923114201343,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.8245659646041195,
+            "teacher_forced_perplexity_on_mapped_french": 6.200103370690781,
+            "teacher_forced_top1_accuracy": 0.6288185230034611
+          }
+        },
+        {
+          "epoch": 3,
+          "online_train_nll": 1.6987589062481814,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.5574559959582177,
+            "teacher_forced_perplexity_on_mapped_french": 4.746730171047856,
+            "teacher_forced_top1_accuracy": 0.6678432483961559
+          }
+        },
+        {
+          "epoch": 4,
+          "online_train_nll": 1.4801509099469905,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.4139284458526835,
+            "teacher_forced_perplexity_on_mapped_french": 4.112077790317462,
+            "teacher_forced_top1_accuracy": 0.6905804756138407
+          }
+        },
+        {
+          "epoch": 5,
+          "online_train_nll": 1.346649876876276,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.3403945786695448,
+            "teacher_forced_perplexity_on_mapped_french": 3.8205507158086074,
+            "teacher_forced_top1_accuracy": 0.7029689365247039
+          }
+        },
+        {
+          "epoch": 6,
+          "online_train_nll": 1.2561027950984651,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.2595318684082304,
+            "teacher_forced_perplexity_on_mapped_french": 3.5237715124256725,
+            "teacher_forced_top1_accuracy": 0.7172682692225114
+          }
+        },
+        {
+          "epoch": 7,
+          "online_train_nll": 1.1847719025464842,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.2207162468326025,
+            "teacher_forced_perplexity_on_mapped_french": 3.389614665144226,
+            "teacher_forced_top1_accuracy": 0.7231425896821512
+          }
+        },
+        {
+          "epoch": 8,
+          "online_train_nll": 1.1313473245684431,
+          "validation": {
+            "target_tokens_including_eos": 232878,
+            "mean_teacher_forced_nll_nats": 1.1851241195681725,
+            "teacher_forced_perplexity_on_mapped_french": 3.2710928028964585,
+            "teacher_forced_top1_accuracy": 0.7305584898530562
+          }
+        }
+      ],
+      "selected_epoch": 8,
+      "selected_validation_nll": 1.1851241195681725,
+      "first_batch_trace": {
+        "prepared_training_row": 127351,
+        "source_ids": [
+          79,
+          147,
+          6,
+          5,
+          78,
+          103,
+          11,
+          166,
+          1149,
+          122,
+          3
+        ],
+        "decoder_input_ids": [
+          2,
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45
+        ],
+        "decoder_target_ids": [
+          65,
+          401,
+          22,
+          5,
+          158,
+          79,
+          25,
+          117,
+          43,
+          364,
+          45,
+          3
+        ],
+        "active_target_steps": 12,
+        "first_batch_mean_loss": 9.002157211303711,
+        "pre_clip_gradient_norm": 0.31011056900024414
+      },
+      "train_seconds_excluding_data_loading": 99.103478099918,
+      "peak_cuda_allocated_mib": 880.1298828125,
+      "checkpoint": "results/tatoeba_soft_read_best.pt",
+      "checkpoint_sha256": "e2d752d2a9c234acdca5465d03e225aba03bde3c0af45e7f999f9eae92a8e04d",
+      "test_teacher_forced": {
+        "target_tokens_including_eos": 224375,
+        "mean_teacher_forced_nll_nats": 1.1846344397414694,
+        "teacher_forced_perplexity_on_mapped_french": 3.2694914068572736,
+        "teacher_forced_top1_accuracy": 0.7329114206128133,
+        "source_length_bins": {
+          "2-5": {
+            "targets": 29396,
+            "mean_nll": 1.0135597720375222
+          },
+          "6-10": {
+            "targets": 150720,
+            "mean_nll": 1.1475655174179442
+          },
+          "11-18": {
+            "targets": 44259,
+            "mean_nll": 1.4244939276339221
+          }
+        }
+      },
+      "test_greedy": {
+        "unique_source_sentences": 16858,
+        "exact_match_to_any_reference": 0.14675524973306442,
+        "mean_best_normalized_token_edit_similarity": 0.6185301127912319,
+        "source_length_bins": {
+          "2-5": {
+            "sources": 2852,
+            "exact_match": 0.2668302945301543,
+            "mean_edit_similarity": 0.673552927515055
+          },
+          "6-10": {
+            "sources": 11567,
+            "exact_match": 0.1385839024811965,
+            "mean_edit_similarity": 0.6229078588292343
+          },
+          "11-18": {
+            "sources": 2439,
+            "exact_match": 0.045100451004510045,
+            "mean_edit_similarity": 0.5334286548109252
+          }
+        },
+        "first_twelve_sources_before_looking_at_predictions": [
+          {
+            "source": "Fire!",
+            "reference_first": [
+              "au",
+              "feu",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "le",
+              "feu",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "Hello!",
+            "reference_first": [
+              "bonjour",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "bonjour",
+              "!"
+            ],
+            "exact_any": true,
+            "best_edit_similarity": 1.0
+          },
+          {
+            "source": "I see.",
+            "reference_first": [
+              "je",
+              "comprends",
+              "."
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "vois",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "I try.",
+            "reference_first": [
+              "j",
+              "'",
+              "essaye",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "j",
+              "'",
+              "essaie",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          },
+          {
+            "source": "Oh no!",
+            "reference_first": [
+              "oh",
+              "non",
+              "!"
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "oh",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6666666666666667
+          },
+          {
+            "source": "Got it!",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "pigé",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "<unk>",
+              "-",
+              "le",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.25
+          },
+          {
+            "source": "I fled.",
+            "reference_first": [
+              "j",
+              "'",
+              "ai",
+              "fui",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "me",
+              "suis",
+              "<unk>",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.19999999999999996
+          },
+          {
+            "source": "I knit.",
+            "reference_first": [
+              "je",
+              "tricote",
+              "."
+            ],
+            "reference_count_for_same_source": 1,
+            "predicted_tokens": [
+              "je",
+              "me",
+              "suis",
+              "<unk>",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.4
+          },
+          {
+            "source": "Call me.",
+            "reference_first": [
+              "appelle",
+              "-",
+              "moi",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "appelle",
+              "-",
+              "moi",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.75
+          },
+          {
+            "source": "Come in.",
+            "reference_first": [
+              "entrez",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "venez",
+              "."
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "Goodbye!",
+            "reference_first": [
+              "adieu",
+              "!"
+            ],
+            "reference_count_for_same_source": 3,
+            "predicted_tokens": [
+              "<unk>",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.5
+          },
+          {
+            "source": "I'm hit!",
+            "reference_first": [
+              "je",
+              "suis",
+              "touché",
+              "!"
+            ],
+            "reference_count_for_same_source": 2,
+            "predicted_tokens": [
+              "je",
+              "suis",
+              "un",
+              "peu",
+              "!"
+            ],
+            "exact_any": false,
+            "best_edit_similarity": 0.6
+          }
+        ],
+        "limits": "Multiple references per exact English source included; other valid translations may be absent. UNK output never equals a real unseen French word. Exact match and edit similarity are reference-based, not human semantic adequacy."
+      }
+    }
+  },
+  "preselected_validation_alignment_example": {
+    "source_row_zero_based": 26766,
+    "english_original": "He wore red pants.",
+    "french_original": "Il portait un pantalon rouge.",
+    "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #300587 (CK) & #132782 (Julien_PDC)",
+    "source_tokens_used": [
+      "he",
+      "wore",
+      "red",
+      "pants",
+      ".",
+      "<eos>"
+    ],
+    "reference_target_tokens_used": [
+      "il",
+      "portait",
+      "un",
+      "pantalon",
+      "rouge",
+      ".",
+      "<eos>"
+    ],
+    "teacher_forced_source_weight_matrix": [
+      [
+        0.8583475947380066,
+        0.10362493991851807,
+        0.008654749020934105,
+        0.02742050774395466,
+        0.0016483698273077607,
+        0.00030384198180399835
+      ],
+      [
+        0.00574580579996109,
+        0.55308598279953,
+        0.13104960322380066,
+        0.2892014980316162,
+        0.019960612058639526,
+        0.0009565645013935864
+      ],
+      [
+        0.00018036690016742796,
+        0.2730076014995575,
+        0.2654649019241333,
+        0.3783220648765564,
+        0.08181788772344589,
+        0.0012071769451722503
+      ],
+      [
+        2.763686381968e-07,
+        0.0051317401230335236,
+        0.2049444019794464,
+        0.5353960394859314,
+        0.2527860105037689,
+        0.001741456682793796
+      ],
+      [
+        4.8264002572295794e-08,
+        0.005372034851461649,
+        0.16260915994644165,
+        0.3832222521305084,
+        0.42936787009239197,
+        0.01942860335111618
+      ],
+      [
+        1.988911257910786e-10,
+        6.249770376598462e-05,
+        0.012316925451159477,
+        0.10118306428194046,
+        0.705600380897522,
+        0.18083716928958893
+      ],
+      [
+        6.125143447999193e-11,
+        9.984686766983941e-05,
+        0.016108516603708267,
+        0.086858369410038,
+        0.7689477801322937,
+        0.12798550724983215
+      ]
+    ],
+    "max_row_sum_error": 1.1920928955078125e-07,
+    "note": "Weights are from the trained model while feeding reference French prefixes; no manual gold word alignment or proof of a human interpretation."
+  },
+  "limits": "One seed, at most 18 input/target tokens, many short Tatoeba pairs, duplicate/alternative French targets, source grouping only. Teacher-forced NLL and reference-based greedy metrics do not equal WMT14 BLEU or human adequacy."
+}

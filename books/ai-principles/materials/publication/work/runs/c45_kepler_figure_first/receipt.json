@@ -1,0 +1,12 @@
+{
+  "q1_report_sha256": "97065409b1c6fb085154bfdff993a9734378a277b3c1cc59f3df5c72b6a91eaa",
+  "q2_report_sha256": "b67132b1c9280db6ef51933e22fab05cf42117de21dbfc8133a595bc28aae90d",
+  "q1_fits_sha256": "37faa7dc82fa5d9ec6d794369d93def0d78a49c91e61cf19bb4cafe571bb8f6c",
+  "q2_fits_sha256": "2a10ce0fa87e8a757e6d66a740669bcf94a704eecf0646bbf898ad91b402fc08",
+  "figure_sha256": "eaecb3e4539138f13f31b32bd3c9d0f325c7018c5b3f3c993330dc2625ad6318",
+  "figure": "work\\runs\\c45_kepler_figure_first\\hat_p_7b_q1_q2_measured_and_predicted.png",
+  "period_days": 2.205021325331333,
+  "duration_days": 0.14,
+  "q2_calibration_excluded": 55,
+  "q2_scored": 1982
+}

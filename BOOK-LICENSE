@@ -1,0 +1,37 @@
+Original teaching content in books/ and examples/books/ is licensed under
+Creative Commons Attribution 4.0 International (CC BY 4.0), to the extent
+copyright subsists and the contributors have the right to license it.
+
+License: https://creativecommons.org/licenses/by/4.0/
+Legal code: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Attribution: Comfortable Reader project (舒适阅读书库项目).
+Initial maintainer: https://github.com/1760139151lkh-ctrl
+Source: https://github.com/1760139151lkh-ctrl/comfortable-reader
+Initial public edition: 2026-09-28. ChatGPT and Codex assisted with writing,
+editing, implementation and layout; specific references and recorded
+experiments retain their own provenance. No endorsement by OpenAI is implied.
+
+You may share and adapt the original teaching material, including commercially,
+with appropriate credit, a link to the license and an indication of changes.
+The linked legal code controls; this notice is not a replacement for it.
+
+EXCEPTIONS
+1. Original program code, including book programs, uses the repository MIT
+   license unless an individual file says otherwise.
+2. ETH3D images, reconstructed geometry and derived figures retain
+   CC BY-NC-SA 4.0, requiring attribution, noncommercial use and share-alike.
+   See books/ai-principles/RIGHTS.md and resource-rights.json for the exact files.
+3. Fashion-MNIST-derived images retain the upstream MIT notice included in
+   books/ai-principles/licenses/Fashion-MNIST-MIT.txt.
+4. LibriSpeech excerpts and transformations retain CC BY 4.0 and their
+   source attribution. The book distinguishes source speech, transformations
+   and generated output. Other media provenance is recorded per file.
+5. CommonRoad road figures identify OpenStreetMap contributors and the ODbL
+   source database; the original database is not redistributed here.
+6. External papers, photographs, data and linked websites are not relicensed
+   by this repository. Materials without sufficiently clear redistribution
+   terms are linked at their source and are absent from public artifacts.
+
+Consult each book's RIGHTS.md before reusing third-party material. A software
+license does not grant rights in all the content that the software can open.

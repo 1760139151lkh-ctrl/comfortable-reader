@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>3. 智能优化算法的一般结构</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="3-智能优化算法的一般结构">3. 智能优化算法的一般结构</h2>
+<p>虽然遗传算法、粒子群、蚁群算法名字差别很大，但骨架通常非常相似。</p>
+<h3 id="第一步表示并产生候选解">第一步：表示并产生候选解</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>N</mi></msub></mrow></math></div>
+<p>连续优化中的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math></span> 可以是实数向量；旅行商问题中的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mi>i</mi></msub></mrow></math></span> 是一个城市排列。</p>
+<h3 id="第二步评价每个解">第二步：评价每个解</h3>
+<p>计算：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>,</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>N</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>在最小化问题中，函数值越小，解越好。若解违反约束，常见做法是构造惩罚目标：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mi>λ</mi><munder><mo>∑</mo><mi>j</mi></munder><mo>max</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><msup><mo stretchy="false">}</mo><mn>2</mn></msup><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn></mrow></math></span> 是约束，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow></math></span> 是人为选择的惩罚强度：太小会纵容违规解，太大又可能妨碍搜索。</p>
+<h3 id="第三步根据好坏生成新解">第三步：根据好坏生成新解</h3>
+<p>通常会保留、扰动或组合已有解，并淘汰一部分较差的解。最容易被忽略的是“邻域”概念：从当前解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 出发，一次允许怎样改变，决定了算法实际上能搜索到哪里。例如：</p>
+<ul>
+<li>连续变量可用 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>x</mi><mi>′</mi></msup><mo>=</mo><mi>x</mi><mo>+</mo><mi>σ</mi><mi>ε</mi></mrow></math></span>，其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ε</mi><mi>~</mi><mi>N</mi><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mi>I</mi><mo stretchy="false">)</mo></mrow></math></span>；</li>
+<li>路线可随机交换两个城市，或把一段路线反转；</li>
+<li>0–1 决策可随机翻转一个或多个比特。</li>
+</ul>
+<h3 id="第四步重复并记录最好解">第四步：重复并记录最好解</h3>
+<p>不断执行：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>产生解</mtext><mo>→</mo><mtext>评价解</mtext><mo>→</mo><mtext>改进解</mtext></mrow></math></div>
+<p>直到运行轮数、目标评价次数或无改进轮数达到上限。无论算法是否暂时接受较差解，都应另存历史最好解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mrow><mrow><mi mathvariant="normal">b</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi></mrow></mrow></msub></mrow></math></span>，否则最后停下的位置可能比曾经到过的最好位置更差。</p>
+<p>抽象地写：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>X</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></msup><mo>=</mo><mi mathvariant="script">A</mi><mspace width="negativethinmathspace"/><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup><mo>,</mo><mi>f</mi><mo stretchy="false">(</mo><msup><mi>X</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup><mo stretchy="false">)</mo><mo>,</mo><mtext>随机信息</mtext><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>X</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup></mrow></math></span> 表示第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 轮的一批候选解，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="script">A</mi></mrow></math></span> 是更新规则。对单解算法，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>X</mi><mrow><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></msup></mrow></math></span> 也可以只有一个元素。</p>
+<hr/>
+</body></html>

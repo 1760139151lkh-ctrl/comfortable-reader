@@ -1,0 +1,159 @@
+{
+  "dataset_identity": "UCI Bike Sharing day.csv, SHA-256 a6bcf826782d3c0fbfdcbeead17cd0884185a0dafe8ff10cd48a874ee7ba18be",
+  "source_and_license": "work/data/uci_bike_sharing/SOURCE.md",
+  "protocol": "work/verification/C07_bike_protocol.md",
+  "forecast_origin": "目标日前一日结束，上一日实际 cnt 已知；目标日是否周末已知",
+  "excluded_same_day_fields": [
+    "weathersit",
+    "temp",
+    "atemp",
+    "hum",
+    "windspeed",
+    "casual",
+    "registered",
+    "cnt"
+  ],
+  "raw_days": 731,
+  "target_examples": 730,
+  "ranges": {
+    "train": [
+      "2011-01-02",
+      "2011-12-31"
+    ],
+    "validation": [
+      "2012-01-01",
+      "2012-06-30"
+    ],
+    "test": [
+      "2012-07-01",
+      "2012-12-31"
+    ]
+  },
+  "split_counts": {
+    "train": 364,
+    "validation": 182,
+    "test": 184
+  },
+  "candidate_order_predeclared": [
+    "yesterday",
+    "lag_linear",
+    "lag_weekend"
+  ],
+  "fitted_from_training_only": {
+    "yesterday": {
+      "kind": "fixed",
+      "parameter_count": 0
+    },
+    "lag_linear": {
+      "kind": "least_squares_on_2011_only",
+      "parameter_count": 2,
+      "coefficients": [
+        654.3979693885561,
+        0.8092072976069715
+      ]
+    },
+    "lag_weekend": {
+      "kind": "least_squares_on_2011_only",
+      "parameter_count": 3,
+      "coefficients": [
+        664.7887834950504,
+        0.8094828142735924,
+        -39.65449298723835
+      ]
+    }
+  },
+  "selection_metric": "validation MAE in rental counts per day, tie goes to fewer parameters",
+  "selected_on_validation": "yesterday",
+  "metrics": {
+    "train": {
+      "yesterday": {
+        "n": 364,
+        "mae": 588.8076923076923,
+        "rmse": 843.0285670338608,
+        "mean_signed_error": -4.1208791208791204,
+        "target_mean": 3412.412087912088
+      },
+      "lag_linear": {
+        "n": 364,
+        "mae": 575.6712911088705,
+        "rmse": 800.978569614641,
+        "mean_signed_error": 6.246529545143738e-13,
+        "target_mean": 3412.412087912088
+      },
+      "lag_weekend": {
+        "n": 364,
+        "mae": 574.4267120315268,
+        "rmse": 800.7783083112722,
+        "mean_signed_error": 3.2931703761997786e-12,
+        "target_mean": 3412.412087912088
+      }
+    },
+    "validation": {
+      "yesterday": {
+        "n": 182,
+        "mae": 900.6043956043956,
+        "rmse": 1273.4612908685758,
+        "mean_signed_error": -17.593406593406595,
+        "target_mean": 5152.06043956044
+      },
+      "lag_linear": {
+        "n": 182,
+        "mae": 941.8868644401848,
+        "rmse": 1237.4547948326713,
+        "mean_signed_error": -342.8142777725457,
+        "target_mean": 5152.06043956044
+      },
+      "lag_weekend": {
+        "n": 182,
+        "mae": 939.6040758878229,
+        "rmse": 1235.215477957697,
+        "mean_signed_error": -342.33868756346425,
+        "target_mean": 5152.06043956044
+      }
+    },
+    "test": {
+      "yesterday": {
+        "n": 184,
+        "mae": 840.0760869565217,
+        "rmse": 1218.9774313993141,
+        "mean_signed_error": 16.07608695652174,
+        "target_mean": 6042.940217391304
+      },
+      "lag_linear": {
+        "n": 184,
+        "mae": 980.3321755226509,
+        "rmse": 1247.9784327576158,
+        "mean_signed_error": -485.54203820486447,
+        "target_mean": 6042.940217391304
+      },
+      "lag_weekend": {
+        "n": 184,
+        "mae": 974.8310064437869,
+        "rmse": 1243.5866868921967,
+        "mean_signed_error": -484.9040822119098,
+        "target_mean": 6042.940217391304
+      }
+    }
+  },
+  "first_validation_row": {
+    "target_date": "2012-01-01",
+    "lag_date": "2011-12-31",
+    "lag_count": 2485,
+    "weekend": 1,
+    "target": 2294
+  },
+  "first_test_row": {
+    "target_date": "2012-07-01",
+    "lag_date": "2012-06-30",
+    "lag_count": 5687,
+    "weekend": 1,
+    "target": 5531,
+    "predictions": {
+      "yesterday": 5687.0,
+      "lag_linear": 5256.3598708794025,
+      "lag_weekend": 5228.663055281732
+    }
+  },
+  "test_predictions_csv": "work/results/bike_next_day_test_rows.csv",
+  "scope": "One city, 2011 fit; 2012 H1 selection; 2012 H2 once-reported test. Rolling one-day forecasts with actual prior-day count; not a closed-loop six-month forecast or universal generalization claim."
+}

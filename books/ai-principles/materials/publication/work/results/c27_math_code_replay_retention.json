@@ -1,0 +1,81 @@
+{
+  "scope": "previously-used C25 Dolly and C19 WikiText validation only; posthoc retention after C27 branches fixed; no new blind evaluation or selection",
+  "parent_identity": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c25_sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+    "c25_full_mix_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced"
+  },
+  "checkpoint_sha256": {
+    "math_specialist": "02be020308fabdc0b7ea05f800ac424d8c062e525130f91cae9aa30825464115",
+    "code_specialist": "3fac03d6cf2d29102289b5fdafce64360e75015daccfed373c45a7ca4b1dedbd",
+    "math_and_code_joint": "e3e2d7b0035f6d0b706b490560992bd73760de309d4f0ed1fbb9997498c5f57e",
+    "math_code_with_old_replay": "3d7d7132484d8924cffd1660cab4227330ae3b3ac83e360f3e07ef46758aea1c"
+  },
+  "results": {
+    "c25_full_mix_start": {
+      "dolly_validation_response": {
+        "response_nll": 5.492693432379673,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "wikitext_validation": {
+        "nll": 5.942112406650391,
+        "perplexity": 380.73835489178646,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    "math_specialist": {
+      "dolly_validation_response": {
+        "response_nll": 13.709534610215053,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "wikitext_validation": {
+        "nll": 19.589374872507747,
+        "perplexity": 321778787.6384015,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    "code_specialist": {
+      "dolly_validation_response": {
+        "response_nll": 16.16366260774023,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "wikitext_validation": {
+        "nll": 12.759186338941234,
+        "perplexity": 347731.6494230326,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    "math_and_code_joint": {
+      "dolly_validation_response": {
+        "response_nll": 15.85257463144308,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "wikitext_validation": {
+        "nll": 15.84318401957138,
+        "perplexity": 7596392.485258583,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    "math_code_with_old_replay": {
+      "dolly_validation_response": {
+        "response_nll": 5.160574043405445,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "wikitext_validation": {
+        "nll": 5.673054904401692,
+        "perplexity": 290.92191691175356,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    }
+  }
+}

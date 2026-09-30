@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>有限元方法：从直觉到可靠计算</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="有限元方法从直觉到可靠计算">有限元方法：从直觉到可靠计算</h1>
+<blockquote>
+<p>从“为什么要切成小块”到“为什么最后会出现矩阵”，再到“凭什么相信计算结果”</p>
+</blockquote>
+<h2 id="前言这本书真正要回答什么">前言：这本书真正要回答什么</h2>
+<p>有限元方法（Finite Element Method，FEM）常被概括成一句话：</p>
+<blockquote>
+<p>把一个复杂区域切成许多小块，在每个小块上用简单函数近似未知解，再把局部结果拼成整体结果。</p>
+</blockquote>
+<p>这句话没有错，但它只说出了外形，没有说出有限元为什么成立。</p>
+<p>真正的逻辑链是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>现实中的局部平衡规律</mtext><mi>⟶</mi><mtext>微分方程</mtext><mi>⟶</mi><mtext>弱形式</mtext><mi>⟶</mi><mtext>有限维函数空间</mtext><mi>⟶</mi><mi>K</mi><mi>U</mi><mo>=</mo><mi>F</mi></mrow></menclose></mrow></math></div>
+<p>有限元的核心，不是“三角形足够小，所以答案应该差不多”，而是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>弱形式</mtext><mo>+</mo><mtext>分片多项式近似</mtext><mo>+</mo><mtext>Galerkin 投影</mtext><mo>+</mo><mtext>局部组装</mtext></mrow></menclose></mrow></math></div>
+<p>本书围绕三个问题展开：</p>
+<ol>
+<li>连续的函数问题为什么会变成矩阵方程？</li>
+<li>刚度矩阵和组装到底从哪里来？</li>
+<li>有限元为什么可靠，又在什么情况下不该盲信？</li>
+</ol>
+<p>不要求读者已经系统学过偏微分方程。第一次出现的对象都会先解释它在解决什么麻烦，再给出公式。</p>
+<hr/>
+</body></html>

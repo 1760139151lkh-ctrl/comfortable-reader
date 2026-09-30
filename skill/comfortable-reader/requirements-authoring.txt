@@ -1,0 +1,6 @@
+# Optional authoring/conversion runtime. Ordinary web reading needs none of these.
+latex2mathml==3.81.0
+mistune==3.3.2
+beautifulsoup4==4.15.0
+pypdf==6.13.2
+PyMuPDF==1.28.2

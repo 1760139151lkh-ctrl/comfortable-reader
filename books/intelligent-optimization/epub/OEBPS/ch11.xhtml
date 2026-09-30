@@ -1,0 +1,324 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>11. 当一次 f(x) 非常昂贵：代理模型与贝叶斯优化</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="11-当一次-f-x-非常昂贵代理模型与贝叶斯优化">11. 当一次 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 非常昂贵：代理模型与贝叶斯优化</h2>
+<p>粒子群、差分进化常常需要大量目标函数评价。但有些问题中，计算一次 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 就要几分钟、几小时甚至真实花钱，例如：</p>
+<ul>
+<li>完整训练一次神经网络；</li>
+<li>运行一次有限元或流体仿真；</li>
+<li>制造一个样品并做实验；</li>
+<li>在真实系统上测试一组控制参数。</li>
+</ul>
+<p>这时真正稀缺的资源不是算法循环次数，而是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>真实目标函数评价次数</mtext></mrow></menclose></mrow></math></div>
+<p>普通智能优化的思路是“多试一些候选解”；昂贵优化则被迫多问一步：<strong>能不能先从已经做过的少量实验中学习，再决定下一次最值得试哪里？</strong></p>
+<h3 id="111-代理模型昂贵函数的便宜替身">11.1 代理模型：昂贵函数的便宜替身</h3>
+<p>设我们要解决</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>∈</mo><mi mathvariant="script">X</mi></mrow></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>但 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span> 没有显式公式，只能输入一个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 后运行实验。已经获得的数据是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="script">D</mi><mi>n</mi></msub><mo>=</mo><mo stretchy="false">{</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>1</mn></msub><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>,</mo><msub><mi>y</mi><mi>n</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mi>;</mi><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>用这些数据训练一个便宜近似：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover></mrow></math></span> 就是<strong>代理模型</strong>。它的职责不是永久取代真实函数，而是：</p>
+<ol>
+<li>在大量尚未实验的位置上进行便宜预测；</li>
+<li>帮助筛出少数值得真实评价的候选点；</li>
+<li>用新实验结果继续更新对未知函数的认识。</li>
+</ol>
+<p>因此，代理模型上的最优点只能叫<strong>候选点</strong>。最后必须计算真实的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 才能确认；否则我们优化到的可能只是代理模型的误差。</p>
+<p>高斯过程、随机森林和径向基函数通常直接学习 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>↦</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>。树结构 Parzen 估计器稍有不同：它不直接问“给定 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span>，结果 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>y</mi></mrow></math></span> 是多少”，而是问“已知结果好或坏时，什么样的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 更常见”。</p>
+<h3 id="112-高斯过程不仅预测函数值还预测自己有多不确定">11.2 高斯过程：不仅预测函数值，还预测自己有多不确定</h3>
+<p>高斯过程，Gaussian Process，简称 GP。它不先假定 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span> 必须等于某个固定的有限参数公式，而是对“可能的函数”本身建立概率分布：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mi>~</mi><mrow><mi mathvariant="script">G</mi><mi mathvariant="script">P</mi></mrow><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><mi>m</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><mi>k</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msup><mi>x</mi><mi>′</mi></msup><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mo>.</mo></mrow></math></div>
+<p>这里：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>m</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 是均值函数，表示看见数据前认为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 大约是多少；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msup><mi>x</mi><mi>′</mi></msup><mo stretchy="false">)</mo></mrow></math></span> 是核函数，表示两个位置的函数值应当有多相似。</li>
+</ul>
+<p>常见的平方指数核为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>k</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><msup><mi>x</mi><mi>′</mi></msup><mo stretchy="false">)</mo><mo>=</mo><msubsup><mi>σ</mi><mi>f</mi><mn>2</mn></msubsup><mi>exp</mi><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><mo>−</mo><mfrac><mrow><mo fence="false" stretchy="false">‖</mo><mi>x</mi><mo>−</mo><msup><mi>x</mi><mi>′</mi></msup><msup><mo fence="false" stretchy="false">‖</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>ℓ</mi><mn>2</mn></msup></mrow></mfrac><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>.</mo></mrow></math></div>
+<p>这个式子不是凭空挑出的装饰。它把一个建模假设写进了数学里：位置越近，函数值越应相似。其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>σ</mi><mi>f</mi><mn>2</mn></msubsup></mrow></math></span> 控制函数整体波动幅度，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 是长度尺度：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 大，相关性衰减得慢，模型相信函数变化平缓；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 小，相关性衰减得快，模型允许函数迅速起伏。</li>
+</ul>
+<p>所以核函数属于<strong>建模选择</strong>，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi></mrow></math></span> 和 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>f</mi></msub></mrow></math></span> 是核的参数。它们可以由边际似然从数据中估计，也可以由先验知识或交叉验证确定。</p>
+<h4 id="gp-的预测公式从哪里来">GP 的预测公式从哪里来？</h4>
+<p>记训练点的核矩阵为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>k</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><msub><mi>x</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>新点 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mo>*</mo></msub></mrow></math></span> 与所有训练点的核向量为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>k</mi><mo>*</mo></msub><mo>=</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><mi>k</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><mi>k</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>n</mi></msub><mo>,</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><msup><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>.</mo></mrow></math></div>
+<p>若观测含有方差为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>σ</mi><mi>ε</mi><mn>2</mn></msubsup></mrow></math></span> 的独立噪声，高斯过程的条件分布仍是高斯分布：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>∣</mo><msub><mi mathvariant="script">D</mi><mi>n</mi></msub><mi>~</mi><mi mathvariant="script">N</mi><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>,</mo><msubsup><mi>σ</mi><mi>n</mi><mn>2</mn></msubsup><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mo>.</mo></mrow></math></div>
+<p>为简化记号，先取零均值函数，则</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>=</mo><msubsup><mi>k</mi><mo>*</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msubsup><mo stretchy="false">(</mo><mi>K</mi><mo>+</mo><msubsup><mi>σ</mi><mi>ε</mi><mn>2</mn></msubsup><mi>I</mi><msup><mo stretchy="false">)</mo><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>y</mi><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>σ</mi><mi>n</mi><mn>2</mn></msubsup><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>=</mo><mi>k</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mo>*</mo></msub><mo>,</mo><msub><mi>x</mi><mo>*</mo></msub><mo stretchy="false">)</mo><mo>−</mo><msubsup><mi>k</mi><mo>*</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msubsup><mo stretchy="false">(</mo><mi>K</mi><mo>+</mo><msubsup><mi>σ</mi><mi>ε</mi><mn>2</mn></msubsup><mi>I</mi><msup><mo stretchy="false">)</mo><mrow><mo>−</mo><mn>1</mn></mrow></msup><msub><mi>k</mi><mo>*</mo></msub><mo>.</mo></mrow></math></div>
+<p>第一式把已知观测按照“与新点有多相似”加权组合，得到预测均值；第二式用先验不确定性减去数据已经解释掉的部分，得到剩余不确定性。靠近已有样本时，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>k</mi><mo>*</mo></msub></mrow></math></span> 提供的信息多，方差通常较小；远离样本时，方差通常回升。</p>
+<p>例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mn>3.2</mn><mi>±</mi><mn>0.1</mn></mrow></math></div>
+<p>表示模型比较有把握；而</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≈</mo><mn>2.8</mn><mi>±</mi><mn>4.0</mn></mrow></math></div>
+<p>虽然均值看起来更好，模型却几乎没底。昂贵优化不能只看均值，因为第二个点既可能很差，也可能藏着尚未发现的优良区域。</p>
+<blockquote>
+<p>可以把观测点想成钉子，把可能的函数曲线想成铺在钉子之间的弹性布。钉子附近的布被限制得较死，远处可能出现很多种形状，因此不确定性更大。</p>
+</blockquote>
+<p>标准 GP 训练通常需要分解一个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></math></span> 核矩阵，时间复杂度约为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>存储量约为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></math></span>。它适合样本少、连续、较平滑、中低维且单次实验昂贵的问题；面对几万样本、大量类别变量、复杂条件变量或很高维空间时，普通 GP 往往不自然或过于昂贵。</p>
+<h3 id="113-随机森林让许多棵不同的树共同判断">11.3 随机森林：让许多棵不同的树共同判断</h3>
+<p>随机森林，Random Forest，简称 RF，由多棵决策树组成。一棵树可能依次询问：</p>
+<ul>
+<li>学习率是否小于 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.01</mn></mrow></math></span>？</li>
+<li>网络层数是否大于 6？</li>
+<li>优化器是不是 Adam？</li>
+<li>是否启用 dropout？</li>
+</ul>
+<p>每个叶节点根据落入其中的历史样本给出预测。随机森林通过“对训练样本重采样”和“每次分裂只随机考察部分变量”制造不同的树：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>T</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><msub><mi>T</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>T</mi><mi>M</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>回归预测取平均：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>M</mi></mrow></munderover><msub><mi>T</mi><mi>m</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>还可以用树之间的分歧构造经验方差：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mover accent="true"><mi>σ</mi><mo>^</mo></mover><mn>2</mn></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><mi>M</mi><mo>−</mo><mn>1</mn></mrow></mfrac><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>M</mi></mrow></munderover><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msub><mi>T</mi><mi>m</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><msup><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mn>2</mn></msup><mo>.</mo></mrow></math></div>
+<p>如果所有树都预测约为 3.1，模型内部意见比较一致；若一部分树预测 1，另一部分预测 8，说明这个区域缺乏稳定认识。但要注意：这通常是<strong>经验性不确定性</strong>，并不自动等价于 GP 中严格的后验方差。</p>
+<p>随机森林的优势是能自然处理连续、整数、类别、布尔乃至条件变量。例如只有选择 SGD 时 momentum 才有意义，这种分支结构正适合树模型。它不要求目标平滑，对异常值也较稳健。</p>
+<p>它的局限同样来自树结构：树把空间切成许多矩形区域，预测往往近似分段常数。如果真实函数是光滑的</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>,</mo></mrow></math></div>
+<p>随机森林的曲线更像一级一级的楼梯。它也不擅长在观测范围之外外推，常常只能重复已有叶节点中的值。</p>
+<h3 id="114-径向基函数在每个样本周围放一个波纹">11.4 径向基函数：在每个样本周围放一个“波纹”</h3>
+<p>径向基函数，Radial Basis Function，简称 RBF。“径向”表示基函数只依赖到中心的距离：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mo fence="false" stretchy="false">‖</mo><mi>x</mi><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo fence="false" stretchy="false">‖</mo><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>常见形式包括：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>r</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mo stretchy="false">(</mo><mi>ε</mi><mi>r</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msup><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>r</mi><mo stretchy="false">)</mo><mo>=</mo><msqrt><mrow><mn>1</mn><mo>+</mo><mo stretchy="false">(</mo><mi>ε</mi><mi>r</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msqrt><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>r</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mrow><msqrt><mrow><mn>1</mn><mo>+</mo><mo stretchy="false">(</mo><mi>ε</mi><mi>r</mi><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msqrt></mrow></mfrac><mo>,</mo></mrow></math></div>
+<p>以及薄板样条</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ϕ</mi><mo stretchy="false">(</mo><mi>r</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>r</mi><mn>2</mn></msup><mi>log</mi><mi>r</mi><mo>.</mo></mrow></math></div>
+<p>把各样本中心产生的波纹叠加：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>λ</mi><mi>i</mi></msub><mi>ϕ</mi><mo stretchy="false">(</mo><mo fence="false" stretchy="false">‖</mo><mi>x</mi><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo fence="false" stretchy="false">‖</mo><mo stretchy="false">)</mo><mo>+</mo><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>λ</mi><mi>i</mi></msub></mrow></math></span> 决定第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 个波纹的方向和强度，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 是描述整体趋势的低阶多项式。插值型 RBF 通常要求</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo></mrow></math></div>
+<p>由此得到关于 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>λ</mi><mi>i</mi></msub></mrow></math></span> 和多项式系数的线性方程组。</p>
+<p>它与 GP 看起来很像，因为二者都可能使用高斯形状</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>e</mi><mrow><mo>−</mo><mo fence="false" stretchy="false">‖</mo><mi>x</mi><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><msup><mo fence="false" stretchy="false">‖</mo><mn>2</mn></msup><mo>/</mo><mo stretchy="false">(</mo><mn>2</mn><msup><mi>ℓ</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow></msup><mo>.</mo></mrow></math></div>
+<p>但思想不同：RBF 通常寻找一个具体的插值曲面 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>；GP 描述的是函数的概率分布，并自然给出均值和方差。普通 RBF 不会自动告诉你“这里有多不确定”，需要额外设计误差或距离指标。</p>
+<p>RBF 适合连续、平滑、确定性仿真和中低维工程设计。它对距离非常敏感。例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">]</mo><mi>;</mi><msub><mi>x</mi><mn>2</mn></msub><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>100000</mn><mo stretchy="false">]</mo><mo>,</mo></mrow></math></div>
+<p>若直接计算欧氏距离，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mn>2</mn></msub></mrow></math></span> 会完全支配结果，因此必须先归一化。高维时还会出现维数灾难：样本彼此普遍都很远，距离失去区分度。标准 RBF 插值同样需要求解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo>×</mo><mi>n</mi></mrow></math></span> 线性系统，计算成本也可能达到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>3</mn></msup><mo stretchy="false">)</mo></mrow></math></span>。</p>
+<h3 id="115-tpe研究好参数通常长什么样">11.5 TPE：研究“好参数通常长什么样”</h3>
+<p>树结构 Parzen 估计器，Tree-structured Parzen Estimator，简称 TPE。GP、随机森林和 RBF 通常学习</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>或直接近似 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>y</mi><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>。TPE 则反过来学习</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo>∣</mo><mi>y</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>假设在最小化 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>y</mi><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，选一个分位数阈值 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>y</mi><mo>*</mo></msup></mrow></math></span>，例如把历史上最好的 20% 作为“好样本”。定义</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ℓ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo>∣</mo><mi>y</mi><mo>≤</mo><msup><mi>y</mi><mo>*</mo></msup><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo>∣</mo><mi>y</mi><mo>&gt;</mo><msup><mi>y</mi><mo>*</mo></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ℓ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 高说明这种参数常出现在好实验中；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 高说明它常出现在坏实验中。因此 TPE 倾向于寻找</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>ℓ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow></math></div>
+<p>较大的区域，也就是“在好实验中常见、在坏实验中少见”的参数。</p>
+<p>“Parzen 估计器”是一种核密度估计。若好样本为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>m</mi></msub></mrow></math></span>，可以在每个样本周围放一个小概率分布并相加：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>ℓ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi></mrow></munderover><msub><mi>K</mi><mi>h</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>其中带宽 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 决定每个概率包有多宽。太窄容易只记住已有样本，太宽又会抹平真正的优良区域。</p>
+<p>“树结构”不是指 TPE 必须使用决策树，而是参数空间可以有条件层级：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>optimizer</mtext><mrow><mo fence="true" form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left"><mtext>SGD</mtext><mo>→</mo><mtext>momentum</mtext><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left"><mtext>Adam</mtext><mo>→</mo><mo stretchy="false">(</mo><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><msub><mi>β</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>.</mo></mtd></mtr></mtable></mrow></mrow></math></div>
+<p>只有选择 SGD 时 momentum 才存在；选择 Adam 后才需要 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><msub><mi>β</mi><mn>2</mn></msub></mrow></math></span>。类似地，CNN 才有卷积核大小，Transformer 才有注意力头数。TPE 因而特别适合类别多、条件结构复杂的超参数空间。</p>
+<h3 id="116-四种代理方法怎样选">11.6 四种代理方法怎样选？</h3>
+<p>没有一种代理模型在所有问题上最好。模型的搜索方式必须匹配问题结构：</p>
+<table>
+<thead>
+<tr>
+<th>问题特征</th>
+<th>较自然的选择</th>
+<th>主要理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>样本很少、变量连续、函数较平滑</td>
+<td>GP</td>
+<td>同时给出预测均值和正规概率不确定性</td>
+</tr>
+<tr>
+<td>连续、平滑、确定性工程仿真</td>
+<td>RBF</td>
+<td>插值曲面直接，工程黑箱中常用</td>
+</tr>
+<tr>
+<td>连续、整数、类别和布尔变量混合</td>
+<td>随机森林</td>
+<td>不要求光滑，能处理复杂变量类型</td>
+</tr>
+<tr>
+<td>类别多、参数具有条件层级</td>
+<td>TPE</td>
+<td>直接描述好坏参数分布与树状搜索空间</td>
+</tr>
+</tbody>
+</table>
+<p>可以把经验压缩成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>少样本、连续、平滑</mtext><mo>⇒</mo><mtext>GP/RBF</mtext><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>混合变量、非光滑</mtext><mo>⇒</mo><mtext>随机森林</mtext><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>类别多、条件结构复杂</mtext><mo>⇒</mo><mtext>TPE</mtext><mo>.</mo></mrow></math></div>
+<p>这些是建模起点，不是数学定理。最终仍应在相同真实评价预算下比较代理误差和优化结果。</p>
+<h3 id="117-贝叶斯优化一边学习未知函数一边决定下一次实验">11.7 贝叶斯优化：一边学习未知函数，一边决定下一次实验</h3>
+<p>贝叶斯优化，Bayesian Optimization，简称 BO，专门解决：目标函数昂贵、无显式公式、梯度不可得且实验预算有限的问题。它的本质可以写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>代理模型</mtext><mo>+</mo><mtext>采集函数</mtext><mo>+</mo><mtext>迭代实验</mtext></mrow></menclose></mrow></math></div>
+<p>完整循环有四步。</p>
+<p><strong>第一步：做少量初始实验。</strong> 先用随机、拉丁超立方或问题知识选择 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>m</mi></msub></mrow></math></span>，真实计算</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>初始设计既不能全部挤在一小块区域，也不必密集铺满空间；它的作用是让模型获得最初的尺度和趋势信息。</p>
+<p><strong>第二步：拟合代理模型。</strong> 例如 GP 给出</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>∣</mo><msub><mi mathvariant="script">D</mi><mi>n</mi></msub><mi>~</mi><mi mathvariant="script">N</mi><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><msubsup><mi>σ</mi><mi>n</mi><mn>2</mn></msubsup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 回答“这里大概有多好”，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 回答“我对这里有多没把握”。</p>
+<p><strong>第三步：优化采集函数。</strong> 记采集函数为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>a</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，选择</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mo>argmax</mo><mrow><mi>x</mi><mo>∈</mo><mi mathvariant="script">X</mi></mrow></msub><msub><mi>a</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>有些采集函数按最大化定义，有些如 LCB 按最小化定义。这里优化的是便宜的代理模型和采集函数，不是昂贵的真实 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span>，所以即使使用多起点局部搜索、差分进化或网格搜索，代价通常也能接受。</p>
+<p><strong>第四步：真实评价并更新。</strong> 运行一次昂贵实验：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>y</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>并更新数据：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi mathvariant="script">D</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi mathvariant="script">D</mi><mi>n</mi></msub><mo>∪</mo><mo stretchy="false">{</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>y</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>随后重新拟合模型，直到评价预算耗尽：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>实验</mtext><mo>→</mo><mtext>建模</mtext><mo>→</mo><mtext>选点</mtext><mo>→</mo><mtext>再实验</mtext><mo>→</mo><mo>⋯</mo></mrow></menclose></mrow></math></div>
+<p>之所以叫“贝叶斯”优化，是因为新数据会不断更新对未知函数的概率认识：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>f</mi><mo>∣</mo><mi mathvariant="script">D</mi><mo stretchy="false">)</mo><mo>∝</mo><mi>p</mi><mo stretchy="false">(</mo><mi mathvariant="script">D</mi><mo>∣</mo><mi>f</mi><mo stretchy="false">)</mo><mi>p</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>f</mi><mo stretchy="false">)</mo></mrow></math></span> 是先验，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi mathvariant="script">D</mi><mo>∣</mo><mi>f</mi><mo stretchy="false">)</mo></mrow></math></span> 是似然，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>f</mi><mo>∣</mo><mi mathvariant="script">D</mi><mo stretchy="false">)</mo></mrow></math></span> 是观察数据后的后验。核心不是机械套一次公式，而是让每轮实验改变下一轮的决策。</p>
+<h3 id="118-采集函数把利用和探索写进公式">11.8 采集函数：把“利用”和“探索”写进公式</h3>
+<p>代理模型回答“各位置可能是多少”，采集函数回答“下一步最值得去哪里”。它必须同时照顾：</p>
+<ul>
+<li><strong>利用 exploitation</strong>：到当前预测最好的区域继续深挖；</li>
+<li><strong>探索 exploration</strong>：到模型最不了解的区域获取信息。</li>
+</ul>
+<h4 id="置信下界-lcb">置信下界 LCB</h4>
+<p>对最小化问题，定义</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>LCB</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>κ</mi><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>并选择</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mo>argmin</mo><mrow><mi>x</mi><mo>∈</mo><mi mathvariant="script">X</mi></mrow></msub><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">[</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>κ</mi><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">]</mo><mo>.</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 小奖励当前看来优秀的位置；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 大也会降低 LCB，奖励陌生区域；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>κ</mi><mo>&gt;</mo><mn>0</mn></mrow></math></span> 控制探索强度。</p>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>点</th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>μ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span></th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>σ</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span></th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>LCB</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>, <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>κ</mi><mo>=</mo><mn>1</mn></mrow></math></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">0.1</td>
+<td style="text-align:right">1.9</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">3.0</td>
+<td style="text-align:right">2.0</td>
+<td style="text-align:right">1.0</td>
+</tr>
+</tbody>
+</table>
+<p>虽然 B 的平均预测更差，但它的不确定性很大，LCB 更小，因此值得探索。</p>
+<h4 id="改进概率-pi">改进概率 PI</h4>
+<p>设当前观测到的最好值为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>f</mi><mrow><mo>min</mo></mrow></msub></mrow></math></span>，再设一个要求改进幅度的参数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ξ</mi><mo>≥</mo><mn>0</mn></mrow></math></span>。令</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mrow><mo>min</mo></mrow></msub><mo>−</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>ξ</mi></mrow><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>若 GP 预测服从正态分布，则改进概率为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>PI</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>Φ</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Φ</mi></mrow></math></span> 是标准正态分布的累积分布函数。PI 问的是“这个点有多大概率超过当前最好结果”。它的局限是只看是否改进：好 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.001</mn></mrow></math></span> 和好 100 都被记作一次改进。</p>
+<h4 id="期望改进-ei">期望改进 EI</h4>
+<p>对最小化问题，定义随机改进量</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo>max</mo><mo stretchy="false">{</mo><msub><mi>f</mi><mrow><mo>min</mo></mrow></msub><mo>−</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>ξ</mi><mo>,</mo><mn>0</mn><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>期望改进为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>EI</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi mathvariant="double-struck">E</mi><mo stretchy="false">[</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">]</mo><mo>.</mo></mrow></math></div>
+<p>在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>&gt;</mo><mn>0</mn></mrow></math></span> 时可以算出</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>EI</mo><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><msub><mi>f</mi><mrow><mo>min</mo></mrow></msub><mo>−</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>ξ</mi><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mi>Φ</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo>+</mo><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi>ϕ</mi><mo stretchy="false">(</mo><mi>z</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>其中</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>z</mi><mo>=</mo><mfrac><mrow><msub><mi>f</mi><mrow><mo>min</mo></mrow></msub><mo>−</mo><msub><mi>μ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>−</mo><mi>ξ</mi></mrow><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></mfrac><mo>,</mo></mrow></math></div>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ϕ</mi></mrow></math></span> 是标准正态密度。第一项在预测均值已经较好时变大，偏向利用；第二项随不确定性增大，偏向探索。EI 因而不只问“能否变好”，还问“平均能好多少”。若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>n</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow></math></span>，则直接按确定性改进量计算。</p>
+<p>LCB、PI、EI 都不是目标函数本身。它们是<strong>选择下一次实验的决策规则</strong>，计算便宜，但不同规则会产生不同的实验顺序。</p>
+<h3 id="119-一个具体回合用贝叶斯优化调学习率">11.9 一个具体回合：用贝叶斯优化调学习率</h3>
+<p>设</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mtext>使用学习率 </mtext><mi>x</mi><mtext> 训练后的验证误差</mtext><mo>,</mo></mrow></math></div>
+<p>搜索范围为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>∈</mo><mo stretchy="false">[</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>6</mn></mrow></msup><mo>,</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">]</mo><mo>,</mo></mrow></math></div>
+<p>每次训练需要 2 小时。若网格搜索 100 个学习率，需要</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>100</mn><mo>×</mo><mn>2</mn><mo>=</mo><mn>200</mn><mtext> 小时</mtext><mo>.</mo></mrow></math></div>
+<p>贝叶斯优化先试</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup><mo>,</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup><mo>,</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>,</mo></mrow></math></div>
+<p>得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup><mo stretchy="false">)</mo><mo>=</mo><mn>0.35</mn><mi>;</mi><mi>f</mi><mo stretchy="false">(</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup><mo stretchy="false">)</mo><mo>=</mo><mn>0.12</mn><mi>;</mi><mi>f</mi><mo stretchy="false">(</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo><mo>=</mo><mn>0.80</mn><mo>.</mo></mrow></math></div>
+<p>模型由此认为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>3</mn></mrow></msup></mrow></math></span> 附近均值较低，而 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow></math></span> 附近样本较少、不确定性较大。采集函数可能选择</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>=</mo><mn>3</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup><mo>.</mo></mrow></math></div>
+<p>真实训练得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0.09</mn><mo>,</mo></mrow></math></div>
+<p>比 0.12 更好。将该点加入数据后，下一轮可能选择 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>5</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>4</mn></mrow></msup></mrow></math></span>。算法不是把所有学习率都试一遍，而是尽量让每一次昂贵训练同时带来“更好结果”或“更有价值的信息”。</p>
+<h3 id="1110-它和随机搜索梯度下降有什么区别">11.10 它和随机搜索、梯度下降有什么区别？</h3>
+<p>随机搜索每轮从一个预先给定的分布采样：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>~</mi><mi>q</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>第 100 次实验的选点机制与第 1 次基本相同；贝叶斯优化则根据全部历史数据调整下一步。因此 BO 具有记忆：越做实验，越知道哪里值得搜索。</p>
+<p>但随机搜索仍有优势：实现简单、容易大规模并行、没有代理模型训练成本。在高维空间或单次评价很便宜时，它可能比复杂 BO 更合算。</p>
+<p>梯度下降使用局部导数：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>k</mi></msub><mo>−</mo><mi>α</mi><mo>∇</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>它适合梯度可得、一次计算相对便宜、变量维数很高的问题。贝叶斯优化只要求黑箱查询 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>↦</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，但通常只适合较低维、评价昂贵的问题。</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>是否利用梯度</th>
+<th>是否学习历史评价</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>梯度下降</td>
+<td>通常需要</td>
+<td>通过当前梯度迭代</td>
+<td>训练神经网络的海量权重</td>
+</tr>
+<tr>
+<td>贝叶斯优化</td>
+<td>不需要</td>
+<td>用代理模型系统学习</td>
+<td>调学习率、层数等少量超参数</td>
+</tr>
+<tr>
+<td>随机搜索</td>
+<td>不需要</td>
+<td>通常不建模</td>
+<td>简单基线或大规模并行搜索</td>
+</tr>
+</tbody>
+</table>
+<p>神经网络可能有几十亿个权重，适合梯度下降；学习率、层数、正则化系数只有几十个，且每次验证昂贵，才适合贝叶斯优化。</p>
+<p>还要特别区分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>高斯过程</mtext><mo>≠</mo><mtext>贝叶斯优化</mtext></mrow></menclose></mrow></math></div>
+<p>高斯过程只是代理模型之一。经典组合是 GP 与 EI；也可以使用随机森林与采集策略，或者使用 TPE 的好坏密度比选点。TPE 虽然建模的是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo stretchy="false">(</mo><mi>x</mi><mo>∣</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></math></span>，仍遵循“根据历史建模—选择新实验—更新模型”的序贯循环，因此通常也放在贝叶斯优化或序贯模型优化框架中。</p>
+<h3 id="1111-响应面方法是什么">11.11 响应面方法是什么？</h3>
+<p>响应面方法是经典统计学方法，常用低阶多项式近似局部目标。例如二次响应面：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover accent="true"><mi>f</mi><mo>^</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>β</mi><mn>0</mn></msub><mo>+</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>β</mi><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>+</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>β</mi><mrow><mi>i</mi><mi>i</mi></mrow></msub><msubsup><mi>x</mi><mi>i</mi><mn>2</mn></msubsup><mo>+</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow></munder><msub><mi>β</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mi>i</mi></msub><msub><mi>x</mi><mi>j</mi></msub><mo>.</mo></mrow></math></div>
+<p>通过实验设计选择采样点，拟合 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 系数，再在曲面上寻找较优区域。它可以看作代理模型方法的一个经典分支，特别适合变量维数不高、局部较平滑，并且希望解释主效应和交互作用的实验。</p>
+<h3 id="1112-多保真优化是什么">11.12 多保真优化是什么？</h3>
+<p>有时同一个方案 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 可以用不同成本和精度评价：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>f</mi><mrow><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><msub><mi>f</mi><mrow><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><msub><mi>f</mi><mrow><mrow><mi mathvariant="normal">h</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi></mrow></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>例如只训练 1 个 epoch 很便宜但误差大，完整训练 100 个 epoch 昂贵但准确；有限元粗网格便宜，细网格昂贵。</p>
+<p>多保真优化的核心是：</p>
+<blockquote>
+<p>用大量便宜而粗略的评价筛选方向，再用少量昂贵的高精度评价确认。</p>
+</blockquote>
+<p>它比普通 BO 多做一个决定：除了选“评价哪个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span>”，还要选“使用哪一级保真度”。低保真模型必须与高保真结果有足够相关性，否则便宜评价会把算法引向错误方向。最终结论仍应以高保真或真实系统为准。</p>
+<h3 id="1113-把这些概念放回同一张图里">11.13 把这些概念放回同一张图里</h3>
+<ul>
+<li><strong>代理模型</strong>：对昂贵函数的便宜近似，是一种模型角色；</li>
+<li><strong>GP、随机森林、RBF</strong>：可以承担代理模型角色的具体方法；</li>
+<li><strong>TPE</strong>：通过好坏参数的条件密度决定新实验的序贯模型方法；</li>
+<li><strong>响应面</strong>：常用多项式代理，强调实验设计和统计解释；</li>
+<li><strong>贝叶斯优化</strong>：根据模型预测及不确定性，序贯决定下一次真实评价点；</li>
+<li><strong>多保真优化</strong>：同时决定评价位置和评价精度。</li>
+</ul>
+<p>它们与粒子群、差分进化并非互斥。可以用差分进化优化采集函数，也可以在 RBF 上先搜索，再用真实函数复核。但必须清楚：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>代理上的最优不等于真实系统的最优</mtext></mrow></menclose></mrow></math></div>
+<p>贝叶斯优化最适合“单次实验昂贵、总实验次数有限”的问题。它的优势是节省真实实验次数，而不是省代理模型的计算时间。它真正优化的不只是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，还包括</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>获取信息的顺序</mtext></mrow></menclose></mrow></math></div>
+<p>每一步都在权衡：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>当前收益</mtext><mo>+</mo><mtext>未来信息价值</mtext><mo>.</mo></mrow></math></div>
+<hr/>
+</body></html>

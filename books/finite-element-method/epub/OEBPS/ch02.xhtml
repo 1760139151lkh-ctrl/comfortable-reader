@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第二章　弱形式为什么会被问题逼出来</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第二章-弱形式为什么会被问题逼出来">第二章　弱形式为什么会被问题逼出来</h1>
+<h2 id="21-从逐点成立改为整体平衡">2.1 从逐点成立改为整体平衡</h2>
+<p>从</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>−</mo><msup><mi>u</mi><mi>″</mi></msup><mo>=</mo><mi>f</mi></mrow></math></div>
+<p>出发，任取一个测试函数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>v</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，两边乘以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>v</mi></mrow></math></span> 并积分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mo>−</mo><msup><mi>u</mi><mi>″</mi></msup><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>x</mi><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>f</mi><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>x</mi><mo>.</mo></mrow></math></div>
+<p>对左边分部积分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mo>−</mo><msup><mi>u</mi><mi>″</mi></msup><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>x</mi><mo>=</mo><mo>−</mo><mo stretchy="false">[</mo><msup><mi>u</mi><mi>′</mi></msup><mi>v</mi><msubsup><mo stretchy="false">]</mo><mn>0</mn><mn>1</mn></msubsup><mo>+</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><msup><mi>u</mi><mi>′</mi></msup><msup><mi>v</mi><mi>′</mi></msup><mspace width="0.167em"/><mi>d</mi><mi>x</mi><mo>.</mo></mrow></math></div>
+<p>若测试函数满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>v</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mi>v</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow></math></span>，边界项消失，于是得到</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><msup><mi>u</mi><mi>′</mi></msup><msup><mi>v</mi><mi>′</mi></msup><mspace width="0.167em"/><mi>d</mi><mi>x</mi><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>f</mi><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>x</mi></mrow></menclose></mrow></math></div>
+<p>并要求它对所有允许的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>v</mi></mrow></math></span> 都成立。这就是弱形式。</p>
+<h2 id="22-弱在哪里">2.2 “弱”在哪里</h2>
+<p>原方程含有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>u</mi><mi>″</mi></msup></mrow></math></span>，要求解具有二阶导数；弱形式只含 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>u</mi><mi>′</mi></msup></mrow></math></span>，只要求一阶导数在积分意义下存在。</p>
+<p>因此，分段线性函数虽然在节点处可能不光滑，却仍能合法地进入弱形式。弱化不是随意降低标准，而是把导数转移给测试函数，用“对所有测试函数都满足整体平衡”代替“每一点都满足微分方程”。</p>
+<p>对二维 Poisson 方程</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>−</mo><mi>Δ</mi><mi>u</mi><mo>=</mo><mi>f</mi></mrow></math></div>
+<p>相同思路给出</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mo>∫</mo><mi>Ω</mi></msub><mo>∇</mo><mi>u</mi><mo>·</mo><mo>∇</mo><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>Ω</mi><mo>=</mo><msub><mo>∫</mo><mi>Ω</mi></msub><mi>f</mi><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>Ω</mi></mrow></menclose></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>∇</mo><mi>u</mi></mrow></math></span> 是梯度，表示函数在各空间方向上的变化。</p>
+<p>为了简化记号，定义</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>a</mi><mo stretchy="false">(</mo><mi>w</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∫</mo><mi>Ω</mi></msub><mo>∇</mo><mi>w</mi><mo>·</mo><mo>∇</mo><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>Ω</mi><mo>,</mo><mspace width="0.278em"/><mi>L</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∫</mo><mi>Ω</mi></msub><mi>f</mi><mi>v</mi><mspace width="0.167em"/><mi>d</mi><mi>Ω</mi><mo>.</mo></mrow></math></div>
+<p>连续问题便写成：寻找 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>u</mi><mo>∈</mo><mi>V</mi></mrow></math></span>，使</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>a</mi><mo stretchy="false">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false">)</mo><mo>=</mo><mi>L</mi><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo><mo>,</mo><mspace width="0.278em"/><mo>∀</mo><mi>v</mi><mo>∈</mo><mi>V</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这里的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi></mrow></math></span> 是所有满足必要边界条件、且具有足够可积性的函数组成的空间。</p>
+<hr/>
+</body></html>

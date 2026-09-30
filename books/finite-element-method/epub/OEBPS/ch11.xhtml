@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十一章　什么时候应该想到有限元</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十一章-什么时候应该想到有限元">第十一章　什么时候应该想到有限元</h1>
+<p>最重要的判断是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>有限元不是建立模型的方法，而是求解模型的方法。</mtext></mrow></menclose></mrow></math></div>
+<p>你要先根据物理规律建立微分方程，才谈得上是否用有限元求解。</p>
+<p>当题目出现以下组合时，有限元往往值得考虑：</p>
+<h2 id="111-未知量是空间分布">11.1 未知量是空间分布</h2>
+<p>题目关心的不是一个数字，而是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>,</mo><mspace width="0.278em"/><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo stretchy="false">)</mo><mo>,</mo><mspace width="0.278em"/><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>例如温度场、位移场、应力场、地下水压力、电势或污染物浓度。</p>
+<h2 id="112-几何形状复杂">11.2 几何形状复杂</h2>
+<p>不规则湖泊、桥梁、发动机外壳、骨骼、孔洞和裂纹都很难用规则方格贴合，而三角形和四面体网格具有很强的几何适应性。</p>
+<h2 id="113-参数或材料随位置变化">11.3 参数或材料随位置变化</h2>
+<p>例如导热系数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>k</mi><mo>=</mo><mi>k</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow></math></span>，或一个结构由钢、铝、橡胶和复合材料共同组成。有限元可以让不同单元使用不同参数。</p>
+<h2 id="114-关心局部细节">11.4 关心局部细节</h2>
+<p>如果问题关心最大应力在哪里、孔洞附近是否出现应力集中、哪个位置温度最高，通常需要整个空间场，并可能在局部区域加密网格。</p>
+<h2 id="115-三个快速判断例子">11.5 三个快速判断例子</h2>
+<p>整杯咖啡被视为温度均匀，只研究 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span>，一个常微分方程通常足够；若研究杯内每处温度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>z</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span> 以及杯壁和冰块，就可能需要有限元或有限体积法。</p>
+<p>桥梁若只用简化梁模型估算总承重，未必需要有限元；若要得到复杂结构各处的位移、应力、应变和屈曲风险，有限元很自然。</p>
+<p>湖泊若只关心平均污染浓度，可以使用低维模型；若关心不规则湖区中的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>c</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></math></span>，有限元便有明显优势。</p>
+<hr/>
+</body></html>

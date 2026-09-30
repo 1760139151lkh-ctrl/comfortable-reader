@@ -1,0 +1,332 @@
+{
+  "scope": "C21 fictional fully observed courier; scalar two-step REINFORCE/baseline/off-policy/PPO ratio probes and finite-horizon tabular actor-critic; no neural PPO or language-model RL",
+  "time_convention": "state_t -> action_t -> (reward_t+1, state_t+1)",
+  "scalar_first_action": {
+    "continuation": "after first action, follow C21 immediate policy for one final step",
+    "exact_theta_zero": {
+      "theta": 0.0,
+      "p_express": 0.5,
+      "objective": 2.75,
+      "direct_gradient": -0.625,
+      "score_gradient": -0.625,
+      "branches": [
+        {
+          "first_action": "express",
+          "first_reward": 4,
+          "second_action": "charge",
+          "second_reward": -1,
+          "conditional_probability": 0.75,
+          "return": 3,
+          "policy_probability": 0.5,
+          "joint_probability": 0.375,
+          "score": 0.5,
+          "gradient_contribution": 0.5625
+        },
+        {
+          "first_action": "express",
+          "first_reward": -2,
+          "second_action": "charge",
+          "second_reward": -1,
+          "conditional_probability": 0.25,
+          "return": -3,
+          "policy_probability": 0.5,
+          "joint_probability": 0.125,
+          "score": 0.5,
+          "gradient_contribution": -0.1875
+        },
+        {
+          "first_action": "slow",
+          "first_reward": 2,
+          "second_action": "slow",
+          "second_reward": 2,
+          "conditional_probability": 1.0,
+          "return": 4,
+          "policy_probability": 0.5,
+          "joint_probability": 0.5,
+          "score": -0.5,
+          "gradient_contribution": -1.0
+        }
+      ],
+      "zero_baseline_estimator": {
+        "mean": -0.625,
+        "variance": 2.734375
+      },
+      "objective_baseline_estimator": {
+        "mean": -0.625,
+        "variance": 0.84375
+      }
+    },
+    "on_policy_sample": {
+      "target_p_express": 0.5,
+      "behavior_p_express": 0.5,
+      "samples": 4000,
+      "seed": 20260924,
+      "action_counts": {
+        "express": 1968,
+        "slow": 2032
+      },
+      "plain_mean": -0.659,
+      "centered_mean": -0.637,
+      "importance_corrected_plain_mean": -0.659,
+      "importance_corrected_centered_mean": -0.637,
+      "plain_variance": 2.704719,
+      "centered_variance": 0.848106
+    },
+    "off_policy_exact": {
+      "target_p_express": 0.5,
+      "behavior_p_express": 0.8,
+      "target_objective_baseline": 2.75,
+      "uncorrected_expected_score": 0.20000000000000018,
+      "importance_corrected_expected_score": -0.625,
+      "uncorrected_centered_expected_score": -0.625,
+      "importance_corrected_centered_expected_score": -0.625
+    },
+    "off_policy_asymmetric_check": {
+      "target_p_express": 0.3,
+      "behavior_p_express": 0.8,
+      "target_objective_baseline": 3.25,
+      "uncorrected_expected_score": 0.6000000000000001,
+      "importance_corrected_expected_score": -0.525,
+      "uncorrected_centered_expected_score": -1.025,
+      "importance_corrected_centered_expected_score": -0.525
+    },
+    "off_policy_sample": {
+      "target_p_express": 0.5,
+      "behavior_p_express": 0.8,
+      "samples": 4000,
+      "seed": 20260925,
+      "action_counts": {
+        "express": 3180,
+        "slow": 820
+      },
+      "plain_mean": 0.178,
+      "centered_mean": -0.63325,
+      "importance_corrected_plain_mean": -0.6575000000000002,
+      "importance_corrected_centered_mean": -0.636015625,
+      "plain_variance": 2.577066,
+      "centered_variance": 1.3538694375
+    },
+    "clipped_surrogate_probe": {
+      "old_p_express": 0.5,
+      "new_p_express": 0.8,
+      "epsilon": 0.2,
+      "old_objective": 2.75,
+      "new_objective": 2.0,
+      "true_change": -0.75,
+      "old_to_new_kl": 0.22314355131420982,
+      "unclipped_surrogate": -0.7500000000000002,
+      "clipped_surrogate": -0.7875000000000002,
+      "terms": [
+        {
+          "first_action": "express",
+          "return": 3,
+          "old_probability": 0.375,
+          "advantage_from_old_mean": 0.25,
+          "ratio": 1.6,
+          "unclipped_term": 0.4,
+          "clipped_surrogate_term": 0.3
+        },
+        {
+          "first_action": "express",
+          "return": -3,
+          "old_probability": 0.125,
+          "advantage_from_old_mean": -5.75,
+          "ratio": 1.6,
+          "unclipped_term": -9.200000000000001,
+          "clipped_surrogate_term": -9.200000000000001
+        },
+        {
+          "first_action": "slow",
+          "return": 4,
+          "old_probability": 0.5,
+          "advantage_from_old_mean": 1.25,
+          "ratio": 0.3999999999999999,
+          "unclipped_term": 0.4999999999999999,
+          "clipped_surrogate_term": 0.4999999999999999
+        }
+      ]
+    },
+    "all_equal_feedback_boundary": {
+      "constant_return": -1.0,
+      "expected_score_gradient": -0.0,
+      "meaning": "identical final feedback for every path carries no preference among the two first actions"
+    }
+  },
+  "actor_critic": {
+    "epochs": 2000,
+    "seed": 20260926,
+    "actor_rate": 0.03,
+    "critic_rate": 0.08,
+    "sampling": "nine reset starts per epoch; current softmax policy draws actions; only observed events enter updates",
+    "critic_target": "reward + current V[n-1][next state]; terminal V[0]=0",
+    "actor_update": "old-episode action log probability score times the one-step TD residual",
+    "checkpoints": [
+      {
+        "epoch": 0,
+        "episodes_seen": 0,
+        "exact_policy_objective_for_diagnostics": -1.8724279835390947,
+        "exact_value_n3_energy2_for_diagnostics": -0.685185185185185,
+        "greedy_action_matches_optimal_in_9_pairs": 3,
+        "p_n3_energy2": {
+          "slow": 0.3333333333333333,
+          "express": 0.3333333333333333,
+          "charge": 0.3333333333333333
+        },
+        "critic_n3_energy2": 0.0
+      },
+      {
+        "epoch": 1,
+        "episodes_seen": 9,
+        "exact_policy_objective_for_diagnostics": -1.7103530790723434,
+        "exact_value_n3_energy2_for_diagnostics": -0.5405418351660639,
+        "greedy_action_matches_optimal_in_9_pairs": 6,
+        "p_n3_energy2": {
+          "slow": 0.32057364433199687,
+          "express": 0.35885271133600627,
+          "charge": 0.32057364433199687
+        },
+        "critic_n3_energy2": 0.3008
+      },
+      {
+        "epoch": 10,
+        "episodes_seen": 90,
+        "exact_policy_objective_for_diagnostics": -0.3294119339647319,
+        "exact_value_n3_energy2_for_diagnostics": 1.0042585627860778,
+        "greedy_action_matches_optimal_in_9_pairs": 8,
+        "p_n3_energy2": {
+          "slow": 0.38628195080380184,
+          "express": 0.2885682008567124,
+          "charge": 0.3251498483394858
+        },
+        "critic_n3_energy2": -0.26670841922628324
+      },
+      {
+        "epoch": 100,
+        "episodes_seen": 900,
+        "exact_policy_objective_for_diagnostics": 1.9649961497990462,
+        "exact_value_n3_energy2_for_diagnostics": 3.251096488072141,
+        "greedy_action_matches_optimal_in_9_pairs": 8,
+        "p_n3_energy2": {
+          "slow": 0.40695787285206486,
+          "express": 0.3228475666756807,
+          "charge": 0.2701945604722545
+        },
+        "critic_n3_energy2": 3.426361423729623
+      },
+      {
+        "epoch": 500,
+        "episodes_seen": 4500,
+        "exact_policy_objective_for_diagnostics": 2.282529378905966,
+        "exact_value_n3_energy2_for_diagnostics": 3.894378228743604,
+        "greedy_action_matches_optimal_in_9_pairs": 9,
+        "p_n3_energy2": {
+          "slow": 0.06370828564516877,
+          "express": 0.8933613622371233,
+          "charge": 0.04293035211770809
+        },
+        "critic_n3_energy2": 3.939861145556717
+      },
+      {
+        "epoch": 1000,
+        "episodes_seen": 9000,
+        "exact_policy_objective_for_diagnostics": 2.308779885940391,
+        "exact_value_n3_energy2_for_diagnostics": 3.9465891509160715,
+        "greedy_action_matches_optimal_in_9_pairs": 9,
+        "p_n3_energy2": {
+          "slow": 0.029754379070364434,
+          "express": 0.9506467110823925,
+          "charge": 0.019598909847243124
+        },
+        "critic_n3_energy2": 4.512628085650512
+      },
+      {
+        "epoch": 2000,
+        "episodes_seen": 18000,
+        "exact_policy_objective_for_diagnostics": 2.322467024572154,
+        "exact_value_n3_energy2_for_diagnostics": 3.980649479505589,
+        "greedy_action_matches_optimal_in_9_pairs": 9,
+        "p_n3_energy2": {
+          "slow": 0.010263998351472674,
+          "express": 0.9816102298999986,
+          "charge": 0.008125771748528795
+        },
+        "critic_n3_energy2": 3.535587376233298
+      }
+    ],
+    "actor_logits": {
+      "1": {
+        "0": {
+          "slow": -2.0530235073774263,
+          "express": -2.1647740580684465,
+          "charge": 4.21779756544587
+        },
+        "1": {
+          "slow": 5.147066613751593,
+          "express": -3.0391457863298332,
+          "charge": -2.1079208274217445
+        },
+        "2": {
+          "slow": -1.395756659275398,
+          "express": 4.749471872541942,
+          "charge": -3.3537152132665238
+        }
+      },
+      "2": {
+        "0": {
+          "slow": -2.6008865212507297,
+          "express": -2.761430005295351,
+          "charge": 5.362316526546032
+        },
+        "1": {
+          "slow": -0.640655059600824,
+          "express": -2.822077042408,
+          "charge": 3.4627321020088178
+        },
+        "2": {
+          "slow": 4.777053444870859,
+          "express": -2.411959463608778,
+          "charge": -2.365093981262105
+        }
+      },
+      "3": {
+        "0": {
+          "slow": -2.129505739323062,
+          "express": -3.0159346485700116,
+          "charge": 5.145440387893081
+        },
+        "1": {
+          "slow": 3.620822060755134,
+          "express": -3.1743229841521683,
+          "charge": -0.4464990766029554
+        },
+        "2": {
+          "slow": -1.442316696579589,
+          "express": 3.1182351517205613,
+          "charge": -1.6759184551409716
+        }
+      }
+    },
+    "critic_values": {
+      "0": {
+        "0": 0.0,
+        "1": 0.0,
+        "2": 0.0
+      },
+      "1": {
+        "0": -1.032820560448206,
+        "1": 1.9999999999999987,
+        "2": 1.4574801782268774
+      },
+      "2": {
+        "0": 0.8151949478357261,
+        "1": 1.0139224296821245,
+        "2": 3.999999999999972
+      },
+      "3": {
+        "0": 2.999999919361404,
+        "1": 3.0341163753437668,
+        "2": 3.535587376233298
+      }
+    }
+  }
+}

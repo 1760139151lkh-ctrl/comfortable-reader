@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>8. TOPSIS：同时靠近最好、远离最差</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="8-topsis同时靠近最好远离最差">8. TOPSIS：同时靠近最好、远离最差</h2>
+<p>TOPSIS 的名字来自“逼近理想解排序法”。它不直接问哪个对象总和最大，而是把每个对象看成指标空间中的一个点，比较它与正理想点、负理想点的距离。</p>
+<h3 id="81-从标准化矩阵到加权矩阵">8.1 从标准化矩阵到加权矩阵</h3>
+<p>设同向化后的数据为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span>。常用向量归一化：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><mrow><msqrt><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>m</mi></mrow></msubsup><msubsup><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup></mrow></msqrt></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>再乘以权重：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>w</mi><mi>j</mi></msub><msub><mi>r</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>得到加权标准化矩阵 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">)</mo></mrow></math></span>。</p>
+<h3 id="82-构造正负理想解">8.2 构造正、负理想解</h3>
+<p>若所有列均已转换为越大越好，则：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>v</mi><mi>j</mi><mo>+</mo></msubsup><mo>=</mo><msub><mo>max</mo><mi>i</mi></msub><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>,</mo><msubsup><mi>v</mi><mi>j</mi><mo>−</mo></msubsup><mo>=</mo><msub><mo>min</mo><mi>i</mi></msub><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>正理想点 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>v</mi><mo>+</mo></msup></mrow></math></span> 把每个指标的最好值拼在一起，负理想点 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>v</mi><mo>−</mo></msup></mrow></math></span> 则由每列最差值组成。它们未必对应某个真实对象。</p>
+<h3 id="83-计算距离与贴近度">8.3 计算距离与贴近度</h3>
+<p>对象 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 到两个理想点的欧氏距离为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>D</mi><mi>i</mi><mo>+</mo></msubsup><mo>=</mo><msqrt><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo stretchy="false">(</mo><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msubsup><mi>v</mi><mi>j</mi><mo>+</mo></msubsup><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msqrt><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>D</mi><mi>i</mi><mo>−</mo></msubsup><mo>=</mo><msqrt><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></msubsup><mo stretchy="false">(</mo><msub><mi>v</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msubsup><mi>v</mi><mi>j</mi><mo>−</mo></msubsup><msup><mo stretchy="false">)</mo><mn>2</mn></msup></mrow></msqrt><mo>.</mo></mrow></math></div>
+<p>相对贴近度为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>C</mi><mi>i</mi></msub><mo>=</mo><mfrac><mrow><msubsup><mi>D</mi><mi>i</mi><mo>−</mo></msubsup></mrow><mrow><msubsup><mi>D</mi><mi>i</mi><mo>+</mo></msubsup><mo>+</mo><msubsup><mi>D</mi><mi>i</mi><mo>−</mo></msubsup></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>当 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow></math></span> 越接近 1，对象越接近正理想点并远离负理想点。</p>
+<p>这个分式同时使用了两端信息。只看 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>D</mi><mi>i</mi><mo>+</mo></msubsup></mrow></math></span> 时，两个对象可能离最好点同样远，但其中一个也离最差点很近；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow></math></span> 会把这种差异体现出来。</p>
+<h3 id="84-几何直觉与补偿性">8.4 几何直觉与补偿性</h3>
+<p>在二维指标空间中，每个对象是一个点。权重相当于沿不同坐标轴缩放空间：某指标权重越大，该方向上的差异对距离影响越大。</p>
+<p>欧氏距离允许补偿。对象在指标 1 上很差、指标 2 上很好，仍可能与理想点保持中等距离。如果某指标具有不可补偿的最低要求，应先设门槛，不能指望 TOPSIS 自动识别红线。</p>
+<h3 id="85-topsis-的敏感点">8.5 TOPSIS 的敏感点</h3>
+<ul>
+<li>标准化方式改变几何尺度；</li>
+<li>权重改变各坐标轴的伸缩；</li>
+<li>欧氏距离会强调较大的偏差，也可以改用曼哈顿距离等，但含义随之改变；</li>
+<li>加入或删除对象会改变理想点，可能发生排序反转；</li>
+<li>当某对象在一个指标上极端优秀时，它会拉动正理想点。</li>
+</ul>
+<p>因此，TOPSIS 给出的不是超越样本的绝对质量，而是当前模型设定下的相对接近度。</p>
+<hr/>
+</body></html>

@@ -1,0 +1,501 @@
+{
+  "identity": "load-only qualitative audit; selected validation sentence was fixed before training, 3 test source groups per length bin chosen by source hash, not by model outputs",
+  "manifest_sha256": "a593dfbb42532113302c012613df5a3ee22902d30d146ef2541497f1c7661b02",
+  "checkpoints": {
+    "fixed_forward": {
+      "sha256": "28b006946c3aab1214dd820b3643c291d6dfb178de6eacd36906faa84801c9ea",
+      "selected_epoch": 8
+    },
+    "fixed_reversed": {
+      "sha256": "fb45ba274ef353b1663a46fd1e423ea0eda329c5432c5567c4b9f208f391d9e4",
+      "selected_epoch": 8
+    },
+    "soft_read": {
+      "sha256": "e2d752d2a9c234acdca5465d03e225aba03bde3c0af45e7f999f9eae92a8e04d",
+      "selected_epoch": 8
+    }
+  },
+  "preselected_validation_sentence": {
+    "source_row_zero_based": 26766,
+    "english_original": "He wore red pants.",
+    "french_original": "Il portait un pantalon rouge.",
+    "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #300587 (CK) & #132782 (Julien_PDC)",
+    "source_tokens_mapped": [
+      "he",
+      "wore",
+      "red",
+      "pants",
+      ".",
+      "<eos>"
+    ],
+    "teacher_decoder_input": [
+      "<bos>",
+      "il",
+      "portait",
+      "un",
+      "pantalon",
+      "rouge",
+      "."
+    ],
+    "teacher_target": [
+      "il",
+      "portait",
+      "un",
+      "pantalon",
+      "rouge",
+      ".",
+      "<eos>"
+    ],
+    "predicted_greedy": {
+      "fixed_forward": [
+        "il",
+        "a",
+        "porté",
+        "des",
+        "défauts",
+        "."
+      ],
+      "fixed_reversed": [
+        "il",
+        "a",
+        "<unk>",
+        "des",
+        "roses",
+        "."
+      ],
+      "soft_read": [
+        "il",
+        "portait",
+        "des",
+        "<unk>",
+        "."
+      ]
+    },
+    "soft_teacher_target_probabilities": [
+      0.9936279058456421,
+      0.7420390248298645,
+      0.018571367487311363,
+      0.3568328619003296,
+      0.3276379406452179,
+      0.9859386086463928,
+      0.9999821186065674
+    ],
+    "soft_teacher_attention_row_sums": [
+      1.0,
+      1.0,
+      1.0,
+      0.9999998807907104,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "test_hash_selected_examples": [
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "0009b03efbdbe4639a0d92fa6dd3ece355e5f3027b0c8c31e17da7c9c9d62f60",
+      "source": "He owns a dishwasher.",
+      "first_reference": {
+        "french": "Il possède un lave-vaisselle.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1744330 (belgavox) & #861621 (Micsmithel)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "il",
+          "possède",
+          "un",
+          "lave",
+          "-",
+          "vaisselle",
+          "."
+        ],
+        "fixed_reversed": [
+          "il",
+          "a",
+          "un",
+          "accent",
+          "."
+        ],
+        "soft_read": [
+          "il",
+          "possède",
+          "un",
+          "lave",
+          "-",
+          "vaisselle",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "0011ca0179b64dc3f1753d227b0da02acd354dc0fba080fc6ee2c7ccb8c7bbda",
+      "source": "Thanks for the advice.",
+      "first_reference": {
+        "french": "Merci pour le conseil !",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1836198 (Spamster) & #1836503 (sacredceltic)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "merci",
+          "pour",
+          "la",
+          "conseil",
+          "."
+        ],
+        "fixed_reversed": [
+          "merci",
+          "pour",
+          "la",
+          "conseil",
+          "."
+        ],
+        "soft_read": [
+          "merci",
+          "pour",
+          "le",
+          "conseil",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "00369d9a7d540e9465580550b0ddc582c85f3ec174140d05302c59eb96f7c576",
+      "source": "The world is dangerous.",
+      "first_reference": {
+        "french": "Le monde est dangereux.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3226410 (CK) & #3226622 (Dreamk33)"
+      },
+      "reference_count": 2,
+      "generated": {
+        "fixed_forward": [
+          "le",
+          "monde",
+          "est",
+          "dangereux",
+          "."
+        ],
+        "fixed_reversed": [
+          "le",
+          "monde",
+          "est",
+          "dangereux",
+          "."
+        ],
+        "soft_read": [
+          "le",
+          "monde",
+          "est",
+          "dangereux",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "0001912a57755834a793e64fb3be64687ea9f916e86b0b25aff4021b2b56cf2e",
+      "source": "Tom made a good suggestion.",
+      "first_reference": {
+        "french": "Tom a fait une bonne suggestion.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3127984 (CK) & #7677867 (tras)"
+      },
+      "reference_count": 2,
+      "generated": {
+        "fixed_forward": [
+          "tom",
+          "a",
+          "fait",
+          "une",
+          "bonne",
+          "suggestion",
+          "."
+        ],
+        "fixed_reversed": [
+          "tom",
+          "a",
+          "fait",
+          "une",
+          "bonne",
+          "suggestion",
+          "."
+        ],
+        "soft_read": [
+          "tom",
+          "a",
+          "fait",
+          "une",
+          "bonne",
+          "suggestion",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "0006a2db0e59e8c890c74de066e9a8f13b1a966c4b9e57792a1f482116ae30fe",
+      "source": "Spending time with friends on the beach is fun.",
+      "first_reference": {
+        "french": "C'est amusant de passer du temps sur la plage avec des copains.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #681043 (Source_VOA) & #1196092 (sacredceltic)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "le",
+          "japon",
+          "est",
+          "à",
+          "boire",
+          "avec",
+          "des",
+          "amis",
+          "."
+        ],
+        "fixed_reversed": [
+          "le",
+          "temps",
+          "s",
+          "'",
+          "est",
+          "passé",
+          "à",
+          "la",
+          "plage",
+          "en",
+          "<unk>",
+          "de",
+          "la",
+          "plage",
+          "."
+        ],
+        "soft_read": [
+          "il",
+          "est",
+          "temps",
+          "de",
+          "ses",
+          "amis",
+          "à",
+          "la",
+          "plage",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "001a6d3d3bca9c9501c6144f6587056fc02528b3b3c974759a5487d5fd21fb70",
+      "source": "Is there anything you want to say?",
+      "first_reference": {
+        "french": "Y a-t-il quoi que ce soit que tu veuilles dire ?",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2016690 (CK) & #2018669 (sacredceltic)"
+      },
+      "reference_count": 2,
+      "generated": {
+        "fixed_forward": [
+          "y",
+          "a",
+          "-",
+          "t",
+          "-",
+          "il",
+          "quelque",
+          "chose",
+          "que",
+          "tu",
+          "veuilles",
+          "dire",
+          "?"
+        ],
+        "fixed_reversed": [
+          "y",
+          "a",
+          "-",
+          "t",
+          "-",
+          "il",
+          "quelque",
+          "chose",
+          "que",
+          "tu",
+          "veuilles",
+          "dire",
+          "?"
+        ],
+        "soft_read": [
+          "y",
+          "a",
+          "-",
+          "t",
+          "-",
+          "il",
+          "quelque",
+          "chose",
+          "que",
+          "tu",
+          "veuilles",
+          "dire",
+          "?"
+        ]
+      }
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "0011bf6bd398f7ac096eb5a169a3d392b10f246dc12da787b336b251879f09c2",
+      "source": "Next time it'll be my turn to drive.",
+      "first_reference": {
+        "french": "La prochaine fois ce sera à moi de conduire.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10089711 (CK) & #487143 (qdii)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "la",
+          "prochaine",
+          "fois",
+          "que",
+          "je",
+          "vais",
+          "aller",
+          "à",
+          "l",
+          "'",
+          "aéroport",
+          "."
+        ],
+        "fixed_reversed": [
+          "la",
+          "prochaine",
+          "fois",
+          "que",
+          "ma",
+          "sœur",
+          "est",
+          "à",
+          "ma",
+          "sœur",
+          "."
+        ],
+        "soft_read": [
+          "le",
+          "temps",
+          "le",
+          "temps",
+          "sera",
+          "mon",
+          "tour",
+          "de",
+          "conduire",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "002d1a8e91f2f95a06bc391750a10a99ff12e545173527b4ee245ec5edb1023c",
+      "source": "Tom fell off the ladder when he was cleaning out his gutters.",
+      "first_reference": {
+        "french": "Tom est tombé de l'échelle alors qu'il nettoyait ses gouttières.",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3433946 (patgfisher) & #8898694 (lbdx)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "tom",
+          "était",
+          "<unk>",
+          "quand",
+          "il",
+          "a",
+          "<unk>",
+          "sa",
+          "<unk>",
+          "."
+        ],
+        "fixed_reversed": [
+          "tom",
+          "était",
+          "<unk>",
+          "quand",
+          "il",
+          "a",
+          "été",
+          "<unk>",
+          "dans",
+          "la",
+          "situation",
+          "."
+        ],
+        "soft_read": [
+          "tom",
+          "est",
+          "tombé",
+          "quand",
+          "les",
+          "<unk>",
+          "quand",
+          "il",
+          "était",
+          "<unk>",
+          "."
+        ]
+      }
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "00332effd1c70dded3792f9a2ea33959ad12c459fae64fea69d5892bca293aa4",
+      "source": "\"Whose cards are these?\" \"They are Fahima's.\"",
+      "first_reference": {
+        "french": "« À qui sont ces cartes ? » « Elles sont à Fahima. »",
+        "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1742180 (Amastan) & #11436090 (Micsmithel)"
+      },
+      "reference_count": 1,
+      "generated": {
+        "fixed_forward": [
+          "«",
+          "sont",
+          "-",
+          "ils",
+          "<unk>",
+          "que",
+          "les",
+          "<unk>",
+          "sont",
+          "<unk>",
+          ".",
+          "»"
+        ],
+        "fixed_reversed": [
+          "«",
+          "ces",
+          "hommes",
+          "sont",
+          "-",
+          "ils",
+          "<unk>",
+          "?",
+          "»",
+          "«",
+          "ils",
+          "sont",
+          "<unk>",
+          ".",
+          "»"
+        ],
+        "soft_read": [
+          "«",
+          "à",
+          "qui",
+          "sont",
+          "les",
+          "cartes",
+          "?"
+        ]
+      }
+    }
+  ],
+  "limits": "Teacher-forced source weights and probabilities are not manual word-alignment labels; greedy decoding may differ, references are incomplete and often non-unique."
+}

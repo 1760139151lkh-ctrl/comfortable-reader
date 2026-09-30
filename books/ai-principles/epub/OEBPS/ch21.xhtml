@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN"><head><meta charset="utf-8"/><title>第二十一章　一次行动为何改变以后</title><link rel="stylesheet" type="text/css" href="style.css"/></head><body><h1 id="sec-21-001">第二十一章　一次行动为何改变以后</h1>
+<p>第二十章留下了一台确实训练过的语言模型，也留下了一道它尚未回答的问题：如果程序做的事会改变后来的处境，该凭什么判断这件事做得好不好？预测文章里的下一个片段，答案已经写在原文中；让配送程序选择现在快送、慢送还是充电，眼前并没有一张标好“正确动作”的卡片。一次选择还可能改变下一次能做什么。</p>
+<p>这不意味着我们已经把语言模型变成了配送员。我们先用一个能完整列出后果的小世界，弄清<strong>行动、后果和跨多次行动的评价</strong>怎样相接。它属于强化学习以后要处理的问题范围，但本章的前半步只是把问题建清楚：规则暂时由我们给定，程序还没有从经验里学规则或策略。第一章的跳棋故事已经见过程序在局面中搜索走法、用经验修改判断；现在要把其中“局面是什么、走法改变了什么、结果何时算好”拆开认真计算。</p>
+<p><a id="twentyfirst-courier"/></p>
+<h2 id="sec-21-002">快送得分高，为什么两次行动反而可能输</h2>
+<p>设一辆虚构配送车的电量只有三档：0、1、2。每轮可以选一次行动，充电也占用这一轮。我们的评价表规定：一次慢送成功记 +2 分，快送成功记 +4 分，充电记 −1 分。这里的“分”是任务设计者为比较行为设的数，负分仍叫<strong>奖励</strong>，只表示这一步不合算；它不是电池的物理读数，也不是顾客满意度的测量。</p>
+<p>规则还需说完整。电量为 2 时，快送有 3/4 的机会成功、得 +4 分，1/4 的机会失手、得 −2 分；两种结果都把电量用到 0。慢送每次耗一档电，能量至少为 1 才成功。电量不足却硬要送，会失败并留在原电量。充电总把电量补到 2。所有可能的一步后果如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">行动前电量</th>
+<th>慢送</th>
+<th>快送</th>
+<th>充电</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">2</td>
+<td>必得 +2，后为 1</td>
+<td>以 3/4 得 +4、以 1/4 得 −2；后都为 0</td>
+<td>得 −1，后为 2</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td>必得 +2，后为 0</td>
+<td>必得 −4，后仍为 1</td>
+<td>得 −1，后为 2</td>
+</tr>
+<tr>
+<td style="text-align:right">0</td>
+<td>必得 −3，后仍为 0</td>
+<td>必得 −4，后仍为 0</td>
+<td>得 −1，后为 2</td>
+</tr>
+</tbody>
+</table>
+<p>同一行中，“后为……”是行动结束后的电量，不是奖励。把快送在电量 2 的两条结果合写成“必到 0”，会丢掉成功和失手的不同得分；以后比较选择时，概率必须加在<strong>奖励与后继电量这一对结果</strong>上。</p>
+<p>如果电量是 2、只剩<strong>一次</strong>行动，快送尚未执行时的平均得分是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mn>3</mn><mn>4</mn></mfrac><mo stretchy="false">(</mo><mn>4</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo stretchy="false">(</mo><mo>−</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><mfrac><mn>5</mn><mn>2</mn></mfrac><mo>=</mo><mn>2.5</mn><mo>.</mo></mrow></math></div>
+<p>第五章已经用有限结果的加权平均解释过<a href="ch05.xhtml#fifth-expectation">期望</a>。这个 2.5 是在规则成立并重复面对同样条件时的比较数；单独一次快送只会拿到 +4 或 −2。慢送确定拿 +2，充电拿 −1。所以若目标只数眼前一步，快送的<strong>期望</strong>最高。</p>
+<p>现在不要换车、换概率或换分数，只把目标改为：从电量 2 出发，连续做<strong>两次</strong>行动，比较两次得分之和。若先快送，不论成败，第二轮都是电量 0；在这个电量下充电得 −1，比硬送的 −3 或 −4 好。两条可能路径是“+4，−1”，总分 3，机会 3/4；以及“−2，−1”，总分 −3，机会 1/4。两轮平均为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mn>3</mn><mn>4</mn></mfrac><mo stretchy="false">(</mo><mn>3</mn><mo stretchy="false">)</mo><mo>+</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo stretchy="false">(</mo><mo>−</mo><mn>3</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1.5</mn><mo>.</mo></mrow></math></div>
+<p>若先慢送，电量变成 1，第二轮还能慢送一次；路径确定是“+2，+2”，总分 4。眼前最高的 2.5 没错，<strong>把它当作两轮选择的答案才错</strong>：第一次快送把下一次的机会花掉了。不同目标下，评价同一行动必须带上它造成的后继处境。</p>
+<p><a id="twentyfirst-time"/></p>
+<h2 id="sec-21-003">在写总分之前，先说清每个数何时出现</h2>
+<p>为了让“第一次”和“下一次”在多轮里不打架，把第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 次行动<strong>之前</strong>的电量记为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>S</mi><mi>t</mi></msub></mrow></math></span>，当时选的行动记为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>A</mi><mi>t</mi></msub></mrow></math></span>。行动发生以后，才收到这一步的奖励 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></math></span>，并看到下次行动前的电量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>S</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow></math></span>。例如电量 2 时第一次快送成功的一行记录是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mspace width="1em"/><mi>⟶</mi><mspace width="1em"/><msub><mi>A</mi><mn>0</mn></msub><mo>=</mo><mtext>快送</mtext><mspace width="1em"/><mi>⟶</mi><mspace width="1em"/><mo stretchy="false">(</mo><msub><mi>R</mi><mn>1</mn></msub><mo>=</mo><mn>4</mn><mo>,</mo><mtext> </mtext><msub><mi>S</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>大写 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>,</mo><mi>A</mi><mo>,</mo><mi>R</mi></mrow></math></span> 表示结果尚未确定时的量；这一行小写的具体数字是其中一次实现。我们固定采用“<strong>行动之后的奖励下标加一</strong>”这套记法：不会一会儿把快送奖励写作 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mn>0</mn></msub></mrow></math></span>，一会儿又写作 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>R</mi><mn>1</mn></msub></mrow></math></span>。</p>
+<p>若一共允许 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 次行动，行动编号是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>T</mi><mo>−</mo><mn>1</mn></mrow></math></span>，收得的奖励编号是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>T</mi></mrow></math></span>。从第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 次行动之前直到结束的得分之和，叫这段的<strong>回报</strong>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>R</mi><mi>T</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mi>t</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>T</mi></mrow></munderover><msub><mi>R</mi><mi>k</mi></msub><mo>.</mo></mrow></math></div>
+<p>这一定义只把有限段的实际得分相加。没有理由在尚未需要时给第三轮乘一个折扣系数。刚才两轮成功路径的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>G</mi><mn>0</mn></msub></mrow></math></span> 是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>4</mn><mo>+</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>3</mn></mrow></math></span>，失手路径是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>−</mo><mn>2</mn><mo>+</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mo>−</mo><mn>3</mn></mrow></math></span>。奖励是<strong>一步后</strong>给的数，回报是<strong>多步</strong>的和；它们不能换名使用。</p>
+<p>还必须说明谁来选下一步。一套在每个可遇到的处境下指定行动的规则，叫<strong>策略</strong>。先比较两套能看到准确电量的固定策略：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>电量 2</th>
+<th>电量 1</th>
+<th>电量 0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>“眼前优先”</td>
+<td>快送</td>
+<td>慢送</td>
+<td>充电</td>
+</tr>
+<tr>
+<td>“保留电量”</td>
+<td>慢送</td>
+<td>慢送</td>
+<td>充电</td>
+</tr>
+</tbody>
+</table>
+<p>名字只是为了辨认两行规则，不预先宣布谁总是最佳。它们都先读电量，再选行动；给定同一电量就总选同一动作，所以是<strong>确定性的电量策略</strong>。别的策略可以在相同电量下掷随机数，也可以因为只剩一轮而改变动作。此刻比较两条固定规则，已经足以看清“行动影响后续机会”。</p>
+<p><a id="twentyfirst-probability"/></p>
+<h2 id="sec-21-004">从一条记录的机会，算到一套规则的结果</h2>
+<p>第五章的条件概率在这里有了新的工作。写</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><mi>r</mi><mo>,</mo><msup><mi>s</mi><mi>′</mi></msup><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>表示：当前电量是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi></mrow></math></span>，选行动 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>a</mi></mrow></math></span> 后，同时得到奖励 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>r</mi></mrow></math></span> 和下一电量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>s</mi><mi>′</mi></msup></mrow></math></span> 的机会。例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>0</mn><mo>∣</mo><mn>2</mn><mo>,</mo><mtext>快送</mtext><mo stretchy="false">)</mo><mo>=</mo><mstyle displaystyle="false" scriptlevel="0"><mfrac><mn>3</mn><mn>4</mn></mfrac></mstyle><mo>,</mo><mspace width="2em"/><mi>P</mi><mo stretchy="false">(</mo><mo>−</mo><mn>2</mn><mo>,</mo><mn>0</mn><mo>∣</mo><mn>2</mn><mo>,</mo><mtext>快送</mtext><mo stretchy="false">)</mo><mo>=</mo><mstyle displaystyle="false" scriptlevel="0"><mfrac><mn>1</mn><mn>4</mn></mfrac></mstyle><mo>.</mo></mrow></math></div>
+<p>同一给定条件下，表中所有可能结果的概率相加为 1。只写 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>P</mi><mo stretchy="false">(</mo><msup><mi>s</mi><mi>′</mi></msup><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo stretchy="false">)</mo></mrow></math></span> 不足以复原这次快送的奖励：两种结果的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>s</mi><mi>′</mi></msup></mrow></math></span> 都是 0。若现实问题的奖励由 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>s</mi><mo>,</mo><mi>a</mi><mo>,</mo><msup><mi>s</mi><mi>′</mi></msup></mrow></math></span> 唯一决定，当然可以用较短的“下一状态概率 + 奖励函数”；本例故意让同一后继电量配两种奖励，提醒我们别偷偷删信息。</p>
+<p>一条完整路径的概率可以沿途相乘。理由不是“所有行动互相独立”：第二步究竟选什么，正由第一步后的电量和策略决定。相乘用的是<strong>逐步已知当前处境和所选行动后的条件概率</strong>。在我们已写定的规则和固定策略下，从电量 2 走两轮，“眼前优先”的两条路径各有 3/4、1/4 的概率；没有另一个隐藏的随机分支。“保留电量”的两步都确定，路径概率为 1。</p>
+<p>现在把“策略 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>π</mi></mrow></math></span> 好不好”限定得可以计算：从 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn></mrow></math></span> 开始，给定总共 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 次行动，取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>G</mi><mn>0</mn></msub></mrow></math></span> 的期望，记作</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>J</mi><mi>T</mi></msub><mo stretchy="false">(</mo><mi>π</mi><mo>∣</mo><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mo stretchy="false">)</mo><mo>=</mo><msub><mi>E</mi><mrow><mi>π</mi></mrow></msub><mo stretchy="false">[</mo><msub><mi>G</mi><mn>0</mn></msub><mo>∣</mo><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mo stretchy="false">]</mo><mo>=</mo><munder><mo>∑</mo><mrow><mtext>可能路径 </mtext><mi>h</mi></mrow></munder><msub><mi>P</mi><mrow><mi>π</mi></mrow></msub><mo stretchy="false">(</mo><mi>h</mi><mo>∣</mo><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mo stretchy="false">)</mo><mspace width="0.167em"/><msub><mi>G</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这里 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 是一整条可能发生的记录，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>P</mi><mrow><mi>π</mi></mrow></msub><mo stretchy="false">(</mo><mi>h</mi><mo>∣</mo><msub><mi>S</mi><mn>0</mn></msub><mo>=</mo><mn>2</mn><mo stretchy="false">)</mo></mrow></math></span> 是按策略行动时这条记录的概率，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>G</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>h</mi><mo stretchy="false">)</mo></mrow></math></span> 是它的总分。最后一式就是第五章有限加权平均的老办法，只不过“结果”从一颗球扩展成了<strong>整段行动与后果</strong>。它没有假装我们已经知道现实配送车的概率；表里的 3/4 是本章人为规定的模型值。</p>
+<p>把同两套规则的机会数改成一、二、三轮，得到：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">从电量 2 出发的行动数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span></th>
+<th style="text-align:right">“眼前优先”期望总分</th>
+<th style="text-align:right">“保留电量”期望总分</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">2.5</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">1.5</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">4</td>
+<td style="text-align:right">3</td>
+</tr>
+</tbody>
+</table>
+<p>第三行也能逐步核对。“眼前优先”第一轮快送，第二轮在电量 0 充电，第三轮又可快送；两次快送各有期望 2.5，中间充电 −1，所以总期望 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2.5</mn><mo>−</mo><mn>1</mn><mo>+</mo><mn>2.5</mn><mo>=</mo><mn>4</mn></mrow></math></span>。这里两个快送的随机分支按本章规则在重新充电后各自抽取；若它们共享未记录的天气或故障，必须另建模型。“保留电量”则慢送、慢送、充电，得到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mo>+</mo><mn>2</mn><mo>−</mo><mn>1</mn><mo>=</mo><mn>3</mn></mrow></math></span>。<strong>一轮、两轮、三轮的比较结论不同</strong>；这不是模型的自相矛盾，而是我们问了三个不同长度的问题。表只比较这两套给定规则，不能由此声称第三行的 4 是所有可能策略的最大值。</p>
+<p><a id="twentyfirst-observation"/></p>
+<h2 id="sec-21-005">同一盏绿灯，为什么还不能作同一个决定</h2>
+<p>先前的计算用了准确电量。但假设车内电量只在模拟器里，控制程序的面板只有一盏灯：0 显红，1 和 2 都显绿。灯给程序的是<strong>观测</strong>；车的实际电量是我们为描述后果所用的<strong>状态候选</strong>。从电量 2 慢送一次，灯绿、电量 1；从任何电量充电一次，灯也绿、电量 2。相同绿灯并没有抹掉两段经历的差别。</p>
+<p>差别可以当场检验。在电量 1 选快送，表中确定得 −4 并留在 1；在电量 2 选快送，3/4 得 +4、1/4 得 −2，两者都到 0。虽然两次行动前灯都绿，但“刚从 2 慢送过”和“刚充过电”这两段记录下，下一次快送得 +4 的机会分别是 <strong>0</strong> 与 <strong>3/4</strong>。因此“只看绿灯就估快送后果”没有唯一的一行条件概率。假设控制器只看灯，却让它执行上面的“眼前优先”或“保留电量”规则，是把看不到的电量偷偷给了它。两套规则实际使用的是<strong>完整电量</strong>；只有绿灯的程序至少要借助先前动作与奖励的记录推断电量，或者承认自己仍不确定它。</p>
+<p>把到此刻见过的灯、作过的动作与收到的奖励依次保存，称为<strong>历史</strong>，可写作</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>H</mi><mi>t</mi></msub><mo>=</mo><mo stretchy="false">(</mo><msub><mi>O</mi><mn>0</mn></msub><mo>,</mo><msub><mi>A</mi><mn>0</mn></msub><mo>,</mo><msub><mi>R</mi><mn>1</mn></msub><mo>,</mo><msub><mi>O</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>A</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>R</mi><mi>t</mi></msub><mo>,</mo><msub><mi>O</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>O</mi><mi>t</mi></msub></mrow></math></span> 是第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>t</mi></mrow></math></span> 次行动前的灯。历史可以很长，而判断下一步未必需要原样带着每一项。在本章<strong>给定的环境规则</strong>下，知道准确电量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>S</mi><mi>t</mi></msub></mrow></math></span> 和将选的行动 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>A</mi><mi>t</mi></msub></mrow></math></span> 后，过去的历史不再改变“下一奖励、下一电量”这对结果的分布：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo stretchy="false">(</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>r</mi><mo>,</mo><msub><mi>S</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msup><mi>s</mi><mi>′</mi></msup><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi><mo>,</mo><msub><mi>H</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><mi>r</mi><mo>,</mo><msup><mi>s</mi><mi>′</mi></msup><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这就是我们在此环境使用的<strong>马尔可夫性质</strong>。“马尔可夫”不是说过去不存在，也不是说所有系统天生只需上一项；它要求当前选出的状态<strong>已保存过去对下一步后果有用的信息</strong>。例如如果同样电量下的快送成功率还取决于未记录的路况或电池老化，单独电量就不再足够，应把有关因素纳入状态或用历史估计。若这个条件都未检查，只因某个变量名叫 <code>state</code> 就说它是状态，等于把最难的问题藏在名字里。</p>
+<p>再看只有绿灯可见、而且<strong>只剩最后一次行动</strong>时，历史究竟能补什么信息。让 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>b</mi><mi>t</mi></msub><mo>=</mo><mi>P</mi><mo stretchy="false">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mn>2</mn><mo>∣</mo><msub><mi>H</mi><mi>t</mi></msub><mo stretchy="false">)</mo></mrow></math></span> 表示在当前已见绿灯和这段记录之下，电量其实为 2 的机会；余下 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn><mo>−</mo><msub><mi>b</mi><mi>t</mi></msub></mrow></math></span> 就是电量为 1 的机会。快送在两种电量下的事前得分分别为 2.5 和 −4，慢送在两种电量下都得 2。按第五章的有限加权平均，绿灯下最后一步快送与慢送的期望差为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mrow><mo fence="true" form="prefix" stretchy="true">[</mo><msub><mi>b</mi><mi>t</mi></msub><mo stretchy="false">(</mo><mn>2.5</mn><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msub><mi>b</mi><mi>t</mi></msub><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mo>−</mo><mn>4</mn><mo stretchy="false">)</mo><mo fence="true" form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mn>2</mn><mo>=</mo><mstyle displaystyle="false" scriptlevel="0"><mfrac><mrow><mn>13</mn></mrow><mrow><mn>2</mn></mrow></mfrac></mstyle><msub><mi>b</mi><mi>t</mi></msub><mo>−</mo><mn>6</mn><mo>.</mo></mrow></math></div>
+<p>所以仅就<strong>最后这一步</strong>，快送要比慢送好，必须有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>b</mi><mi>t</mi></msub><mo>&gt;</mo><mn>12</mn><mo>/</mo><mn>13</mn></mrow></math></span>。刚完成充电，规则告诉我们电量必为 2，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>b</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow></math></span>；若从已知电量 2 慢送了一次，电量必为 1，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>b</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>。两次眼前都见同一盏绿灯，合理选择却在门槛两侧。<a href="res-results.xhtml#res-bf8b7510451a9b47">短程序</a>直接从本章 <code>outcomes</code> 的同一张表算出 0、0.9、12/13、0.95、1 等条件下的分数，不是又造一份奖励规则。<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>b</mi><mi>t</mi></msub></mrow></math></span> 只是控制程序<strong>根据已有记录对未见电量的条件估计</strong>，并未把灯改造成能直接显示电量的仪器；多轮选择还须把下一轮的信息和机会一起算，不能把这个一步门槛直接当全部任务的策略。</p>
+<p>本例的电量转移规则不随第几轮改变，所以电量对<strong>下一步后果</strong>是充分的。另一件事不能混淆：即使当前电量相同，只剩一轮还是剩三轮，值得采取的动作仍可能不同。剩余轮数属于<strong>评价问题</strong>的信息；允许策略根据时间改动作，不会使电量的下一步转移突然失去上述性质。如果环境本身会按日期改变成功率，那又应把相应时间或条件加进状态描述。</p>
+<p>我们现在可以给这类有限模型一个名字：<strong>马尔可夫决策过程</strong>。它需要可区分的状态、可选动作、给定状态和动作时的后果概率，以及用于评价结果的奖励；多轮任务还要说清起点和结束条件。这个名字不是通往答案的咒语。对眼前的车，电量、三种动作、整张后果表与有限行动次数都已经具体给出，才有资格使用它。只有绿灯的控制器面对的是<strong>部分观测</strong>，不能因为底层模拟器有完整状态，就把自己的灯也称为完整状态。</p>
+<p><a id="twentyfirst-history"/></p>
+<h2 id="sec-21-006">两条早期研究线索，怎样在“有后果的选择”处相遇</h2>
+<p>为弄清今天使用的几个想法从哪里来，要从上一章的当代训练往回看。“马尔可夫”这个词比人工智能学科的命名早得多。1913 年，安德烈·马尔可夫按原次序数《叶甫盖尼·奥涅金》中的两万个俄文字母，研究相邻元音与辅音是否像互不影响的抽取。按他的记录，元音之后再来元音约有 <strong>0.128</strong> 的频率，辅音之后来元音约有 <strong>0.663</strong>；若忽略前一字母的类别，这两个数不该如此分开。他又检查更长的相邻组合，发现简单的一步链不能把所有离散程度精确解释。这是对<strong>有依赖的文字序列</strong>的统计研究，既不是配送策略，也不是“只看上一项总能准确预测”的宣言。(<a href="https://gwern.net/doc/statistics/probability/2006-markov.pdf">马尔可夫原文英译，第 591—597 页</a>)</p>
+<p>这两项历史计数也能参加一次真正的概率核算。令 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi></mrow></math></span> 为这一长段里元音的比例；把“上一字母是元音”与“上一字母是辅音”分开，下一字母为元音的比例应近似满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>=</mo><mn>0.128</mn><mi>p</mi><mo>+</mo><mn>0.663</mn><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false">)</mo></mrow></math></span>。解出约 <strong>0.4319</strong>，恰与他从两万个字母直接数得的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>8638</mn><mo>/</mo><mn>20000</mn><mo>=</mo><mn>0.4319</mn></mrow></math></span> 相称。<a href="res-results.xhtml#res-49af27cb9e069d7c">用原文未四舍五入计数的本机核算</a>得约 <strong>0.431922</strong>，与实数频率差约 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2.2</mn><mo>×</mo><msup><mn>10</mn><mrow><mo>−</mo><mn>5</mn></mrow></msup></mrow></math></span>。这不是又一条独立证明“只看前一字母就够”：相邻次数与总字数本来从同一段文字数出，长序列里两种流量近乎必须平衡；换成只看前一项仍可能漏掉再前一个字母的影响。马尔可夫本人继续查两项历史和离散程度，恰说明一阶条件概率有用途，却不是把其简化假设免检。</p>
+<p>到 1948 年，香农为研究通信中的消息来源，展示了几种逐渐保留更多前文字母或词语的英文近似：独立按字母频率取样时，常见双字母形状仍缺失；按前一个、前两个字母的相邻频率取样，局部形状会改变。第十五章已经用它引出<a href="ch15.xhtml#fifteenth-history-shannon">下一词的局部统计</a>。两人的研究目的不同：马尔可夫用文字检验有关依赖与离散程度的概率计算，香农要描述通信中的消息来源；从今天回看，它们都迫使我们认真处理<strong>前文会影响后续分布</strong>这件事。但他们的文字模型里没有一个配送员在当前选择快慢、进而改变下一轮可用电量。(<a href="https://marco-dalai.unibs.it/teach/IT/shannon_1948.pdf">香农，1948，§3</a>)</p>
+<p>关于<strong>选择</strong>，也不能把当时的历史讲成“先有文字链，再给它加一个动作”。1950 年香农讨论电脑下棋时，程序须从局面列出合法走法，并在无法搜索到终局时估计局面；1952 年 Samuel 已写出能运行的跳棋程序，后来再研究怎样从棋局改进评估。第一章讲过这段<a href="ch01.xhtml#history-1952">搜索与学习的实际进程</a>。棋类程序清楚显示“今天的一步改变明天局面”，但棋规给出的许多后果是确定的，程序的学习难点也不等同于本车的随机快送。(<a href="https://d1yx3ys82bpsa0.cloudfront.net/chess/programming-a-computer-for-playing-chess.shannon.062303002.pdf">香农，1950，第 1、3 节</a>；<a href="https://gwern.net/doc/reinforcement-learning/model-free/1959-samuel.pdf">Samuel，1959，第 212 页脚注</a>)</p>
+<p>同在 1952 年，贝尔曼讨论的出发点是<strong>连续操作的规划</strong>：如果这次操作产生随机事件，结果又影响后续操作，怎样选一串操作才合适？他给过检查盒子寻找隐藏球的例子——一次检查的结果会改变下一次该查哪里，也给过资源余量影响继续分配的例子。我们车的“快送耗尽电量、慢送保留下次机会”是新的教学模型，却正好把这类问题的骨架放到一张小表中。(<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC1063639/">贝尔曼，1952，《On the Theory of Dynamic Programming》</a>)</p>
+<p>贝尔曼 1954 年的综述已把确定与随机情形并列；1957 年题为 <em>A Markovian Decision Process</em> 的论文开头，明确写出在有限状态下，选择会改变当前收益和到各后继状态的概率。到了 1960 年，Howard 的《Dynamic Programming and Markov Processes》把马尔可夫过程作为系统模型，与求解连续选择的动态规划放在同一本书里。这里有从随机依赖、局面选择到系统规划逐步形成的共同数学问题，<strong>没有证据可以把它写成马尔可夫的小说统计直接生出了贝尔曼的算法</strong>。下一章再处理这些研究中关键的“怎样复用后续问题”的计算思想，本章先把什么要算、哪些信息必须保留交代完整。(<a href="https://pubsonline.informs.org/doi/abs/10.1287/opre.2.3.275">贝尔曼，1954，原期刊摘要</a>；<a href="https://iumj.s3-us-west-2.amazonaws.com/abstracts/56038_abs.pdf">贝尔曼，1957，原论文</a>；<a href="https://books.google.co.uk/books?id=fXJEAAAAIAAJ">Howard，1960，原书目录</a>)</p>
+<p><a id="twentyfirst-practice"/></p>
+<h2 id="sec-21-007">在这台电脑上，让两种算法核对同一张表</h2>
+<p><a href="code-b18e969d35ac.xhtml#code-source">完整程序</a>只用 Python 标准库，不需要下载模型、游戏环境或额外资料。它做两件分开的事：先<strong>穷举</strong>本章规则允许的每条有限路径，把路径概率乘上总分求精确期望；再用固定种子的伪随机数抽取 100,000 次路径，取样本平均。第一件是在已知表内算数，第二件展示有限采样会偏离表内真值；两件都还不是“从未知环境训练出策略”。</p>
+<p>下面是程序处理一步结果的实际代码片段。三个数按“这条结果的概率、这一步的奖励、下一电量”排在一起：</p>
+<pre><code class="language-python">if energy == 2:
+    return ((0.75, 4, 0), (0.25, -2, 0))
+return ((1.0, -4, energy),)
+</code></pre>
+<p>这是 <code>outcomes</code> 中快送分支的末尾；前面已处理充电和慢送。完整程序在 <code>enumerate_paths</code> 中沿每条已有路径接上这些分支：</p>
+<pre><code class="language-python">for prob, reward, next_energy in outcomes(energy, action):
+    next_paths.append({
+        "probability": path["probability"] * prob,
+        "energy": next_energy,
+        "return": path["return"] + reward,
+        "events": path["events"] + [event],
+    })
+</code></pre>
+<p><code>for</code> 逐条取出本步可能结果；上方刚构造的 <code>event</code> 字典记着行动前后电量、动作和奖励时刻。路径概率乘本步的<strong>条件</strong>概率，累计回报加本步奖励，<code>events</code> 在原记录后接这一轮。程序随后按“路径概率 × 路径总分”加总，与上面的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>J</mi><mi>T</mi></msub></mrow></math></span> 同一件事。它还检查每组路径概率之和是否为 1，避免遗漏分支。</p>
+<p>在 PowerShell 中，从本书目录运行：</p>
+<pre><code class="language-powershell"># 当前目录：先按“随书实践准备”运行 Open-Lab.ps1
+$env:PYTHONUTF8='1'
+python work/code/delivery_decision_lab.py --out work/runs/c21_自己复跑_001.json
+python work/code/delivery_belief_probe.py --out work/runs/c21_自己绿灯核算_001.json
+python work/code/markov_vowel_balance_probe.py --out work/runs/c21_自己字母核算_001.json
+</code></pre>
+<p>若再次运行，换一个输出文件名；程序会拒绝覆盖已有结果。作者这台电脑的<a href="res-results.xhtml#res-e4d5db711f2d5c74">完整结果</a>中，穷举依次得到上表的一、二、三轮数值。100,000 次抽取的平均在“眼前优先”三行约为 <strong>2.520、1.486、3.985</strong>；确定性的“保留电量”恰为 <strong>2、4、3</strong>。样本平均与精确期望的微小差距来自抽样，不能说模型“学会”了哪套策略。结果文件还保留逐步记录、各路径概率和样本方差，可以从任意一行倒查表中的后果。第二条短命令只算同一绿灯背后的<strong>一步</strong>条件期望和 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>12</mn><mo>/</mo><mn>13</mn></mrow></math></span> 门槛；它不抽样、不训练策略，也不改变第一条完整电量策略的三轮表。第三条回到 1913 年的真实字母计数，用同一份原文的频率核对上面那项平衡关系；它不运行配送车，也不假称马尔可夫当年用过这段 Python。</p>
+<p>想亲自观察抽样的作用，可把命令里的输出名换成 <code>c21_少量抽取.json</code>，再加 <code>--episodes 1000 --seed 7</code>。先预测：穷举列应不变，哪几行的样本平均会摇动？为什么完全确定的“保留电量”不摇？两个运行文件让你的猜测可以核对，而不需要改掉正式结果。这里若再把快送分数或机会改掉，就必须同时重算整张表和策略比较；只在结论句里换个数不算完成实验。</p>
+<p><a id="twentyfirst-exercises"/></p>
+<h2 id="sec-21-008">用三个改动检查自己是否真的把对象分开了</h2>
+<ol>
+<li>从电量 2 开始，只剩两轮。不要看上面的总分，自己把“眼前优先”的每条路径写成“行动前电量 → 动作 → 奖励与下一电量”，算路径概率、总分与 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>J</mi><mn>2</mn></msub></mrow></math></span>。解释为什么只给出“快送后必到 0”的电量转移还不够。</li>
+<li>假设面板仍只亮红、绿。从电量 2 慢送后与充电后都见绿。若马上快送，这两段历史给出的后果分布相同吗？这里究竟是环境没有充分状态，还是<strong>面板没有显示充分状态</strong>？再假设仅剩一步、根据记录估计电量为 2 的机会是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>9</mn><mo>/</mo><mn>10</mn></mrow></math></span>，快送还是慢送的期望高？</li>
+<li>另造一个算术对照：保持充电 −1、慢送 +2，令电量 2 的快送成功得 +7、失手得 −2，成功机会改为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi></mrow></math></span>。从电量 2 连做两轮，第一轮快送、第二轮充电的期望是多少？何时比“慢送、慢送”的 4 分大？这题改变的是你自己设的新模型，不能把答案冒充本机原规则的成绩。</li>
+</ol>
+<h3 id="sec-21-009">核对思路</h3>
+<ol>
+<li>成功路径 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>2</mn><mo>→</mo><mtext>快送</mtext><mo>→</mo><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>0</mn><mo stretchy="false">)</mo><mo>→</mo><mtext>充电</mtext><mo>→</mo><mo stretchy="false">(</mo><mo>−</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo stretchy="false">)</mo></mrow></math></span>，概率 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>3</mn><mo>/</mo><mn>4</mn></mrow></math></span>、总分 3；失手路径第一奖励为 −2，概率 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn><mo>/</mo><mn>4</mn></mrow></math></span>、总分 −3。加权得 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>J</mi><mn>2</mn></msub><mo>=</mo><mn>3</mn><mo stretchy="false">(</mo><mn>3</mn><mo>/</mo><mn>4</mn><mo stretchy="false">)</mo><mo>−</mo><mn>3</mn><mo stretchy="false">(</mo><mn>1</mn><mo>/</mo><mn>4</mn><mo stretchy="false">)</mo><mo>=</mo><mn>1.5</mn></mrow></math></span>。只知道两条路径后都到 0，无法辨认 +4 与 −2。</li>
+<li>不同。慢送后实际电量 1，快送确定得 −4 且留在 1；充电后实际电量 2，快送有两种奖励且到 0。环境用电量作状态仍满足本章规则；同一个绿色观测把 1 与 2 合并，导致它不够用。若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>b</mi><mo>=</mo><mn>9</mn><mo>/</mo><mn>10</mn></mrow></math></span>，最后一步快送期望是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mfrac><mrow><mn>13</mn></mrow><mrow><mn>2</mn></mrow></mfrac><mfrac><mn>9</mn><mrow><mn>10</mn></mrow></mfrac><mo>−</mo><mn>4</mn><mo>=</mo><mn>1.85</mn></mrow></math></span>，慢送仍得 2，因此选慢送；须超过 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>12</mn><mo>/</mo><mn>13</mn></mrow></math></span> 才改选快送。</li>
+<li>第一轮快送期望 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>7</mn><mi>p</mi><mo>−</mo><mn>2</mn><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo stretchy="false">)</mo><mo>=</mo><mn>9</mn><mi>p</mi><mo>−</mo><mn>2</mn></mrow></math></span>，再充电为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>9</mn><mi>p</mi><mo>−</mo><mn>3</mn></mrow></math></span>；它大于 4 当且仅当 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>&gt;</mo><mn>7</mn><mo>/</mo><mn>9</mn></mrow></math></span>。例如 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>=</mo><mn>3</mn><mo>/</mo><mn>4</mn></mrow></math></span> 时是 3.75，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>p</mi><mo>=</mo><mn>4</mn><mo>/</mo><mn>5</mn></mrow></math></span> 时是 4.2。界限来自所改的成功奖励，不是本章原来的 +4。</li>
+</ol>
+<p><a id="twentyfirst-next"/></p>
+<h2 id="sec-21-010">已知道什么，还缺怎样的计算</h2>
+<p>我们已经能从一张有限后果表出发，按固定的时间顺序记录行动和奖励；能区别单步奖励与多步回报，算两套策略在不同轮数下的期望；也知道为什么电量能描述这张表中的下一步后果，而只亮红绿的面板不能。1913 年的文字相邻统计说明“历史可由某种当前信息摘要”是需要检查的模型想法；五十年代的连续决策研究再把<strong>可选行动改变后继处境</strong>放到了中心。这些不是一条无缝发明链，而是本章问题确实要同时面对的两种结构。</p>
+<p>穷举三轮路径很容易；若行动数变长、处境增多，逐条抄写所有未来路径会迅速重复计算。若后果概率不再由作者给定，而要从实际行动记录估计，刚才的加权平均还缺可靠的权重。下一章从这两个具体缺口出发：怎样利用已算过的后续结果评价或改进选择，怎样在只看到有限经历时估计它。至此，状态、观测、行动、奖励、回报和策略都已有实际任务，而不是一串等着下章才解释的名字。</p>
+</body></html>

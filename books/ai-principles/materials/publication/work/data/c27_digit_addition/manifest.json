@@ -1,0 +1,24 @@
+{
+  "task": "given separated hundreds/tens/units digits and a one-digit addend, emit three spaced decimal digits",
+  "source": "author-defined deterministic arithmetic; no external model or user labels",
+  "old_model": "C19 random WikiText pretraining, C25 full-mix Dolly SFT checkpoint",
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "context_limit": 128,
+  "prompt_answer_sequence": "BOS + prompt + three response BPE tokens + EOS; only response/EOS targets scored",
+  "split_rule": "SHA ordering within units-carry and hundred-carry strata, 70/15/15 percent",
+  "counts": {
+    "train": 700,
+    "validation": 150,
+    "test": 150
+  },
+  "prompt_plus_three_response_length_min_max": [
+    51,
+    51
+  ],
+  "splits": {
+    "train": "14006f34c02c37e19917bc80b08eb8f3d4c39f122525cb72ae6d8be4dff47200",
+    "validation": "830ea792af57c079c1a76ac16c550bcd8ae5331772edc145f546a07e502fb429",
+    "test": "115131d23377dcebc8944497171800478b486324d873a665dc3e54e77d031caa"
+  },
+  "test_policy": "train and selection never read test.json; evaluate opens once after chosen checkpoint"
+}

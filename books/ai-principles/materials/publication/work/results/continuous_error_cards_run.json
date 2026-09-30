@@ -1,0 +1,238 @@
+{
+  "data_identity": "第一章同一批七张人工点卡片；没有新采样或自然数据",
+  "target_scale": 1.0,
+  "historical_scope": "本程序是现代课堂计算，不是 1960 年 Adaline 装置的复刻",
+  "model_family": "z = w1*x1 + w2*x2 + b; z>0 为正类",
+  "objective": "七条记录的 1/2*(z-y)^2 的平均",
+  "start_loaded_from": "work/results/first_perceptron_model.json",
+  "one_sample_trials": [
+    {
+      "learning_rate": 0.1,
+      "before": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        0.2,
+        0.2,
+        0.1
+      ],
+      "score_before": 0.0,
+      "score_after": 0.9,
+      "loss_before": 0.5,
+      "loss_after": 0.0049999999999999975
+    },
+    {
+      "learning_rate": 0.3,
+      "before": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        0.6,
+        0.6,
+        0.3
+      ],
+      "score_before": 0.0,
+      "score_after": 2.6999999999999997,
+      "loss_before": 0.5,
+      "loss_after": 1.4449999999999996
+    }
+  ],
+  "batch_rate": 0.1,
+  "batch_steps": 3000,
+  "checkpoints": [
+    {
+      "step": 0,
+      "theta": [
+        1.0,
+        1.0,
+        -3.0
+      ],
+      "mean_square_loss": 0.2857142857142857,
+      "classification_errors": 0,
+      "gradient": [
+        0.0,
+        0.0,
+        -0.2857142857142857
+      ]
+    },
+    {
+      "step": 1,
+      "theta": [
+        1.0,
+        1.0,
+        -2.9714285714285715
+      ],
+      "mean_square_loss": 0.27795918367346945,
+      "classification_errors": 0,
+      "gradient": [
+        0.03673469387755089,
+        0.03673469387755089,
+        -0.25714285714285723
+      ]
+    },
+    {
+      "step": 10,
+      "theta": [
+        0.945916378684595,
+        0.945916378684595,
+        -2.7717617039841533
+      ],
+      "mean_square_loss": 0.22734398652994464,
+      "classification_errors": 0,
+      "gradient": [
+        0.061662289240067114,
+        0.061662289240067114,
+        -0.19654815879519477
+      ]
+    },
+    {
+      "step": 100,
+      "theta": [
+        0.680891950356526,
+        0.680891950356526,
+        -1.9279457907585111
+      ],
+      "mean_square_loss": 0.11078864250742114,
+      "classification_errors": 0,
+      "gradient": [
+        0.010749484838454488,
+        0.010749484838454488,
+        -0.03422363269887271
+      ]
+    },
+    {
+      "step": 500,
+      "theta": [
+        0.6250236458503087,
+        0.6250236458503087,
+        -1.7500752823886891
+      ],
+      "mean_square_loss": 0.1071428577953901,
+      "classification_errors": 0,
+      "gradient": [
+        4.54771586541217e-06,
+        4.54771586541217e-06,
+        -1.4478773609700418e-05
+      ]
+    },
+    {
+      "step": 1000,
+      "theta": [
+        0.6250000014347031,
+        0.6250000014347031,
+        -1.7500000045677309
+      ],
+      "mean_square_loss": 0.10714285714285714,
+      "classification_errors": 0,
+      "gradient": [
+        2.7593089717876344e-10,
+        2.7593089717876344e-10,
+        -8.784942297422407e-10
+      ]
+    },
+    {
+      "step": 3000,
+      "theta": [
+        0.6250000000000018,
+        0.6250000000000018,
+        -1.7500000000000056
+      ],
+      "mean_square_loss": 0.10714285714285714,
+      "classification_errors": 0,
+      "gradient": [
+        4.758098676964956e-16,
+        4.758098676964956e-16,
+        -9.833403932394244e-16
+      ]
+    }
+  ],
+  "exact_minimizer_by_normal_equations": [
+    0.625,
+    0.625,
+    -1.75
+  ],
+  "residuals_at_exact": [
+    -0.25,
+    -0.25,
+    -0.25,
+    -0.75,
+    0.5,
+    0.5,
+    0.5
+  ],
+  "residual_feature_sums_at_exact": [
+    0.0,
+    0.0,
+    0.0
+  ],
+  "max_difference_from_exact": 5.551115123125783e-15,
+  "final_predictions": [
+    {
+      "features": [
+        2.0,
+        2.0
+      ],
+      "target": 1.0,
+      "score": 0.7500000000000016,
+      "prediction": 1
+    },
+    {
+      "features": [
+        1.0,
+        3.0
+      ],
+      "target": 1.0,
+      "score": 0.7500000000000016,
+      "prediction": 1
+    },
+    {
+      "features": [
+        3.0,
+        1.0
+      ],
+      "target": 1.0,
+      "score": 0.7500000000000016,
+      "prediction": 1
+    },
+    {
+      "features": [
+        0.0,
+        0.0
+      ],
+      "target": -1.0,
+      "score": -1.7500000000000056,
+      "prediction": -1
+    },
+    {
+      "features": [
+        1.0,
+        1.0
+      ],
+      "target": -1.0,
+      "score": -0.500000000000002,
+      "prediction": -1
+    },
+    {
+      "features": [
+        2.0,
+        0.0
+      ],
+      "target": -1.0,
+      "score": -0.500000000000002,
+      "prediction": -1
+    },
+    {
+      "features": [
+        0.0,
+        2.0
+      ],
+      "target": -1.0,
+      "score": -0.500000000000002,
+      "prediction": -1
+    }
+  ]
+}

@@ -1,0 +1,637 @@
+{
+  "scope": "fictional three-level courier energy model; exact enumeration versus independently sampled episodes; no real robot, GPU, or language-model training",
+  "start_energy": 2,
+  "states": [
+    0,
+    1,
+    2
+  ],
+  "actions": [
+    "slow",
+    "express",
+    "charge"
+  ],
+  "reward_timing": "state_t -> action_t -> (reward_{t+1}, state_{t+1})",
+  "transition_table": {
+    "0": {
+      "slow": [
+        {
+          "probability": 1.0,
+          "reward": -3,
+          "next_energy": 0
+        }
+      ],
+      "express": [
+        {
+          "probability": 1.0,
+          "reward": -4,
+          "next_energy": 0
+        }
+      ],
+      "charge": [
+        {
+          "probability": 1.0,
+          "reward": -1,
+          "next_energy": 2
+        }
+      ]
+    },
+    "1": {
+      "slow": [
+        {
+          "probability": 1.0,
+          "reward": 2,
+          "next_energy": 0
+        }
+      ],
+      "express": [
+        {
+          "probability": 1.0,
+          "reward": -4,
+          "next_energy": 1
+        }
+      ],
+      "charge": [
+        {
+          "probability": 1.0,
+          "reward": -1,
+          "next_energy": 2
+        }
+      ]
+    },
+    "2": {
+      "slow": [
+        {
+          "probability": 1.0,
+          "reward": 2,
+          "next_energy": 1
+        }
+      ],
+      "express": [
+        {
+          "probability": 0.75,
+          "reward": 4,
+          "next_energy": 0
+        },
+        {
+          "probability": 0.25,
+          "reward": -2,
+          "next_energy": 0
+        }
+      ],
+      "charge": [
+        {
+          "probability": 1.0,
+          "reward": -1,
+          "next_energy": 2
+        }
+      ]
+    }
+  },
+  "lamp_alias": {
+    "after_charge": {
+      "energy": 2,
+      "observation": "green",
+      "express_outcomes": [
+        [
+          0.75,
+          4,
+          0
+        ],
+        [
+          0.25,
+          -2,
+          0
+        ]
+      ]
+    },
+    "after_slow_from_2": {
+      "energy": 1,
+      "observation": "green",
+      "express_outcomes": [
+        [
+          1.0,
+          -4,
+          1
+        ]
+      ]
+    }
+  },
+  "policies": {
+    "immediate": {
+      "energy_0": "charge",
+      "energy_1": "slow",
+      "energy_2": "express"
+    },
+    "conserve": {
+      "energy_0": "charge",
+      "energy_1": "slow",
+      "energy_2": "slow"
+    }
+  },
+  "comparisons": [
+    {
+      "policy": "immediate",
+      "horizon": 1,
+      "expected_return": 2.5,
+      "return_variance": 6.75,
+      "paths": [
+        {
+          "probability": 0.75,
+          "energy": 0,
+          "return": 4,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": 4,
+              "state_after": 0
+            }
+          ]
+        },
+        {
+          "probability": 0.25,
+          "energy": 0,
+          "return": -2,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": -2,
+              "state_after": 0
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261024,
+        "sample_mean_return": 2.52022,
+        "sample_variance": 6.688931151599999,
+        "sample_standard_error": 0.008178588601708732,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "express",
+            "reward_index": 1,
+            "reward": 4,
+            "state_after": 0
+          }
+        ]
+      }
+    },
+    {
+      "policy": "conserve",
+      "horizon": 1,
+      "expected_return": 2.0,
+      "return_variance": 0.0,
+      "paths": [
+        {
+          "probability": 1.0,
+          "energy": 1,
+          "return": 2,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "slow",
+              "reward_index": 1,
+              "reward": 2,
+              "state_after": 1
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261025,
+        "sample_mean_return": 2.0,
+        "sample_variance": 0.0,
+        "sample_standard_error": 0.0,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "slow",
+            "reward_index": 1,
+            "reward": 2,
+            "state_after": 1
+          }
+        ]
+      }
+    },
+    {
+      "policy": "immediate",
+      "horizon": 2,
+      "expected_return": 1.5,
+      "return_variance": 6.75,
+      "paths": [
+        {
+          "probability": 0.75,
+          "energy": 2,
+          "return": 3,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": 4,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            }
+          ]
+        },
+        {
+          "probability": 0.25,
+          "energy": 2,
+          "return": -3,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": -2,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261124,
+        "sample_mean_return": 1.48596,
+        "sample_variance": 6.7919228784,
+        "sample_standard_error": 0.008241312321711877,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "express",
+            "reward_index": 1,
+            "reward": -2,
+            "state_after": 0
+          },
+          {
+            "t": 1,
+            "state_before": 0,
+            "observation_before": "red",
+            "action": "charge",
+            "reward_index": 2,
+            "reward": -1,
+            "state_after": 2
+          }
+        ]
+      }
+    },
+    {
+      "policy": "conserve",
+      "horizon": 2,
+      "expected_return": 4.0,
+      "return_variance": 0.0,
+      "paths": [
+        {
+          "probability": 1.0,
+          "energy": 0,
+          "return": 4,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "slow",
+              "reward_index": 1,
+              "reward": 2,
+              "state_after": 1
+            },
+            {
+              "t": 1,
+              "state_before": 1,
+              "observation_before": "green",
+              "action": "slow",
+              "reward_index": 2,
+              "reward": 2,
+              "state_after": 0
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261125,
+        "sample_mean_return": 4.0,
+        "sample_variance": 0.0,
+        "sample_standard_error": 0.0,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "slow",
+            "reward_index": 1,
+            "reward": 2,
+            "state_after": 1
+          },
+          {
+            "t": 1,
+            "state_before": 1,
+            "observation_before": "green",
+            "action": "slow",
+            "reward_index": 2,
+            "reward": 2,
+            "state_after": 0
+          }
+        ]
+      }
+    },
+    {
+      "policy": "immediate",
+      "horizon": 3,
+      "expected_return": 4.0,
+      "return_variance": 13.5,
+      "paths": [
+        {
+          "probability": 0.5625,
+          "energy": 0,
+          "return": 7,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": 4,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            },
+            {
+              "t": 2,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 3,
+              "reward": 4,
+              "state_after": 0
+            }
+          ]
+        },
+        {
+          "probability": 0.1875,
+          "energy": 0,
+          "return": 1,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": 4,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            },
+            {
+              "t": 2,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 3,
+              "reward": -2,
+              "state_after": 0
+            }
+          ]
+        },
+        {
+          "probability": 0.1875,
+          "energy": 0,
+          "return": 1,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": -2,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            },
+            {
+              "t": 2,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 3,
+              "reward": 4,
+              "state_after": 0
+            }
+          ]
+        },
+        {
+          "probability": 0.0625,
+          "energy": 0,
+          "return": -5,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 1,
+              "reward": -2,
+              "state_after": 0
+            },
+            {
+              "t": 1,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 2,
+              "reward": -1,
+              "state_after": 2
+            },
+            {
+              "t": 2,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "express",
+              "reward_index": 3,
+              "reward": -2,
+              "state_after": 0
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261224,
+        "sample_mean_return": 3.98542,
+        "sample_variance": 13.607787423600001,
+        "sample_standard_error": 0.011665242142193192,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "express",
+            "reward_index": 1,
+            "reward": 4,
+            "state_after": 0
+          },
+          {
+            "t": 1,
+            "state_before": 0,
+            "observation_before": "red",
+            "action": "charge",
+            "reward_index": 2,
+            "reward": -1,
+            "state_after": 2
+          },
+          {
+            "t": 2,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "express",
+            "reward_index": 3,
+            "reward": 4,
+            "state_after": 0
+          }
+        ]
+      }
+    },
+    {
+      "policy": "conserve",
+      "horizon": 3,
+      "expected_return": 3.0,
+      "return_variance": 0.0,
+      "paths": [
+        {
+          "probability": 1.0,
+          "energy": 2,
+          "return": 3,
+          "events": [
+            {
+              "t": 0,
+              "state_before": 2,
+              "observation_before": "green",
+              "action": "slow",
+              "reward_index": 1,
+              "reward": 2,
+              "state_after": 1
+            },
+            {
+              "t": 1,
+              "state_before": 1,
+              "observation_before": "green",
+              "action": "slow",
+              "reward_index": 2,
+              "reward": 2,
+              "state_after": 0
+            },
+            {
+              "t": 2,
+              "state_before": 0,
+              "observation_before": "red",
+              "action": "charge",
+              "reward_index": 3,
+              "reward": -1,
+              "state_after": 2
+            }
+          ]
+        }
+      ],
+      "sampled": {
+        "episodes": 100000,
+        "seed": 20261225,
+        "sample_mean_return": 3.0,
+        "sample_variance": 0.0,
+        "sample_standard_error": 0.0,
+        "first_trajectory": [
+          {
+            "t": 0,
+            "state_before": 2,
+            "observation_before": "green",
+            "action": "slow",
+            "reward_index": 1,
+            "reward": 2,
+            "state_after": 1
+          },
+          {
+            "t": 1,
+            "state_before": 1,
+            "observation_before": "green",
+            "action": "slow",
+            "reward_index": 2,
+            "reward": 2,
+            "state_after": 0
+          },
+          {
+            "t": 2,
+            "state_before": 0,
+            "observation_before": "red",
+            "action": "charge",
+            "reward_index": 3,
+            "reward": -1,
+            "state_after": 2
+          }
+        ]
+      }
+    }
+  ]
+}
