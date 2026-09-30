@@ -10,7 +10,7 @@
 
 ```text
 请使用 $skill-installer，从
-https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.6.0/skill/comfortable-reader
+https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.6.1/skill/comfortable-reader
 安装 comfortable-reader 技能。先核对来源和版本；如果已有同名技能，保留我的私人配置并比较差异，不直接覆盖。
 ```
 

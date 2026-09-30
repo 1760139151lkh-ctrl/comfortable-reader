@@ -1,7 +1,7 @@
 ---
 name: comfortable-reader
 metadata:
-  version: "0.6.0"
+  version: "0.6.1"
 description: 维护现有舒适阅读书库、书籍源与多书阅读工作区，或将材料保真导入已配置的私人书库。用于阅读器修复、分屏与沉浸阅读、多栏翻页、原文批注、自由笔记和 $comfortable-reader；普通入库不授权另建阅读器、公开材料或运行书中代码。
 ---
 

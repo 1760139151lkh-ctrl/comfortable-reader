@@ -3806,15 +3806,15 @@ function wireEvents(): void {
       searchInput.focus();
       return;
     }
+    if (event.ctrlKey && /^[1-9]$/.test(event.key)) {
+      event.preventDefault();
+      const pane=workspace.ids[Number(event.key)-1];if(pane!==undefined)setActivePane(pane);
+      return;
+    }
     if (target instanceof Element && target.closest("button, a[href], summary, input, textarea, select, [contenteditable], [role='button'], [role='link'], [role='tab'], [role='menuitem']")) return;
     if (event.key.toLowerCase() === "g") {
       event.preventDefault();
       openJumpDialog();
-      return;
-    }
-    if (event.ctrlKey && /^[1-9]$/.test(event.key)) {
-      event.preventDefault();
-      const pane=workspace.ids[Number(event.key)-1];if(pane!==undefined)setActivePane(pane);
       return;
     }
     if (event.key === "ArrowLeft") {

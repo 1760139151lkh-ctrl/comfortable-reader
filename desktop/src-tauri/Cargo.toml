@@ -1,6 +1,6 @@
 [package]
 name = "comfortable-reader-desktop"
-version = "0.6.0"
+version = "0.6.1"
 description = "舒适阅读书库：保留阅读现场的多书阅读空间"
 edition = "2021"
 
