@@ -2,13 +2,15 @@
 
 读书不需要 Codex。它是可选的创作与维护助手，和人工作者使用同一份书源、规范与验证工具。
 
+先核对仓库当前可见性；访问受限时使用有权限的 GitHub 身份。技能安装不授予仓库权限，也不授权公开私人归档。已有获准取得的源码包可在本机使用。
+
 ## 安装技能
 
 在自己的 Codex 中发送：
 
 ```text
 请使用 $skill-installer，从
-https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.5.1/skill/comfortable-reader
+https://github.com/1760139151lkh-ctrl/comfortable-reader/tree/v0.5.2/skill/comfortable-reader
 安装 comfortable-reader 技能。先核对来源和版本；如果已有同名技能，保留我的私人配置并比较差异，不直接覆盖。
 ```
 

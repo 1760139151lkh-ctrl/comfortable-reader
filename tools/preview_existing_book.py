@@ -9,6 +9,7 @@ import argparse,hashlib,json,shutil,zipfile,xml.etree.ElementTree as ET,mimetype
 from PIL import Image
 from streamed_epub import prepare_reader
 from book_format import safe_relative,BookError,file_identity
+from reader_build_receipt import verify_reader_dist, RECEIPT
 
 def main():
  p=argparse.ArgumentParser();p.add_argument('--epub',type=Path,required=True);p.add_argument('--learning-pack',type=Path,required=True);p.add_argument('--content-root',type=Path,required=True);p.add_argument('--derived-root',type=Path);p.add_argument('--shell',type=Path,required=True);p.add_argument('--out',type=Path,required=True);p.add_argument('--slug',default='existing-book');p.add_argument('--revision',required=True);a=p.parse_args()
@@ -16,9 +17,9 @@ def main():
  if not re.fullmatch(r'\d+\.\d+\.\d+',a.revision):raise BookError('阅读清单修订使用三段数字，如 0.4.0；原 EPUB 身份另由实际字节哈希固定')
  pack=json.loads(a.learning_pack.read_text(encoding='utf-8'));epub_hash=file_identity(a.epub)['sha256']
  if pack['book_revision_sha256']!=epub_hash:raise BookError('增强包不是这份 EPUB 的版本')
- if not (a.shell/'index.html').is_file():raise BookError('共享阅读器入口不存在')
+ shell_receipt=verify_reader_dist(a.shell)
  a.out.mkdir(parents=True)
- for name in ('index.html','sw.js','assets','vendor','third-party.html'):
+ for name in ('index.html','sw.js','assets','vendor','third-party.html',RECEIPT):
   source=a.shell/name
   if source.is_dir():shutil.copytree(source,a.out/name)
   elif source.is_file():shutil.copyfile(source,a.out/name)
@@ -58,13 +59,23 @@ def main():
   if isinstance(src.get('chapter'),str):src['chapter']=src['chapter'].lower()
  study_file=destination/'learning.json';study_file.write_text(json.dumps(pack,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
  with zipfile.ZipFile(a.epub) as archive:
-  opf=ET.fromstring(archive.read('OEBPS/content.opf'));metadata=opf.find('{*}metadata');title=metadata.find('{*}title').text;author=metadata.find('{*}creator').text
- book={'schemaVersion':1,'id':pack['book_uuid'],'slug':a.slug,'title':title,'author':author,'revision':a.revision,'revisionModified':'2026-09-27T00:00:00Z','language':'zh-CN','rights':{'status':'private_preview_only'},'description':'现行导读与 47 章原书。逐章查看，材料按需打开。此预览保持原书字节，尚未经过公开发行授权。','reader':reader,'studyDescriptor':{'path':'learning.json',**file_identity(study_file)},'chapters':[{**{k:v for k,v in c.items() if k not in ('assets','source_sha256')},'body':mapping[c['id']],'readingDocument':mapping[c['id']],'readingDependencies':reader['chapterDependencies'][c['id']],'essential':[]} for c in chapters],'resources':resources,'sources':[],'activities':[{'id':act['id'],'chapter':act['chapter'],'title':act['title'],'question':next((c['question'] for c in chapters if c['id']==act['chapter']),''),'capability':'native-python@1','required':act.get('required_assets',[act['entry_asset']]),'optional':[],'parameters':{}} for act in pack['activities']]}
+  opf=ET.fromstring(archive.read(reader['package']['path'].removeprefix('reader/')))
+ metadata=opf.find('{*}metadata')
+ if metadata is None:raise BookError('原 EPUB 缺少书籍元数据')
+ dc='{http://purl.org/dc/elements/1.1/}'
+ title=metadata.findtext(dc+'title')
+ if not title:raise BookError('原 EPUB 缺少书名')
+ author=metadata.findtext(dc+'creator') or ''
+ language=metadata.findtext(dc+'language') or 'und'
+ modified=next((item.text for item in metadata.findall('{*}meta') if item.get('property')=='dcterms:modified'),None)
+ description=f'私人兼容预览：保留原 EPUB 字节，展示 {len(chapters)} 个已登记章节；材料按需打开，尚未取得公开发行授权。'
+ book={'schemaVersion':1,'id':pack['book_uuid'],'slug':a.slug,'title':title,'author':author,'revision':a.revision,'language':language,'rights':{'status':'private_preview_only'},'description':description,'reader':reader,'studyDescriptor':{'path':'learning.json',**file_identity(study_file)},'chapters':[{**{k:v for k,v in c.items() if k not in ('assets','source_sha256')},'body':mapping[c['id']],'readingDocument':mapping[c['id']],'readingDependencies':reader['chapterDependencies'][c['id']],'essential':[]} for c in chapters],'resources':resources,'sources':[],'activities':[{'id':act['id'],'chapter':act['chapter'],'title':act['title'],'question':next((c['question'] for c in chapters if c['id']==act['chapter']),''),'capability':'native-python@1','required':act.get('required_assets',[act['entry_asset']]),'optional':[],'parameters':{}} for act in pack['activities']]}
+ if modified and re.fullmatch(r'\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ',modified):book['revisionModified']=modified
  manifest=destination/'manifest.json';manifest.write_text(json.dumps(book,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
  full=a.out/'ebooks'/f'{a.slug}-{a.revision}.epub';full.parent.mkdir(exist_ok=True);shutil.copyfile(a.epub,full)
  catalog={'schemaVersion':1,'status':'private_preview_only','books':[{'id':book['id'],'slug':a.slug,'revision':a.revision,'title':title,'author':author,'description':book['description'],'language':'zh-CN','chapters':[{'id':c['id'],'title':c['title']} for c in chapters],'manifest':{'path':manifest.relative_to(a.out).as_posix(),**file_identity(manifest)},'epub':{'path':full.relative_to(a.out).as_posix(),**file_identity(full)}}]}
  (a.out/'catalog.json').write_text(json.dumps(catalog,ensure_ascii=False,separators=(',',':')),encoding='utf-8')
- receipt={'status':'private_preview_only','epub_sha256':epub_hash,'epub_byte_equal':a.epub.read_bytes()==full.read_bytes(),'chapters':len(chapters),'declared_assets':len(resources),'asset_bytes':sum(r['bytes'] for r in resources),'personal_state_copied':False,'native_grants_copied':False,'reader_locations':len(reader['locations'])}
+ receipt={'status':'private_preview_only','epub_sha256':epub_hash,'epub_byte_equal':a.epub.read_bytes()==full.read_bytes(),'chapters':len(chapters),'declared_assets':len(resources),'asset_bytes':sum(r['bytes'] for r in resources),'personal_state_copied':False,'native_grants_copied':False,'reader_locations':len(reader['locations']),'reader_source_sha256':shell_receipt['sourceTreeSha256'],'reader_build_sha256':shell_receipt['buildTreeSha256'],'reader_verification':'source_and_files_only'}
  (a.out/'existing-book-receipt.json').write_text(json.dumps(receipt,indent=2),encoding='utf-8');print(json.dumps(receipt))
 
 if __name__=='__main__':main()

@@ -47,19 +47,29 @@ export async function webInvoke(command:string,args:any={}):Promise<any>{
     case 'learning_pack':return portableLearningPack(bookId);
     case 'learning_asset':return await portableAsset(bookId,args.assetId);
     case 'learning_load_state':return read(`study:${bookId}`,{version:1,notes:[],media:{},drafts:{}});
+    case 'learning_raw_state':{const value=localStorage.getItem(prefix+`study:${bookId}`);if(value===null)throw new Error('没有可备份的原始记录');const data=new TextEncoder().encode(value);return{name:'原始学习记录-'+bookId+'.json',sha256:await sha256(data.buffer),bytes:Array.from(data)};}
     case 'learning_save_state':save(`study:${bookId}`,args.value);return;
-    case 'learning_save_draft':{const key=`draft:${bookId}:${args.activityId}`;save(key,{code:args.code,updated_at:Math.floor(Date.now()/1000)});const value={code:args.code,sha256:await sha256(new TextEncoder().encode(args.code).buffer),updated_at:Math.floor(Date.now()/1000)};save(key,value);save(key+':'+value.sha256,value);return value;}
+    case 'learning_save_draft':{const key=`draft:${bookId}:${args.activityId}`;const value={code:args.code,sha256:await sha256(new TextEncoder().encode(args.code).buffer),updated_at:Math.floor(Date.now()/1000)};save(key,value);save(key+':'+value.sha256,value);return value;}
     case 'learning_draft':return read(`draft:${bookId}:${args.activityId}`,null);
     case 'learning_import_draft':{if(typeof args.code!=='string'||args.code.length>300000||!/^[a-z][a-z0-9-]{0,63}$/.test(args.activityId))throw new Error('导入草稿无效');const key=`draft:${bookId}:${args.activityId}`,value={code:args.code,sha256:await sha256(new TextEncoder().encode(args.code).buffer),updated_at:Math.floor(Date.now()/1000),provenance:'explicit_personal_import'};save(key+':'+value.sha256,value);if(!read(key,null))save(key,value);return;}
+    case 'learning_draft_activities':{const key=prefix+`draft:${bookId}:`;const ids=new Set<string>();for(const name of Object.keys(localStorage)){if(!name.startsWith(key))continue;const id=name.slice(key.length).split(':')[0];if(!/^[A-Za-z0-9_-]{1,160}$/.test(id))throw new Error('代码活动标识无效；原记录未改动');ids.add(id);if(ids.size>2000)throw new Error('代码活动数量超过单次导出范围');}return [...ids].sort();}
     case 'learning_draft_versions':{const key=prefix+`draft:${bookId}:${args.activityId}:`;return Object.keys(localStorage).filter(k=>k.startsWith(key)).map(k=>JSON.parse(localStorage.getItem(k)!)).map(v=>({sha256:v.sha256,updated_at:v.updated_at,bytes:new TextEncoder().encode(v.code).length}));}
-    case 'learning_restore_draft':{const value=read(`draft:${bookId}:${args.activityId}:${args.revision}`,null);if(!value)throw new Error('该草稿版本不存在');return await webInvoke('learning_save_draft',{bookId,activityId:args.activityId,code:value.code});}
+    case 'learning_draft_revision':{
+      if(typeof args.activityId!=='string'||!/^[a-z][a-z0-9-]{0,63}$/.test(args.activityId)||typeof args.revision!=='string'||!/^[a-f0-9]{64}$/.test(args.revision))throw new Error('无效的代码版本');
+      const value=read(`draft:${bookId}:${args.activityId}:${args.revision}`,null);
+      if(!value)throw new Error('该草稿版本不存在');
+      const bytes=typeof value.code==='string'?new TextEncoder().encode(value.code):null;
+      if(!bytes||bytes.byteLength>300000||value.sha256!==args.revision||await sha256(bytes.buffer)!==args.revision||!Number.isSafeInteger(value.updated_at)||value.updated_at<0)throw new Error('草稿版本内容或身份校验失败；原数据未改动');
+      return {code:value.code,sha256:value.sha256,updated_at:value.updated_at};
+    }
+    case 'learning_restore_draft':{const value=await webInvoke('learning_draft_revision',args);return await webInvoke('learning_save_draft',{bookId,activityId:args.activityId,code:value.code});}
     case 'learning_run':return await runBuiltin(args);
     case 'learning_run_status':{const run=read(`run:${bookId}:${args.runId}`,null);if(!run)throw new Error('这条运行记录不存在');if(run.status==='running'&&!runWorkers.has(args.runId)){run.status='interrupted';run.diagnostic='浏览器已重开，上次计算已中断；没有自动重跑';save(`run:${bookId}:${args.runId}`,run);}return run;}
     case 'learning_run_history':{const key=prefix+`run:${bookId}:`;return Object.keys(localStorage).filter(k=>k.startsWith(key)).map(k=>JSON.parse(localStorage.getItem(k)!)).sort((a,b)=>b.started_at-a.started_at);}
     case 'learning_run_snapshot':{const run=read(`run:${bookId}:${args.runId}`,null),snapshot=read(`snapshot:${bookId}:${args.runId}`,null);if(!run||!snapshot||snapshot.code_sha256!==run.code_sha256||run.code_sha256!==await sha256(new TextEncoder().encode(snapshot.code).buffer))throw new Error('历史代码快照尚未核对，当前源码不会冒充历史源码');return snapshot;}
     case 'learning_artifact':{if(args.artifactPath!=='work/results/report.json')throw new Error('产物未登记');const value=read(`result:${bookId}:${args.runId}`,null);if(value===null)throw new Error('结果不存在');return new TextEncoder().encode(JSON.stringify(value)).buffer;}
     case 'learning_cancel':{const worker=runWorkers.get(args.runId);if(worker){worker.terminate();runWorkers.delete(args.runId);const run=await getRun(bookId,args.runId);run.status='cancelled';run.ended_at=Math.floor(Date.now()/1000);await putRun(bookId,run);}return;}
-    case 'learning_open_source':{const pack=portableLearningPack(bookId),source=pack.source_claims.find((s:any)=>s.id===args.sourceId);if(!source?.url||!/^https:\/\//.test(source.url))throw new Error('来源地址不可用');window.open(source.url,'_blank','noopener,noreferrer');return;}
+    case 'learning_open_source':{const pack=await portableLearningPack(bookId),source=pack.source_claims.find((s:any)=>s.id===args.sourceId);if(!source?.url||!/^https:\/\//.test(source.url))throw new Error('来源地址不可用');window.open(source.url,'_blank','noopener,noreferrer');return;}
     case 'learning_resource_info':{const book=portableBooks.get(bookId),asset=book?.book.resources.find((r:any)=>r.id===args.assetId);if(!asset)throw new Error('资源未登记');return{path:asset.logicalPath,sha256:asset.sha256,bytes:asset.bytes};}
     case 'learning_export':{if(args.activityId){const draft=read(`draft:${bookId}:${args.activityId}`,null);if(!draft)throw new Error('还没有自己的代码');download('我的代码-'+args.activityId+'.py',draft.code,'text/plain');}else{const study=read(`study:${bookId}`,{notes:[]});download('本书笔记.md',study.notes.map((n:any)=>`## ${n.chapter}\n\n${n.text}\n\n`).join(''),'text/markdown');}return '浏览器下载';}
     case 'learning_authorize_edit':case 'learning_authorize_training':throw new Error('浏览器不能授予本机执行权限，请在桌面阅读器中选择运行环境。');

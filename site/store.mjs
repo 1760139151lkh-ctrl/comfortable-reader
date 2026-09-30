@@ -20,7 +20,25 @@ export class LocalStore {
     });
   }
   async getChunk(hash){return await this.action('chunks','readonly','get',hash);}
+  // Presence is not integrity; acquisition checks the declared length and digest.
   async hasChunk(hash){return Boolean(await this.getChunk(hash));}
+  async removeChunkIfUnchanged(hash,observed){
+    await this.open();return await new Promise((resolve,reject)=>{
+      const transaction=this.database.transaction('chunks','readwrite'),store=transaction.objectStore('chunks');
+      const request=store.get(hash);let removed=false;
+      request.onsuccess=()=>{
+        const current=request.result;
+        let unchanged=!(observed instanceof ArrayBuffer) && current!==undefined && !(current instanceof ArrayBuffer);
+        if(observed instanceof ArrayBuffer && current instanceof ArrayBuffer && observed.byteLength===current.byteLength){
+          unchanged=true;const before=new Uint8Array(observed),now=new Uint8Array(current);
+          for(let i=0;i<before.length;i++)if(before[i]!==now[i]){unchanged=false;break;}
+        }
+        if(unchanged){store.delete(hash);removed=true;}
+      };
+      request.onerror=()=>reject(request.error);
+      transaction.oncomplete=()=>resolve(removed);transaction.onerror=()=>reject(transaction.error);transaction.onabort=()=>reject(transaction.error);
+    });
+  }
   async putChunk(hash,buffer){
     if(!/^[a-f0-9]{64}$/.test(hash)||!(buffer instanceof ArrayBuffer))throw new Error('下载分块身份无效');
     try{await this.action('chunks','readwrite','put',hash,buffer);}

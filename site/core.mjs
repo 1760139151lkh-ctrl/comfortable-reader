@@ -153,6 +153,15 @@ async function fetchVerifiedBody(url, identity, signal, maxBytes) {
   return bytes;
 }
 export function resourceUnits(res) {return res.chunks??[res];}
+async function verifiedCachedChunk(store,unit) {
+  entryBytes(unit,128*1024*1024);
+  const value=await store.getChunk(unit.sha256);
+  if(value===undefined)return null;
+  if(value instanceof ArrayBuffer && value.byteLength===unit.bytes && await sha256(value)===unit.sha256)return value;
+  if(store.removeChunkIfUnchanged)await store.removeChunkIfUnchanged(unit.sha256,value);
+  else await store.removeChunk(unit.sha256);
+  return null;
+}
 export function selection(book, kind, selectedId, optionals=[]) {
   validateBook(book);
   let chosen=[];
@@ -175,7 +184,11 @@ export function selection(book, kind, selectedId, optionals=[]) {
     for(const key of optionals){if(!a.optional.includes(key))fail('所选额外资源不属于此活动');const r=book.resources.find(r=>r.id===key);chosen.push({...r,required:false,reason:'你额外选择的资源'});}
   } else fail('未知选择范围');
   if(book.reader&&['book','chapter','activity'].includes(kind)){
-    for(const entry of book.reader.support??[])chosen.push({id:'reader:'+entry.path,title:'目录与阅读样式',kind:'metadata',...entry,required:true,reason:'离线阅读所需的目录、出处与样式'});
+    for(const entry of book.reader.support??[]){
+      const type=entry.path===book.reader.package?.path?'package':/\.css$/i.test(entry.path)?'style':/\.ncx$/i.test(entry.path)?'legacy-navigation':'navigation';
+      const labels={package:['书籍结构信息','保持章节顺序、文件身份与阅读入口'],style:['正文排版样式','离线时保持文字、公式与图表排版'],'legacy-navigation':['目录兼容信息','保持电子书目录在不同阅读环境中的对应关系'],navigation:['全书目录','显示章节和配套资料入口；不包含其他章的正文']};
+      const [title,reason]=labels[type];chosen.push({id:'reader:'+entry.path,title,kind:'metadata',...entry,required:true,reason});
+    }
     if(book.studyDescriptor)chosen.push({id:'study-descriptor',title:'随书学习说明',kind:'metadata',...book.studyDescriptor,required:true,reason:'来源、活动和资源的说明，不含运行环境'});
     for(const item of [...chosen])if(item.kind==='chapter'){
       const chapter=book.chapters.find(c=>'chapter:'+c.id===item.id);
@@ -198,23 +211,28 @@ export function selection(book, kind, selectedId, optionals=[]) {
 }
 export async function planSelection(store,book,kind,selectedId,optionals=[]) {
   const items=selection(book,kind,selectedId,optionals);
-  const missing=new Set(),available=new Set();
+  const checked=new Map();let addedBytes=0,alreadyPresentBytes=0;
   for(const item of items){
     let ready=true;
     for(const unit of resourceUnits(item)) {
-      if(await store.hasChunk(unit.sha256)){available.add(unit.sha256);continue;}
-      ready=false;missing.add(unit.sha256);
+      let cached=checked.get(unit.sha256);
+      if(cached && cached.bytes!==unit.bytes)fail('同一分块的大小声明不一致');
+      if(!cached){
+        cached={bytes:unit.bytes,ready:!!await verifiedCachedChunk(store,unit)};
+        checked.set(unit.sha256,cached);
+        if(cached.ready)alreadyPresentBytes+=unit.bytes;else addedBytes+=unit.bytes;
+      }
+      if(!cached.ready)ready=false;
     }
     item.cached=ready;
   }
-  const addedBytes=items.flatMap(resourceUnits).filter(u=>missing.has(u.sha256)).filter((u,i,all)=>all.findIndex(x=>x.sha256===u.sha256)===i).reduce((n,x)=>n+x.bytes,0);
-  return {items,addedBytes,alreadyPresentBytes:items.flatMap(resourceUnits).filter(u=>available.has(u.sha256)).filter((u,i,all)=>all.findIndex(x=>x.sha256===u.sha256)===i).reduce((n,x)=>n+x.bytes,0)};
+  return {items,addedBytes,alreadyPresentBytes};
 }
 export async function acquire(store,bookUrl,item,{signal,onProgress}={}) {
   const units=resourceUnits(item);let finished=0;
   for(const unit of units){
     if(signal?.aborted) throw new DOMException('下载已取消；已核分块保留以便继续','AbortError');
-    if(await store.hasChunk(unit.sha256)){finished++;onProgress?.(finished,units.length);continue;}
+    if(await verifiedCachedChunk(store,unit)){finished++;onProgress?.(finished,units.length);continue;}
     const url=resolveBookPath(bookUrl,unit.path);
     const bytes=await fetchVerified(url,unit,signal,item.kind==='chapter'||item.kind==='metadata'?64*1024*1024:128*1024*1024);
     await store.putChunk(unit.sha256,bytes);finished++;onProgress?.(finished,units.length);
@@ -224,11 +242,8 @@ export async function acquire(store,bookUrl,item,{signal,onProgress}={}) {
 export async function materialize(store,item) {
   const units=resourceUnits(item),parts=[];let length=0;
   for(const unit of units){
-    const value=await store.getChunk(unit.sha256);
-    if(!(value instanceof ArrayBuffer) || value.byteLength!==unit.bytes || await sha256(value)!==unit.sha256){
-      if(value!==undefined) await store.removeChunk(unit.sha256);
-      throw new Error('已保存分块缺失或损坏；请重新准备这份资源');
-    }
+    const value=await verifiedCachedChunk(store,unit);
+    if(!value)throw new Error('已保存分块缺失或损坏；请重新准备这份资源');
     parts.push(new Uint8Array(value));length+=value.byteLength;
   }
   if(length!==item.bytes || length>128*1024*1024)throw new Error('资源总长度或读取预算不符');

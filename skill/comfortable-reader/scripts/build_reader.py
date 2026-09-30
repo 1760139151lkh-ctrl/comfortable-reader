@@ -1037,17 +1037,16 @@ def validate_html(path: Path, columns: str, theme: str) -> None:
 
 
 def open_artifact(reader: str, html_path: Path | None, epub_path: Path | None) -> tuple[str, str]:
-    viewer = find_calibre_executable("ebook-viewer")
-    selected = reader
-    if reader == "auto":
-        selected = "calibre" if viewer and epub_path else "html"
-    if selected == "calibre":
+    if reader == "calibre":
+        viewer = find_calibre_executable("ebook-viewer")
         if not viewer:
             raise BuildError("calibre E-book Viewer was requested but ebook-viewer.exe was not found.")
         if not epub_path or not epub_path.is_file():
             raise BuildError("calibre E-book Viewer was requested but no EPUB was generated.")
         subprocess.Popen([str(viewer), str(epub_path)])
         return "calibre", str(viewer)
+    if reader != "html":
+        raise BuildError("--open 仅用于临时兼容预览；请明确指定 --reader html 或 --reader calibre。")
     if not html_path or not html_path.is_file():
         raise BuildError("The HTML reader was requested, but no HTML fallback was generated.")
     if os.name == "nt":
@@ -1075,8 +1074,8 @@ def parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument("--add-to-library", action="store_true", help="Add the EPUB to a persistent calibre library")
     parser.add_argument("--library", type=Path, help="calibre library path; auto-detected when omitted")
     parser.add_argument("--open-library", action="store_true", help="Open the calibre desktop library after import")
-    parser.add_argument("--open", action="store_true", dest="open_after", help="Open after successful generation")
-    parser.add_argument("--reader", choices=("auto", "html", "calibre"), default="auto")
+    parser.add_argument("--open", action="store_true", dest="open_after", help="Open an explicitly selected temporary compatibility preview; not the Comfortable Reader app")
+    parser.add_argument("--reader", choices=("auto", "html", "calibre"), help="Required with --open: explicitly choose html or calibre; auto no longer launches an app")
     return parser.parse_args(argv)
 
 
@@ -1122,6 +1121,10 @@ def main(argv: list[str] | None = None) -> int:
             raise BuildError("--source-reference requires an EPUB; remove --no-epub.")
         if args.library and not (args.add_to_library or args.open_library):
             raise BuildError("--library is only meaningful with --add-to-library or --open-library.")
+        if args.open_after and args.reader not in ("html", "calibre"):
+            raise BuildError("--open 不会自动选择或启动其他软件；临时兼容预览须明确指定 --reader html 或 --reader calibre。")
+        if args.open_after and ((args.reader == "html" and args.no_html) or (args.reader == "calibre" and args.no_epub)):
+            raise BuildError("所选临时预览对象未生成；请调整 --reader 与 --no-html/--no-epub。")
 
         fragment, source_kind, raw_identity = load_source(input_path, args.format, warnings)
         fragment = embed_local_images(fragment, input_path.parent, warnings)
@@ -1190,7 +1193,8 @@ def main(argv: list[str] | None = None) -> int:
         opened = None
         if args.open_after:
             opened_reader, opened_with = open_artifact(args.reader, output_path, epub_path)
-            opened = {"reader": opened_reader, "with": opened_with}
+            opened = {"reader": opened_reader, "with": opened_with,
+                      "scope": "temporary_compatibility_preview", "desktop_verified": False}
         library_opened_with = open_calibre_library(library_path) if args.open_library and library_path else None
 
         result = {

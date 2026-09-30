@@ -1,8 +1,82 @@
-.collection-panel{color:var(--text,#35382f);background:var(--panel,#fbfaf6);border:1px solid var(--border,#d9d7cf);border-radius:18px;padding:28px;width:min(880px,calc(100vw - 40px));max-height:calc(100vh - 56px);overflow:auto;box-shadow:0 20px 90px #0003;font:15px/1.6 system-ui,sans-serif}
-.collection-panel::backdrop{background:#10181660;backdrop-filter:blur(5px)}
-.collection-panel header{display:flex;justify-content:space-between;gap:24px;align-items:flex-start}.collection-panel h1{font:500 clamp(28px,4vw,40px)/1.3 Georgia,'Noto Serif SC',serif;margin:8px 0}.collection-panel h2{font-size:22px;font-weight:550;margin:5px 0 12px}.collection-eyebrow{font-size:12px;letter-spacing:.1em;color:var(--muted,#797c72)}.collection-intro{margin:5px 0 30px;color:var(--muted,#797c72)}
-.collection-panel button{cursor:pointer}.collection-panel header button{flex-shrink:0}.catalogue-grid{display:grid;gap:22px;grid-template-columns:1fr}.catalogue-book{display:grid;grid-template-columns:150px 1fr;gap:24px;padding:20px 0;border-top:1px solid var(--border,#d9d7cf)}.catalogue-book h2{font-family:Georgia,'Noto Serif SC',serif}.catalogue-book p{max-width:48em;color:var(--muted,#797c72);margin:8px 0 18px}.catalogue-cover{min-height:185px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;background:#526459;color:#f7f6ea;box-shadow:inset 5px 0 #0002;border-radius:2px 7px 7px 2px}.catalogue-book:nth-child(2n) .catalogue-cover{background:#8f6852}.catalogue-cover span{opacity:.7;font-size:12px}.catalogue-cover strong{font:500 20px/1.5 Georgia,serif;writing-mode:vertical-rl;max-height:140px;align-self:flex-end}.catalogue-footer,.collection-help{font-size:13px;color:var(--muted,#797c72);margin-top:22px}.catalogue-footer{border-top:1px solid var(--border,#d9d7cf);padding-top:12px}
-.catalogue-address{max-width:600px}.catalogue-address input{display:block;width:100%;margin-top:8px;padding:12px;border:1px solid #bbb9ae;border-radius:6px;background:transparent;color:inherit}.catalogue-address p{font-size:13px}.book-file-actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.download-summary{display:flex;align-items:baseline;gap:12px}.download-summary strong{font-size:26px;font-weight:500}.download-summary span{color:var(--muted,#797c72);font-size:13px}.acquisition-list{list-style:none;padding:0;max-height:42vh;overflow:auto}.acquisition-list li{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--border,#d9d7cf)}.acquisition-list span{display:block;font-size:12px;color:var(--muted,#797c72)}.acquisition-list small{white-space:nowrap}.acquisition-options{padding:12px 0}.acquisition-options label{display:block;padding:6px 0}.collection-panel footer{display:flex;flex-wrap:wrap;gap:10px}.collection-error,.collection-status{font-size:13px}.saved-collections>div{display:flex;gap:15px;justify-content:space-between;padding:12px 0;border-bottom:1px solid #aaa5}.saved-collections button{white-space:nowrap}
-.discover-books{margin:0 16px 12px}.book-files-toggle{font-size:25px;letter-spacing:.05em}
-@media(max-width:600px){.collection-panel{padding:20px;max-height:calc(100vh - 24px);width:calc(100vw - 20px)}.catalogue-book{grid-template-columns:84px 1fr;gap:16px}.catalogue-cover{min-height:150px;padding:12px}.catalogue-cover strong{font-size:16px;max-height:120px}.catalogue-book h2{font-size:20px}.download-summary{flex-wrap:wrap}}
-.edition-records details{padding:16px 0;border-bottom:1px solid var(--border,#ccc)}.edition-records summary{cursor:pointer}.edition-records details>p{white-space:pre-wrap;max-height:180px;overflow:auto}
+/* The existing reader owns surface and type tokens in every theme. */
+.collection-panel {
+  color:var(--text);background:var(--pane-raised);border:1px solid var(--border);
+  border-radius:14px;padding:0;width:min(760px,calc(100vw - 32px));
+  max-height:calc(100vh - 48px);overflow:hidden;box-shadow:var(--shadow);
+  font:14px/1.65 "Segoe UI","Microsoft YaHei UI",system-ui,sans-serif;
+}
+.collection-panel[open] {display:flex;flex-direction:column;}
+.collection-panel[aria-label="发现书籍"] {width:min(880px,calc(100vw - 32px));}
+.collection-panel::backdrop {background:#10181660;backdrop-filter:blur(4px);}
+.collection-panel>header {
+  display:flex;justify-content:space-between;gap:20px;align-items:flex-start;
+  padding:20px 24px 17px;border-bottom:1px solid var(--border);flex:0 0 auto;
+}
+.collection-panel>header>div {min-width:0;}
+.collection-panel h1 {font:500 clamp(25px,3vw,34px)/1.4 Georgia,"Noto Serif SC",serif;margin:5px 0 0;}
+.collection-panel h2 {font-size:20px;line-height:1.5;font-weight:600;margin:4px 0 0;overflow-wrap:anywhere;}
+.collection-panel h3 {font-size:13px;line-height:1.5;font-weight:600;margin:0 0 10px;color:var(--muted);}
+.collection-body {padding:20px 24px 24px;min-height:0;overflow:auto;overscroll-behavior:contain;scrollbar-gutter:stable;}
+.collection-body>:first-child {margin-top:0;}
+.collection-eyebrow {font-size:12px;letter-spacing:.06em;color:var(--muted);}
+.collection-intro {margin:0 0 22px;color:var(--muted);}
+.collection-panel button {cursor:pointer;}
+.collection-panel .primary-action,.collection-panel .secondary-action,.collection-panel [data-export-edition] {
+  flex:0 1 auto;width:auto;min-width:64px;min-height:40px;height:auto;max-width:100%;
+  padding:9px 14px;border-radius:7px;font-family:inherit;font-size:14px;font-weight:500;letter-spacing:normal;
+  line-height:1.5;white-space:normal;overflow-wrap:break-word;
+}
+.collection-panel .primary-action {font-size:14px;font-weight:600;color:var(--on-accent);}
+.collection-panel .secondary-action,.collection-panel [data-export-edition] {color:var(--text);background:var(--pane);border:1px solid var(--border);}
+.collection-panel header button {flex:0 0 auto;white-space:nowrap;}
+.collection-panel [data-export-edition] {font-family:inherit;font-size:14px;}
+.catalogue-grid {display:grid;gap:22px;grid-template-columns:1fr;}
+.catalogue-book {display:grid;grid-template-columns:132px minmax(0,1fr);gap:24px;padding:20px 0;border-top:1px solid var(--border);}
+.catalogue-book h2 {font-family:Georgia,"Noto Serif SC",serif;}
+.catalogue-book p {max-width:48em;color:var(--muted);margin:9px 0 17px;}
+.catalogue-cover {min-height:180px;padding:18px;display:flex;flex-direction:column;justify-content:space-between;background:#526459;color:#f7f6ea;box-shadow:inset 5px 0 #0002;border-radius:2px 7px 7px 2px;}
+.catalogue-book:nth-child(2n) .catalogue-cover {background:#8f6852;}
+.catalogue-cover span {opacity:.85;font-size:12px;}
+.catalogue-cover strong {font:500 19px/1.5 Georgia,serif;writing-mode:vertical-rl;max-height:140px;align-self:flex-end;}
+.catalogue-footer,.collection-help {font-size:13px;color:var(--muted);margin-top:20px;line-height:1.75;}
+.catalogue-footer {border-top:1px solid var(--border);padding-top:14px;}
+.catalogue-address {max-width:600px;}
+.catalogue-address input {display:block;width:100%;margin-top:8px;padding:10px 12px;border:1px solid var(--border);border-radius:6px;background:var(--pane);color:var(--text);}
+.catalogue-address p {font-size:13px;}
+.book-file-groups {display:grid;gap:20px;}
+.book-file-group+.book-file-group {padding-top:18px;border-top:1px solid var(--border);}
+.book-file-actions {display:flex;flex-wrap:wrap;align-items:flex-start;gap:9px;margin:0;}
+.download-summary {display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;}
+.download-summary strong {font-size:25px;line-height:1.4;font-weight:500;}
+.download-summary span {color:var(--muted);font-size:13px;}
+.acquisition-list {list-style:none;padding:0;max-height:38vh;overflow:auto;overscroll-behavior:contain;}
+.acquisition-list li {display:flex;justify-content:space-between;gap:18px;padding:11px 0;border-bottom:1px solid var(--border);}
+.acquisition-list li>div {min-width:0;overflow-wrap:anywhere;}
+.acquisition-list span {display:block;font-size:12px;color:var(--muted);}
+.acquisition-list small {white-space:nowrap;}
+.acquisition-options {padding:12px 0;}
+.acquisition-options label {display:block;padding:6px 0;}
+.collection-panel footer {display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.collection-error,.collection-status {font-size:13px;overflow-wrap:anywhere;}
+.collection-error {color:var(--danger);}
+.saved-collections>div {display:flex;gap:15px;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.saved-collections>div>span {min-width:0;overflow-wrap:anywhere;}
+.saved-collections button {flex:0 0 auto;white-space:nowrap;}
+.discover-books {margin:0 16px 12px;}
+.book-files-toggle {font-size:25px;letter-spacing:.05em;}
+.edition-records details {padding:16px 0;border-bottom:1px solid var(--border);}
+.edition-records summary {cursor:pointer;}
+.edition-records details>p {white-space:pre-wrap;max-height:180px;overflow:auto;}
+@media(max-width:600px) {
+  .collection-panel,.collection-panel[aria-label="发现书籍"] {width:calc(100vw - 24px);max-height:calc(100vh - 32px);border-radius:12px;}
+  .collection-panel>header {padding:17px 18px 14px;gap:14px;}
+  .collection-body {padding:17px 18px 20px;}
+  .collection-panel h2 {font-size:18px;}
+  .collection-panel header button {min-width:56px;padding-inline:10px;}
+  .catalogue-book {grid-template-columns:84px minmax(0,1fr);gap:16px;}
+  .catalogue-cover {min-height:150px;padding:12px;}
+  .catalogue-cover strong {display:none;}
+  .catalogue-cover {min-height:110px;max-height:150px;}
+  .catalogue-cover span {font:500 28px/1.3 Georgia,serif;}
+  .catalogue-book h2 {font-size:18px;}
+}

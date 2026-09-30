@@ -19,7 +19,9 @@ jobs:
         with:
           python-version: '3.13'
       - run: npm ci --ignore-scripts --prefix desktop
-      - run: python tools/prepare_release_assets.py --download
+      - run: python tools/prepare_release_assets.py --download --github-auth
+        env:
+          GH_TOKEN: ${{ github.token }}
       - run: python tools/build_site.py --preview --out site-dist
       - run: python tools/build_site.py --preview --books-dir examples/books --reader-dist desktop/dist --out site-dist-r01
       - run: node --test tests/core.test.mjs

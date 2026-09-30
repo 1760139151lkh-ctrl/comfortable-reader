@@ -19,7 +19,7 @@ export async function invoke<T=unknown>(command:string,args:Record<string,any>={
     if(nativeLearningBooks.has(args.bookId)&&command.startsWith('learning_'))return await nativeInvoke<T>(command,args);
     if(command==='learning_asset')return await portableAsset(args.bookId,args.assetId) as T;
     if(command==='learning_run'&&portableBooks.get(args.bookId)!.book.activities.find((a:any)=>a.id===args.activityId)?.capability==='least-squares@1')return await runBuiltin(args);
-    if(command==='learning_open_source'&&isDesktop){const source=portableLearningPack(args.bookId).source_claims.find((s:any)=>s.id===args.sourceId);if(!source?.url)throw new Error('来源地址未登记');return await nativeInvoke('learning_open_external',{url:source.url});}
+    if(command==='learning_open_source'&&isDesktop){const source=(await portableLearningPack(args.bookId)).source_claims.find((s:any)=>s.id===args.sourceId);if(!source?.url)throw new Error('来源地址未登记');return await nativeInvoke('learning_open_external',{url:source.url});}
     if(['learning_open_source','learning_resource_info'].includes(command))return await webInvoke(command,args);
   }
   return isDesktop?await nativeInvoke<T>(command,args):await webInvoke(command,args);

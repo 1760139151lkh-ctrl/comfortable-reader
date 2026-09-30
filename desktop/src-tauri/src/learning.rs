@@ -137,6 +137,41 @@ fn saved_draft_path(root: &Path, activity: &str) -> Result<PathBuf, String> {
     Ok(root.join("drafts").join(format!("{activity}.json")))
 }
 
+fn read_draft_revision(root: &Path, activity: &str, revision: &str) -> Result<Value, String> {
+    token(activity)?;
+    if revision.len() != 64 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
+        return Err("无效的代码版本".into());
+    }
+    let relative = format!("drafts/{activity}/versions/{revision}.json");
+    let path = safe_path(root, &relative)?;
+    let mut file = File::open(path).map_err(|e| e.to_string())?;
+    if file.metadata().map_err(|e| e.to_string())?.len() > 400_000 {
+        return Err("资料超过读取预算".into());
+    }
+    let mut bytes = Vec::new();
+    std::io::Read::by_ref(&mut file)
+        .take(400_001)
+        .read_to_end(&mut bytes)
+        .map_err(|e| e.to_string())?;
+    if bytes.len() > 400_000 {
+        return Err("资料超过读取预算".into());
+    }
+    let value: Value =
+        serde_json::from_slice(&bytes).map_err(|e| format!("资料格式错误：{e}"))?;
+    let code = text(&value, "code")?;
+    if code.len() > 300_000 {
+        return Err("代码超过本次编辑预算".into());
+    }
+    let hash = digest(code.as_bytes());
+    if text(&value, "sha256")? != hash || !hash.eq_ignore_ascii_case(revision) {
+        return Err("代码历史版本内容与哈希不符".into());
+    }
+    let updated_at = value["updated_at"]
+        .as_u64()
+        .ok_or("代码历史版本缺少保存时间")?;
+    Ok(json!({"code":code,"sha256":hash,"updated_at":updated_at}))
+}
+
 /// Reject ambiguous Windows forms and every reparse component before opening.
 /// Frozen bytes are hashed AFTER opening; those exact bytes, not the path, are used.
 pub fn safe_path(root: &Path, relative: &str) -> Result<PathBuf, String> {
@@ -465,6 +500,14 @@ pub fn learning_save_state(app: AppHandle, book_id: String, value: Value) -> Res
     atomic(&state.join("study-state.json"), &value)
 }
 #[tauri::command]
+pub fn learning_raw_state(app: AppHandle, book_id: String) -> Result<Value, String> {
+    let path = user_storage(&app, &book_id)?.join("study-state.json");
+    let metadata = fs::metadata(&path).map_err(|e| format!("原始记录暂时无法读取：{e}"))?;
+    if metadata.len() > 16 * 1024 * 1024 { return Err("原始记录超过备份读取范围；原文件仍保留，请先另存本机原件".into()); }
+    let bytes = fs::read(&path).map_err(|e| e.to_string())?;
+    Ok(json!({"name":format!("原始学习记录-{book_id}.json"),"sha256":digest(&bytes),"bytes":bytes}))
+}
+#[tauri::command]
 pub fn learning_save_draft(
     app: AppHandle,
     book_id: String,
@@ -516,7 +559,7 @@ pub fn learning_import_draft(app:AppHandle,book_id:String,activity_id:String,cod
     let state=user_storage(&app,&book_id)?;
     let hash=digest(code.as_bytes());let value=json!({"code":code,"sha256":hash,"updated_at":super::now_secs(),"provenance":"explicit_personal_import"});
     let version=state.join("drafts").join(&activity_id).join("versions").join(format!("{hash}.json"));
-    if !version.exists(){atomic(&version,&value)?;}
+    if version.exists(){read_draft_revision(&state,&activity_id,&hash)?;}else{atomic(&version,&value)?;}
     let current=saved_draft_path(&state,&activity_id)?;if !current.exists(){atomic(&current,&value)?;}
     Ok(())
 }
@@ -667,6 +710,33 @@ pub fn learning_authorize_training(
     )
 }
 
+fn draft_activity_ids(state: &Path) -> Result<Vec<String>, String> {
+    let folder = state.join("drafts");
+    match fs::symlink_metadata(&folder) {
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Ok(Vec::new()),
+        Err(error) => return Err(error.to_string()),
+        Ok(_) => {}
+    }
+    let folder = safe_path(state, "drafts")?;
+    let mut ids = std::collections::BTreeSet::new();
+    for item in fs::read_dir(folder).map_err(|e| e.to_string())? {
+        let item = item.map_err(|e| e.to_string())?;
+        let name = item.file_name();
+        let Some(name) = name.to_str() else { continue; };
+        let kind = item.file_type().map_err(|e| e.to_string())?;
+        let id = if kind.is_dir() { name } else if let Some(id) = name.strip_suffix(".json") { id } else { continue; };
+        token(id)?;
+        safe_path(state, &format!("drafts/{name}"))?;
+        ids.insert(id.to_owned());
+        if ids.len() > 2000 { return Err("代码活动数量超过单次导出范围".into()); }
+    }
+    Ok(ids.into_iter().collect())
+}
+#[tauri::command]
+pub fn learning_draft_activities(app: AppHandle, book_id: String) -> Result<Vec<String>, String> {
+    draft_activity_ids(&user_storage(&app, &book_id)?)
+}
+
 #[tauri::command]
 pub fn learning_draft_versions(
     app: AppHandle,
@@ -677,18 +747,34 @@ pub fn learning_draft_versions(
     let state = user_storage(&app, &book_id)?;
     let folder = state.join("drafts").join(&activity_id).join("versions");
     let mut versions = Vec::new();
-    if folder.exists() {
-        for item in fs::read_dir(folder)
-            .map_err(|e| e.to_string())?
-            .filter_map(Result::ok)
-        {
-            if let Ok(value) = read_json(&item.path(), 400_000) {
-                versions.push(json!({"sha256":value["sha256"],"updated_at":value["updated_at"],"bytes":value["code"].as_str().unwrap_or("").len()}));
+    match fs::symlink_metadata(&folder) {
+        Err(error) if error.kind() == std::io::ErrorKind::NotFound => {}
+        Err(error) => return Err(error.to_string()),
+        Ok(_) => {
+            let safe_folder = safe_path(&state, &format!("drafts/{activity_id}/versions"))?;
+            for item in fs::read_dir(safe_folder).map_err(|e| e.to_string())? {
+                let item = item.map_err(|e| e.to_string())?;
+                let name = item.file_name();
+                let Some(revision) = name.to_str().and_then(|s| s.strip_suffix(".json")) else {
+                    continue;
+                };
+                let value = read_draft_revision(&state, &activity_id, revision)?;
+                versions.push(json!({"sha256":value["sha256"],"updated_at":value["updated_at"],"bytes":text(&value,"code")?.len()}));
             }
         }
     }
     versions.sort_by_key(|v| std::cmp::Reverse(v["updated_at"].as_u64().unwrap_or(0)));
     Ok(json!(versions))
+}
+#[tauri::command]
+pub fn learning_draft_revision(
+    app: AppHandle,
+    book_id: String,
+    activity_id: String,
+    revision: String,
+) -> Result<Value, String> {
+    let state = user_storage(&app, &book_id)?;
+    read_draft_revision(&state, &activity_id, &revision)
 }
 #[tauri::command]
 pub fn learning_restore_draft(
@@ -697,17 +783,8 @@ pub fn learning_restore_draft(
     activity_id: String,
     revision: String,
 ) -> Result<Value, String> {
-    token(&activity_id)?;
-    if revision.len() != 64 || !revision.bytes().all(|b| b.is_ascii_hexdigit()) {
-        return Err("无效的代码版本".into());
-    }
     let state = user_storage(&app, &book_id)?;
-    let file = state
-        .join("drafts")
-        .join(&activity_id)
-        .join("versions")
-        .join(format!("{revision}.json"));
-    let value = read_json(&file, 400_000)?;
+    let value = read_draft_revision(&state, &activity_id, &revision)?;
     learning_save_draft(app, book_id, activity_id, text(&value, "code")?.to_owned())
 }
 #[tauri::command]
@@ -1413,6 +1490,41 @@ mod tests {
         assert_eq!(verified(d.path(), "a.txt", &h, 100).unwrap(), b"original");
         fs::write(d.path().join("a.txt"), b"changed").unwrap();
         assert!(verified(d.path(), "a.txt", &h, 100).is_err());
+    }
+    #[test]
+    fn draft_activity_listing_keeps_retired_history_without_a_pack() {
+        let d = tempfile::tempdir().unwrap();
+        assert!(draft_activity_ids(d.path()).unwrap().is_empty());
+        fs::create_dir_all(d.path().join("drafts/retired/versions")).unwrap();
+        fs::write(d.path().join("drafts/current.json"), b"{}").unwrap();
+        fs::write(d.path().join("drafts/current.writing"), b"{}").unwrap();
+        fs::create_dir_all(d.path().join("drafts/current/versions")).unwrap();
+        assert_eq!(draft_activity_ids(d.path()).unwrap(), vec!["current", "retired"]);
+    }
+    #[test]
+    fn draft_revision_reads_only_matching_bounded_code() {
+        let d = tempfile::tempdir().unwrap();
+        let code = "print(42)\n";
+        let hash = digest(code.as_bytes());
+        let folder = d.path().join("drafts").join("activity").join("versions");
+        fs::create_dir_all(&folder).unwrap();
+        let file = folder.join(format!("{hash}.json"));
+        let current = d.path().join("drafts").join("activity.json");
+        fs::write(&current, b"current stays unchanged").unwrap();
+        atomic(&file, &json!({"code":code,"sha256":hash,"updated_at":7})).unwrap();
+
+        assert_eq!(
+            read_draft_revision(d.path(), "activity", &hash).unwrap(),
+            json!({"code":code,"sha256":hash,"updated_at":7})
+        );
+        assert_eq!(fs::read(&current).unwrap(), b"current stays unchanged");
+        assert!(read_draft_revision(d.path(), "../activity", &hash).is_err());
+        assert!(read_draft_revision(d.path(), "activity", "../version").is_err());
+
+        atomic(&file, &json!({"code":"changed","sha256":hash,"updated_at":7})).unwrap();
+        assert!(read_draft_revision(d.path(), "activity", &hash).is_err());
+        atomic(&file, &json!({"code":code,"sha256":hash,"updated_at":7,"padding":"x".repeat(400_000)})).unwrap();
+        assert!(read_draft_revision(d.path(), "activity", &hash).is_err());
     }
     #[test]
     fn limits_are_real() {

@@ -43,6 +43,8 @@ Then use an isolated long structured fixture and capture evidence for:
 
 For each item record `installed_app`, `fixture_or_book_id`, `before`, `after`, `evidence_path`, and `status`. A browser screenshot or a mock IPC response must be marked as such and cannot be reported as installed-app verification.
 
+For visual and interaction regressions, inspect text buttons separately from fixed-size icon buttons, check computed foreground/background colors after each theme change, and make the last control reachable in short viewports by actual panel scrolling and keyboard navigation. Save real screenshots together with element bounds, scroll dimensions, focus/ARIA state, and the interaction that produced them. A source patch or isolated CSS experiment remains pending until the affected browser and installed-app paths are retested; use the review breadth requested for the current task rather than fixing a reviewer count into every future task.
+
 ## Resize and density rules
 
 Read [dynamic-pagination-contract.md](dynamic-pagination-contract.md) before modifying layout. The hot resize path updates one compositor transform only. It does not call EPUB reflow, clear views, regenerate locations, change CFI, update headers, or show a loading layer. Fixed-mode resize is presentation-only.

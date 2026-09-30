@@ -6,7 +6,7 @@ export async function mountImage(parent: HTMLElement, url: string, title: string
   let zoom=Math.min(8,Math.max(1,Number(saved?.zoom)||1)),x=Number(saved?.x)||.5,y=Number(saved?.y)||.5,disposed=false;
   const control=new AbortController(),options={signal:control.signal};
   function remember(){x=(viewport.scrollLeft+viewport.clientWidth/2)/Math.max(1,img.width);y=(viewport.scrollTop+viewport.clientHeight/2)/Math.max(1,img.height);onChange({zoom,x,y});}
-  function draw(){if(disposed)return;const width=Math.min(img.naturalWidth,Math.max(100,viewport.clientWidth-24));img.style.width=`${Math.round(width*zoom)}px`;img.style.maxWidth='none';label.textContent=`${Math.round(zoom*100)}% · 原图 ${img.naturalWidth} × ${img.naturalHeight}`;viewport.scrollLeft=x*img.width-viewport.clientWidth/2;viewport.scrollTop=y*img.height-viewport.clientHeight/2;}
+  function draw(){if(disposed)return;const width=Math.min(img.naturalWidth,Math.max(24,viewport.clientWidth-24),img.naturalWidth*Math.max(24,viewport.clientHeight-24)/Math.max(1,img.naturalHeight));img.style.width=`${Math.round(width*zoom)}px`;img.style.maxWidth='none';label.textContent=`${Math.round(zoom*100)}% · 原图 ${img.naturalWidth} × ${img.naturalHeight}`;viewport.scrollLeft=x*img.width-viewport.clientWidth/2;viewport.scrollTop=y*img.height-viewport.clientHeight/2;}
   parent.querySelector('.image-fit')!.addEventListener('click',()=>{zoom=1;x=y=.5;draw();remember();},options);
   parent.querySelector('.image-in')!.addEventListener('click',()=>{zoom=Math.min(8,zoom*1.5);draw();remember();},options);
   parent.querySelector('.image-out')!.addEventListener('click',()=>{zoom=Math.max(1,zoom/1.5);draw();remember();},options);

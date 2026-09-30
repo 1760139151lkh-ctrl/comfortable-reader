@@ -1,6 +1,6 @@
 [package]
 name = "comfortable-reader-desktop"
-version = "0.5.0"
+version = "0.5.2"
 description = "A local multi-book EPUB reader with persistent progress"
 edition = "2021"
 

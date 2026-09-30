@@ -2,23 +2,23 @@
 
 **选一章，顺着问题读下去。** 同一本书可以翻页、多栏或连续滚动；需要时打开随书学习，查看来源、代码、声音与三维材料，再回到原段落。
 
-[开始在线阅读](https://1760139151lkh-ctrl.github.io/comfortable-reader/) · [下载 Windows 版](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/tag/v0.5.1) · [读者指南](docs/READER.md) · [贡献一本书](CONTRIBUTING.md) · [让 Codex 加入](docs/CODEX.md)
+[下载 Windows 版](https://github.com/1760139151lkh-ctrl/comfortable-reader/releases/latest) · [读者指南](docs/READER.md) · [贡献一本书](CONTRIBUTING.md) · [让 Codex 加入](docs/CODEX.md)
 
-阅读无需账号、无需克隆源码，也无需安装 Python 或 GPU 环境。本站使用桌面版的同一套阅读与学习界面。阅读方式与主题分别设置，笔记留在自己的设备；目前通过主动导入、导出迁移个人记录，没有自动上传或跨端同步。
+仓库可见性、Release 获取权限及公共站点状态以 GitHub 当前设置为准。本地阅读和自行构建的站点不要求 AI 账号、Python 或 GPU 环境。网页与桌面使用同一套阅读与学习界面。阅读方式与主题分别设置，笔记留在自己的设备；目前通过主动导入、导出迁移个人记录，没有自动上传或跨端同步。
 
 ## 正式书目
 
 | 书籍 | 从哪里开始 |
 | --- | --- |
-| [人工智能原理：从学习机制到可运行系统](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=ai-principles&chapter=c01) | 导读与 47 章，从经验怎样改变规则，走向语言、视觉、行动和系统 |
-| [数学定理等价性](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=mathematical-equivalence) | 公式、句子、证明、弱背景与问题归约 |
-| [有限元方法：从直觉到可靠计算](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=finite-element-method) | 弱形式、基函数、矩阵组装与误差 |
-| [智能优化算法简介](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=intelligent-optimization) | 表示、评价、搜索、选择和可比较的实验 |
-| [模糊规划：把“差不多”变成可计算的决定](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=fuzzy-programming) | 模糊目标、软约束与满意度 |
-| [综合评价方法：从指标、权重到可信结论](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=comprehensive-evaluation) | 指标、权重、AHP、TOPSIS、PCA 与 DEA |
-| [运筹学分类检查：建模流程完整闭环](https://1760139151lkh-ctrl.github.io/comfortable-reader/?book=operations-research) | 从识别问题，到建模、求解、验证和反馈 |
+| [人工智能原理：从学习机制到可运行系统](books/ai-principles) | 导读与 47 章，从经验怎样改变规则，走向语言、视觉、行动和系统 |
+| [数学定理等价性](books/mathematical-equivalence) | 公式、句子、证明、弱背景与问题归约 |
+| [有限元方法：从直觉到可靠计算](books/finite-element-method) | 弱形式、基函数、矩阵组装与误差 |
+| [智能优化算法简介](books/intelligent-optimization) | 表示、评价、搜索、选择和可比较的实验 |
+| [模糊规划：把“差不多”变成可计算的决定](books/fuzzy-programming) | 模糊目标、软约束与满意度 |
+| [综合评价方法：从指标、权重到可信结论](books/comprehensive-evaluation) | 指标、权重、AHP、TOPSIS、PCA 与 DEA |
+| [运筹学分类检查：建模流程完整闭环](books/operations-research) | 从识别问题，到建模、求解、验证和反馈 |
 
-三本短小的合成数据样书放在 [examples](examples/)，供创作和测试使用，不列入正式书目。软件快速入门、阅读器验收样章和无全文再分发授权的第三方出版物没有进入发行物。
+三本短小的合成数据样书放在 [examples](examples/)，供创作和测试使用，不列入正式书目。软件快速入门、阅读器验收样章和无全文再分发授权的第三方出版物不进入可分发书目。维护 checkout 中的 `private-books` 个人归档不属于 `release-files.json`、站点、技能包或源码发行包；可分发清单不能证明整个 Git 历史已获得公开授权。
 
 ## 阅读与实践
 
@@ -47,7 +47,7 @@ Python 3.11+、Node.js 22+。仅预览自己的小书不需要公共教材的大
 
 ```text
 npm ci --ignore-scripts --prefix desktop
-python tools/prepare_release_assets.py --download
+python tools/prepare_release_assets.py --download --github-auth
 python tools/build_site.py --release --out site-dist
 python tools/serve_preview.py site-dist
 ```

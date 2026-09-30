@@ -1,12 +1,12 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "舒适阅读书库",
-  "version": "0.5.0",
+  "version": "0.5.2",
   "identifier": "com.comfortablereader.desktop",
   "build": {
     "beforeDevCommand": "npm run dev",
     "devUrl": "http://localhost:1420",
-    "beforeBuildCommand": "npm run build",
+    "beforeBuildCommand": "python ../tools/reader_build_receipt.py build",
     "frontendDist": "../dist"
   },
   "app": {
@@ -22,7 +22,8 @@
         "resizable": true,
         "maximized": false,
         "fullscreen": false,
-        "decorations": true
+        "decorations": true,
+        "zoomHotkeysEnabled": true
       }
     ],
     "security": {

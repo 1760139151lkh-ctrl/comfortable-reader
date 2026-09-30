@@ -22,7 +22,9 @@ jobs:
         with:
           python-version: '3.13'
       - run: npm ci --ignore-scripts --prefix desktop
-      - run: python tools/prepare_release_assets.py --download
+      - run: python tools/prepare_release_assets.py --download --github-auth
+        env:
+          GH_TOKEN: ${{ github.token }}
       - run: python tools/audit_release.py --report source-audit.json
       - run: python tools/build_site.py --release --out site-dist
       - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import {fileURLToPath} from 'node:url';
-import {join,dirname} from 'node:path';
+import {join,dirname,resolve} from 'node:path';
 import {validateCatalog,validateBook,validateChapter,selection,planSelection,validPath,resourceUnits} from '../site/core.mjs';
 import {leastSquares,parsePairs} from '../site/engine.mjs';
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
-const built=join(root,process.env.SITE_DIST??'site-dist');
+const built=resolve(root,process.env.SITE_DIST??'site-dist');
 const json=async relative=>JSON.parse(await readFile(join(built,relative),'utf8'));
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 
@@ -37,11 +37,36 @@ test('a chapter and one activity do not pull the next chapter or sibling experim
   const withCode=selection(book,'activity','fit-three',['python-fit']);assert.deepEqual(selectedContent(withCode),['chapter:c01','three-points','python-fit']);
   assert.ok(resourceUnits(withCode.find(x=>x.id==='python-fit')).length>1);
   assert.ok(withCode.filter(x=>x.kind==='metadata').every(x=>!x.path.includes('chapter-c02')));
-  const stored=new Set(resourceUnits(book.resources.find(r=>r.id==='python-fit')).map(x=>x.sha256));
-  const fake={hasChunk:async x=>stored.has(x)};const plan=await planSelection(fake,book,'activity','fit-three',['python-fit']);
+  const stored=new Map(await Promise.all(resourceUnits(book.resources.find(r=>r.id==='python-fit')).map(async unit=>{
+    const bytes=await readFile(join(built,'books/measurement-lab',unit.path));
+    return [unit.sha256,bytes.buffer.slice(bytes.byteOffset,bytes.byteOffset+bytes.byteLength)];
+  })));
+  const fake={getChunk:async x=>stored.get(x),removeChunk:async x=>stored.delete(x)};
+  const plan=await planSelection(fake,book,'activity','fit-three',['python-fit']);
   assert.equal(plan.items.find(x=>x.id==='python-fit').cached,true);
   assert.equal(plan.addedBytes,book.chapters[0].readingDocument.bytes+book.resources.find(x=>x.id==='three-points').bytes+book.reader.support.reduce((n,x)=>n+x.bytes,0));
   assert.ok(!plan.items.some(x=>x.id==='outlier-points'||x.id==='chapter:c02'));
+});
+test('a damaged selected cache entry is counted missing on the first plan without touching other chapters',async()=>{
+  const bytes=values=>Uint8Array.from(values).buffer;
+  const body=bytes([1,2,3,4]),resource=bytes([5,6,7]),other=bytes([8,9]);
+  const bodyHash=sha(Buffer.from(body)),resourceHash=sha(Buffer.from(resource)),otherHash=sha(Buffer.from(other));
+  const book={schemaVersion:1,id:'urn:uuid:00000000-0000-4000-8000-000000000001',revision:'0.1.0',slug:'cache-test',chapters:[
+    {id:'c01',title:'One',body:{path:'one.json',bytes:4,sha256:bodyHash},essential:['shared']},
+    {id:'c02',title:'Two',body:{path:'two.json',bytes:2,sha256:otherHash}},
+  ],resources:[{id:'shared',kind:'text',logicalPath:'shared.txt',path:'shared.txt',bytes:3,sha256:resourceHash}],activities:[],sources:[]};
+  const stored=new Map([[bodyHash,bytes([1,2,3,0])],[resourceHash,bytes([5])],[otherHash,other]]);
+  const touched=[];const store={
+    async hasChunk(){throw new Error('仅有键不能证明内容已保存');},
+    async getChunk(key){touched.push(key);return stored.get(key);},
+    async removeChunkIfUnchanged(key,observed){if(stored.get(key)!==observed)return false;stored.delete(key);return true;},
+  };
+  const plan=await planSelection(store,book,'chapter','c01');
+  assert.deepEqual(plan.items.map(x=>x.cached),[false,false]);
+  assert.equal(plan.addedBytes,7);assert.equal(plan.alreadyPresentBytes,0);
+  assert.deepEqual(touched,[bodyHash,resourceHash]);
+  assert.equal(stored.has(bodyHash),false);assert.equal(stored.has(resourceHash),false);
+  assert.strictEqual(stored.get(otherHash),other);
 });
 test('trusted generic arithmetic uses actual classroom rows and rejects bad inputs',async()=>{
   const text=await readFile(join(root,'examples/books/measurement-lab/data/three-points.csv'),'utf8');const rows=parsePairs(text),result=leastSquares(rows,{rate:.12,steps:1});

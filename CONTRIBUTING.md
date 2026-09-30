@@ -34,7 +34,7 @@ python tools/export_epub.py ../my-books/my-book --out ../my-book.epub
 
 ```text
 npm ci --ignore-scripts --prefix desktop
-npm run build --prefix desktop
+python tools/reader_build_receipt.py build
 python tools/build_site.py --preview --books-dir ../my-books --reader-dist desktop/dist --out ../my-preview
 python tools/serve_preview.py ../my-preview
 ```

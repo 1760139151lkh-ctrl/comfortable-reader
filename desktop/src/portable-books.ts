@@ -4,14 +4,18 @@ import {validateCatalog,validateBook,resolveBookPath,resolveCatalogPath,fetchVer
 export const publicStore=new LocalStore('comfortable-reader-content-v1');
 export const portableBooks=new Map<string,PortableBook>();
 export type CatalogRecord={id:string;title:string;author:string;path:string;addedAt:number;lazyPages:null;bookUuid:string;catalogSource:{url:string;sha256:string;bytes:number;slug:string;revision:string;epub?:any}};
-type PortableBook={record:CatalogRecord;book:any;url:string;entries:Map<string,any>;memory:Map<string,ArrayBuffer>;urls:Map<string,string>;study?:any};
+type PortableBook={record:CatalogRecord;book:any;url:string;entries:Map<string,any>;memory:Map<string,ArrayBuffer>;urls:Map<string,string>;study?:any;studyError?:string;studyLoading?:Promise<void>};
 const enc=(value:unknown)=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 export async function portableId(uuid:string):Promise<string>{return (await sha256(new TextEncoder().encode('epub-identifier-v1:'+uuid.toLowerCase()).buffer)).slice(0,24);}
-export async function fetchCatalog(url=new URL('catalog.json',location.href).href):Promise<{catalog:any;records:CatalogRecord[];url:string}>{
+export async function fetchCatalog(url=new URL('catalog.json',location.href).href,options:{signal?:AbortSignal}={}):Promise<{catalog:any;records:CatalogRecord[];url:string}>{
   const address=new URL(url);if(address.username||address.password||address.protocol!=='https:'&&!(address.protocol==='http:'&&['127.0.0.1','localhost'].includes(address.hostname)))throw new Error('书目需要无凭据的 HTTPS 地址或本机预览地址');
-  let catalog:any;
-  try{const response=await fetch(url,{credentials:'omit',cache:'no-store',redirect:'error'});if(!response.ok)throw new Error(`HTTP ${response.status}`);const reader=response.body?.getReader();if(!reader)throw new Error('当前浏览器未提供有界读取');let length=0;const chunks:Uint8Array[]=[];while(true){const {value,done}=await reader.read();if(done)break;length+=value.byteLength;if(length>1000000){await reader.cancel();throw new Error('书目超过读取范围');}chunks.push(value);}const joined=new Uint8Array(length);let at=0;for(const chunk of chunks){joined.set(chunk,at);at+=chunk.length;}catalog=validateCatalog(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(joined)));await publicStore.putManifest('catalog:'+url,catalog);}
-  catch(e){catalog=await publicStore.getManifest('catalog:'+url);if(!catalog)throw e;validateCatalog(catalog);}
+  let catalog:any;const controller=new AbortController();let timedOut=false;
+  const cancel=()=>controller.abort();if(options.signal?.aborted)throw new DOMException('已取消书目读取','AbortError');
+  options.signal?.addEventListener('abort',cancel,{once:true});
+  const timer=setTimeout(()=>{timedOut=true;controller.abort();},15000);
+  try{const response=await fetch(url,{credentials:'omit',cache:'no-store',redirect:'error',signal:controller.signal});if(!response.ok)throw new Error(`HTTP ${response.status}`);const reader=response.body?.getReader();if(!reader)throw new Error('当前浏览器未提供有界读取');let length=0;const chunks:Uint8Array[]=[];while(true){const {value,done}=await reader.read();if(done)break;length+=value.byteLength;if(length>1000000){await reader.cancel();throw new Error('书目超过读取范围');}chunks.push(value);}const joined=new Uint8Array(length);let at=0;for(const chunk of chunks){joined.set(chunk,at);at+=chunk.length;}catalog=validateCatalog(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(joined)));await publicStore.putManifest('catalog:'+url,catalog);}
+  catch(e){if(options.signal?.aborted)throw e;catalog=await publicStore.getManifest('catalog:'+url);if(!catalog)throw timedOut?new Error('读取书目超时。可以重试，或关闭此窗口继续阅读已保存的书籍。'):e;validateCatalog(catalog);}
+  finally{clearTimeout(timer);options.signal?.removeEventListener('abort',cancel);}
   const records:CatalogRecord[]=[];
   for(const row of catalog.books){records.push({id:await portableId(row.id),bookUuid:row.id,title:row.title,author:row.author||'作者信息见书籍说明',path:resolveCatalogPath(url,row.manifest.path),addedAt:0,lazyPages:null,catalogSource:{url:resolveCatalogPath(url,row.manifest.path),sha256:row.manifest.sha256,bytes:row.manifest.bytes,slug:row.slug,revision:row.revision,epub:row.epub?{...row.epub,url:resolveCatalogPath(url,row.epub.path)}:undefined}});}
   return{catalog,records,url};
@@ -38,18 +42,26 @@ export async function preparePortableBook(record:CatalogRecord):Promise<Portable
   if(!entries.has(resolveBookPath(source.url,reader.package.path)))throw new Error('阅读入口未登记');
   for(const entry of [...(reader.support??[]),...book.chapters.flatMap((c:any)=>c.readingDependencies??[])]){const found=entries.get(resolveBookPath(source.url,entry.path));if(!found||found.sha256!==entry.sha256||found.bytes!==entry.bytes)throw new Error('阅读依赖没有绑定到当前书籍版本');}
   for(const chapter of book.chapters){const declared=chapter.readingDocument;if(!declared||entries.get(resolveBookPath(source.url,declared.path))?.sha256!==declared.sha256)throw new Error('章节与按需阅读文件不一致');}
-  let study:any;
-  if(book.studyDescriptor){
+  const session:PortableBook={record,book,url:source.url,entries,memory:new Map<string,ArrayBuffer>(),urls:new Map<string,string>()};portableBooks.set(record.id,session);
+  return session;
+}
+async function loadPortableStudy(session:PortableBook):Promise<void>{
+  if(session.studyLoading)return session.studyLoading;
+  const book=session.book;
+  const task=(async()=>{try{
     const entry=book.studyDescriptor;entryBytes(entry,2*1024*1024);if(!validPath(entry.path))throw new Error('学习描述地址无效');
     let data=await publicStore.getChunk(entry.sha256);
-    if(!data||await sha256(data)!==entry.sha256){data=await fetchVerified(resolveBookPath(source.url,entry.path),entry,undefined,2*1024*1024);await publicStore.putChunk(entry.sha256,data);}
-    study=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(data));
+    if(!data||await sha256(data)!==entry.sha256){data=await fetchVerified(resolveBookPath(session.url,entry.path),entry,undefined,2*1024*1024);await publicStore.putChunk(entry.sha256,data);}
+    let study=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(data));
     if(study.schema_version!==1||study.book_uuid!==book.id||!Array.isArray(study.assets)||!Array.isArray(study.chapters)||!Array.isArray(study.activities))throw new Error('学习描述与这本书不匹配');
     for(const asset of study.assets){const r=book.resources.find((r:any)=>r.id===asset.id);if(!r||r.sha256!==asset.sha256||r.bytes!==asset.bytes)throw new Error('学习材料与当前书籍版本不一致');}
-    study={...study,portable:true,activities:study.activities.map((a:any)=>({...a,registered:false,editable:false}))};
-  }
-  const session={record,book,url:source.url,entries,memory:new Map<string,ArrayBuffer>(),urls:new Map<string,string>(),study};portableBooks.set(record.id,session);return session;
+    session.study={...study,portable:true,activities:study.activities.map((a:any)=>({...a,registered:false,editable:false}))};
+    session.studyError=undefined;
+  }catch(error){session.studyError='学习资料暂未取得，正文仍可阅读；点击学习入口可以重试。'+(error instanceof Error?error.message:String(error));}
+  })();session.studyLoading=task;
+  await task;if(session.studyLoading===task)session.studyLoading=undefined;
 }
+
 export async function portableEntry(session:PortableBook,url:string):Promise<ArrayBuffer>{
   const resolved=new URL(url,session.url);resolved.hash='';const entry=session.entries.get(resolved.href);if(!entry)throw new Error('这份章节资源未在当前书籍登记');
   if(session.memory.has(entry.sha256))return session.memory.get(entry.sha256)!;
@@ -92,9 +104,9 @@ export async function portableAsset(bookId:string,id:string):Promise<ArrayBuffer
   const units=asset.chunks??[asset],parts:Uint8Array[]=[];for(const unit of units){parts.push(new Uint8Array(await fetchVerified(resolveBookPath(session.url,unit.path),unit,undefined,64*1024*1024)));}
   const data=new Uint8Array(parts.reduce((n,p)=>n+p.length,0));let offset=0;for(const part of parts){data.set(part,offset);offset+=part.length;}if(await sha256(data.buffer)!==asset.sha256)throw new Error('资源内容与版本不一致');return data.buffer;
 }
-export function portableLearningPack(bookId:string):any{
+export async function portableLearningPack(bookId:string):Promise<any>{
   const session=portableBooks.get(bookId);if(!session)throw new Error('书籍尚未准备');const b=session.book;
-  if(session.study)return session.study;
+  if(b.studyDescriptor){if(!session.study)await loadPortableStudy(session);if(session.studyError)throw new Error(session.studyError);if(session.study)return session.study;}
   const usage=(id:string)=>b.chapters.filter((c:any)=>(c.essential??[]).includes(id)||(c.resourceIds??[]).includes(id)||b.resources.find((r:any)=>r.id===id)?.chapters?.includes(c.id)||b.activities.some((a:any)=>a.chapter===c.id&&[...a.required,...a.optional].includes(id))).map((c:any)=>c.id);
   return{schema_version:1,book_uuid:b.id,book_revision_sha256:session.record.catalogSource.sha256,
     chapters:b.chapters.map((c:any,i:number)=>({id:c.id,number:i+1,title:c.title,question:c.question??'',href:c.readingDocument.path.split('/').pop(),assets:b.resources.filter((r:any)=>usage(r.id).includes(c.id)).map((r:any)=>r.id)})),

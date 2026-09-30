@@ -8,6 +8,10 @@ import { mountPdf } from './pdf-viewer';
 import { mountGeometry } from './geometry-viewer';
 import { mountImage } from './image-viewer';
 import { connectStudyWorkspace } from '../../site/shared/workspace.mjs';
+import { renderReadableText, renderDelimited } from './study-text';
+import { readableError } from './reader-errors';
+import { mountAudioPlots } from './audio-plots';
+import { unfinishedNoteIdentity } from './personal-records';
 
 type Asset = {comparison_reference?:string; root?:string; id:string; relative_path:string; sha256:string; bytes:number; kind:string; title:string; filename:string; role:string; chapters:string[]; media?:any };
 type Chapter = {source_sha256?:string; id:string; number:number; title:string; href:string; question:string; assets:string[]};
@@ -17,6 +21,7 @@ type Origin = {contentDigest?:string;sourceSha256?:string;localSource?:boolean;b
 type Host = {current:()=>Origin|null; settle:()=>Promise<void>; jump:(target:string,pane:number)=>Promise<void>; toast:(text:string)=>void};
 const packs=new Map<string,Pack>();
 const failures=new Map<string,string>();
+const lastBodyChapter=new Map<string,{revision:string;chapterId:string}>();
 const bodyLocations=new WeakMap<object,{size:number;positions:number[]}>();
 let host:Host;
 let dialog:HTMLElement;
@@ -27,6 +32,9 @@ let chapter:Chapter|null=null;
 let currentAsset:Asset|null=null;
 let activity:Activity|null=null;
 let study:any={notes:[],media:{}};
+let studyLoaded=false;
+let studyOpenGeneration=0;
+let noteTransition=false;
 let referenceCode='';
 let latestRun:any=null;
 let activeRun:any=null;
@@ -43,7 +51,10 @@ let cancelConsent:(()=>void)|null=null;
 let pendingMediaAnchor:any=null;
 let objectUrls:string[]=[];
 let disposeObject:(()=>void)|null=null;
+let disposeResponsive:(()=>void)|null=null;
 let latestReport:any=null;
+let showingAuthorReference=false;
+let resultViewRevision=0;
 let displayedResultIdentity='';
 let trace:any[]=[];
 let traceIndex=-1;
@@ -54,46 +65,72 @@ const enc=(v:unknown)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 const one=<T extends HTMLElement=HTMLElement>(q:string)=>dialog.querySelector<T>(q)!;
 const invokeBook=<T>(command:string,args:Record<string,unknown>={})=>invoke<T>(command,{bookId:origin!.bookId,...args});
 const assetById=(id:string)=>pack?.assets.find(a=>a.id===id);
-const chapterOf=(href:string)=>pack?.chapters.find(c=>href.split('#')[0].endsWith(c.href))??pack?.chapters[1]??pack?.chapters[0]??null;
+const chapterOf=(href:string):Chapter|null=>{
+  if(!pack)return null;const clean=href.split('#')[0];
+  const direct=pack.chapters.find(c=>clean.endsWith(c.href));if(direct)return direct;
+  const mapped=Object.entries(pack.href_assets).find(([key])=>clean.endsWith(key.split('#')[0]));
+  const linked=mapped?pack.assets.find(a=>a.id===mapped[1]):null;
+  const owners=pack.chapters.filter(c=>linked?.chapters.includes(c.id));if(owners.length===1)return owners[0];
+  const previous=origin?lastBodyChapter.get(origin.bookId+':'+origin.pane):null;
+  if(previous?.revision===pack.book_revision_sha256){const known=pack.chapters.find(c=>c.id===previous.chapterId);if(known&&(!owners.length||owners.includes(known)))return known;}
+  return {id:'reader-resources',number:0,title:'配套资料',href:clean,question:'从当前资料核对来源与内容；全书目录保留各章的学习入口。',assets:linked?[linked.id]:[]};
+};
 const label=(kind:string)=>({code:'程序',audio:'声音',video:'视频',image:'图像',pdf:'原典',model:'模型',geometry:'三维',data:'数据',text:'资料'}[kind]??'资料');
 const buffer=(value:ArrayBuffer|number[])=>value instanceof ArrayBuffer?value:new Uint8Array(value).buffer;
 const formatBytes=(n:number)=>n>1024*1024?`${(n/1024/1024).toFixed(1)} MB`:`${Math.ceil(n/1024)} KB`;
 const digest=async(code:string)=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(code)))).map(x=>x.toString(16).padStart(2,'0')).join('');
 
+const preparationGeneration=new Map<string,number>();
 export async function prepareLearning(bookId:string):Promise<void>{
+  const generation=(preparationGeneration.get(bookId)??0)+1;preparationGeneration.set(bookId,generation);
   packs.delete(bookId);failures.delete(bookId);
-  try {const p=await invoke<Pack>('learning_pack',{bookId});p.audio_groups??=[];p.activities??=[];p.source_claims??=[];p.dependencies??=[];p.history??=[];p.href_assets??={};p.chapters.forEach((c,i)=>{c.number??=i+1;c.title||=(i+1)+' · 本文';c.question??='';c.assets??=[];});packs.set(bookId,p);}
-  catch(e){failures.set(bookId,String(e));}
+  try {const p=await invoke<Pack>('learning_pack',{bookId});if(preparationGeneration.get(bookId)!==generation)return;p.audio_groups??=[];p.activities??=[];p.source_claims??=[];p.dependencies??=[];p.history??=[];p.href_assets??={};p.chapters.forEach((c,i)=>{c.number??=i+1;c.title||=(i+1)+' · 本文';c.question??='';c.assets??=[];});packs.set(bookId,p);window.dispatchEvent(new CustomEvent('reader-learning-ready',{detail:{bookId}}));}
+  catch(e){if(preparationGeneration.get(bookId)===generation)failures.set(bookId,String(e));}
   refreshLearningButton();
 }
-export function holdLearning(bookId:string,reason:string):void{packs.delete(bookId);failures.set(bookId,reason);refreshLearningButton();}
+export function holdLearning(bookId:string,reason:string):void{preparationGeneration.set(bookId,(preparationGeneration.get(bookId)??0)+1);packs.delete(bookId);failures.set(bookId,reason);refreshLearningButton();}
 export function refreshLearningButton():void{
   const button=document.querySelector<HTMLButtonElement>('.study-toggle');if(!button)return;
-  const current=host?.current();const reason=current?failures.get(current.bookId):undefined;const actionable=Boolean(reason&&!reason.includes('没有登记学习增强包')&&!reason.includes('资料尚未就绪'));button.hidden=!current||(!packs.has(current.bookId)&&!actionable);if(current&&!packs.has(current.bookId)&&actionable){button.textContent='学习资料待匹配';button.title=reason!;}else{button.innerHTML=activeRun?.status==='running'?'<span aria-hidden="true">◌</span> 实验计算中':'<span aria-hidden="true">✧</span> 随书学习';button.title='打开当前段落的学习材料';}
+  const current=host?.current();const reason=current?failures.get(current.bookId):undefined;const actionable=Boolean(reason&&!reason.includes('没有登记学习增强包')&&!reason.includes('资料尚未就绪'));button.hidden=!current||(!packs.has(current.bookId)&&!actionable);if(current&&!packs.has(current.bookId)&&actionable){button.innerHTML='<span aria-hidden="true">!</span><span class="study-toggle-label">学习资料待匹配</span>';button.setAttribute('aria-label','学习资料待匹配');button.title=reason!;}else{button.innerHTML=activeRun?.status==='running'?'<span aria-hidden="true">◌</span><span class="study-toggle-label">实验计算中</span>':'<span aria-hidden="true">✧</span><span class="study-toggle-label">随书学习</span>';button.title='打开当前段落的学习材料';button.setAttribute('aria-label','打开随书学习');}
 }
 export function learningIsOpen():boolean{return Boolean(workspace?.open);}
 export async function flushLearningBeforeClose():Promise<void>{
   if(saveTimer!==null){clearTimeout(saveTimer);saveTimer=null;}
-  if(!origin)return;
+  if(!origin||!studyLoaded)return;
   const editor=dialog?.querySelector<HTMLTextAreaElement>('.study-code');
   if(draftMode&&activity&&editor)await invokeBook('learning_save_draft',{activityId:activity.id,code:editor.value});
   if(activeMedia&&currentAsset){study.media[currentAsset.id]={time:activeMedia.currentTime};activeMedia.pause();}
   captureUnfinishedNote();
   await persistStudy();
 }
+export function learningMemoryBackup(bookId:string):any {
+  if(!origin||origin.bookId!==bookId||!studyLoaded)return null;
+  captureUnfinishedNote();
+  const editor=dialog?.querySelector<HTMLTextAreaElement>('.study-code');
+  return {study:structuredClone(study),draft:draftMode&&activity&&editor?{activityId:activity.id,code:editor.value}:null};
+}
 function captureUnfinishedNote():boolean{
   const note=dialog?.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');
-  if(!origin||!note?.value.trim()||note.dataset.committed==='true')return false;
-  study.unfinished_note={text:note.value,chapter:chapter?.id,quote:origin.quote,href:origin.href,cfi:origin.cfi,content_digest:origin.contentDigest,editId:note.closest<HTMLElement>('.study-note-editor')?.dataset.editId??null};return true;
+  if(!studyLoaded||!origin||!note||note.dataset.committed==='true')return false;
+  const editor=note.closest<HTMLElement>('.study-note-editor');
+  let restored:Record<string,any>={};
+  if(editor?.dataset.restoredAnchor){try{const value=JSON.parse(editor.dataset.restoredAnchor);if(value&&typeof value==='object'&&!Array.isArray(value))restored=value;}catch{}}
+  const original=(key:string,fallback:unknown)=>Object.prototype.hasOwnProperty.call(restored,key)?restored[key]:fallback;
+  const draft:Record<string,any>={...restored,text:note.value,chapter:original('chapter',chapter?.id),quote:original('quote',origin.quote),href:original('href',origin.href),cfi:original('cfi',origin.cfi),content_digest:original('content_digest',origin.contentDigest),editId:editor?.dataset.editId??original('editId',null)};
+  if(!Object.prototype.hasOwnProperty.call(draft,'media_anchor')&&pendingMediaAnchor)draft.media_anchor=structuredClone(pendingMediaAnchor);
+  delete draft.import_id;
+  study.unfinished_note=draft;return true;
 }
 function persistStudy():Promise<void>{
-  if(!origin)return Promise.resolve();const bookId=origin.bookId,value=structuredClone(study);
+  if(!origin||!studyLoaded)return Promise.reject(new Error('学习记录未成功读取；未写入空白记录'));
+  const bookId=origin.bookId,value=structuredClone(study);
   stateWriteQueue=stateWriteQueue.catch(()=>{}).then(()=>invoke<void>('learning_save_state',{bookId,value}));return stateWriteQueue;
 }
-export function learningReadingProgress(bookId:string,book:any,cfi:string|null):{kind:'body'|'reference';text:string;percent:number|null;position:number;total:number}|null{
+export function learningReadingProgress(bookId:string,book:any,cfi:string|null,pane=0):{kind:'body'|'reference';text:string;percent:number|null;position:number;total:number}|null{
   const p=packs.get(bookId);if(!p||!cfi||!book?.locations.length())return null;
   const section=book.spine.get(cfi);const href=section?.href??'';
-  const main=p.chapters.some(c=>href.endsWith(c.href));
+  const currentChapter=p.chapters.find(c=>href.endsWith(c.href));
+  const main=Boolean(currentChapter);if(currentChapter)lastBodyChapter.set(bookId+':'+pane,{revision:p.book_revision_sha256,chapterId:currentChapter.id});
   const size=book.locations.length();let cache=bodyLocations.get(book);
   if(!cache||cache.size!==size){
     const locations:string[]=JSON.parse(book.locations.save());const positions:number[]=[];
@@ -113,22 +150,45 @@ export function learningCfiFromBodyPosition(bookId:string,book:any,cfi:string|nu
   return book.locations.cfiFromLocation(positions[Math.min(positions.length-1,Math.max(0,Math.round(position)-1))]);
 }
 
+function handleStudyEscape():void{
+  if(cancelConsent){cancelConsent();return;}
+  const menu=dialog.querySelector<HTMLDetailsElement>('.study-activity-more[open]');
+  if(menu){menu.open=false;menu.querySelector<HTMLElement>('summary')?.focus();return;}
+  void closeStudy();
+}
+function trapStudyTab(event:KeyboardEvent):void{
+  const scope=cancelConsent?dialog.querySelector<HTMLElement>('.study-consent'):dialog;
+  if(!scope)return;
+  const controls=Array.from(scope.querySelectorAll<HTMLElement>('a[href],button,input,select,textarea,summary,[tabindex]:not([tabindex="-1"])'))
+    .filter(el=>!el.closest('[inert]')&&!('disabled' in el&&(el as HTMLButtonElement).disabled)&&el.getClientRects().length>0);
+  if(!controls.length)return;
+  const index=controls.indexOf(document.activeElement as HTMLElement);
+  if(index<0||event.shiftKey&&index===0||!event.shiftKey&&index===controls.length-1){
+    event.preventDefault();controls[event.shiftKey?controls.length-1:0].focus();
+  }
+}
+
 export function initLearning(adapter:Host):void{
   host=adapter;
   window.addEventListener('reader-theme-change',()=>{if(!workspace?.open||!activity||activity.presentation!=='linear-classifier@1'||!latestReport)return;const step=showingTrace?trace[traceIndex]:null;drawCards(latestReport.training_rows??[],step?.weights??latestReport.trained_weights,step?.bias??latestReport.trained_bias);});
   const button=document.createElement('button');button.className='study-toggle';button.type='button';button.hidden=true;
-  button.innerHTML='<span aria-hidden="true">✧</span> 随书学习';button.title='打开当前段落的学习材料';
+  button.innerHTML='<span aria-hidden="true">✧</span><span class="study-toggle-label">随书学习</span>';button.title='打开当前段落的学习材料';button.setAttribute('aria-label','打开随书学习');
   document.querySelector('.active-book-title')?.after(button);
   button.addEventListener('click',async()=>{await host.settle();const current=host.current();if(current){if(!packs.has(current.bookId))await prepareLearning(current.bookId);if(packs.has(current.bookId))void openStudy(current);else host.toast(failures.get(current.bookId)||'学习资料尚未匹配；正文仍可阅读');}});
   dialog=document.createElement('section');dialog.className='study-stage';dialog.setAttribute('aria-label','随书学习');
   document.querySelector('.app-shell')?.append(dialog);
   workspace=connectStudyWorkspace(dialog,{root:document.querySelector('.app-shell'),readingRoot:document.querySelector('.reader-grid'),toolbar:document.querySelector('.top-toolbar')});
   dialog.addEventListener('cancel',e=>{e.preventDefault();void closeStudy();});
+  document.addEventListener('keydown',e=>{
+    if(!workspace?.open||dialog.contains(e.target as Node)||document.querySelector('dialog[open]'))return;
+    if(e.key==='Escape'){e.preventDefault();e.stopPropagation();handleStudyEscape();}
+    else if(e.key==='Tab')trapStudyTab(e);
+  },true);
   dialog.addEventListener('keydown',e=>{
     // Reading shortcuts never steal an editor, media or stage keystroke.
     e.stopPropagation();
-    if(e.key==='Escape'){e.preventDefault();if(cancelConsent){cancelConsent();return;}const menu=dialog.querySelector<HTMLDetailsElement>('.study-activity-more[open]');if(menu){menu.open=false;menu.querySelector<HTMLElement>('summary')?.focus();return;}void closeStudy();}
-    if(e.key==='Tab'&&cancelConsent){const controls=Array.from(dialog.querySelectorAll<HTMLElement>('.study-consent button:not([disabled]),.study-consent input'));const i=controls.indexOf(document.activeElement as HTMLElement);if(controls.length){e.preventDefault();controls[(i+(e.shiftKey?-1:1)+controls.length)%controls.length].focus();}}
+    if(e.key==='Escape'){e.preventDefault();handleStudyEscape();return;}
+    if(e.key==='Tab')trapStudyTab(e);
     if(e.ctrlKey&&e.key==='s'){e.preventDefault();void saveDraft();}
     if(e.ctrlKey&&e.key==='Enter'&&activity){e.preventDefault();void runActivity();}
   });
@@ -140,10 +200,11 @@ export function initLearning(adapter:Host):void{
       return;
     }
     const target=(e.target as Element).closest<HTMLElement>('[data-study]');if(!target)return;
-    const action=target.dataset.study!;
+    const action=target.dataset.study!;target.closest<HTMLDetailsElement>('.study-activity-more')?.removeAttribute('open');
+    if(action==='backup-raw'){try{const raw=await invokeBook<any>('learning_raw_state');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([new Uint8Array(raw.bytes)],{type:'application/octet-stream'}));a.download=raw.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),30000);one('.study-run-status').textContent='原始副本已导出。原记录保持完整，核对后再恢复。';}catch(error){showError(error);}return;}
     if(['overview','asset','activity','sources','notes','map','history','chapter','audio-group','video','run-history','saved-run'].includes(action)) await saveDraft();
     if(action==='close')void closeStudy();
-    if(action==='copy-path')void invokeBook<{path:string}>('learning_resource_info',{assetId:target.dataset.id}).then(v=>navigator.clipboard.writeText(v.path)).then(()=>status('已复制核对过的本机路径')).catch(showError);
+    if(action==='copy-path')void invokeBook<{path:string}>('learning_resource_info',{assetId:target.dataset.id}).then(async v=>{await navigator.clipboard.writeText(v.path);status(isDesktop&&/^(?:[A-Za-z]:[\\/]|\\\\[^\\]+\\[^\\]+\\|\/)/.test(v.path)?'已复制核对过的本机路径':'已复制书籍内资源路径');}).catch(showError);
     if(action==='overview')overview();
     if(action==='asset')void showAsset(target.dataset.id!);
     if(action==='activity')void showActivity(target.dataset.id!);
@@ -164,20 +225,28 @@ export function initLearning(adapter:Host):void{
     if(action==='blank')void enableDraft(true);
     if(action==='reference-code')void showReferenceCode();
     if(action==='locate-code')locateCode(target.dataset.symbol!);
-    if(action==='focus-code'){const grid=one('.study-lab-grid');const focused=grid.classList.toggle('study-code-focused');target.textContent=focused?'回到结果与代码':'专注看代码';one('.study-main').scrollTop=0;}
+    if(action==='focus-code'){
+      const grid=one('.study-lab-grid'),main=one('.study-main'),editor=one<HTMLTextAreaElement>('.study-code');
+      const frame=main.getBoundingClientRect(),editorBefore=editor.getBoundingClientRect();
+      const anchor=editorBefore.top>=frame.top&&editorBefore.top<frame.bottom?editor:target;
+      const top=anchor.getBoundingClientRect().top;
+      const focused=grid.classList.toggle('study-code-focused');target.textContent=focused?'回到结果与代码':'专注看代码';
+      requestAnimationFrame(()=>{if(!grid.isConnected)return;main.scrollTop+=anchor.getBoundingClientRect().top-top;const visible=editor.getBoundingClientRect(),bounds=main.getBoundingClientRect();if(visible.top>bounds.bottom-80)main.scrollTop+=visible.top-(bounds.bottom-80);else if(visible.bottom<bounds.top+80)main.scrollTop+=visible.bottom-(bounds.top+80);});
+    }
     if(action==='final-result'&&latestReport){showingTrace=false;renderResult(latestReport,displayedResultIdentity);if(trace.length)renderTraceControls();}
     if(action==='error-line'){const editor=one<HTMLTextAreaElement>('.study-code');const line=Number(target.dataset.line);const lines=editor.value.split('\n');const start=lines.slice(0,line-1).reduce((n,s)=>n+s.length+1,0);editor.focus();editor.setSelectionRange(start,start+(lines[line-1]?.length??0));editor.scrollTop=Math.max(0,line-3)*22;}
     if(action==='save')void saveDraft();
-    if(action==='draft-history')void showDraftHistory();
+    if(action==='draft-history')void showDraftHistory().catch(error=>showError(error,'draft-history'));
     if(action==='export-code')void saveDraft().then(()=>invokeBook<string|null>('learning_export',{activityId:activity!.id})).then(path=>status(path?'已导出：'+path:'已取消导出')).catch(showError);
     if(action==='reference')void showReference();
     if(action==='my-result'&&latestRun)void showRun(latestRun,true);
     if(action==='step')stepTrace(1);
     if(action==='step-back')stepTrace(-1);
     if(action==='add-note')void addNote();
+    if(action==='continue-unfinished')void continueUnfinishedNote(target.dataset.importId!);
     if(action==='save-note')void persistNote();
     if(action==='export-note')void exportNotes();
-    if(action==='edit-note')editNote(target.dataset.id!);
+    if(action==='edit-note')void editNote(target.dataset.id!);
     if(action==='archive-note')void archiveNote(target.dataset.id!);
     if(action==='restore-note')void restoreNote(target.dataset.id!);
     if(action==='audio-group')void showAudio(target.dataset.id!);
@@ -189,6 +258,7 @@ export function initLearning(adapter:Host):void{
 export function wireLearningDocument(bookId:string,pane:number,contents:any,sectionHref:string):void{
   const p=packs.get(bookId);if(!p)return;
   const doc=contents.document as Document;
+  if(doc.documentElement.dataset.learningWired===bookId)return;doc.documentElement.dataset.learningWired=bookId;
   doc.addEventListener('click',event=>{
     const a=(event.target as Element).closest<HTMLAnchorElement>('a[href]');if(!a||!event.isTrusted)return;
     const raw=a.getAttribute('href')??'';
@@ -213,14 +283,40 @@ export function wireLearningDocument(bookId:string,pane:number,contents:any,sect
   const style=doc.createElement('style');style.textContent='.study-inline-link{text-decoration-thickness:1px;text-underline-offset:.23em} .study-inline-link:focus-visible{outline:2px solid #bb8e55;outline-offset:3px}';doc.head?.append(style);
 }
 
+function showStudyLoadError(error:unknown):void{
+  dialog.innerHTML=`<header class="study-header"><strong>随书学习 · 记录待核对</strong><button class="study-return" data-study="close">返回书页 <kbd>Esc</kbd></button></header><main class="study-main"><div class="study-content"><h1>学习记录暂时无法读取</h1><p>学习空间暂停写入，原有记录不会被空白状态替换。可以先另存原始副本；这不会修复或覆盖原文件，核对后再恢复。</p><button data-study="backup-raw">保存原始记录副本</button><p class="study-run-status" role="alert"></p></div></main>`;
+  dialog.querySelector<HTMLElement>('.study-run-status')!.textContent=readableError(error);
+  window.dispatchEvent(new CustomEvent('reader-study-open'));workspace.show();one<HTMLButtonElement>('[data-study="close"]').focus();
+}
 async function openStudy(o:Origin,assetId?:string,url?:string,activityId?:string):Promise<void>{
-  if(workspace.open)await closeStudy();
-  const p=packs.get(o.bookId);if(!p)return;
-  origin=o;pack=p;chapter=chapterOf(o.href);latestRun=null;
-  try{study=await invokeBook<any>('learning_load_state');}catch{study={notes:[],media:{}};}
-  study.notes??=[];study.media??={};
-  if(o.localSource&&o.contentDigest){let migrated=false;for(const note of study.notes){if(!note.content_digest&&note.book_revision===o.sourceSha256){note.content_digest=o.contentDigest;migrated=true;}}if(migrated)await persistStudy();}
-  renderShell();workspace.show();
+  if(workspace.open){await closeStudy();if(workspace.open)return;}
+  const p=packs.get(o.bookId);if(!p)return;const opening=++studyOpenGeneration;
+  origin=o;pack=p;chapter=chapterOf(o.href);latestRun=null;studyLoaded=false;study={notes:[],media:{}};
+  try{
+    const loaded=await invoke<any>('learning_load_state',{bookId:o.bookId});
+    if(opening!==studyOpenGeneration||origin?.bookId!==o.bookId)return;
+    if(!loaded||typeof loaded!=='object'||Array.isArray(loaded)||
+       (loaded.notes!=null&&!Array.isArray(loaded.notes))||
+       (loaded.archived_notes!=null&&!Array.isArray(loaded.archived_notes))||
+       (loaded.unfinished_notes!=null&&!Array.isArray(loaded.unfinished_notes))||
+       (loaded.media!=null&&(typeof loaded.media!=='object'||Array.isArray(loaded.media))))throw new Error('学习记录结构无效');
+    if((loaded.notes??[]).some((note:any)=>!note||typeof note!=='object'||Array.isArray(note))||
+       (loaded.archived_notes??[]).some((note:any)=>!note||typeof note!=='object'||Array.isArray(note)))throw new Error('笔记记录结构无效');
+    const validUnfinished=(note:any)=>note&&typeof note==='object'&&!Array.isArray(note)&&typeof note.text==='string';
+    if((loaded.unfinished_note!=null&&!validUnfinished(loaded.unfinished_note))||
+       (loaded.unfinished_notes??[]).some((note:any)=>!validUnfinished(note)))throw new Error('未提交笔记结构无效');
+    for(const note of loaded.unfinished_notes??[]){
+      const id=await unfinishedNoteIdentity(note);
+      if(note.import_id!==undefined&&note.import_id!==id)throw new Error('未提交笔记身份与内容不符');
+      note.import_id=id;
+    }
+    if(opening!==studyOpenGeneration||origin?.bookId!==o.bookId)return;
+    study=loaded;study.notes??=[];study.media??={};study.unfinished_notes??=[];studyLoaded=true;
+  }catch(error){
+    if(opening===studyOpenGeneration&&origin?.bookId===o.bookId)showStudyLoadError(error);return;
+  }
+  if(o.localSource&&o.contentDigest){let migrated=false;for(const note of study.notes){if(!note.content_digest&&note.book_revision===o.sourceSha256){note.content_digest=o.contentDigest;migrated=true;}}if(migrated){try{await persistStudy();}catch(error){studyLoaded=false;showStudyLoadError(error);return;}}}
+  renderShell();window.dispatchEvent(new CustomEvent('reader-study-open'));workspace.show();
   if(activityId)await showActivity(activityId);else if(assetId)await showAsset(assetId);else if(url)showSources(url);else overview();
   one<HTMLButtonElement>('[data-study="close"]').focus();
 }
@@ -234,9 +330,20 @@ function renderShell():void{
   for(const group of pack.audio_groups.filter(g=>g.assets.some((id:string)=>chapterAssets.some(a=>a.id===id))))nav.insertAdjacentHTML('beforeend',`<button data-study="audio-group" data-id="${enc(group.id)}"><span>♪</span>${enc(group.title)}</button>`);
   if(chapterAssets.some(a=>a.kind==='video'))nav.insertAdjacentHTML('beforeend','<button data-study="video"><span>▷</span> 本章视频</button>');
 }
-function resetContent():HTMLElement{
+function setStudyNavigation(tab:string):void{
+  for(const button of Array.from(dialog.querySelectorAll<HTMLElement>('.study-nav>button[data-study]'))){
+    if(button.dataset.study===tab)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
+  }
+}
+function resourceChapter(ids:string[]):void{
+  if(!pack||!chapter||ids.some(id=>id.toLowerCase()===chapter!.id.toLowerCase()))return;
+  const next=pack.chapters.find(c=>ids.some(id=>id.toLowerCase()===c.id.toLowerCase()));
+  if(next){if(captureUnfinishedNote())void saveState();chapter=next;renderShell();}
+}
+function resetContent(tab='overview'):HTMLElement{
+  setStudyNavigation(tab);
   if(captureUnfinishedNote())void saveState();
-  pageGeneration++;disposeObject?.();disposeObject=null;
+  pageGeneration++;resultViewRevision++;showingAuthorReference=false;disposeObject?.();disposeObject=null;disposeResponsive?.();disposeResponsive=null;
   audioAnalysisWorker?.terminate();audioAnalysisWorker=null;audioAnalyses.clear();
   if(audioGraph){void audioGraph.close();audioGraph=null;audioGain=null;}
   if(activeMedia){study.media[currentAsset?.id??'last']={time:activeMedia.currentTime};activeMedia.pause();activeMedia=null;void saveState();}
@@ -244,7 +351,7 @@ function resetContent():HTMLElement{
   activity=null;currentAsset=null;referenceCode='';draftMode=false;
   const content=one('.study-content');content.replaceChildren();one('.study-main').scrollTop=0;return content;
 }
-const intro=(eyebrow:string,title:string,description:string)=>`<div class="study-intro"><p class="study-eyebrow">${enc(eyebrow)}</p><h1>${enc(title)}</h1><p class="study-lede">${enc(description)}</p></div>`;
+const intro=(eyebrow:string,title:string,description:string)=>`<div class="study-intro"><p class="study-eyebrow">${enc(eyebrow)}</p><h1>${enc(title)}</h1><details class="study-intro-description" ${innerHeight>560?'open':''}><summary>说明与观察方法</summary><p class="study-lede">${enc(description)}</p></details></div>`;
 function overview():void{
   const body=resetContent();if(!chapter||!pack)return;
   const items=pack.assets.filter(a=>a.root!=='derived'&&a.chapters.includes(chapter!.id));
@@ -260,13 +367,13 @@ function overview():void{
 }
 async function bytesFor(a:Asset):Promise<ArrayBuffer>{return buffer(await invokeBook<ArrayBuffer|number[]>('learning_asset',{assetId:a.id}));}
 async function urlFor(a:Asset,mime:string):Promise<string>{const url=URL.createObjectURL(new Blob([await bytesFor(a)],{type:mime}));objectUrls.push(url);return url;}
-function details(a:Asset):string{return `<details class="study-details"><summary>版本、原件与实际路径</summary><dl><dt>身份</dt><dd>${a.role==='external_model'?'外部已训模型结果':'作者已有资料；不是本次运行'}</dd><dt>源文件</dt><dd><code>${enc(a.relative_path)}</code></dd><dt>SHA-256</dt><dd><code>${enc(a.sha256)}</code></dd><dt>大小</dt><dd>${formatBytes(a.bytes)}</dd></dl><button data-study="copy-path" data-id="${a.id}">复制本机实际路径</button></details>`;}
+function details(a:Asset):string{const portable=!isDesktop||pack?.portable;return `<details class="study-details"><summary>版本、原件与资源标识</summary><dl><dt>身份</dt><dd>${a.role==='external_model'?'外部已训模型结果':'作者已有资料；不是本次运行'}</dd><dt>书籍内相对路径</dt><dd><code>${enc(a.relative_path)}</code></dd><dt>SHA-256</dt><dd><code>${enc(a.sha256)}</code></dd><dt>大小</dt><dd>${formatBytes(a.bytes)}</dd></dl><button data-study="copy-path" data-id="${a.id}">${portable?'复制书籍内资源路径':'复制资源路径'}</button></details>`;}
 async function showAsset(id:string):Promise<void>{
-  const a=assetById(id);if(!a)return;const chapterTargets=pack!.chapters.filter(c=>c.source_sha256===a.sha256);if(a.kind==='text'&&a.filename.endsWith('.md')&&chapterTargets.length===1){const target=chapterTargets[0].href;const pane=origin!.pane;await closeStudy();await host.jump(target,pane);return;}
+  const a=assetById(id);if(!a)return;resourceChapter(a.chapters??[]);const chapterTargets=pack!.chapters.filter(c=>c.source_sha256===a.sha256);if(a.kind==='text'&&a.filename.endsWith('.md')&&chapterTargets.length===1){const target=chapterTargets[0].href;const pane=origin!.pane;await closeStudy();await host.jump(target,pane);return;}
   const recipe=pack!.activities.find(x=>x.entry_asset===id);if(recipe){await showActivity(recipe.id);return;}
   if(a.kind==='audio'){let g=pack!.audio_groups.find(g=>g.assets.includes(id));if(!g){g={id:'single-'+a.id,title:a.title,description:'这份音频由当前材料引用。手动播放，返回时保留位置；不会自动发声。',assets:[id]};pack!.audio_groups.push(g);}await showAudio(g.id,id);return;}
   if(a.kind==='video'){await showVideo(id);return;}
-  const body=resetContent();currentAsset=a;const generation=pageGeneration;
+  resourceChapter(a.chapters??[]);const body=resetContent();currentAsset=a;const generation=pageGeneration;
   body.innerHTML=intro(label(a.kind),a.title,'保持原件内容，按当前问题阅读。退出后回到原句。')+'<div class="study-object">正在读取已登记原件…</div>'+details(a);
   if(['model','data'].includes(a.kind)){one('.study-object').innerHTML=`<p>这是已登记的数据或模型原件。计算活动使用自己的输入副本；这里按需显示身份，不提前把大型文件读进界面。</p><p>原件大小：${formatBytes(a.bytes)}。可以在当前章节的来源说明与参考记录中核对其用途。</p>`;return;}
   try{
@@ -281,31 +388,28 @@ async function showAsset(id:string):Promise<void>{
     const object=one('.study-object');object.replaceChildren();
     if(a.kind==='image'){const url=URL.createObjectURL(new Blob([bytes]));objectUrls.push(url);study.images??={};const cleanup=await mountImage(object,url,a.title,study.images[a.id],view=>{study.images[a.id]=view;saveViewSoon();});if(generation!==pageGeneration){cleanup();return;}disposeObject=cleanup;}
     else if(a.kind==='pdf'){const cleanup=await mountPdf(object,bytes,a.title,showError);if(generation!==pageGeneration){cleanup();return;}disposeObject=cleanup;}
-    else {const value=new TextDecoder().decode(bytes);if(a.filename.endsWith('.json')){try{renderJson(object,JSON.parse(value));}catch{appendText(object,value);}}else if(a.kind==='code'){appendText(object,value,'study-code-readonly');object.insertAdjacentHTML('afterbegin','<p class="study-callout">完整参考源码。此程序尚未登记短实验配方；这里不会自动执行或启动训练。</p>');}else renderText(object,value);}
+    else {const value=new TextDecoder().decode(bytes);if(a.filename.endsWith('.json')){try{renderJson(object,JSON.parse(value));}catch{appendText(object,value);}}else if(a.kind==='code'){appendText(object,value,'study-code-readonly');object.insertAdjacentHTML('afterbegin','<p class="study-callout">完整参考源码；保留原始代码行，可上下、左右滚动。这里不会自动执行或启动训练。</p>');}else if(/\.(csv|tsv)$/i.test(a.filename)){try{renderDelimited(object,value,/\.tsv$/i.test(a.filename)?'\t':',');}catch{appendText(object,value,'study-code-readonly');}}else renderText(object,value);}
+    const footer=dialog.querySelector<HTMLElement>('.study-save-state');if(footer?.dataset.statusOwner==='resource')status('资料已载入');
   }catch(e){if(generation===pageGeneration){const object=dialog.querySelector<HTMLElement>('.study-object');if(object){object.replaceChildren();resourceUnavailable(object,e);}else showError(e);}}
 }
 function resourceUnavailable(parent:HTMLElement,error:unknown):void{
   parent.querySelector('.study-resource-error')?.remove();const message=document.createElement('section');message.className='study-resource-error';
   message.innerHTML='<p class="study-callout">这份原件暂时无法使用。正文与笔记仍然保留；恢复原文件后重新选择这一项即可重试。若文件已换版，请重新核对增强包。</p><details class="study-details"><summary>查看具体原因</summary><pre></pre></details>';
-  message.querySelector('pre')!.textContent=String(error);parent.append(message);status('资料暂不可用 · 可以返回书页');
+  message.querySelector('pre')!.textContent=readableError(error);parent.append(message);status('资料暂不可用 · 可以返回书页','resource');
 }
 function appendText(parent:HTMLElement,text:string,className='study-raw'):void{const pre=document.createElement('pre');pre.className=className;pre.textContent=text;parent.append(pre);}
 function renderText(parent:HTMLElement,text:string):void{
-  for(const block of text.split(/\n\s*\n/)){const line=block.trim();if(!line)continue;let el:HTMLElement;
-    if(/^#{1,4} /.test(line)){el=document.createElement('h3');el.textContent=line.replace(/^#+ /,'');}
-    else {el=document.createElement('p');el.textContent=line;el.style.whiteSpace='pre-wrap';}
-    parent.append(el);
-  }
+  renderReadableText(parent,text,url=>{if(isDesktop)void invoke('learning_open_external',{url}).catch(showError);else window.open(url,'_blank','noopener,noreferrer');});
 }
 function renderJson(parent:HTMLElement,value:any):void{
   const scalar=Object.entries(value??{}).filter(([,v])=>typeof v!=='object');
-  if(scalar.length){const table=document.createElement('table');table.className='study-table';table.innerHTML='<thead><tr><th>记录字段</th><th>实际值</th></tr></thead><tbody>'+scalar.map(([k,v])=>`<tr><td>${enc(k)}</td><td>${enc(v)}</td></tr>`).join('')+'</tbody>';parent.append(table);}
+  if(scalar.length){const table=document.createElement('table');table.className='study-table study-record-table';table.innerHTML='<thead><tr><th>记录字段</th><th>实际值</th></tr></thead><tbody>'+scalar.map(([k,v])=>`<tr><td>${enc(k)}</td><td>${enc(v)}</td></tr>`).join('')+'</tbody>';parent.append(table);}
   const detail=document.createElement('details');detail.className='study-details';detail.innerHTML='<summary>查看完整结构化记录</summary>';appendText(detail,JSON.stringify(value,null,2));parent.append(detail);
 }
 
 async function showBuiltinActivity(a:Activity):Promise<void>{
   const body=resetContent();activity=a;currentAsset=assetById(a.entry_asset)??null;referenceCode=builtinSource;latestRun=null;latestReport=null;
-  body.innerHTML=intro('内置计算 · 按你选择的参数',a.title,a.description??'')+`<div class="study-activity-toolbar"><button class="study-primary" data-study="run">运行计算</button><button data-study="cancel" hidden>停止运行</button><button data-study="my-result" disabled>查看已保存结果</button><span class="study-runtime-badge">阅读器内置 · 无需 Python</span></div><div class="study-parameters">${(a.parameters??[]).map(p=>`<label>${enc(p.label??p.name)}<input type="number" data-parameter="${enc(p.name)}" data-parameter-type="${enc(p.type)}" value="${p.default}" min="${p.min}" max="${p.max}" step="${p.type==='integer'?'1':'any'}"/></label>`).join('')}</div><p class="study-run-status" role="status">运行时只使用本活动的输入，不安装依赖。</p><div class="study-lab-grid"><section class="study-result-panel"><div class="study-section-title"><h2>观察与结果</h2><span class="study-result-identity">尚未运行</span></div><div class="study-result"><p>改变一个参数，观察预测、误差与更新轨迹。</p></div></section><section class="study-code-panel"><div class="study-section-title"><h2>这次运行的算法</h2><button data-study="focus-code">专注看代码</button></div><p class="study-code-guide">这里是阅读器内置计算的 JavaScript 源码。书中提供的 Python 参考文件可在材料列表按需查看；它不会被网页直接执行。</p><textarea class="study-code" readonly spellcheck="false" aria-label="内置算法源码"></textarea><div class="study-editor-footer"><span class="study-draft-status">内置算法 · 只读</span></div></section></div><details class="study-details study-log"><summary>计算日志</summary><pre></pre></details><div class="study-artifacts"></div><p class="study-code-guide">返回书页会让本次轻量计算继续；关闭页面会中断未结束的计算。参数变化只标记旧结果，不自动运行。</p>`;
+  body.innerHTML=intro('内置计算 · 按你选择的参数',a.title,a.description??'')+`<div class="study-activity-toolbar"><button class="study-primary" data-study="run">运行计算</button><button data-study="cancel" hidden>停止运行</button><button data-study="my-result" disabled>查看已保存结果</button><span class="study-runtime-badge">阅读器内置 · 无需 Python</span></div><div class="study-parameters">${(a.parameters??[]).map(p=>`<label>${enc(p.label??p.name)}<input type="number" data-parameter="${enc(p.name)}" data-parameter-type="${enc(p.type)}" value="${p.default}" min="${p.min}" max="${p.max}" step="${p.type==='integer'?'1':'any'}"/></label>`).join('')}</div><p class="study-run-status" role="status">运行时只使用本活动的输入，不安装依赖。</p><div class="study-lab-grid"><section class="study-result-panel"><div class="study-section-title"><h2>观察与结果</h2><span class="study-result-identity">尚未运行</span></div><div class="study-result"><p>改变一个参数，观察预测、误差与更新轨迹。</p></div></section><section class="study-code-panel"><div class="study-section-title"><h2>这次运行的算法</h2><button data-study="focus-code">专注看代码</button></div><p class="study-code-guide">这里是阅读器内置计算的 JavaScript 源码。书中提供的 Python 参考文件可在材料列表按需查看；它不会被网页直接执行。</p><textarea class="study-code" wrap="off" readonly spellcheck="false" aria-label="内置算法源码"></textarea><div class="study-editor-footer"><span class="study-draft-status">内置算法 · 只读</span></div></section></div><details class="study-details study-log"><summary>计算日志</summary><pre></pre></details><div class="study-artifacts"></div><p class="study-code-guide">返回书页会让本次轻量计算继续；关闭页面会中断未结束的计算。参数变化只标记旧结果，不自动运行。</p>`;
   one<HTMLTextAreaElement>('.study-code').value=builtinSource;
   dialog.querySelectorAll('[data-parameter]').forEach(el=>el.addEventListener('change',markStale));
   const previous=study.lastRuns?.[a.id];if(previous){try{latestRun=await invokeBook('learning_run_status',{runId:previous});await showRun(latestRun,true);}catch(error){showError(error);}}
@@ -332,7 +436,7 @@ async function showActivity(id:string):Promise<void>{
   const body=resetContent();activity=a;currentAsset=assetById(a.entry_asset)!;const generation=pageGeneration;
   latestReport=null;latestRun=null;trace=[];traceIndex=-1;linearVisualization=true;
   const description=a.description||'从当前材料的输入与问题开始，运行已登记的实验。结果与当前代码版本一同保存。';
-  body.innerHTML=intro(a.presentation==='causal-batch@1'?'先看一批 · 完整训练另行选择':'从书中的计算，到你手里的结果',a.title,description)+`<div class="study-activity-toolbar"><button class="study-primary" data-study="run" disabled>${a.presentation==='causal-training@1'?'检查预算并开始训练':a.presentation==='causal-batch@1'?'运行真实 batch 探针':'运行本章程序'}</button><button data-study="cancel" hidden>停止运行</button><button data-study="edit" ${a.editable===false||a.presentation==='causal-batch@1'?'disabled':''}>我来改</button><button data-study="blank" ${a.editable===false||a.presentation==='causal-batch@1'?'disabled':''}>从空白写</button><button data-study="reference">先看作者记录</button><button data-study="my-result" disabled>看我的记录</button><span class="study-runtime-badge">本机 ${a.runtime==='torch'?'PyTorch':'Python'} · ${a.presentation==='causal-training@1'?'按批准的设备':'CPU'}</span></div><div class="study-run-status" role="status" aria-live="polite">正在读取源码与上次记录；就绪后才可运行。</div><div class="study-lab-grid"><section class="study-result-panel"><div class="study-section-title"><h2>观察与结果</h2><span class="study-result-identity">尚未运行</span></div><div class="study-result"><div class="study-empty-result"><span>⌁</span><h3>先在心里作一个预测</h3><p>${a.presentation==='linear-classifier@1'?'步长改变时，分界线与最终参数会怎样变化？':a.presentation==='gradient-step@1'?'算出了梯度，是否已经改动了参数？':a.presentation==='causal-batch@1'?'每个位置能看到哪些输入？它应该预测哪个 token？':'先预测一个可以核对的结果，再运行和比较。'}</p></div></div></section><section class="study-code-panel"><div class="study-section-title"><h2>计算写在哪里</h2><span class="study-code-mode">只读参考</span></div><p class="study-code-guide">${enc(a.reading_guide??'沿当前问题追踪输入、计算和输出。')}</p><textarea class="study-code" spellcheck="false" aria-label="Python 代码" readonly></textarea><div class="study-editor-footer"><span class="study-draft-status">正在读取原件…</span><button data-study="draft-history">草稿历史</button><button data-study="export-code">导出</button><button data-study="save" hidden>保存我的版本 <kbd>Ctrl S</kbd></button></div></section></div><details class="study-details"><summary>环境、资源预算与运行边界</summary><p>${a.presentation==='causal-training@1'?'完整训练使用上方选择的设备，每次运行单独确认时间预算。':'当前使用已核对的本机 Python 环境与 CPU。'}每次有独立目录、${a.presentation==='causal-training@1'?'本次批准的时间':a.timeout_seconds+' 秒时间'}上限、${a.presentation==='causal-training@1'?8:4} GiB 进程组已提交内存上限；${a.presentation==='causal-training@1'?'不调用外部 API。':'未启动 GPU 或外部 API。'}返回书页会继续计算，关闭应用会结束本机任务。Windows Job Objects 管理取消与退出，<strong>不是文件或网络沙箱</strong>。参考配方只使用登记的输入副本。修改代码需明确授权当前版本的高信任本机执行。</p></details><details class="study-details study-log"><summary>运行日志与错误定位（每路最多 2 MiB）</summary><pre></pre></details><div class="study-artifacts"></div>`;
+  body.innerHTML=intro(a.presentation==='causal-batch@1'?'先看一批 · 完整训练另行选择':'从书中的计算，到你手里的结果',a.title,description)+`<div class="study-activity-toolbar"><button class="study-primary" data-study="run" disabled>${a.presentation==='causal-training@1'?'检查预算并开始训练':a.presentation==='causal-batch@1'?'运行真实 batch 探针':'运行本章程序'}</button><button data-study="cancel" hidden>停止运行</button><button data-study="edit" ${a.editable===false||a.presentation==='causal-batch@1'?'disabled':''}>我来改</button><button data-study="blank" ${a.editable===false||a.presentation==='causal-batch@1'?'disabled':''}>从空白写</button><button data-study="reference">先看作者记录</button><button data-study="my-result" disabled>看我的记录</button><span class="study-runtime-badge">本机 ${a.runtime==='torch'?'PyTorch':'Python'} · ${a.presentation==='causal-training@1'?'按批准的设备':'CPU'}</span></div><div class="study-run-status" role="status" aria-live="polite">正在读取源码与上次记录；就绪后才可运行。</div><div class="study-lab-grid"><section class="study-result-panel"><div class="study-section-title"><h2>观察与结果</h2><span class="study-result-identity">尚未运行</span></div><div class="study-result"><div class="study-empty-result"><span>⌁</span><h3>先在心里作一个预测</h3><p>${a.presentation==='linear-classifier@1'?'步长改变时，分界线与最终参数会怎样变化？':a.presentation==='gradient-step@1'?'算出了梯度，是否已经改动了参数？':a.presentation==='causal-batch@1'?'每个位置能看到哪些输入？它应该预测哪个 token？':'先预测一个可以核对的结果，再运行和比较。'}</p></div></div></section><section class="study-code-panel"><div class="study-section-title"><h2>计算写在哪里</h2><span class="study-code-mode">只读参考</span></div><p class="study-code-guide">${enc(a.reading_guide??'沿当前问题追踪输入、计算和输出。')}</p><textarea class="study-code" wrap="off" spellcheck="false" aria-label="Python 代码" readonly></textarea><div class="study-editor-footer"><span class="study-draft-status">正在读取原件…</span><button data-study="draft-history">草稿历史</button><button data-study="export-code">导出</button><button data-study="save" hidden>保存我的版本 <kbd>Ctrl S</kbd></button></div></section></div><details class="study-details"><summary>环境、资源预算与运行边界</summary><p>${a.presentation==='causal-training@1'?'完整训练使用上方选择的设备，每次运行单独确认时间预算。':'当前使用已核对的本机 Python 环境与 CPU。'}每次有独立目录、${a.presentation==='causal-training@1'?'本次批准的时间':a.timeout_seconds+' 秒时间'}上限、${a.presentation==='causal-training@1'?8:4} GiB 进程组已提交内存上限；${a.presentation==='causal-training@1'?'不调用外部 API。':'未启动 GPU 或外部 API。'}返回书页会继续计算，关闭应用会结束本机任务。Windows Job Objects 管理取消与退出，<strong>不是文件或网络沙箱</strong>。参考配方只使用登记的输入副本。修改代码需明确授权当前版本的高信任本机执行。</p></details><details class="study-details study-log"><summary>运行日志与错误定位（每路最多 2 MiB）</summary><pre></pre></details><div class="study-artifacts"></div>`;
   if(a.parameters?.length){const fields=document.createElement('div');fields.className='study-parameters';for(const field of a.parameters){const label=document.createElement('label');const title=document.createElement('span');title.textContent=field.label||field.name;label.append(title);const control=document.createElement(field.type==='enum'?'select':'input') as HTMLInputElement|HTMLSelectElement;control.dataset.parameter=field.name;if(/^[a-z][a-z0-9-]*$/.test(field.name))control.className='study-'+field.name;control.dataset.parameterType=field.type;if(field.type==='enum'){for(const value of field.choices??[]){const option=document.createElement('option');option.value=String(value);option.textContent=String(field.choiceLabels?.[String(value)]??value);control.append(option);}}else{const input=control as HTMLInputElement;input.type=field.type==='boolean'?'checkbox':field.type==='string'?'text':'number';if(field.min!==undefined)input.min=String(field.min);if(field.max!==undefined)input.max=String(field.max);if(field.type==='boolean')input.checked=Boolean(field.default);if(['number','integer'].includes(field.type))input.step=field.type==='integer'?'1':'any';if(field.max_bytes)input.maxLength=Math.min(field.max_bytes,10000);}control.value=String(field.default??'');control.addEventListener('input',markStale);label.append(control);fields.append(label);}one('.study-activity-toolbar').after(fields);}
   if(!isDesktop){one('.study-runtime-badge').textContent='网页 · 源码与参考材料';one<HTMLButtonElement>('[data-study="edit"]').disabled=false;one<HTMLButtonElement>('[data-study="blank"]').disabled=false;const info=one('.study-content').querySelector<HTMLElement>(':scope > .study-details p');if(info)info.textContent='这项活动需要桌面的本机解释器与经过审查的运行配置。网页可阅读源码、保存个人草稿和查看参考材料；不会安装依赖或执行 Python。可导出草稿，在桌面中核对同一书籍版本后继续。';}
   one('.study-editor-footer').insertAdjacentHTML('beforeend','<button data-study="reference-code">读参考源码</button>');
@@ -350,22 +454,38 @@ async function showActivity(id:string):Promise<void>{
   one<HTMLTextAreaElement>('.study-code').addEventListener('input',()=>{markStale();one('.study-draft-status').textContent='正在保存你的修改…';if(saveTimer)clearTimeout(saveTimer);saveTimer=window.setTimeout(()=>void saveDraft(),550);});
   one<HTMLTextAreaElement>('.study-code').addEventListener('keydown',e=>{if(e.ctrlKey&&e.code==='BracketRight'&&!(e.currentTarget as HTMLTextAreaElement).readOnly){e.preventDefault();const t=e.currentTarget as HTMLTextAreaElement;const start=t.selectionStart;t.setRangeText('    ',start,t.selectionEnd,'end');t.dispatchEvent(new Event('input'));}});
   for(const control of Array.from(dialog.querySelectorAll('.study-parameters input,.study-parameters select')))control.addEventListener('input',markStale);
-  const previous=study.lastRuns?.[a.id];if(previous){try{const savedRun=await invokeBook<any>('learning_run_status',{runId:previous});if(generation!==pageGeneration)return;latestRun=savedRun;await showRun(latestRun,true);}catch(e){if(generation!==pageGeneration)return;one('.study-run-status').textContent=`上次运行记录暂不可用：${String(e)}`;}}
+  const previous=study.lastRuns?.[a.id];if(previous){try{const savedRun=await invokeBook<any>('learning_run_status',{runId:previous});if(generation!==pageGeneration)return;latestRun=savedRun;one<HTMLButtonElement>('[data-study="my-result"]').disabled=false;if(!showingAuthorReference)await showRun(latestRun,true);}catch(e){if(generation!==pageGeneration)return;one('.study-run-status').textContent=`上次运行记录暂不可用：${String(e)}`;}}
   if(generation!==pageGeneration)return;one<HTMLButtonElement>('[data-study="run"]').disabled=latestRun?.status==='running'||a.registered===false;if(a.registered===false)one('.study-run-status').textContent='此活动还未完成本机环境与配方登记。源码和参考材料仍可阅读，不会假装已经接通运行。';else if(!previous)one('.study-run-status').textContent='准备好了。点击时才计算；作者原文件保持完整。';
 }
 function markStale():void{if(latestReport||latestRun){one('.study-result-identity').textContent=(displayedResultIdentity||'已保存结果')+' · 输入已改变';one('.study-result-panel').classList.add('study-stale');one('.study-run-status').textContent='参数或草稿已改变。上方标明的旧结果仍然保留；点击运行才会计算新结果。';} }
+function sameActivity(bookId:string,activityId:string,generation:number,editor:HTMLTextAreaElement):boolean{
+  return workspace.open&&origin?.bookId===bookId&&activity?.id===activityId&&pageGeneration===generation&&dialog.querySelector('.study-code')===editor;
+}
 async function enableDraft(blank:boolean):Promise<void>{
-  if(!activity)return;
-  const draft=await invokeBook<any>('learning_draft',{activityId:activity.id});
-  const editor=one<HTMLTextAreaElement>('.study-code');
-  if(blank&&draft?.code.trim())await invokeBook('learning_save_draft',{activityId:activity.id,code:draft.code});
-  draftMode=true;editor.readOnly=false;
-  editor.value=blank?activity.practice?.starter??`# 我的独立练习：${activity.title}\n# 先确定输入、计算与可核对的输出。\n\n`:draft?.code??referenceCode;
-  if(blank){const guide=dialog.querySelector<HTMLDetailsElement>('.study-practice-guide');if(guide)guide.open=true;}
-  one('.study-code-mode').textContent='我的独立版本';one<HTMLButtonElement>('[data-study="save"]').hidden=false;editor.focus();await saveDraft();markStale();
+  if(!activity||!origin)return;
+  const a=activity,bookId=origin.bookId,generation=pageGeneration,editor=dialog.querySelector<HTMLTextAreaElement>('.study-code');
+  if(!editor)return;
+  try{
+    const draft=await invoke<any>('learning_draft',{bookId,activityId:a.id});
+    if(!sameActivity(bookId,a.id,generation,editor))return;
+    if(blank&&draft?.code.trim()){
+      await invoke('learning_save_draft',{bookId,activityId:a.id,code:draft.code});
+      if(!sameActivity(bookId,a.id,generation,editor))return;
+    }
+    draftMode=true;editor.readOnly=false;
+    const code=blank?a.practice?.starter??`# 我的独立练习：${a.title}\n# 先确定输入、计算与可核对的输出。\n\n`:draft?.code??referenceCode;
+    editor.value=code;
+    if(blank){const guide=dialog.querySelector<HTMLDetailsElement>('.study-practice-guide');if(guide)guide.open=true;}
+    one('.study-code-mode').textContent='我的独立版本';one<HTMLButtonElement>('[data-study="save"]').hidden=false;editor.focus();
+    await invoke('learning_save_draft',{bookId,activityId:a.id,code});
+    if(!sameActivity(bookId,a.id,generation,editor))return;
+    one('.study-draft-status').textContent=editor.value===code?'我的版本已保存':'正在保存你的修改…';markStale();
+  }catch(error){if(sameActivity(bookId,a.id,generation,editor))showError(error);}
 }
 async function showReferenceCode():Promise<void>{
-  await saveDraft();draftMode=false;const editor=one<HTMLTextAreaElement>('.study-code');editor.value=referenceCode;editor.readOnly=true;
+  if(!activity||!origin)return;const a=activity,bookId=origin.bookId,generation=pageGeneration,editor=one<HTMLTextAreaElement>('.study-code');
+  await saveDraft();if(!sameActivity(bookId,a.id,generation,editor))return;
+  draftMode=false;editor.value=referenceCode;editor.readOnly=true;
   one('.study-code-mode').textContent='只读参考';one('.study-draft-status').textContent='原件只读 · 我的版本仍在草稿中';one<HTMLButtonElement>('[data-study="save"]').hidden=true;markStale();
 }
 function locateCode(symbol:string):void{
@@ -377,7 +497,7 @@ function locateCode(symbol:string):void{
   const line=editor.value.slice(0,start).split('\n').length-1;editor.scrollTop=Math.max(0,line-4)*parseFloat(getComputedStyle(editor).lineHeight);
   let location=dialog.querySelector<HTMLElement>('.study-code-location');if(!location){location=document.createElement('p');location.className='study-code-location';editor.after(location);}location.textContent=`源码定位：${symbol} · 第 ${line+1} 行（阅读位置，不是执行中的一行）`;
 }
-async function saveDraft():Promise<void>{if(!activity||!draftMode)return;const editor=dialog.querySelector<HTMLTextAreaElement>('.study-code');if(!editor)return;try{await invokeBook('learning_save_draft',{activityId:activity.id,code:editor.value});one('.study-draft-status').textContent='我的版本已保存';}catch(e){showError(e);}}
+async function saveDraft():Promise<void>{if(!activity||!origin||!draftMode)return;const editor=dialog.querySelector<HTMLTextAreaElement>('.study-code');if(!editor)return;const bookId=origin.bookId,activityId=activity.id,generation=pageGeneration,code=editor.value;try{await invoke('learning_save_draft',{bookId,activityId,code});if(sameActivity(bookId,activityId,generation,editor))one('.study-draft-status').textContent=editor.value===code?'我的版本已保存':'正在保存你的修改…';}catch(e){if(sameActivity(bookId,activityId,generation,editor))showError(e);}}
 function currentActivityParameters(a:Activity):any{
     const params:any=a.presentation==='causal-training@1'?{device:one<HTMLSelectElement>('.study-train-device').value,budget_seconds:Number(one<HTMLSelectElement>('.study-train-budget').value),resume_from:one<HTMLInputElement>('.study-resume').checked?study.lastRuns?.[a.id]??'':''}:{};
     for(const input of Array.from(dialog.querySelectorAll<HTMLInputElement|HTMLSelectElement>('[data-parameter]'))){params[input.dataset.parameter!]=input.dataset.parameterType==='boolean'?(input as HTMLInputElement).checked:['number','integer'].includes(input.dataset.parameterType!)?Number(input.value):input.value;}
@@ -385,6 +505,7 @@ function currentActivityParameters(a:Activity):any{
 }
 async function runActivity():Promise<void>{
   if(!activity||!origin)return;const a=activity;const generation=pageGeneration;
+  if(showingAuthorReference){showingAuthorReference=false;resultViewRevision++;latestReport=null;trace=[];traceIndex=-1;showPersonalRunDetails(true);one('.study-result').replaceChildren();one('.study-result-identity').textContent='尚未产生本次结果';one('.study-log pre').textContent='';one('.study-artifacts').replaceChildren();dialog.querySelector('.study-run-metadata')?.remove();dialog.querySelector('.study-artifact-detail')?.remove();}
   const button=one<HTMLButtonElement>('[data-study="run"]');if(button.disabled)return;button.disabled=true;
   one('.study-run-status').textContent='正在准备当前代码版本…';
   try{
@@ -408,7 +529,7 @@ async function runActivity():Promise<void>{
     if(poll)clearInterval(poll);
     const runId=latestRun.run_id;const bookId=origin.bookId;
     let polling=false;poll=window.setInterval(async()=>{
-      if(polling)return;polling=true;try{const result=await invoke<any>('learning_run_status',{bookId,runId});activeRun=result;refreshLearningButton();if(origin?.bookId===bookId&&activity?.id===a.id){latestRun=result;if(workspace.open)await showRun(result);}
+      if(polling)return;polling=true;try{const result=await invoke<any>('learning_run_status',{bookId,runId});activeRun=result;refreshLearningButton();if(origin?.bookId===bookId&&activity?.id===a.id){latestRun=result;if(workspace.open&&!showingAuthorReference)await showRun(result);}
         if(result.status!=='running'){if(poll)clearInterval(poll);poll=null;}
       }catch(e){if(poll)clearInterval(poll);poll=null;showError(e);}finally{polling=false;}
     },500);
@@ -420,9 +541,17 @@ async function trainingConsent(params:any):Promise<boolean>{
 async function highTrustConsent():Promise<boolean>{
   return new Promise(resolve=>{const box=document.createElement('div');box.className='study-consent';box.innerHTML='<section role="alertdialog" aria-modal="true" aria-labelledby="trust-title"><p class="study-eyebrow">只授权当前保存的代码版本</p><h2 id="trust-title">在本机运行你修改的代码</h2><p>它以你当前的 Windows 用户身份运行，能访问该用户有权访问的文件和网络。独立副本、时间上限和停止按钮不能隔离这些权限。</p><p>仅运行你理解并信任的代码。书籍网页或来源资料不能替你作此授权。</p><div><button class="trust-no">返回检查代码</button><button class="study-primary trust-yes">我信任这一版，运行</button></div></section>';dialog.append(box);const finish=(v:boolean)=>{cancelConsent=null;box.remove();resolve(v);};cancelConsent=()=>finish(false);box.querySelector('.trust-no')!.addEventListener('click',()=>finish(false));box.querySelector('.trust-yes')!.addEventListener('click',()=>finish(true));box.querySelector<HTMLButtonElement>('.trust-no')!.focus();});
 }
+function showPersonalRunDetails(visible:boolean):void{
+  for(const selector of ['.study-log','.study-artifacts','.study-run-metadata','.study-artifact-detail']){
+    const element=dialog.querySelector<HTMLElement>(selector);if(element)element.hidden=!visible;
+  }
+}
 async function showRun(run:any,restored=false):Promise<void>{
   if(!activity)return;
-  const generation=pageGeneration;one<HTMLButtonElement>('[data-study="my-result"]').disabled=false;
+  const generation=pageGeneration,viewRevision=++resultViewRevision;
+  if(showingAuthorReference){latestReport=null;trace=[];traceIndex=-1;one('.study-result').replaceChildren();}
+  showingAuthorReference=false;showPersonalRunDetails(true);
+  one<HTMLButtonElement>('[data-study="my-result"]').disabled=false;
   const status=({running:'本机正在计算；返回书页后会继续。需要结束时请点击“停止运行”。',succeeded:'这次运行已完成 · 结果与代码版本一同保存',failed:'程序报错了 · 原始错误与代码保留在下方',cancelled:'进程树已停止 · 草稿和已有输出保留',interrupted:'上次运行已中断 · 没有自动重跑'} as Record<string,string>)[run.status]??run.status;
   one('.study-run-status').textContent=run.status==='running'?status:'计算已结束，正在读取这一版结果…';one('.study-log pre').textContent=(run.stdout??'')+(run.stderr?'\n'+run.stderr:'');
   one<HTMLButtonElement>('[data-study="run"]').disabled=true;one<HTMLButtonElement>('[data-study="cancel"]').hidden=run.status!=='running';
@@ -433,11 +562,11 @@ async function showRun(run:any,restored=false):Promise<void>{
   const files=run.artifacts??[];
   one('.study-artifacts').innerHTML=files.length?`<div class="study-section-title"><h2>这次留下的结果</h2><span>${files.length} 个独立产物</span></div>${files.map((a:any)=>`<button class="study-artifact" data-study="artifact" data-path="${enc(a.path)}">${enc(a.path.split('/').pop())}<span>${formatBytes(a.bytes)} ↗</span></button>`).join('')}`:'';
   if(run.status==='succeeded'){
-    const contract=files.find((f:any)=>f.path.endsWith('visualization-contract.json'));if(contract){const info=JSON.parse(new TextDecoder().decode(buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:contract.path}))));if(generation!==pageGeneration)return;linearVisualization=info.linear_score_matches_reference===true;}
+    const contract=files.find((f:any)=>f.path.endsWith('visualization-contract.json'));if(contract){const info=JSON.parse(new TextDecoder().decode(buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:contract.path}))));if(generation!==pageGeneration||viewRevision!==resultViewRevision)return;linearVisualization=info.linear_score_matches_reference===true;}
     const main=activity.result_suffix?files.find((f:any)=>f.path.endsWith(activity!.result_suffix)):files.find((f:any)=>f.extension==='json');
-    if(main){const raw=buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:main.path}));if(generation!==pageGeneration)return;latestReport=JSON.parse(new TextDecoder().decode(raw));renderResult(latestReport,`${restored?'保存的结果':'本次结果'} · ${run.run_id.slice(0,8)} · 代码 ${run.code_sha256.slice(0,8)}`);}else{one('.study-result').replaceChildren();appendText(one('.study-result'),run.stdout||'程序正常结束，没有打印输出。可以在自己的代码中打印正在核对的量，再检查它是否符合预期。');one('.study-result-identity').textContent=restored?'上次运行记录':'本次程序输出';}
-    const track=files.find((f:any)=>f.path.endsWith('execution_trace.json'));if(track){trace=JSON.parse(new TextDecoder().decode(buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:track.path}))));traceIndex=-1;if(linearVisualization)renderTraceControls();}
-    if(activity.presentation==='causal-batch@1'){const batch=files.find((f:any)=>f.path.endsWith('visible_batch.json'));if(batch){const data=JSON.parse(new TextDecoder().decode(buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:batch.path}))));renderBatch(data);}}
+    if(main){const raw=buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:main.path}));if(generation!==pageGeneration||viewRevision!==resultViewRevision)return;latestReport=JSON.parse(new TextDecoder().decode(raw));renderResult(latestReport,`${restored?'保存的结果':'本次结果'} · ${run.run_id.slice(0,8)} · 代码 ${run.code_sha256.slice(0,8)}`);}else{one('.study-result').replaceChildren();appendText(one('.study-result'),run.stdout||'程序正常结束，没有打印输出。可以在自己的代码中打印正在核对的量，再检查它是否符合预期。');one('.study-result-identity').textContent=restored?'上次运行记录':'本次程序输出';}
+    const track=files.find((f:any)=>f.path.endsWith('execution_trace.json'));if(track){const raw=buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:track.path}));if(generation!==pageGeneration||viewRevision!==resultViewRevision)return;trace=JSON.parse(new TextDecoder().decode(raw));traceIndex=-1;if(linearVisualization)renderTraceControls();}
+    if(activity.presentation==='causal-batch@1'){const batch=files.find((f:any)=>f.path.endsWith('visible_batch.json'));if(batch){const raw=buffer(await invokeBook<ArrayBuffer|number[]>('learning_artifact',{runId:run.run_id,artifactPath:batch.path}));if(generation!==pageGeneration||viewRevision!==resultViewRevision)return;const data=JSON.parse(new TextDecoder().decode(raw));renderBatch(data);}}
   }else if(run.status==='failed'){
     const stderr=String(run.stderr??'');const last=stderr.trim().split(/\r?\n/).filter(Boolean).slice(-1)[0]??'进程未正常结束。';
     const reason=/OutOfMemoryError|out of memory|MemoryError/.test(stderr)?'计算所需内存未能分配。先核对本次主机内存预算与设备占用，再决定是否重试。显存空闲量与 Windows 进程内存限制是不同的量。':/ModuleNotFoundError|ImportError/.test(stderr)?'当前解释器缺少程序需要的依赖。请先核对本章环境；不会自动安装或更换环境。':/SyntaxError|IndentationError/.test(stderr)?'Python 还没能读懂这段代码。检查所示位置的语法、括号和缩进，再保存重试。':'本次计算已停止。检查出错行使用的输入、形状和条件；完整原始错误保留在下方日志中。';
@@ -446,12 +575,12 @@ async function showRun(run:any,restored=false):Promise<void>{
     one('.study-result-identity').textContent='这次运行未完成';
     if(run.job_memory)one('.study-result').insertAdjacentHTML('beforeend',`<p class="study-code-guide">进程组峰值：${formatBytes(run.job_memory.peak_committed_bytes)}；本次上限：${formatBytes(run.job_memory.limit_bytes)}。这是主机已提交内存，不是显存。</p>`);
   }
-  if(generation!==pageGeneration)return;
+  if(generation!==pageGeneration||viewRevision!==resultViewRevision)return;
   one('.study-run-status').textContent=run.diagnostic??status;
   one<HTMLButtonElement>('[data-study="run"]').disabled=false;
   let metadata=dialog.querySelector<HTMLElement>('.study-run-metadata');if(!metadata){metadata=document.createElement('details');metadata.className='study-details study-run-metadata';one('.study-content').append(metadata);}metadata.innerHTML='<summary>这次运行的版本、输入与环境</summary>';appendText(metadata,JSON.stringify({run_id:run.run_id,code_sha256:run.code_sha256,adapter_sha256:run.adapter_sha256,params:run.params,environment:run.environment||run.runtime,inputs:run.inputs,started_at:run.started_at,ended_at:run.ended_at},null,2));
   if(restored){one('.study-run-status').textContent='已恢复上次运行记录。修改参数或代码后，请主动重新运行。';one('.study-result-panel').classList.add('study-stale');}
-  if(activity&&run.status==='succeeded'){const current=currentActivityParameters(activity);const changed=Object.keys(run.params??{}).some(key=>JSON.stringify(current[key])!==JSON.stringify(run.params[key]));const codeHash=await digest(draftMode?one<HTMLTextAreaElement>('.study-code').value:referenceCode);if(generation===pageGeneration&&(changed||codeHash!==run.code_sha256))markStale();}
+  if(activity&&run.status==='succeeded'){const current=currentActivityParameters(activity);const changed=Object.keys(run.params??{}).some(key=>JSON.stringify(current[key])!==JSON.stringify(run.params[key]));const codeHash=await digest(draftMode?one<HTMLTextAreaElement>('.study-code').value:referenceCode);if(generation===pageGeneration&&viewRevision===resultViewRevision&&(changed||codeHash!==run.code_sha256))markStale();}
 }
 function renderResult(value:any,identity:string):void{
   displayedResultIdentity=identity;
@@ -490,11 +619,11 @@ function drawCards(rows:any[],weights:number[],bias:number):void{
   for(let i=0;i<=3;i++){const gx=loX+i*spanX/3,gy=loY+i*spanY/3;ctx.beginPath();ctx.moveTo(x(gx),28);ctx.lineTo(x(gx),h-35);ctx.stroke();ctx.beginPath();ctx.moveTo(45,y(gy));ctx.lineTo(w-25,y(gy));ctx.stroke();}
   ctx.globalAlpha=1;ctx.fillStyle=muted;
   for(let i=0;i<=3;i++){const gx=loX+i*spanX/3,gy=loY+i*spanY/3;ctx.fillText(String(Number(gx.toPrecision(3))),x(gx)-7,h-10);ctx.fillText(String(Number(gy.toPrecision(3))),8,y(gy)+8);}
-  ctx.save();ctx.beginPath();ctx.rect(45,20,w-70,h-55);ctx.clip();ctx.strokeStyle='#b9864c';ctx.lineWidth=3;ctx.beginPath();
+  ctx.save();ctx.beginPath();ctx.rect(45,20,w-70,h-55);ctx.clip();ctx.strokeStyle=getComputedStyle(dialog).getPropertyValue('--accent').trim();ctx.lineWidth=3;ctx.beginPath();
   if(weights[1]!==0){ctx.moveTo(x(xmin),y((-bias-weights[0]*xmin)/weights[1]));ctx.lineTo(x(xmax),y((-bias-weights[0]*xmax)/weights[1]));}
   else if(weights[0]!==0){const at=-bias/weights[0];ctx.moveTo(x(at),20);ctx.lineTo(x(at),h-35);}
   ctx.stroke();ctx.restore();
-  for(const row of valid){ctx.fillStyle=row.label>0?'#be935d':'#669ba0';ctx.beginPath();ctx.arc(x(row.features[0]),y(row.features[1]),12,0,Math.PI*2);ctx.fill();ctx.fillStyle=ink;ctx.fillText(row.label>0?'+1':'−1',x(row.features[0])+19,y(row.features[1])+8);}
+  for(const row of valid){ctx.fillStyle=row.label>0?(document.documentElement.dataset.theme==='paper'||document.documentElement.dataset.theme==='light'?'#8a492f':'#e0a077'):(document.documentElement.dataset.theme==='paper'||document.documentElement.dataset.theme==='light'?'#286a76':'#87c5ce');ctx.beginPath();ctx.arc(x(row.features[0]),y(row.features[1]),12,0,Math.PI*2);ctx.fill();ctx.fillStyle=ink;ctx.fillText(row.label>0?'+1':'−1',x(row.features[0])+19,y(row.features[1])+8);}
   ctx.fillStyle=muted;ctx.fillText('x₁',w-32,h-10);ctx.fillText('x₂',9,24);
 }
 
@@ -502,9 +631,18 @@ function renderTraceControls():void{const area=dialog.querySelector('.study-trac
 function stepTrace(delta:number):void{if(!trace.length||!latestReport)return;showingTrace=true;traceIndex=Math.min(trace.length-1,Math.max(0,traceIndex+delta));const s=trace[traceIndex];drawCards(latestReport.training_rows,s.weights,s.bias);one('.study-step-label').textContent=`轨迹回放 ${traceIndex+1} / ${trace.length} · 第 ${s.epoch} 轮 · 当时源码第 ${s.line} 行`;const metrics=dialog.querySelectorAll<HTMLElement>('.study-result > .study-metrics > div');if(metrics[0]&&metrics[1]){metrics[0].querySelector('span')!.textContent='回放时刻的权重 w';metrics[0].querySelector('strong')!.textContent=s.weights.join('，');metrics[1].querySelector('span')!.textContent='回放时刻的偏置 b';metrics[1].querySelector('strong')!.textContent=String(s.bias);}one('.study-result-identity').textContent='回放已保存的轨迹 · '+(latestRun?.run_id?.slice(0,8)??'作者记录');one('.study-step-description').textContent=s.phase==='after_update'?`更新完成：卡片 (${s.features.join(', ')})，判断使用的分数 ${s.score_before}。旧参数 (${s.old_weights?.join(', ')}, ${s.old_bias}) → 新参数 (${s.weights.join(', ')}, ${s.bias})；变化量 (${s.weight_delta?.join(', ')}, ${s.bias_delta})。`:`判断前：卡片 (${s.features.join(', ')})，标签 ${s.label}，已算出的本张分数 ${s.score_before}；当前参数 w=(${s.weights.join(', ')}), b=${s.bias}。`;}
 function renderBatch(v:any):void{const area=document.createElement('details');area.className='study-details';area.open=true;area.innerHTML='<summary>这次真实 batch 的输入、目标与可见范围</summary><p>以下展示第一条样本的前 16 个位置。位置 t 的输入只可读到 t，目标为下一 token；完整数组保存在这次产物中。</p><table class="study-table"><thead><tr><th>位置</th><th>input id</th><th>label id</th><th>可见输入</th><th>参与损失</th></tr></thead><tbody>'+v.input_ids[0].slice(0,16).map((id:number,i:number)=>`<tr><td>${i}</td><td>${enc(id)}</td><td>${enc(v.labels[0][i])}</td><td>0 … ${i}</td><td>${v.attention_mask[0][i]?'是':'否'}</td></tr>`).join('')+'</tbody></table>';one('.study-result').append(area);}
 async function showReference():Promise<void>{
-  if(!activity)return;const asset=activity.reference_asset?assetById(activity.reference_asset):undefined;
+  if(!activity||!origin)return;const a=activity,bookId=origin.bookId,generation=pageGeneration;
+  const asset=a.reference_asset?assetById(a.reference_asset):undefined;
   if(!asset){showError('这项活动没有登记独立的参考结果；原材料仍可从本章列表查看。');return;}
-  try{linearVisualization=true;trace=[];traceIndex=-1;latestReport=JSON.parse(new TextDecoder().decode(await bytesFor(asset)));renderResult(latestReport,'作者已有记录 · 不是本次运行');}catch(error){showError(error);}
+  const viewRevision=++resultViewRevision,wasAuthor=showingAuthorReference;showingAuthorReference=true;
+  one('.study-run-status').textContent='正在读取作者已有记录；个人运行详情仍独立保存。';
+  try{
+    const raw=await bytesFor(asset);
+    if(generation!==pageGeneration||viewRevision!==resultViewRevision||origin?.bookId!==bookId||activity?.id!==a.id)return;
+    linearVisualization=true;trace=[];traceIndex=-1;latestReport=JSON.parse(new TextDecoder().decode(raw));
+    showPersonalRunDetails(false);renderResult(latestReport,'作者已有记录 · 不是本次运行');
+    one('.study-run-status').textContent='正在查看作者已有记录；点击“看我的记录”可回到原来的运行详情。';
+  }catch(error){if(generation===pageGeneration&&viewRevision===resultViewRevision){showingAuthorReference=wasAuthor;showPersonalRunDetails(!wasAuthor);showError(error);}}
 }
 async function showArtifact(path:string):Promise<void>{
   if(!latestRun)return;const run=latestRun,generation=pageGeneration;
@@ -530,26 +668,35 @@ async function showArtifact(path:string):Promise<void>{
 }
 
 function showSources(url?:string):void{
-  const body=resetContent();const claims=pack!.source_claims.filter(s=>s.chapter===chapter!.id&&(!url||s.url===url));
+  const body=resetContent('sources');const claims=pack!.source_claims.filter(s=>s.chapter===chapter!.id&&(!url||s.url===url));
   body.innerHTML=intro('原典在手边','看这句话的依据','引文、书中解释与原始资料分开呈现。这里保留当前版本的论断和引用范围，不补造页码。');
   for(const s of claims){const card=document.createElement('article');card.className='study-source-card';card.innerHTML=`<div class="study-section-title"><span class="study-eyebrow">${enc(s.chapter)} · ${enc(s.year??'日期见原引用')}</span><span>书中引用</span></div><h2>${enc(s.title||new URL(s.url).hostname)}</h2><p class="study-eyebrow">书中这段解释 · 非原文摘录</p><blockquote>${enc(s.claim)}</blockquote><p class="study-source-locator">引用范围：${enc(s.source_locator||s.citation)}</p><p class="study-source-locator">作者／机构（按书中标注）：${enc(s.attribution_from_book||'当前引文未单列，需核对原件')} · 年份／版本：${enc(s.publication_year_from_book||s.year||'见原始资料')}</p><div class="study-source-actions"><a href="${enc(s.url)}" target="_blank" rel="noopener noreferrer">在系统浏览器读原文 ↗</a><button class="study-copy-source">复制原始链接</button></div><details class="study-details"><summary>原始链接与核对边界</summary><p>${enc(s.url)}</p><p>${enc(s.metadata_status)}。书中这段解释的支持范围仍需对照原文判断。</p></details>`;if(s.url)card.querySelector('.study-copy-source')!.addEventListener('click',()=>void navigator.clipboard.writeText(s.url).then(()=>status('原始链接已复制')));else{card.querySelector('.study-source-actions')?.remove();card.querySelector('.study-details')?.remove();}body.append(card);}
   if(!claims.length)body.insertAdjacentHTML('beforeend','<p class="study-callout">此处没有登记外部引文。可查看本章的本地数据来源说明。</p>');
 }
 function showMap(history:boolean):void{
-  const body=resetContent();body.innerHTML=intro(history?'历史发展 · 原文中的研究线索':'学习地图 · 真实出版顺序',history?'让日期保留它的含义':'知道自己站在哪里',history?'以下按引用中明确出现的年份排列。时间相邻不表示因果，不绘制未经证实的影响箭头。':'当前章节突出显示；依赖关系来自现行单元登记中的具体使用点。点击可回到相应正文。')+`<div class="study-tabs"><button data-study="map" class="${!history?'active':''}">学习依赖</button><button data-study="history" class="${history?'active':''}">历史线索</button></div>`;
+  const body=resetContent('map');body.innerHTML=intro(history?'历史发展 · 原文中的研究线索':'学习地图 · 真实出版顺序',history?'让日期保留它的含义':'知道自己站在哪里',history?'以下按引用中明确出现的年份排列。时间相邻不表示因果，不绘制未经证实的影响箭头。':'当前章节突出显示；依赖关系来自现行单元登记中的具体使用点。点击可回到相应正文。')+`<div class="study-tabs"><button data-study="map" class="${!history?'active':''}">学习依赖</button><button data-study="history" class="${history?'active':''}">历史线索</button></div>`;
   if(history){const seen=new Set();const claims=pack!.source_claims.filter(s=>s.chapter===chapter!.id&&s.year&&!seen.has(s.url)&&seen.add(s.url)).sort((a,b)=>a.year-b.year);body.insertAdjacentHTML('beforeend',`<div class="study-timeline">${claims.map(s=>`<article><time>${enc(s.year)}</time><div><h3>${enc(s.title)}</h3><p>${enc(s.claim)}</p><a href="${enc(s.url)}" target="_blank" rel="noopener noreferrer">读对应原文 ↗</a></div></article>`).join('')}</div>`);if(!claims.length)body.insertAdjacentHTML('beforeend','<p>本章引文中没有可直接读取的年份。日期没有被推测补齐。</p>');return;}
   const deps=pack!.dependencies.filter(d=>d.to===chapter!.id);
-  body.insertAdjacentHTML('beforeend',`<div class="study-dependencies">${deps.map(d=>{const c=pack!.chapters.find(c=>c.id===d.from)!;return `<button data-study="jump" data-href="${enc(c.href+'#'+d.provider_anchor)}"><span>${enc(c.title)}</span><strong>${enc(d.concept)}</strong><small>${enc(d.action)} ↗</small></button>`;}).join('')}</div><div class="study-section-title"><h2>全书 · 47 章与导读</h2><span>教学顺序，不是历史因果链</span></div><div class="study-chapter-map">${pack!.chapters.map(c=>`<button data-study="chapter" data-id="${c.id}" class="${c.id===chapter!.id?'current':''}"><span>${String(c.number).padStart(2,'0')}</span><strong>${enc(c.title.replace(/^第.+?章\s*/,''))}</strong></button>`).join('')}</div>`);
+  body.insertAdjacentHTML('beforeend',`<div class="study-dependencies">${deps.map(d=>{const c=pack!.chapters.find(c=>c.id===d.from)!;return `<button data-study="jump" data-href="${enc(c.href+'#'+d.provider_anchor)}"><span>${enc(c.title)}</span><strong>${enc(d.concept)}</strong><small>${enc(d.action)} ↗</small></button>`;}).join('')}</div><div class="study-section-title"><h2>全书目录 · ${pack!.chapters.length} 节</h2><span>教学顺序，不是历史因果链</span></div><div class="study-chapter-map">${pack!.chapters.map(c=>`<button data-study="chapter" data-id="${c.id}" class="${c.id===chapter!.id?'current':''}"><span>${String(c.number).padStart(2,'0')}</span><strong>${enc(c.title.replace(/^第.+?章\s*/,''))}</strong></button>`).join('')}</div>`);
 }
 
 async function showAudio(groupId:string,initial?:string):Promise<void>{
-  const group=pack!.audio_groups.find(g=>g.id===groupId);if(!group)return;const body=resetContent();const files:Asset[]=group.assets.map((id:string)=>assetById(id)!);currentAsset=files.find(a=>a.id===initial)??files[0];
+  const group=pack!.audio_groups.find(g=>g.id===groupId);if(!group)return;resourceChapter(group.assets.flatMap((id:string)=>assetById(id)?.chapters??[]));const body=resetContent();const files:Asset[]=group.assets.map((id:string)=>assetById(id)!);currentAsset=files.find(a=>a.id===initial)??files[0];
   body.innerHTML=intro(`${chapter?.title??'当前材料'} · 听见差别`,group.title,group.description)+`<div class="study-tabs">${pack!.audio_groups.map(g=>`<button data-study="audio-group" data-id="${enc(g.id)}" class="${g.id===groupId?'active':''}">${enc(g.title)}</button>`).join('')}</div><div class="study-audio-layout"><div class="study-audio-choices">${files.map((a,i)=>`<button class="study-audio-choice ${a.id===currentAsset!.id?'selected':''}" data-audio-id="${a.id}"><span>${String.fromCharCode(65+i)}</span><div><strong>${enc(a.title)}</strong><small>${a.media?.sample_rate?Number(a.media.sample_rate).toLocaleString()+' Hz':'原采样率待核'} · ${a.media?.duration?Number(a.media.duration).toFixed(2)+' 秒':'读取时长中'} · ${a.role==='external_model'?'外部模型生成':'作者记录'}</small></div></button>`).join('')}</div><section class="study-audio-player"><span class="study-eyebrow">${files.length===1?'单段音频 · 手动播放':group.synchronize===false?'独立音频 · 分别定位':'同一时间片切换 · 每次只播放一个音源'}</span><h2 class="study-playing-title"></h2><audio class="study-audio" controls preload="metadata"></audio><div class="study-media-settings"><label>播放速度<select class="study-speed"><option value="0.5">0.5 ×</option><option value="0.75">0.75 ×</option><option value="1" selected>1 ×</option><option value="1.25">1.25 ×</option></select></label><label>循环起点<input class="study-loop-start" type="number" min="0" value="0" step="0.1"/></label><label>终点<input class="study-loop-end" type="number" min="0" value="2" step="0.1"/></label><label><input class="study-loop" type="checkbox"/> 循环这一段</label></div><p class="study-callout">原始音量 · 改变播放速度不会改写文件的采样率。退出时暂停，回来后不会自动播放。</p><label class="study-loudness"><input type="checkbox" class="study-rms-match"/> 按均方根幅度匹配音量（RMS）</label><p class="study-rms-status">默认原始音量；匹配不会改变文件。</p><button class="study-wave-button">按需查看波形与频谱</button><button data-study="note-media">记下这一刻</button><div class="study-wave-area"></div></section></div><div class="study-audio-details"></div>`;
   const audio=one<HTMLAudioElement>('audio');activeMedia=audio;
+  const choices=one<HTMLElement>('.study-audio-choices'),layout=one<HTMLElement>('.study-audio-layout'),player=one<HTMLElement>('.study-audio-player');
+  const stacked=window.matchMedia('(max-width:1180px)');
+  const placeChoices=()=>{
+    const focused=document.activeElement as HTMLElement|null,retainFocus=focused&&choices.contains(focused);
+    if(stacked.matches){if(choices.parentElement!==player)audio.after(choices);}
+    else if(choices.parentElement!==layout)layout.insertBefore(choices,player);
+    if(retainFocus)focused.focus({preventScroll:true});
+  };
+  placeChoices();stacked.addEventListener('change',placeChoices);disposeResponsive=()=>stacked.removeEventListener('change',placeChoices);
   let audioLoadRevision=0;
-  const load=async(a:Asset,keep:boolean)=>{const request=++audioLoadRevision;const playing=!audio.paused;const time=keep&&group.synchronize!==false?audio.currentTime:study.media[a.id]?.time??0;audio.pause();audio.removeAttribute('src');audio.load();currentAsset=a;one('.study-playing-title').textContent=a.title;const gen=pageGeneration;let url:string;try{url=await urlFor(a,'audio/wav');}catch(error){if(gen===pageGeneration&&request===audioLoadRevision)resourceUnavailable(one('.study-audio-player'),error);return;}if(gen!==pageGeneration||request!==audioLoadRevision)return;one('.study-audio-player').querySelector('.study-resource-error')?.remove();audio.src=url;if(audioGain)audioGain.gain.value=1;one('.study-playing-title').textContent=a.title;one('.study-audio-details').innerHTML=details(a);audio.addEventListener('loadedmetadata',()=>{if(request!==audioLoadRevision||gen!==pageGeneration)return;audio.currentTime=Math.min(time,audio.duration||0);if(playing&&keep)void audio.play().catch(showError);},{once:true});for(const b of Array.from(dialog.querySelectorAll<HTMLElement>('[data-audio-id]')))b.classList.toggle('selected',b.dataset.audioId===a.id);if(one<HTMLInputElement>('.study-rms-match').checked)await setAmplitudeMatch(audio);};
+  const load=async(a:Asset,keep:boolean)=>{const request=++audioLoadRevision;const playing=!audio.paused;const time=keep&&group.synchronize!==false?audio.currentTime:study.media[a.id]?.time??0;audio.pause();audio.removeAttribute('src');audio.load();audio.defaultPlaybackRate=Number(one<HTMLSelectElement>('.study-speed').value);audio.playbackRate=audio.defaultPlaybackRate;currentAsset=a;one('.study-playing-title').textContent=a.title;const gen=pageGeneration;let url:string;try{url=await urlFor(a,'audio/wav');}catch(error){if(gen===pageGeneration&&request===audioLoadRevision)resourceUnavailable(one('.study-audio-player'),error);return;}if(gen!==pageGeneration||request!==audioLoadRevision)return;one('.study-audio-player').querySelector('.study-resource-error')?.remove();audio.src=url;if(audioGain)audioGain.gain.value=1;one('.study-playing-title').textContent=a.title;one('.study-audio-details').innerHTML=details(a);audio.addEventListener('loadedmetadata',()=>{if(request!==audioLoadRevision||gen!==pageGeneration)return;audio.defaultPlaybackRate=Number(one<HTMLSelectElement>('.study-speed').value);audio.playbackRate=audio.defaultPlaybackRate;audio.currentTime=Math.min(time,audio.duration||0);if(dialog.querySelector<HTMLElement>('.study-save-state')?.dataset.statusOwner==='resource')status('音频已载入');if(playing&&keep)void audio.play().catch(showError);},{once:true});for(const b of Array.from(dialog.querySelectorAll<HTMLElement>('[data-audio-id]'))){b.classList.toggle('selected',b.dataset.audioId===a.id);b.setAttribute('aria-pressed',String(b.dataset.audioId===a.id));}if(one<HTMLInputElement>('.study-rms-match').checked)await setAmplitudeMatch(audio);};
   for(const b of Array.from(dialog.querySelectorAll<HTMLElement>('[data-audio-id]')))b.addEventListener('click',()=>void load(assetById(b.dataset.audioId!)!,true).catch(showError));
-  one<HTMLSelectElement>('.study-speed').addEventListener('change',e=>{audio.playbackRate=Number((e.target as HTMLSelectElement).value);});
+  one<HTMLSelectElement>('.study-speed').addEventListener('change',e=>{audio.defaultPlaybackRate=Number((e.target as HTMLSelectElement).value);audio.playbackRate=audio.defaultPlaybackRate;});
   audio.addEventListener('timeupdate',()=>{const ratio=audio.duration>0?audio.currentTime/audio.duration:0;for(const cursor of Array.from(dialog.querySelectorAll<HTMLElement>('.study-play-cursor')))cursor.style.left=`${Number(cursor.dataset.start||0)+ratio*Number(cursor.dataset.span||100)}%`;if(one<HTMLInputElement>('.study-loop').checked){const start=Number(one<HTMLInputElement>('.study-loop-start').value),end=Number(one<HTMLInputElement>('.study-loop-end').value);if(end>start&&audio.currentTime>=Math.min(audio.duration,end)){audio.currentTime=start;}}});
   one('.study-wave-button').addEventListener('click',()=>void showWaveform());one('.study-rms-match').addEventListener('change',()=>void setAmplitudeMatch(audio).catch(showError));await load(currentAsset,false);
 }
@@ -578,10 +725,7 @@ async function showWaveform():Promise<void>{
   try{
     const v=await analyseAudio(a);if(generation!==pageGeneration||currentAsset?.id!==a.id)return;
     one('.study-wave-area').innerHTML='<h3>波形 · 第一声道</h3><div class="study-signal-plot"><canvas width="960" height="220" class="study-wave" role="img" aria-label="横轴为时间，纵轴为原始幅度"></canvas><span class="study-play-cursor" aria-hidden="true"></span></div><h3>短时频谱</h3><div class="study-signal-plot"><canvas width="960" height="340" class="study-spectrum" role="img" aria-label="横轴时间，纵轴频率，颜色表示谱幅度"></canvas><span class="study-play-cursor" data-start="6.25" data-span="92.7" aria-hidden="true"></span></div><p class="study-analysis-description"></p>';
-    const wave=one<HTMLCanvasElement>('.study-wave'),wc=wave.getContext('2d')!;wc.strokeStyle='#7eaaa8';wc.beginPath();
-    for(let x=0;x<v.width;x++){wc.moveTo(x*2,110-v.envelope[x*2+1]*100);wc.lineTo(x*2,110-v.envelope[x*2]*100);}wc.stroke();
-    const image=document.createElement('canvas');image.width=v.width;image.height=v.height;image.getContext('2d')!.putImageData(new ImageData(v.pixels,v.width,v.height),0,0);
-    const spectrum=one<HTMLCanvasElement>('.study-spectrum'),sc=spectrum.getContext('2d')!;sc.drawImage(image,60,10,890,285);sc.fillStyle=getComputedStyle(dialog).getPropertyValue('--muted').trim();sc.font='17px Segoe UI';sc.fillText(`${v.sampleRate/2} Hz`,2,24);sc.fillText('0 Hz',2,295);sc.fillText('0 s',60,325);sc.fillText(`${v.duration.toFixed(2)} s`,850,325);
+    const wave=one<HTMLCanvasElement>('.study-wave'),spectrum=one<HTMLCanvasElement>('.study-spectrum');disposeObject?.();disposeObject=mountAudioPlots(dialog,wave,spectrum,v);
     one('.study-analysis-description').textContent=`分析率 ${v.sampleRate} Hz；${v.fftSize} 点 Hann 窗，频率由低到高，颜色对应 −80 至 0 dB 的相对谱幅度。RMS=${v.rms.toFixed(5)}，峰值=${v.peak.toFixed(5)}。横轴覆盖整段 ${v.duration.toFixed(3)} 秒，源文件未改变。`;
   }catch(e){showError(e);}
 }
@@ -620,7 +764,7 @@ async function showVideo(selectedId?:string):Promise<void>{
 }
 
 async function showRunHistory():Promise<void>{
-  const body=resetContent(),generation=pageGeneration;
+  const body=resetContent('run-history'),generation=pageGeneration;
   body.innerHTML=intro('按保存版本回看','运行记录','每次结果都属于当时的代码、参数和输入。打开记录不会重新执行，也不会替换当前草稿。')+'<label class="study-search"><span>⌕</span><input class="study-run-search" aria-label="查找运行记录" placeholder="按活动、日期或运行编号查找"/></label><label class="study-code-guide"><input class="study-include-validation" type="checkbox"/> 包含功能验收记录</label><div class="study-run-list">正在读取记录…</div>';
   if(study.importedRuns?.length)body.insertAdjacentHTML('beforeend',`<details class="study-details"><summary>从其他设备导入的运行收据 · ${study.importedRuns.length}</summary>${study.importedRuns.map((r:any,i:number)=>`<button class="study-asset-row" data-study="imported-run" data-index="${i}">${enc(r.record.activity_id)} · ${enc(r.record.run_id)}</button>`).join('')}</details>`);
   try{
@@ -642,7 +786,7 @@ async function showSavedRun(id:string):Promise<void>{
   try{
     const run=await invokeBook<any>('learning_run_status',{runId:id});if(generation!==pageGeneration)return;latestRun=run;
     const name=pack!.activities.find(a=>a.id===run.activity_id)?.title??run.activity_id;
-    body.innerHTML=intro('历史结果 · '+(run.purpose==='technical_validation'?'功能验收':'按原版本保存'),name,'下方源码来自该次冻结快照；参数、输入和产物均按保存版本回看。这里不会重新执行。')+'<button data-study="run-history">← 所有运行记录</button><p class="study-run-status" role="status"></p><div class="study-lab-grid"><section class="study-result-panel"><h2>当时的结果</h2><div class="study-result"></div></section><section class="study-code-panel"><h2>当时的代码 · 只读</h2><textarea class="study-code" readonly aria-label="历史运行代码" spellcheck="false"></textarea></section></div><div class="study-artifacts"></div><details class="study-details study-log"><summary>完整 stdout / stderr</summary><pre></pre></details><details class="study-details study-history-metadata"><summary>参数、输入、环境和版本</summary></details>';
+    body.innerHTML=intro('历史结果 · '+(run.purpose==='technical_validation'?'功能验收':'按原版本保存'),name,'下方源码来自该次冻结快照；参数、输入和产物均按保存版本回看。这里不会重新执行。')+'<button data-study="run-history">← 所有运行记录</button><p class="study-run-status" role="status"></p><div class="study-lab-grid"><section class="study-result-panel"><h2>当时的结果</h2><div class="study-result"></div></section><section class="study-code-panel"><h2>当时的代码 · 只读</h2><textarea class="study-code" wrap="off" readonly aria-label="历史运行代码" spellcheck="false"></textarea></section></div><div class="study-artifacts"></div><details class="study-details study-log"><summary>完整 stdout / stderr</summary><pre></pre></details><details class="study-details study-history-metadata"><summary>参数、输入、环境和版本</summary></details>';
     one('.study-run-status').textContent=`${({succeeded:'已完成',failed:'未完成',cancelled:'已停止',interrupted:'已中断',running:'查询时仍在运行'} as Record<string,string>)[run.status]??run.status} · ${new Date((run.started_at??0)*1000).toLocaleString()} · ${run.run_id}`;
     one('.study-log pre').textContent=(run.stdout??'')+'\n'+(run.stderr??'');
     appendText(one('.study-history-metadata'),JSON.stringify({params:run.params,inputs:run.inputs,environment:run.environment,code_sha256:run.code_sha256,adapter_sha256:run.adapter_sha256,started_at:run.started_at,ended_at:run.ended_at},null,2));
@@ -654,40 +798,165 @@ async function showSavedRun(id:string):Promise<void>{
     catch(e){if(generation===pageGeneration)one<HTMLTextAreaElement>('.study-code').value='无法核对当时的代码快照：'+String(e);}
   }catch(e){if(generation===pageGeneration)resourceUnavailable(body,e);}
 }
+function unfinishedLocation(draft:any):string{
+  return pack?.chapters.find(c=>c.id===draft.chapter)?.title??String(draft.chapter||draft.href||'原章节未标明');
+}
 function showNotes():void{
-  const body=resetContent();body.innerHTML=intro('本书笔记 · 跨章保留','你的思考，和它原来的位置','这里列出本书各章的笔记。新记录会标明当前段落或章节，并能回到对应的实验和原句。')+'<button class="study-primary" data-study="add-note">写一条思考</button><button data-study="export-note">导出本书笔记</button><div class="study-notes-list"></div>';
-  if(study.unfinished_note){const draft=study.unfinished_note;const editor=document.createElement('section');editor.className='study-note-editor';if(draft.editId)editor.dataset.editId=draft.editId;editor.dataset.restoredAnchor=JSON.stringify(draft);editor.innerHTML='<p class="study-eyebrow">上次未提交的草稿 · 已在本机保留</p><textarea aria-label="继续上次思考"></textarea><button class="study-primary" data-study="save-note">保存这条思考</button>';editor.querySelector('textarea')!.value=draft.text;one('.study-notes-list').append(editor);}
+  const body=resetContent('notes');body.innerHTML=intro('本书笔记 · 跨章保留','你的思考，和它原来的位置','这里列出本书各章的笔记。新记录会标明当前段落或章节，并能回到对应的实验和原句。')+'<button class="study-primary" data-study="add-note">写一条思考</button><button data-study="export-note">导出本书笔记</button><div class="study-notes-list"></div>';
+  if(study.unfinished_note){
+    const draft=study.unfinished_note,editor=document.createElement('section');editor.className='study-note-editor';
+    if(draft.editId)editor.dataset.editId=draft.editId;
+    editor.dataset.restoredAnchor=JSON.stringify(draft);
+    editor.innerHTML=`<p class="study-eyebrow">当前未提交草稿 · ${enc(unfinishedLocation(draft))}</p>${draft.quote?`<blockquote>${enc(String(draft.quote).slice(0,240))}</blockquote>`:''}<textarea aria-label="继续当前草稿"></textarea><button class="study-primary" data-study="save-note">保存这条思考</button>`;
+    editor.querySelector('textarea')!.value=draft.text;one('.study-notes-list').append(editor);
+  }
+  if(study.unfinished_notes?.length){
+    const heading=document.createElement('h2');heading.textContent=`待继续的草稿 · ${study.unfinished_notes.length} 份`;
+    one('.study-notes-list').append(heading);
+    for(const draft of study.unfinished_notes){
+      const card=document.createElement('article');card.className='study-note-card';
+      card.innerHTML=`<span class="study-eyebrow">${enc(unfinishedLocation(draft))} · 待继续的草稿</span>${draft.quote?`<blockquote>${enc(String(draft.quote).slice(0,240))}</blockquote>`:''}<p>${enc(String(draft.text).slice(0,240)).replace(/\n/g,'<br/>')}</p>${draft.content_digest&&draft.content_digest!==origin?.contentDigest?'<p class="study-code-guide">原内容版本不同，保存前请核对原位置。</p>':''}`;
+      const button=document.createElement('button');button.dataset.study='continue-unfinished';button.dataset.importId=draft.import_id;button.textContent='继续这份草稿';card.append(button);one('.study-notes-list').append(card);
+    }
+  }
   for(const note of [...study.notes].reverse()){const el=document.createElement('article');el.className='study-note-card';el.innerHTML=`<span class="study-eyebrow">${enc(note.chapter)} · ${new Date(note.created_at).toLocaleString()}</span><blockquote>${enc(note.quote)}</blockquote><p>${enc(note.text).replace(/\n/g,'<br/>')}</p>${note.media_anchor?`<button data-study="return-media" data-id="${enc(note.id)}">回到媒体 ${Number(note.media_anchor.time||0).toFixed(2)} 秒${note.media_anchor.frame!==undefined?` · 解码帧 ${note.media_anchor.frame+1}`:''} ↗</button>`:''}${note.run_id?`<button data-study="saved-run" data-id="${enc(note.run_id)}">查看当时的实验 ↗</button>`:''}${note.content_digest&&note.content_digest!==origin?.contentDigest?'<span class="study-code-guide">旧内容版本的笔记 · 保留待核对</span>':`<button data-study="jump" data-href="${enc(note.cfi||note.href)}">回到这条思考的原句 ↗</button>`}<button data-study="edit-note" data-id="${enc(note.id)}">修改</button><button data-study="archive-note" data-id="${enc(note.id)}">移到回收站</button>`;one('.study-notes-list').append(el);}
   if(study.archived_notes?.length)one('.study-notes-list').insertAdjacentHTML('beforeend',`<details class="study-details"><summary>回收站 · ${study.archived_notes.length} 条，可恢复</summary>${study.archived_notes.map((n:any)=>`<p>${enc(n.text.slice(0,160))}<button data-study="restore-note" data-id="${enc(n.id)}">恢复</button></p>`).join('')}</details>`);
 }
-async function addNote():Promise<void>{const existing=dialog.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');if(existing){existing.focus();return;}const el=document.createElement('section');el.className='study-note-editor';el.innerHTML=`<blockquote>${enc(origin?.quote||chapter?.question)}</blockquote><textarea aria-label="我的思考" placeholder="我改了什么？结果支持什么？还有什么没有弄清？"></textarea><button class="study-primary" data-study="save-note">保存这条思考</button>`;one('.study-notes-list').prepend(el);el.querySelector('textarea')!.focus();}
-async function persistNote():Promise<void>{const input=dialog.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');if(!input?.value.trim())return;const editId=input.closest<HTMLElement>('.study-note-editor')?.dataset.editId;if(editId){const note=study.notes.find((n:any)=>n.id===editId);if(note){note.previous_versions??=[];note.previous_versions.push({text:note.text,at:Date.now()});note.text=input.value;study.unfinished_note=null;input.dataset.committed='true';await saveState();showNotes();return;}}const savedAnchor=input.closest<HTMLElement>('.study-note-editor')?.dataset.restoredAnchor;const restored=savedAnchor?JSON.parse(savedAnchor):null;study.notes.push({id:crypto.randomUUID(),book_uuid:pack!.book_uuid,book_revision:pack!.book_revision_sha256,content_digest:restored?.content_digest??origin!.contentDigest,chapter:restored?.chapter??chapter!.id,cfi:restored?.cfi??(origin!.href.endsWith(chapter!.href)?origin!.cfi:null),href:restored?.href??chapter!.href,quote:restored?.quote||(origin!.href.endsWith(chapter!.href)?origin!.quote||chapter!.question:chapter!.question),text:input.value,media_anchor:pendingMediaAnchor,created_at:Date.now(),run_id:pack!.activities.find(a=>a.id===latestRun?.activity_id)?.chapter===chapter!.id?latestRun?.run_id??null:null});pendingMediaAnchor=null;study.unfinished_note=null;input.dataset.committed='true';await saveState();showNotes();}
+async function addNote():Promise<void>{const existing=dialog.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');if(existing){existing.focus();return;}const el=document.createElement('section');el.className='study-note-editor';if(pendingMediaAnchor)el.dataset.restoredAnchor=JSON.stringify({chapter:chapter?.id,quote:origin?.quote,href:origin?.href,cfi:origin?.cfi,content_digest:origin?.contentDigest,media_anchor:pendingMediaAnchor});el.innerHTML=`<blockquote>${enc(origin?.quote||chapter?.question)}</blockquote><textarea aria-label="我的思考" placeholder="我改了什么？结果支持什么？还有什么没有弄清？"></textarea><button class="study-primary" data-study="save-note">保存这条思考</button>`;one('.study-notes-list').prepend(el);el.querySelector('textarea')!.focus();}
+async function continueUnfinishedNote(importId:string):Promise<void>{
+  if(!studyLoaded||noteTransition)return;
+  captureUnfinishedNote();
+  const generation=pageGeneration,bookId=origin?.bookId,visible=dialog.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');
+  const previousCurrent=structuredClone(study.unfinished_note??null);
+  const previousQueue=structuredClone(study.unfinished_notes??[]);
+  const previousMedia=pendingMediaAnchor;
+  const previousCommitted=visible?.dataset.committed;
+  let marked=false;
+  noteTransition=true;
+  try{
+    const index=previousQueue.findIndex((note:any)=>note.import_id===importId);
+    if(index<0)throw new Error('这份草稿已不在待继续队列中');
+    const selected=structuredClone(previousQueue[index]);
+    if(await unfinishedNoteIdentity(selected)!==importId)throw new Error('草稿身份与内容不符；原有草稿未改动');
+    if(generation!==pageGeneration||origin?.bookId!==bookId||!workspace.open)return;
+    const next=previousQueue.filter((_:any,i:number)=>i!==index);
+    if(previousCurrent?.text?.trim()){
+      const currentId=await unfinishedNoteIdentity(previousCurrent);
+      if(currentId!==importId&&!next.some((note:any)=>note.import_id===currentId))next.push({...previousCurrent,import_id:currentId});
+    }
+    if(generation!==pageGeneration||origin?.bookId!==bookId||!workspace.open)return;
+    delete selected.import_id;
+    if(visible){visible.dataset.committed='true';marked=true;}
+    study.unfinished_note=selected;study.unfinished_notes=next;
+    await persistStudy();
+    pendingMediaAnchor=selected.media_anchor??null;
+    if(generation===pageGeneration&&origin?.bookId===bookId&&workspace.open){showNotes();one<HTMLTextAreaElement>('.study-note-editor textarea').focus();status('已切换草稿；其他未提交内容仍保留');}
+  }catch(error){if(origin?.bookId===bookId){study.unfinished_note=previousCurrent;study.unfinished_notes=previousQueue;pendingMediaAnchor=previousMedia;if(marked&&visible?.isConnected){if(previousCommitted===undefined)delete visible.dataset.committed;else visible.dataset.committed=previousCommitted;}showError(error);}}
+  finally{noteTransition=false;}
+}
+async function persistNote():Promise<void>{
+  const input=dialog.querySelector<HTMLTextAreaElement>('.study-note-editor textarea');if(!studyLoaded||!origin||noteTransition||!input?.value.trim())return;
+  const editor=input.closest<HTMLElement>('.study-note-editor');
+  const editId=editor?.dataset.editId;
+  const savedAnchor=editor?.dataset.restoredAnchor;
+  let restored:any=null;
+  try{restored=savedAnchor?JSON.parse(savedAnchor):null;}catch{showError('草稿的原位置记录无法读取；内容仍在编辑框中，未保存到错误位置');return;}
+  noteTransition=true;
+  const generation=pageGeneration,bookId=origin.bookId,oldCommitted=input.dataset.committed;
+  const original=(key:string,fallback:unknown)=>restored&&Object.prototype.hasOwnProperty.call(restored,key)?restored[key]:fallback;
+  const oldNotes=structuredClone(study.notes),oldDraft=structuredClone(study.unfinished_note??null),oldMedia=pendingMediaAnchor;
+  const existing=editId?study.notes.find((n:any)=>n.id===editId):null;
+  input.dataset.committed='true';
+  if(existing){existing.previous_versions??=[];existing.previous_versions.push({text:existing.text,at:Date.now()});existing.text=input.value;}
+  else study.notes.push({id:crypto.randomUUID(),book_uuid:original('book_uuid',pack!.book_uuid),book_revision:original('book_revision',pack!.book_revision_sha256),content_digest:original('content_digest',origin!.contentDigest),chapter:original('chapter',chapter!.id),cfi:original('cfi',origin!.href.endsWith(chapter!.href)?origin!.cfi:null),href:original('href',chapter!.href),quote:original('quote',origin!.href.endsWith(chapter!.href)?origin!.quote||chapter!.question:chapter!.question),text:input.value,media_anchor:original('media_anchor',pendingMediaAnchor),created_at:Date.now(),run_id:original('run_id',pack!.activities.find(a=>a.id===latestRun?.activity_id)?.chapter===chapter!.id?latestRun?.run_id??null:null)});
+  study.unfinished_note=null;
+  try{await persistStudy();if(origin?.bookId===bookId){pendingMediaAnchor=null;if(generation===pageGeneration&&workspace.open){status('已保存到本机');showNotes();}}}
+  catch(error){if(origin?.bookId===bookId){study.notes=oldNotes;study.unfinished_note=oldDraft;pendingMediaAnchor=oldMedia;if(input.isConnected){if(oldCommitted===undefined)delete input.dataset.committed;else input.dataset.committed=oldCommitted;}showError(error);}}
+  finally{noteTransition=false;}
+}
 async function exportNotes():Promise<void>{
   await saveState();try{const path=await invokeBook<string|null>('learning_export',{activityId:null});status(path?'已导出：'+path:'已取消导出');}catch(e){showError(e);}
 }
 async function showDraftHistory():Promise<void>{
-  if(!activity)return;await saveDraft();const versions=await invokeBook<any[]>('learning_draft_versions',{activityId:activity.id});
+  if(!activity||!origin)return;
+  const bookId=origin.bookId,activityId=activity.id,generation=pageGeneration;
+  const editor=one<HTMLTextAreaElement>('.study-code');
+  await saveDraft();if(!sameActivity(bookId,activityId,generation,editor))return;
+  const versions=await invokeBook<any[]>('learning_draft_versions',{activityId});
+  if(!sameActivity(bookId,activityId,generation,editor))return;
   let box=dialog.querySelector<HTMLElement>('.study-version-list');if(box)box.remove();box=document.createElement('div');box.className='study-version-list';
   box.innerHTML='<h3>你的独立草稿版本</h3>'+(!versions.length?'<p>还没有保存过自己的版本。点“我来改”即可开始。</p>':'');
-  for(const version of versions){const b=document.createElement('button');b.textContent=`${new Date(version.updated_at*1000).toLocaleString()} · ${formatBytes(version.bytes)} · ${version.sha256.slice(0,10)} · 恢复`;b.addEventListener('click',async()=>{if(!activity)return;const restored=await invokeBook<any>('learning_restore_draft',{activityId:activity.id,revision:version.sha256});draftMode=true;one<HTMLTextAreaElement>('.study-code').readOnly=false;one<HTMLTextAreaElement>('.study-code').value=restored.code;one('.study-code-mode').textContent='我的独立版本';one<HTMLButtonElement>('[data-study="save"]').hidden=false;box?.remove();markStale();status('已恢复这个版本；其他版本仍在');});box.append(b);}
+  for(const version of versions){
+    const b=document.createElement('button');
+    b.textContent=`${new Date(version.updated_at*1000).toLocaleString()} · ${formatBytes(version.bytes)} · ${version.sha256.slice(0,10)} · 恢复`;
+    b.addEventListener('click',()=>void (async()=>{
+      if(!sameActivity(bookId,activityId,generation,editor))return;
+      b.disabled=true;
+      try{
+        const restored=await invokeBook<any>('learning_restore_draft',{activityId,revision:version.sha256});
+        if(!sameActivity(bookId,activityId,generation,editor))return;
+        draftMode=true;editor.readOnly=false;editor.value=restored.code;
+        one('.study-code-mode').textContent='我的独立版本';one<HTMLButtonElement>('[data-study="save"]').hidden=false;box?.remove();
+        const message=dialog.querySelector<HTMLElement>('.study-run-status');
+        if(message?.dataset.errorScope==='draft-history'){message.classList.remove('study-error');delete message.dataset.statusOwner;delete message.dataset.errorScope;message.textContent='已恢复核对过的草稿版本；点击运行才会计算。';}
+        markStale();status('已恢复这个版本；其他版本仍在');
+      }catch(error){if(sameActivity(bookId,activityId,generation,editor))showError(error,'draft-history');}
+      finally{if(b.isConnected)b.disabled=false;}
+    })());
+    box.append(b);
+  }
   one('.study-code-panel').append(box);
 }
-function editNote(id:string):void{const note=study.notes.find((n:any)=>n.id===id);if(!note)return;const editor=document.createElement('section');editor.className='study-note-editor';editor.dataset.editId=id;editor.innerHTML='<textarea aria-label="修改这条思考"></textarea><button class="study-primary" data-study="save-note">保存修改</button>';editor.querySelector('textarea')!.value=note.text;one('.study-notes-list').prepend(editor);editor.querySelector('textarea')!.focus();}
+async function editNote(id:string):Promise<void>{
+  if(!studyLoaded||!origin||noteTransition)return;
+  const note=study.notes.find((n:any)=>n.id===id);if(!note)return;
+  const visible=dialog.querySelector<HTMLElement>('.study-note-editor');
+  if(visible?.dataset.editId===id){visible.querySelector<HTMLTextAreaElement>('textarea')?.focus();return;}
+  const generation=pageGeneration,bookId=origin.bookId,oldCommitted=visible?.querySelector<HTMLTextAreaElement>('textarea')?.dataset.committed;
+  captureUnfinishedNote();
+  const previousCurrent=structuredClone(study.unfinished_note??null),previousQueue=structuredClone(study.unfinished_notes??[]);
+  let marked=false;
+  noteTransition=true;
+  try{
+    if(previousCurrent?.text?.trim()){
+      const importId=await unfinishedNoteIdentity(previousCurrent);
+      if(generation!==pageGeneration||origin?.bookId!==bookId||!workspace.open)return;
+      study.unfinished_notes??=[];
+      if(!study.unfinished_notes.some((draft:any)=>draft.import_id===importId))study.unfinished_notes.push({...previousCurrent,import_id:importId});
+      const input=visible?.querySelector<HTMLTextAreaElement>('textarea');if(input){input.dataset.committed='true';marked=true;}
+      study.unfinished_note=null;await persistStudy();pendingMediaAnchor=null;
+    }
+    if(generation!==pageGeneration||origin?.bookId!==bookId||!workspace.open)return;
+    visible?.remove();showNotes();
+    const editor=document.createElement('section');editor.className='study-note-editor';editor.dataset.editId=id;editor.dataset.restoredAnchor=JSON.stringify({chapter:note.chapter,cfi:note.cfi,href:note.href,quote:note.quote,content_digest:note.content_digest,editId:id});editor.innerHTML='<textarea aria-label="修改这条思考"></textarea><button class="study-primary" data-study="save-note">保存修改</button>';editor.querySelector('textarea')!.value=note.text;one('.study-notes-list').prepend(editor);editor.querySelector('textarea')!.focus();
+  }catch(error){
+    if(origin?.bookId===bookId){study.unfinished_note=previousCurrent;study.unfinished_notes=previousQueue;const input=visible?.querySelector<HTMLTextAreaElement>('textarea');if(marked&&input?.isConnected){if(oldCommitted===undefined)delete input.dataset.committed;else input.dataset.committed=oldCommitted;}showError(error);}
+  }
+  finally{noteTransition=false;}
+}
 async function archiveNote(id:string):Promise<void>{const note=study.notes.find((n:any)=>n.id===id);if(!note)return;study.archived_notes??=[];study.archived_notes.push({...note,archived_at:Date.now()});study.notes=study.notes.filter((n:any)=>n.id!==id);await saveState();showNotes();}
 async function restoreNote(id:string):Promise<void>{const note=study.archived_notes?.find((n:any)=>n.id===id);if(!note)return;study.notes.push(note);study.archived_notes=study.archived_notes.filter((n:any)=>n.id!==id);await saveState();showNotes();}
 
-async function saveState():Promise<void>{if(!origin)return;try{await persistStudy();status('已保存到本机');}catch(e){showError(e);}}
+async function saveState():Promise<void>{if(!origin||!studyLoaded)return;try{await persistStudy();status('已保存到本机');}catch(e){showError(e);}}
 function saveViewSoon():void{if(saveTimer!==null)clearTimeout(saveTimer);saveTimer=window.setTimeout(()=>{saveTimer=null;void saveState();},350);}
-function status(message:string):void{const el=dialog?.querySelector('.study-save-state');if(el)el.textContent=message;}
-function showError(error:unknown):void{let text=String(error);if(/Python 环境不可用|解释器版本已改变|缺少必要字段 python/.test(text))text+='。请恢复本章已登记的解释器，或核对后重新绑定环境，再重试；正文、草稿和原有结果保留。';const el=dialog?.querySelector('.study-run-status')??dialog?.querySelector('.study-save-state');if(el){el.textContent=text;el.classList.add('study-error');}else host.toast(text);}
+function status(message:string,owner='general'):void{const el=dialog?.querySelector<HTMLElement>('.study-save-state');if(el){el.textContent=message;el.dataset.statusOwner=owner;el.classList.remove('study-error');}}
+function showError(error:unknown,scope='general'):void{
+  let text=readableError(error);
+  if(/Python 环境不可用|解释器版本已改变|缺少必要字段 python/.test(text))text+='。请恢复本章已登记的解释器，或核对后重新绑定环境，再重试；正文、草稿和原有结果保留。';
+  const footer=dialog?.querySelector<HTMLElement>('.study-save-state');
+  const el=dialog?.querySelector<HTMLElement>('.study-run-status')??footer;
+  if(el){el.textContent=text;el.dataset.statusOwner='error';el.dataset.errorScope=scope;el.classList.add('study-error');}else host.toast(text);
+  if(scope==='draft-history'&&footer&&footer!==el){footer.textContent=text;footer.dataset.statusOwner='error';footer.dataset.errorScope=scope;footer.classList.add('study-error');}
+}
 async function closeStudy():Promise<void>{
-  if(!workspace?.open)return;pendingMediaAnchor=null;cancelConsent?.();try{await flushLearningBeforeClose();}catch(error){showError('尚未保存成功，请保留当前窗口重试：'+String(error));return;}if(activeMedia){study.media[currentAsset?.id??'last']={time:activeMedia.currentTime};activeMedia.pause();activeMedia=null;}
+  if(!workspace?.open)return;studyOpenGeneration++;pendingMediaAnchor=null;cancelConsent?.();try{await flushLearningBeforeClose();}catch(error){showError('尚未保存成功，请保留当前窗口重试：'+String(error));return;}if(activeMedia){study.media[currentAsset?.id??'last']={time:activeMedia.currentTime};activeMedia.pause();activeMedia=null;}
   for(const media of Array.from(dialog.querySelectorAll<HTMLMediaElement>('audio,video')))media.pause();
-  if(audioGraph){void audioGraph.close();audioGraph=null;audioGain=null;}audioAnalysisWorker?.terminate();audioAnalysisWorker=null;audioAnalyses.clear();await saveState();pageGeneration++;disposeObject?.();disposeObject=null;for(const url of objectUrls)URL.revokeObjectURL(url);objectUrls=[];workspace.close();
+  if(audioGraph){void audioGraph.close();audioGraph=null;audioGain=null;}audioAnalysisWorker?.terminate();audioAnalysisWorker=null;audioAnalyses.clear();if(studyLoaded)await saveState();pageGeneration++;disposeObject?.();disposeObject=null;disposeResponsive?.();disposeResponsive=null;for(const url of objectUrls)URL.revokeObjectURL(url);objectUrls=[];workspace.close();
   // The reader canvas was never resized or navigated by the stage.
   if(origin?.selection){try{const selection=origin.selection.startContainer.ownerDocument?.getSelection();selection?.removeAllRanges();selection?.addRange(origin.selection);}catch{}}
   if(origin?.focus&&!origin.focus.isConnected&&origin.cfi){try{await host.jump(origin.cfi,origin.pane);}catch(e){host.toast(`原句暂未恢复：${String(e)}`);}}
   if(origin?.focus?.isConnected)origin.focus.focus({preventScroll:true});else document.querySelector<HTMLButtonElement>('.study-toggle')?.focus();
+  studyLoaded=false;
 }
 
 export async function closeLearning():Promise<void>{await closeStudy();}

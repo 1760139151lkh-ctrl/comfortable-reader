@@ -32,9 +32,9 @@ python tools/build_site.py --preview --books-dir path/to/private-books --out pat
 
 这个开关仅用于本机候选；公开发行只能使用仓库里的审核纳入清单，并须经过 `--release` 的归属、许可与资源检查。构建器只取声明的文件，生成按章正文、可独立选择的资源、内容哈希和静态 EPUB 回退。在线打开章节按需取必要正文/插图；选择保存一章、准备活动、取得独立资源、下载整本 EPUB 是不同动作。作者不用把大数据或运行环境打进每个书籍版本；对于不可切分的资源写清实际最小单位。普通 EPUB 仍给正文、活动说明、出处目录与资源说明，不以交互不可用换成空章。
 
-同一构建产生完整 EPUB 与按章获取的 XHTML；网页不会先下载完整 EPUB 再隐藏其他章节。预先生成的 CFI 位置表避免在线全书索引暗中取完所有章节。首次准备共享阅读器需要项目的 Node 依赖；之后可用 `--reader-dist <已审阅的共享构建>` 重用界面产物，书籍更新只修改源内容。预览服务必须绑定本机地址；不把开启本机 HTTP 服务叫作公网发布。
+同一构建产生完整 EPUB 与按章获取的 XHTML；网页不会先下载完整 EPUB 再隐藏其他章节。预先生成的 CFI 位置表避免在线全书索引暗中取完所有章节。首次准备共享阅读器需要项目的 Node 依赖。`python tools/reader_build_receipt.py build` 会从当前仓库构建 `desktop/dist`，给源码与构建文件逐项写入字节和 SHA-256 收据；`python tools/reader_build_receipt.py verify --dist desktop/dist` 可只读复核。之后可用 `--reader-dist <该受审构建>` 重用界面产物；构建器会核对收据、当前源码和构建文件，不再凭一个 `index.html` 接受任意目录。收据只证明本机来源和文件身份，阅读体验仍需另验。预览服务必须绑定本机地址；不把开启本机 HTTP 服务叫作公网发布。
 
-保留既有 EPUB 字节的兼容预览可使用 `tools/preview_existing_book.py`，明确指定 EPUB、学习包、资源根和共享界面构建。它只用于私人本机核对，不会替未获权利确认的原件取得公开许可。学习提示、参考结果对应关系、媒体身份与专用运行适配属于书籍源；`tools/apply_study_profile.py` 可将同书同版的呈现说明合并到新学习包，而不改变正文和资源字节。运行适配本身也是需要单独审查、冻结哈希的代码，不是阅读时执行的组件。
+保留既有 EPUB 字节的兼容预览可使用 `tools/preview_existing_book.py`，明确指定 EPUB、学习包、资源根和带上述收据的共享界面构建；它按 EPUB 容器、包清单和书脊解析原文件路径，不假定 `OEBPS`。该输出须标为这本 EPUB 的私人兼容预览，只用于本机核对，不会替未获权利确认的原件取得公开许可，也不能代替已安装舒适阅读书库的验收。学习提示、参考结果对应关系、媒体身份与专用运行适配属于书籍源；`tools/apply_study_profile.py` 可将同书同版的呈现说明合并到新学习包，而不改变正文和资源字节。运行适配本身也是需要单独审查、冻结哈希的代码，不是阅读时执行的组件。
 
 若用户要加入自己的桌面书库，先核对那台机器的应用标识、已登记库、当前版本与原有批注；使用实际安装版的导入入口，把同源 EPUB 入库。连接同版书目可补上按需材料，保留本机正文字节。私人入库不改变公共目录，不能为了更新而按标题删旧书再导入。浏览器、隔离原生构建和正式安装版必须分别验收。
 
@@ -53,7 +53,7 @@ python tools/build_site.py --preview --books-dir path/to/private-books --out pat
 
 ## 已发布项目与复杂书的维护
 
-当前公共维护入口是 https://github.com/1760139151lkh-ctrl/comfortable-reader 。首次参与先读仓库 `docs/CODEX.md` 与 `CONTRIBUTING.md`；用户已有 clone/fork 时优先使用它，不创建重复产品。技能和源码的安装位置由本机确定，公共技能不携带作者配置。
+当前维护地址是 https://github.com/1760139151lkh-ctrl/comfortable-reader 。地址不代表仓库始终公开；先核实际可见性和访问权限，保留维护者已选择的私人范围。首次参与先读仓库 `docs/CODEX.md` 与 `CONTRIBUTING.md`；用户已有 clone/fork 时优先使用它，不创建重复产品。技能和源码的安装位置由本机确定，公共技能不携带作者配置。
 
 书籍既可以是简单 Markdown 源，也可以是 `sourceFormat: epub-source@1` 的语义 EPUB 源。后一种以正向列明的 XHTML/MathML/CSS/PNG 和 OPF 为当前正文，校验与导出入口仍为 check_book.py/export_epub.py/build_site.py。已有复杂书不能经简化导入器转成纯文字；保持源数学和内容身份，升级修订后从同源重建。历史实验引用的原稿快照另有身份，不把它当第二份当前正文维护。
 

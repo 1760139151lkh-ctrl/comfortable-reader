@@ -8,11 +8,13 @@
 
 ```text
 npm ci --ignore-scripts --prefix desktop
-python tools/prepare_release_assets.py --download
-npm run build --prefix desktop
+python tools/prepare_release_assets.py --download --github-auth
+python tools/reader_build_receipt.py build
 python tools/build_site.py --preview --reader-dist desktop/dist --out site-dist
 python tools/serve_preview.py site-dist
 ```
+
+共享构建工具先编译当前源码，再写入源文件与产物的 SHA-256 收据。`--reader-dist` 只接受与当前源码、实际文件一致的收据；任意含 `index.html` 的目录不能替代本产品。收据证明构建来源与文件身份，不证明视觉或安装版验收。
 
 站点只输出共享界面和纳入清单中的内容。每章 XHTML 与完整 EPUB 来自同一次导出；构建时使用与桌面相同的 epub.js 位置算法，不在网页首次阅读时遍历全部章节。内容成员的规范化哈希将按章文件与本机 EPUB 关联，每个实际取得的文件另核字节数和 SHA-256。
 

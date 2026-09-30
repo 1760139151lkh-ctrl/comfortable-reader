@@ -8,15 +8,14 @@ from pathlib import Path
 import argparse
 import hashlib
 import json
-import os
 import re
 import shutil
 import sys
-import subprocess
 import html
 from book_format import BookError, file_identity, safe_relative, valid_id, validate_book
 from export_epub import export_book
 from streamed_epub import prepare_reader
+from reader_build_receipt import ReaderBuildError, build_shared_reader, verify_reader_dist
 
 ROOT=Path(__file__).resolve().parents[1]
 BOOKS=ROOT/'books'
@@ -149,12 +148,9 @@ def main():
         manifest=dest/'manifest.json';write_json(manifest,book_manifest);written.append(manifest)
         catalog['books'].append({'id':spec['id'],'slug':slug,'revision':spec['revision'],'example':bool(spec.get('example',False)),'author':spec.get('author',''),'language':spec['language'],'title':spec['title'],'description':spec.get('description',''),'chapters':[{'id':c['id'],'title':c['title']} for c in spec['chapters']],'manifest':{'path':f'books/{slug}/manifest.json',**file_identity(manifest)},'epub':{'path':f'ebooks/{epub.name}',**file_identity(epub)}})
     write_json(output/'catalog.json',catalog);written.append(output/'catalog.json')
+    if not args.reader_dist:build_shared_reader()
     reader_dist=args.reader_dist.resolve() if args.reader_dist else READER/'dist'
-    if not args.reader_dist:
-        npm=shutil.which('npm.cmd' if os.name=='nt' else 'npm')
-        if not npm or not (READER/'node_modules').is_dir():raise BookError('共享阅读器依赖尚未准备；先在 desktop 执行 npm ci，或用 --reader-dist 指向已构建版本')
-        subprocess.run([npm,'run','build'],cwd=READER,check=True)
-    if not (reader_dist/'index.html').is_file():raise BookError('共享阅读器构建入口不存在')
+    verify_reader_dist(reader_dist)
     shell_files=[]
     for source in reader_dist.rglob('*'):
         if not source.is_file():continue
@@ -189,6 +185,6 @@ def main():
 
 if __name__=='__main__':
     try:main()
-    except (BookError,FileNotFoundError,UnicodeDecodeError,ValueError,json.JSONDecodeError) as error:
+    except (BookError,ReaderBuildError,FileNotFoundError,UnicodeDecodeError,ValueError,json.JSONDecodeError) as error:
         print(f'构建停止：{error}',file=sys.stderr)
         raise SystemExit(2)

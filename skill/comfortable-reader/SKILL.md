@@ -1,11 +1,13 @@
 ---
 name: comfortable-reader
 metadata:
-  version: "0.5.1"
-description: Create and maintain portable Comfortable Reader book source projects, or faithfully import supplied text, Markdown, EPUB, PDF and referenced replies into a configured personal library. Use for creating shareable books or interactive tutorials, source-first book updates, 多栏阅读、翻页阅读、保真入库、原文批注、自由笔记 and $comfortable-reader. Ordinary import does not authorize publishing or running book code; a request only to display text should first offer a persistent book as an option.
+  version: "0.5.2"
+description: Maintain the existing Comfortable Reader product and its book sources, or faithfully import supplied material into its configured personal library. Use for shareable books, reader repairs, 多栏阅读、翻页阅读、保真入库、原文批注、自由笔记 and $comfortable-reader. Do not replace this product with a separate reader; ordinary import does not authorize publishing or running book code.
 ---
 
 # Comfortable Reader
+
+本技能构建和维护的对象是**已有的舒适阅读书库及其书籍、学习资源和工具**。书籍源项目保存权威内容，网页和 EPUB 是该产品的使用版本；不能另造阅读器来代替产品工作。Calibre、独立 HTML 与临时浏览器页面可作明确标名的兼容预览或诊断，不能当作指定书库中的交付或安装版验收。用户只要求源文件时，按其范围交付源文件。
 
 ## 新增能力调度（学习增强版）
 
@@ -27,6 +29,8 @@ description: Create and maintain portable Comfortable Reader book source project
 ## 从阅读体验出发
 
 先判断内容是否连续、行长与段落节奏是否自然、层级是否清楚，以及交互是否稳定。复杂书或阅读器改动先读 [reading-experience.md](references/reading-experience.md)：其中区分长算法、长表、长图注与真正不可分割的对象，说明字体角色、主题、导航和代表性抽样。
+
+用户要求全面审美与体验审查时，再读 [comfort-review.md](references/comfort-review.md)，先划分不同判断角度，再安排已获授权的独立审查和统一修改；审查人数按当前请求决定。
 
 字号、密度倍率、某次书的页数和旧实现都不是不可改变的要求。用户要求 redesign 时，先从其目标与实际观察建立原则，再将本技能作为可修订的实现资料。原文保真与真实书库身份仍须分别验证。
 
@@ -84,6 +88,8 @@ python <skill-dir>\scripts\build_reader.py <source.md> `
   --epub <work-dir>\book.epub --no-html `
   --title "书名" --author "作者" --source-reference "原始引用"
 ```
+
+这个命令生成待审 EPUB，不会打开或验收舒适阅读书库。`--open` 只表示临时兼容预览；现在必须显式配 `--reader html` 或 `--reader calibre` 才会启动所选程序，默认不自动挑选 Calibre 或浏览器。预览输出须写明实际对象，不能记为 `desktop_verified`。
 
 PDF 的首次命令链固定为下面三步，不能把第一步输出直接入库：
 
