@@ -1,0 +1,224 @@
+{
+  "protocol": "work/verification/C10_twin_worlds_protocol.md",
+  "kind": "author-constructed causal mechanism, exact enumeration plus one seeded simulation",
+  "exogenous_probabilities": {
+    "p_u_one": 0.5,
+    "p_nx_one": 0.1,
+    "p_world_a_ny_one": 0.1,
+    "p_world_b_nb_one": 0.18
+  },
+  "world_a": {
+    "exact": {
+      "observed_joint_rows_x_columns_y": [
+        [
+          0.41000000000000003,
+          0.09000000000000001
+        ],
+        [
+          0.09000000000000001,
+          0.41000000000000003
+        ]
+      ],
+      "p_y1_given_x": [
+        0.18000000000000002,
+        0.8200000000000001
+      ],
+      "observed_gap": 0.64,
+      "p_y1_under_do_x": [
+        0.5,
+        0.5
+      ],
+      "intervention_average_effect": 0.0,
+      "given_u": {
+        "0": {
+          "0": {
+            "p_x_given_u": 0.9,
+            "p_y1_given_x_u": 0.1
+          },
+          "1": {
+            "p_x_given_u": 0.1,
+            "p_y1_given_x_u": 0.10000000000000002
+          }
+        },
+        "1": {
+          "0": {
+            "p_x_given_u": 0.1,
+            "p_y1_given_x_u": 0.9
+          },
+          "1": {
+            "p_x_given_u": 0.9,
+            "p_y1_given_x_u": 0.9
+          }
+        }
+      },
+      "adjusted_p_y1_under_do_x": [
+        0.5,
+        0.5
+      ],
+      "p_potential_y1_given_u_and_observed_x": {
+        "0": {
+          "0": {
+            "0": 0.1,
+            "1": 0.1
+          },
+          "1": {
+            "0": 0.10000000000000002,
+            "1": 0.10000000000000002
+          }
+        },
+        "1": {
+          "0": {
+            "0": 0.9,
+            "1": 0.9
+          },
+          "1": {
+            "0": 0.9,
+            "1": 0.9
+          }
+        }
+      },
+      "potential_outcome_joint_rows_y0_columns_y1": [
+        [
+          0.5,
+          0.0
+        ],
+        [
+          0.0,
+          0.5
+        ]
+      ],
+      "potential_outcome_average_difference": 0.0
+    },
+    "one_simulation": {
+      "n": 20000,
+      "seed": 20260924,
+      "observation_counts_by_x": [
+        10068,
+        9932
+      ],
+      "observation_p_y1_given_x": [
+        0.1822606277314263,
+        0.8259162303664922
+      ],
+      "observation_gap": 0.6436556026350659,
+      "random_assignment_counts_by_x": [
+        10044,
+        9956
+      ],
+      "random_assignment_p_y1": [
+        0.5014934289127837,
+        0.5023101647247891
+      ],
+      "random_assignment_gap": 0.0008167358120053647,
+      "scope": "One simulation from a stipulated mechanism; not data from real people or a real randomized trial."
+    }
+  },
+  "world_b": {
+    "exact": {
+      "observed_joint_rows_x_columns_y": [
+        [
+          0.41000000000000003,
+          0.09
+        ],
+        [
+          0.09,
+          0.41000000000000003
+        ]
+      ],
+      "p_y1_given_x": [
+        0.18,
+        0.8200000000000001
+      ],
+      "observed_gap": 0.6400000000000001,
+      "p_y1_under_do_x": [
+        0.18,
+        0.8200000000000002
+      ],
+      "intervention_average_effect": 0.6400000000000001,
+      "given_u": {
+        "0": {
+          "0": {
+            "p_x_given_u": 0.8999999999999999,
+            "p_y1_given_x_u": 0.17999999999999997
+          },
+          "1": {
+            "p_x_given_u": 0.09999999999999999,
+            "p_y1_given_x_u": 0.8200000000000001
+          }
+        },
+        "1": {
+          "0": {
+            "p_x_given_u": 0.09999999999999999,
+            "p_y1_given_x_u": 0.17999999999999994
+          },
+          "1": {
+            "p_x_given_u": 0.8999999999999999,
+            "p_y1_given_x_u": 0.82
+          }
+        }
+      },
+      "adjusted_p_y1_under_do_x": [
+        0.17999999999999994,
+        0.8200000000000001
+      ],
+      "p_potential_y1_given_u_and_observed_x": {
+        "0": {
+          "0": {
+            "0": 0.17999999999999997,
+            "1": 0.82
+          },
+          "1": {
+            "0": 0.17999999999999994,
+            "1": 0.8200000000000001
+          }
+        },
+        "1": {
+          "0": {
+            "0": 0.17999999999999994,
+            "1": 0.8200000000000001
+          },
+          "1": {
+            "0": 0.17999999999999997,
+            "1": 0.82
+          }
+        }
+      },
+      "potential_outcome_joint_rows_y0_columns_y1": [
+        [
+          0.0,
+          0.8200000000000002
+        ],
+        [
+          0.18,
+          0.0
+        ]
+      ],
+      "potential_outcome_average_difference": 0.6400000000000001
+    },
+    "one_simulation": {
+      "n": 20000,
+      "seed": 20260924,
+      "observation_counts_by_x": [
+        10068,
+        9932
+      ],
+      "observation_p_y1_given_x": [
+        0.17878426698450536,
+        0.815344341522352
+      ],
+      "observation_gap": 0.6365600745378467,
+      "random_assignment_counts_by_x": [
+        10044,
+        9956
+      ],
+      "random_assignment_p_y1": [
+        0.18319394663480684,
+        0.8198071514664524
+      ],
+      "random_assignment_gap": 0.6366132048316456,
+      "scope": "One simulation from a stipulated mechanism; not data from real people or a real randomized trial."
+    }
+  },
+  "figure": "work/figures/twin_causal_worlds.png",
+  "scope": "Both worlds yield exactly the same P(X,Y), but do(X) has different effects. U is not present in the X-Y-only table. Simulation is instructional, not an empirical causal claim."
+}

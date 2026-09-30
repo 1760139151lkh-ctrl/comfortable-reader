@@ -1,0 +1,96 @@
+{
+  "source_split": "train",
+  "source_article": "Valkyria Chronicles III",
+  "source_body_row_zero_based": 3,
+  "source_excerpt_first_18_fields": [
+    "Senjō",
+    "no",
+    "Valkyria",
+    "3",
+    ":",
+    "Unrecorded",
+    "Chronicles",
+    "(",
+    "Japanese",
+    ":",
+    "戦場のヴァルキュリア3",
+    ",",
+    "lit",
+    ".",
+    "Valkyria",
+    "of",
+    "the",
+    "Battlefield"
+  ],
+  "source_excerpt_mapped_ids": [
+    0,
+    129,
+    3933,
+    92,
+    45,
+    0,
+    4430,
+    25,
+    754,
+    45,
+    0,
+    5,
+    7184,
+    6,
+    3933,
+    7,
+    4,
+    0
+  ],
+  "two_selected_prediction_events": [
+    {
+      "raw_context": [
+        "Senjō",
+        "no"
+      ],
+      "raw_target": "Valkyria",
+      "mapped_context_ids": [
+        0,
+        129
+      ],
+      "mapped_context_tokens": [
+        "<unk>",
+        "no"
+      ],
+      "mapped_target_id": 3933,
+      "mapped_target_token": "Valkyria",
+      "training_exact_history_count": 54,
+      "training_exact_trigram_count": 5,
+      "kn_probability": 0.07879931187704262,
+      "kn_negative_log_probability": 2.540851014681272,
+      "neural_probability": 0.004088405519723892,
+      "neural_negative_log_probability": 5.499600233416366
+    },
+    {
+      "raw_context": [
+        "Valkyria",
+        "3"
+      ],
+      "raw_target": ":",
+      "mapped_context_ids": [
+        3933,
+        92
+      ],
+      "mapped_context_tokens": [
+        "Valkyria",
+        "3"
+      ],
+      "mapped_target_id": 45,
+      "mapped_target_token": ":",
+      "training_exact_history_count": 5,
+      "training_exact_trigram_count": 4,
+      "kn_probability": 0.6567680314027882,
+      "kn_negative_log_probability": 0.4204243952885669,
+      "neural_probability": 0.024718888103961945,
+      "neural_negative_log_probability": 3.70018762701745
+    }
+  ],
+  "count_discount_chosen_on_validation": 0.75,
+  "neural_chosen_epoch_on_validation": 5,
+  "note": "This is a training article trace, not an independent quality check. Source fields use supplied WikiText spacing; mapped UNK loses original word identity."
+}

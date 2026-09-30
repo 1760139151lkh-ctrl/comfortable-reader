@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>导读</title><link rel="stylesheet" href="style.css"/></head><body><p>“优化智能算法”通常更规范地叫 <strong>智能优化算法</strong>。它听起来很玄，其实核心就一句话：</p>
+<blockquote>
+<p>当一个优化问题太复杂，没法直接算出最优解时，让算法用“不断尝试、评价、改进”的方式，搜索一个足够好的解。</p>
+</blockquote>
+<p>这些自然界比喻只是外壳。真正需要看懂的是：<strong>解怎样表示、下一个解怎样产生、算法凭什么保留或放弃它。</strong></p>
+<hr/>
+<h2 id="1-它要解决什么问题">1. 它要解决什么问题？</h2>
+<p>大多数优化问题都可以写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mrow><mi>x</mi><mo>∈</mo><mi>Ω</mi></mrow></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>这里：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span>：你要做出的决策，也叫决策变量；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>：评价这个决策好坏的目标函数；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Ω</mi></mrow></math></span>：允许选择的范围，也就是约束条件构成的可行域。</li>
+</ul>
+<p>例如旅行商问题中：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi><mo>=</mo><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow></math></span> 是城市访问顺序；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 是走完并回到起点的总路程；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Ω</mi></mrow></math></span> 要求每个城市恰好出现一次。</li>
+</ul>
+<p>如果有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 个城市，可能的路线数量大约是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo>!</mo></mrow></math></span>。当 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi><mo>=</mo><mn>20</mn></mrow></math></span> 时，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>20</mn><mo>!</mo><mo>≈</mo><mn>2.43</mn><mo>×</mo><msup><mn>10</mn><mrow><mn>18</mn></mrow></msup></mrow></math></span>，逐条检查已经不现实。</p>
+<p>智能优化算法不会把所有路线都检查一遍，而是在巨大的解空间中，把有限的计算次数花在“更值得尝试”的地方。</p>
+<hr/>
+</body></html>

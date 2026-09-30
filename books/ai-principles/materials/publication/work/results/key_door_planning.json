@@ -1,0 +1,517 @@
+{
+  "protocol": "work/verification/C11_key_door_protocol.md",
+  "world_identity": "author-made 7x9 key-door grid; planning and replay only",
+  "grid": [
+    "#########",
+    "#S.K#...#",
+    "#.###...#",
+    "#...#...#",
+    "#...#...#",
+    "#...D..G#",
+    "#########"
+  ],
+  "action_order": [
+    "N",
+    "E",
+    "S",
+    "W"
+  ],
+  "state_fields": [
+    "x",
+    "y",
+    "has_key"
+  ],
+  "start": {
+    "x": 1,
+    "y": 1,
+    "has_key": false
+  },
+  "goal": {
+    "x": 7,
+    "y": 5,
+    "has_key": true
+  },
+  "shortest_steps": 14,
+  "methods": {
+    "BFS": {
+      "actions": [
+        "E",
+        "E",
+        "W",
+        "W",
+        "S",
+        "S",
+        "E",
+        "E",
+        "S",
+        "S",
+        "E",
+        "E",
+        "E",
+        "E"
+      ],
+      "expanded": 32,
+      "discovered": 35,
+      "peak_frontier": 4,
+      "states": [
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "has_key": true
+        }
+      ]
+    },
+    "A*: goal distance": {
+      "actions": [
+        "E",
+        "E",
+        "W",
+        "W",
+        "S",
+        "S",
+        "E",
+        "E",
+        "S",
+        "S",
+        "E",
+        "E",
+        "E",
+        "E"
+      ],
+      "expanded": 25,
+      "discovered": 30,
+      "peak_frontier": 6,
+      "states": [
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "has_key": true
+        }
+      ]
+    },
+    "A*: through key": {
+      "actions": [
+        "E",
+        "E",
+        "W",
+        "W",
+        "S",
+        "S",
+        "E",
+        "E",
+        "S",
+        "S",
+        "E",
+        "E",
+        "E",
+        "E"
+      ],
+      "expanded": 16,
+      "discovered": 22,
+      "peak_frontier": 7,
+      "states": [
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": false
+        },
+        {
+          "x": 3,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 1,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 2,
+          "has_key": true
+        },
+        {
+          "x": 1,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 2,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 3,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 4,
+          "has_key": true
+        },
+        {
+          "x": 3,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 4,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 5,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 6,
+          "y": 5,
+          "has_key": true
+        },
+        {
+          "x": 7,
+          "y": 5,
+          "has_key": true
+        }
+      ]
+    }
+  },
+  "position_only_visited_invalid": {
+    "actions": null,
+    "states": null,
+    "expanded": 13,
+    "discovered": 13,
+    "peak_frontier": 3
+  },
+  "heuristic_checks": {
+    "goal_manhattan": {
+      "checked_states_with_finite_goal_distance": 43,
+      "checked_legal_transitions": 158,
+      "start_lower_bound": 10,
+      "true_start_distance": 14
+    },
+    "key_aware": {
+      "checked_states_with_finite_goal_distance": 43,
+      "checked_legal_transitions": 158,
+      "start_lower_bound": 10,
+      "true_start_distance": 14
+    }
+  },
+  "constraint": {
+    "actions": [
+      "E",
+      "E",
+      "W",
+      "W",
+      "S",
+      "S",
+      "S",
+      "S",
+      "E",
+      "E",
+      "E",
+      "E",
+      "E",
+      "E"
+    ],
+    "first_feasible_horizon": 14,
+    "statuses": [
+      {
+        "horizon": 0,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 1,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 2,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 3,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 4,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 5,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 6,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 7,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 8,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 9,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 10,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 11,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 12,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 13,
+        "status": "INFEASIBLE"
+      },
+      {
+        "horizon": 14,
+        "status": "OPTIMAL"
+      }
+    ],
+    "allowed_transition_tuples": 158,
+    "finite_state_count": 58,
+    "solver": "OR-Tools CP-SAT 9.15.6755",
+    "states": [
+      {
+        "x": 1,
+        "y": 1,
+        "has_key": false
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "has_key": false
+      },
+      {
+        "x": 3,
+        "y": 1,
+        "has_key": true
+      },
+      {
+        "x": 2,
+        "y": 1,
+        "has_key": true
+      },
+      {
+        "x": 1,
+        "y": 1,
+        "has_key": true
+      },
+      {
+        "x": 1,
+        "y": 2,
+        "has_key": true
+      },
+      {
+        "x": 1,
+        "y": 3,
+        "has_key": true
+      },
+      {
+        "x": 1,
+        "y": 4,
+        "has_key": true
+      },
+      {
+        "x": 1,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 2,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 3,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 4,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 5,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 6,
+        "y": 5,
+        "has_key": true
+      },
+      {
+        "x": 7,
+        "y": 5,
+        "has_key": true
+      }
+    ]
+  },
+  "figure": "work/figures/key_door_search.png",
+  "scope": "Finite author-made world. BFS/A* search and OR-Tools CP-SAT constraints use the same successor rules; replay validates plans in this model only, not physical execution or general AI ability.",
+  "python": "3.13.14",
+  "ortools": "9.15.6755"
+}

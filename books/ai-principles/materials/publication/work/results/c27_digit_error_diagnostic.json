@@ -1,0 +1,57 @@
+{
+  "scope": "posthoc analysis of already-opened fixed C27 test; no model selection or update",
+  "selected_checkpoint_sha256": "02be020308fabdc0b7ea05f800ac424d8c062e525130f91cae9aa30825464115",
+  "task_manifest_sha256": "63cba85e04c38cc0aca0a76bb1465523883f139617ab34f8ff86b625c3ea5ab7",
+  "group_counts": {
+    "no_carry": {
+      "total": 82,
+      "correct": 81
+    },
+    "units_carry": {
+      "total": 61,
+      "correct": 61
+    },
+    "hundreds_carry": {
+      "total": 7,
+      "correct": 4
+    }
+  },
+  "errors": [
+    {
+      "tens": 7,
+      "units": 4,
+      "addend": 5,
+      "expected": "0 7 9",
+      "actual": "0 8 0",
+      "eos": true,
+      "category": "no_carry"
+    },
+    {
+      "tens": 9,
+      "units": 1,
+      "addend": 9,
+      "expected": "1 0 0",
+      "actual": "0 9 0",
+      "eos": true,
+      "category": "hundreds_carry"
+    },
+    {
+      "tens": 9,
+      "units": 5,
+      "addend": 5,
+      "expected": "1 0 0",
+      "actual": "0 9 9",
+      "eos": true,
+      "category": "hundreds_carry"
+    },
+    {
+      "tens": 9,
+      "units": 9,
+      "addend": 2,
+      "expected": "1 0 1",
+      "actual": "0 9 1",
+      "eos": true,
+      "category": "hundreds_carry"
+    }
+  ]
+}

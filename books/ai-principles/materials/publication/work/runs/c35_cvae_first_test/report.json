@@ -1,0 +1,73 @@
+{
+  "test_identity": "author-internal 500 COCO2017 val images, first human caption; NOT official image-generation test",
+  "output_is": "decoder conditional Gaussian mean for latent draws z~N(0,I), not a sampled RGB observation or claim of photorealism",
+  "models": {
+    "conditional": {
+      "selected_epoch": 30,
+      "checkpoint_sha256": "97840d3cfb27574d006c343c00e13a83b4696cd8e5ac260d46e312a946aea18e",
+      "paired": {
+        "images": 500,
+        "rec_term_per_image": 2052.246404296875,
+        "kl_per_image": 145.64631555175782,
+        "objective_per_image": 2197.8927198486326,
+        "mse_per_rgb_channel": 0.013360979194641116
+      },
+      "cyclically_wrong_caption": {
+        "images": 500,
+        "rec_term_per_image": 2053.332779296875,
+        "kl_per_image": 145.76220251464844,
+        "objective_per_image": 2199.094981811523,
+        "mse_per_rgb_channel": 0.013368051948547365
+      }
+    },
+    "unconditional": {
+      "selected_epoch": 29,
+      "checkpoint_sha256": "9f3528279f978c7ac7f07131dbf6bd510f5034fcd7a94504b88fa17b6d619db6",
+      "paired": {
+        "images": 500,
+        "rec_term_per_image": 2032.8729912109375,
+        "kl_per_image": 151.8734549560547,
+        "objective_per_image": 2184.746446166992,
+        "mse_per_rgb_channel": 0.01323485020319621
+      }
+    }
+  },
+  "examples": [
+    {
+      "image_id": 724,
+      "first_human_caption": "A stop sign is mounted upside-down on it's post. ",
+      "wrong_human_caption": "A computer on a desk next to a laptop.",
+      "same_latent_caption_change_pixel_rmse": 0.010902910493314266
+    },
+    {
+      "image_id": 1503,
+      "first_human_caption": "A computer on a desk next to a laptop.",
+      "wrong_human_caption": "A street scene with focus on the street signs on an overpass.",
+      "same_latent_caption_change_pixel_rmse": 0.010640004649758339
+    },
+    {
+      "image_id": 1532,
+      "first_human_caption": "A street scene with focus on the street signs on an overpass.",
+      "wrong_human_caption": "A man flying through the air while riding skis.",
+      "same_latent_caption_change_pixel_rmse": 0.010292412713170052
+    },
+    {
+      "image_id": 2473,
+      "first_human_caption": "A man flying through the air while riding skis.",
+      "wrong_human_caption": "A cat observing a computer screen next to a laptop and a cordless phone.",
+      "same_latent_caption_change_pixel_rmse": 0.008832767605781555
+    },
+    {
+      "image_id": 4795,
+      "first_human_caption": "A cat observing a computer screen next to a laptop and a cordless phone.",
+      "wrong_human_caption": "A pan filled with onions sitting next to a pan of stew.",
+      "same_latent_caption_change_pixel_rmse": 0.010436473414301872
+    },
+    {
+      "image_id": 5600,
+      "first_human_caption": "A pan filled with onions sitting next to a pan of stew.",
+      "wrong_human_caption": "A stop sign is mounted upside-down on it's post. ",
+      "same_latent_caption_change_pixel_rmse": 0.010369451716542244
+    }
+  ]
+}

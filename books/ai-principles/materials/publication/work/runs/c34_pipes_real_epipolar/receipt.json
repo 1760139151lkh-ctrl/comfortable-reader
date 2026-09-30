@@ -1,0 +1,78 @@
+{
+  "identity": "actual matched 2D SfM observations and upstream supplied calibrated camera poses; internal geometric check, not independent 3D GT",
+  "source_manifest_sha256": "b6b5500cd1d7d55511a0dd0d23ab3e4ac6ada6eb351f85523fa05e80baa7c4e6",
+  "pair": [
+    "DSC_0634.JPG",
+    "DSC_0635.JPG"
+  ],
+  "shared_3d_track_ids": 717,
+  "relative_rotation_world_to_camera": [
+    [
+      0.9774232930167245,
+      0.0032081428523843356,
+      0.21126621615341415
+    ],
+    [
+      -0.003004960079336995,
+      0.9999946623329217,
+      -0.0012827784640194605
+    ],
+    [
+      -0.21126920382124795,
+      0.000618971004859309,
+      0.9774277161977919
+    ]
+  ],
+  "relative_translation": [
+    -0.5748109679400307,
+    0.002968057652262074,
+    0.03996345867400865
+  ],
+  "essential_matrix": [
+    [
+      -0.000506970579141341,
+      -0.03996140822074345,
+      0.002952326076728649
+    ],
+    [
+      -0.08237864016692385,
+      0.0004839998067315705,
+      0.5702791003375276
+    ],
+    [
+      -0.0011737646725126349,
+      -0.5748174217433935,
+      0.00011030482103705774
+    ]
+  ],
+  "fundamental_matrix": [
+    [
+      -4.3085004883543324e-11,
+      -3.397158926516313e-09,
+      7.985563244357786e-06
+    ],
+    [
+      -7.00308986238559e-09,
+      4.1157781703510954e-11,
+      0.00018805880638378178
+    ],
+    [
+      1.4202820403009955e-05,
+      -0.00015711115808127448,
+      -0.0657829605857343
+    ]
+  ],
+  "correct_pixel_distance_to_right_epipolar_line": {
+    "median": 0.4747504822600353,
+    "p95": 2.9627069921736835
+  },
+  "permuted_wrong_pair_distance_pixels": {
+    "median": 488.24548813432637,
+    "p95": 2317.228997698246
+  },
+  "selected_point_id": 547,
+  "selected_correct_distance_pixels": 0.4747504822600353,
+  "selected_wrong_distance_pixels": 634.9092871977701,
+  "figure_sha256": "626e985129ef5b2e074a1318fa10f05f91447c00db0fd08112b739669840d91e",
+  "limits": "incorrect match can still lie on epipolar line; upstream SfM estimated poses/tracks jointly from photos, so line residual only checks internal consistency, not independent 3D truth"
+}

@@ -1,0 +1,404 @@
+{
+  "scope": "posthoc comparison on already-opened specialist test rows; joint model chosen on validation only, not a new blind acceptance set",
+  "selected_checkpoint_sha256": "e3e2d7b0035f6d0b706b490560992bd73760de309d4f0ed1fbb9997498c5f57e",
+  "selected_step": 2400,
+  "math_same_template": {
+    "records": 150,
+    "exact_answer_and_eos": 136,
+    "syntactically_three_spaced_digits": 150,
+    "numerically_correct_if_syntax_valid": 136,
+    "eos_within_limit": 150,
+    "max_new_tokens": 8,
+    "examples": [
+      {
+        "input_digits": "000+7",
+        "expected": "0 0 7",
+        "generated": "0 0 7",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          694,
+          2
+        ]
+      },
+      {
+        "input_digits": "000+8",
+        "expected": "0 0 8",
+        "generated": "0 0 8",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          737,
+          2
+        ]
+      },
+      {
+        "input_digits": "001+6",
+        "expected": "0 0 7",
+        "generated": "0 0 7",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          694,
+          2
+        ]
+      },
+      {
+        "input_digits": "002+2",
+        "expected": "0 0 4",
+        "generated": "0 0 4",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          558,
+          2
+        ]
+      },
+      {
+        "input_digits": "002+4",
+        "expected": "0 0 6",
+        "generated": "0 0 6",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          670,
+          2
+        ]
+      }
+    ]
+  },
+  "code_same_template": {
+    "records": 45,
+    "eos": 45,
+    "parseable": 45,
+    "allowed_ast": 45,
+    "passes_finite_tests": 45,
+    "symbolically_equivalent": 45,
+    "exact_canonical_text_and_eos": 45,
+    "max_new_tokens": 16,
+    "examples": [
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 16,
+        "expected": "n + 16",
+        "generated": "n + 16",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": true,
+          "symbolically_equivalent": true,
+          "polynomial": {
+            "1": 1,
+            "0": 16
+          }
+        },
+        "token_ids": [
+          80,
+          3629,
+          930,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 19,
+        "expected": "n + 19",
+        "generated": "n + 19",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": true,
+          "symbolically_equivalent": true,
+          "polynomial": {
+            "1": 1,
+            "0": 19
+          }
+        },
+        "token_ids": [
+          80,
+          3629,
+          388,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 23,
+        "expected": "n + 23",
+        "generated": "n + 23",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": true,
+          "symbolically_equivalent": true,
+          "polynomial": {
+            "1": 1,
+            "0": 23
+          }
+        },
+        "token_ids": [
+          80,
+          3629,
+          1690,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 25,
+        "expected": "n + 25",
+        "generated": "n + 25",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": true,
+          "symbolically_equivalent": true,
+          "polynomial": {
+            "1": 1,
+            "0": 25
+          }
+        },
+        "token_ids": [
+          80,
+          3629,
+          1346,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 28,
+        "expected": "n + 28",
+        "generated": "n + 28",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": true,
+          "symbolically_equivalent": true,
+          "polynomial": {
+            "1": 1,
+            "0": 28
+          }
+        },
+        "token_ids": [
+          80,
+          3629,
+          1815,
+          2
+        ]
+      }
+    ]
+  },
+  "math_paraphrase": {
+    "records": 150,
+    "exact_answer_and_eos": 0,
+    "syntactically_three_spaced_digits": 0,
+    "numerically_correct_if_syntax_valid": 0,
+    "eos_within_limit": 150,
+    "max_new_tokens": 8,
+    "examples": [
+      {
+        "input_digits": "000+7",
+        "expected": "0 0 7",
+        "generated": "0 0",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          2
+        ]
+      },
+      {
+        "input_digits": "000+8",
+        "expected": "0 0 8",
+        "generated": "0 0",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          2
+        ]
+      },
+      {
+        "input_digits": "001+6",
+        "expected": "0 0 7",
+        "generated": "0 0",
+        "eos": true,
+        "token_ids": [
+          18,
+          861,
+          2
+        ]
+      },
+      {
+        "input_digits": "002+2",
+        "expected": "0 0 4",
+        "generated": "0 2",
+        "eos": true,
+        "token_ids": [
+          18,
+          354,
+          2
+        ]
+      },
+      {
+        "input_digits": "002+4",
+        "expected": "0 0 6",
+        "generated": "0 1",
+        "eos": true,
+        "token_ids": [
+          18,
+          310,
+          2
+        ]
+      }
+    ]
+  },
+  "code_paraphrase": {
+    "records": 45,
+    "eos": 45,
+    "parseable": 44,
+    "allowed_ast": 44,
+    "passes_finite_tests": 15,
+    "symbolically_equivalent": 15,
+    "exact_canonical_text_and_eos": 15,
+    "max_new_tokens": 16,
+    "examples": [
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 16,
+        "expected": "n + 16",
+        "generated": "n * 16",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": false,
+          "symbolically_equivalent": false,
+          "polynomial": {
+            "1": 16
+          }
+        },
+        "token_ids": [
+          80,
+          223,
+          12,
+          930,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 19,
+        "expected": "n + 19",
+        "generated": "n * 19",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": false,
+          "symbolically_equivalent": false,
+          "polynomial": {
+            "1": 19
+          }
+        },
+        "token_ids": [
+          80,
+          223,
+          12,
+          388,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 23,
+        "expected": "n + 23",
+        "generated": "n * 23",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": false,
+          "symbolically_equivalent": false,
+          "polynomial": {
+            "1": 23
+          }
+        },
+        "token_ids": [
+          80,
+          223,
+          12,
+          1690,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 25,
+        "expected": "n + 25",
+        "generated": "n * 25",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": false,
+          "symbolically_equivalent": false,
+          "polynomial": {
+            "1": 25
+          }
+        },
+        "token_ids": [
+          80,
+          223,
+          12,
+          1346,
+          2
+        ]
+      },
+      {
+        "family": "add",
+        "variable": "n",
+        "constant": 28,
+        "expected": "n + 28",
+        "generated": "n * 28",
+        "eos": true,
+        "checks": {
+          "parseable": true,
+          "allowed_ast": true,
+          "passes_finite_tests": false,
+          "symbolically_equivalent": false,
+          "polynomial": {
+            "1": 28
+          }
+        },
+        "token_ids": [
+          80,
+          223,
+          12,
+          1815,
+          2
+        ]
+      }
+    ]
+  }
+}

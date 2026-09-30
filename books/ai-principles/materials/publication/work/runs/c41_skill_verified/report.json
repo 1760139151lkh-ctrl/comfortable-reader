@@ -1,0 +1,37 @@
+{
+  "discovered": {
+    "frontmatter": {
+      "name": "check-book-source",
+      "description": "Check an answer about this local AI textbook against a published paragraph and its current source hash."
+    },
+    "file_count": 2,
+    "instruction_content_loaded": false
+  },
+  "selected_by": "author demonstration, not model selection",
+  "after_selection_content_loaded": [
+    "SKILL.md",
+    "references/source-rules.md"
+  ],
+  "old_manifest_rejects_changed_support_file": "resource changed since manifest",
+  "registered_manifest": {
+    "origin": "local teaching copy, not installed in Codex",
+    "frontmatter": {
+      "name": "check-book-source",
+      "description": "Check an answer about this local AI textbook against a published paragraph and its current source hash."
+    },
+    "resources": [
+      {
+        "path": "SKILL.md",
+        "sha256": "43aa6e9f6119d4e13f44177506c0abeff17d54950160ad4a8cd44dfdfb623aae",
+        "bytes": 806
+      },
+      {
+        "path": "references/source-rules.md",
+        "sha256": "3a0a240d2f89e4ab65f3761672cb1a019893d3c33bb3acb41d2f4f7fbe84c576",
+        "bytes": 463
+      }
+    ]
+  },
+  "original_example_support_sha256_unchanged": true,
+  "scope": "local copy of an uninstalled teaching skill; no Codex host activation, MCP Skills extension call, model training, tool grant or real user approval"
+}

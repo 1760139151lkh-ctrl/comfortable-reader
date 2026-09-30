@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "sourceFormat": "epub-source@1",
+  "id": "urn:uuid:c300acc2-d256-5566-b0e4-f2e0b3eeb45b",
+  "slug": "intelligent-optimization",
+  "title": "智能优化算法简介",
+  "author": "舒适阅读书库项目",
+  "authorship": "由项目维护者使用 ChatGPT / Codex 辅助编写和整理；原文所述来源和参考实验各自保留身份。",
+  "description": "从解的表示与评价开始，理解遗传、粒子群、蚁群、禁忌搜索与可信的实验比较。",
+  "revision": "1.0.0",
+  "revisionModified": "2026-09-28T00:00:00Z",
+  "language": "zh-CN",
+  "example": false,
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "attribution": "舒适阅读书库项目 / 1760139151lkh-ctrl",
+    "exceptions": "RIGHTS.md"
+  },
+  "epubSource": {
+    "root": "epub",
+    "files": [
+      "META-INF/container.xml",
+      "OEBPS/ch00.xhtml",
+      "OEBPS/ch02.xhtml",
+      "OEBPS/ch03.xhtml",
+      "OEBPS/ch04.xhtml",
+      "OEBPS/ch05.xhtml",
+      "OEBPS/ch06.xhtml",
+      "OEBPS/ch07.xhtml",
+      "OEBPS/ch08.xhtml",
+      "OEBPS/ch09.xhtml",
+      "OEBPS/ch10.xhtml",
+      "OEBPS/ch11.xhtml",
+      "OEBPS/ch12.xhtml",
+      "OEBPS/ch13.xhtml",
+      "OEBPS/ch14.xhtml",
+      "OEBPS/ch15.xhtml",
+      "OEBPS/content.opf",
+      "OEBPS/nav.xhtml",
+      "OEBPS/publication.xhtml",
+      "OEBPS/style.css"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c00",
+      "title": "导读",
+      "href": "ch00.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c02",
+      "title": "2. 为什么叫“智能”？",
+      "href": "ch02.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c03",
+      "title": "3. 智能优化算法的一般结构",
+      "href": "ch03.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c04",
+      "title": "4. 常见的智能优化算法",
+      "href": "ch04.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c05",
+      "title": "5. 它和传统优化算法有什么区别？",
+      "href": "ch05.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c06",
+      "title": "6. 为什么不是什么问题都用智能优化算法？",
+      "href": "ch06.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c07",
+      "title": "7. 它最大的难点：探索和利用的平衡",
+      "href": "ch07.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c08",
+      "title": "8. 一个最简单的例子",
+      "href": "ch08.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c09",
+      "title": "9. 没有一种算法“总体最好”：到底应该怎么选？",
+      "href": "ch09.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c10",
+      "title": "10. 公式里的参数从哪里来：(F)、τ 与 η",
+      "href": "ch10.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c11",
+      "title": "11. 当一次 f(x) 非常昂贵：代理模型与贝叶斯优化",
+      "href": "ch11.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c12",
+      "title": "12. 局部搜索是不是必须先有可行解？",
+      "href": "ch12.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c13",
+      "title": "13. 禁忌搜索：有记忆的局部搜索",
+      "href": "ch13.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c14",
+      "title": "14. 从问题到可信结果：不要把“能跑”当成“算法完成”",
+      "href": "ch14.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c15",
+      "title": "15. 最准确的理解",
+      "href": "ch15.xhtml",
+      "essential": []
+    }
+  ],
+  "resources": [],
+  "sources": [],
+  "activities": []
+}

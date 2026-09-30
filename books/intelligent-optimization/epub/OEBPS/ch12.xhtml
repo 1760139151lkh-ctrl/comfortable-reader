@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>12. 局部搜索是不是必须先有可行解？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="12-局部搜索是不是必须先有可行解">12. 局部搜索是不是必须先有可行解？</h2>
+<p>更准确的回答是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>通常最好先有一个可行解，但并非理论上绝对必须</mtext></mrow></menclose></mrow></math></div>
+<p>设问题为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi>;</mi><mi>x</mi><mo>∈</mo><mi>Ω</mi><mo>.</mo></mrow></math></div>
+<h3 id="情况一搜索始终限制在可行域">情况一：搜索始终限制在可行域</h3>
+<p>先构造</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mn>0</mn></msub><mo>∈</mo><mi>Ω</mi><mo>,</mo></mrow></math></div>
+<p>并设计保持可行的邻域，使得每个 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>x</mi><mi>′</mi></msup><mo>∈</mo><mi>N</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 仍满足 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>x</mi><mi>′</mi></msup><mo>∈</mo><mi>Ω</mi></mrow></math></span>。例如 TSP 的解是城市排列，交换、插入或反转一段路线后仍然是合法排列。</p>
+<p>此时确实需要一条完整可行路线作为起点，但它不必很好，可以来自随机排列、最近邻贪心或插入法。局部搜索负责改进它。</p>
+<h3 id="情况二允许暂时进入不可行区域">情况二：允许暂时进入不可行区域</h3>
+<p>若约束复杂，强制每一步都可行可能让邻域过小。可以定义违反程度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mn>0</mn></mrow></math></span>，使用</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mi>f</mi><mo stretchy="false">~</mo></mover><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mi>λ</mi><mi>V</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>当 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>x</mi></mrow></math></span> 可行时 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn></mrow></math></span>；违反越严重，惩罚越大。算法可从不可行解开始或暂时穿过不可行区域，再逐渐返回可行域。</p>
+<p>另一种不必选择固定惩罚系数的办法是“可行性优先”：</p>
+<ol>
+<li>可行解优于任何不可行解；</li>
+<li>两个可行解比较原目标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span>；</li>
+<li>两个不可行解比较违反程度 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>V</mi></mrow></math></span>。</li>
+</ol>
+<p>还可以把不可行邻居修复成可行解。三种路线各有代价：直接拒绝简单但可能限制移动；修复能保持可行但可能引入偏差；惩罚灵活但 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>λ</mi></mrow></math></span> 难调。</p>
+<h3 id="有了可行解能不能直接按下运行">有了可行解，能不能直接按下运行？</h3>
+<p>不能。初始可行解只决定从哪里出发，真正的设计工作才刚开始。至少还要明确：</p>
+<ol>
+<li><strong>解的表示</strong>：排列、路线集合、0–1 向量还是连续向量？</li>
+<li><strong>邻域</strong>：swap、insert、2-opt 或其他移动能否到达重要区域？</li>
+<li><strong>约束处理</strong>：拒绝、修复、惩罚，还是使用天然保持可行的操作？</li>
+<li><strong>邻居选择</strong>：选第一个改进、最好改进，还是随机抽样？</li>
+<li><strong>停止条件</strong>：时间、评价预算、迭代数或无改进轮数？</li>
+<li><strong>历史最好解</strong>：当前解暂时变差时，怎样保证最好结果不丢？</li>
+</ol>
+<p>可以把全部可行解看成一张“邻域图”：每个解是一个节点，一次允许的移动连接两个节点。局部搜索是在这张图上行走。若邻域图不连通，或最优区域从当前点根本不可达，再聪明的接受规则也无济于事。</p>
+<p>因此：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>初始解决定站在哪里；邻域设计决定能走到哪里</mtext></mrow></menclose></mrow></math></div>
+<hr/>
+</body></html>

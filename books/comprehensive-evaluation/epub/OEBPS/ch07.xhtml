@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>7. 组合赋权：把价值偏好和数据差异放在一起</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="7-组合赋权把价值偏好和数据差异放在一起">7. 组合赋权：把价值偏好和数据差异放在一起</h2>
+<p>如果既希望保留专家判断，又希望利用样本信息，可以组合主观权重 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></msup></mrow></math></span> 与客观权重 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>w</mi><mrow><mo stretchy="false">(</mo><mi>o</mi><mo stretchy="false">)</mo></mrow></msup></mrow></math></span>。最直观的是线性组合：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mi>α</mi><msubsup><mi>w</mi><mi>j</mi><mrow><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>+</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo><msubsup><mi>w</mi><mi>j</mi><mrow><mo stretchy="false">(</mo><mi>o</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>,</mo><mn>0</mn><mo>≤</mo><mi>α</mi><mo>≤</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>这里 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 不是由数学必然决定的，而是建模超参数：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 大，强调制度目标或专家偏好；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 小，强调当前样本的区分能力。</li>
+</ul>
+<p>也可以使用乘法组合：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><mo stretchy="false">(</mo><msubsup><mi>w</mi><mi>j</mi><mrow><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></msubsup><msup><mo stretchy="false">)</mo><mrow><mi>α</mi></mrow></msup><mo stretchy="false">(</mo><msubsup><mi>w</mi><mi>j</mi><mrow><mo stretchy="false">(</mo><mi>o</mi><mo stretchy="false">)</mo></mrow></msubsup><msup><mo stretchy="false">)</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></msup></mrow><mrow><msub><mo>∑</mo><mrow><mi>ℓ</mi></mrow></msub><mo stretchy="false">(</mo><msubsup><mi>w</mi><mrow><mi>ℓ</mi></mrow><mrow><mo stretchy="false">(</mo><mi>s</mi><mo stretchy="false">)</mo></mrow></msubsup><msup><mo stretchy="false">)</mo><mrow><mi>α</mi></mrow></msup><mo stretchy="false">(</mo><msubsup><mi>w</mi><mrow><mi>ℓ</mi></mrow><mrow><mo stretchy="false">(</mo><mi>o</mi><mo stretchy="false">)</mo></mrow></msubsup><msup><mo stretchy="false">)</mo><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></msup></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>乘法形式会更强地惩罚某一来源接近 0 的指标。若客观权重恰为 0，即使专家非常重视，该指标也可能被完全抹去；是否合理取决于应用目的。</p>
+<p>还有一些方法通过最小化权重之间的距离、最大化对象区分度或博弈论协调来确定组合系数。公式更复杂并不等于更客观，因为目标函数本身依然代表一种选择。</p>
+<p>稳妥做法是把 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 当作敏感性参数，例如比较：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>0.25</mn><mo>,</mo><mn>0.5</mn><mo>,</mo><mn>0.75</mn><mo>,</mo><mn>1</mn><mo stretchy="false">}</mo><mo>.</mo></mrow></math></div>
+<p>若不同 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 下前几名稳定，结论较有韧性；若轻微变化就颠倒排序，应报告这种不确定性，而不是只展示最顺眼的一组参数。</p>
+<hr/>
+</body></html>

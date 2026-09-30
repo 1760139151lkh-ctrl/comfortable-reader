@@ -1,0 +1,36 @@
+{
+  "scope": "16 fixed initial-noise class9 eta0 DDIM-style samples, C13 classifier probe and pixel differences versus same model's 300-step deterministic display output; no human quality test",
+  "ddim_report_sha256": "c2c4151666bdbc9814c9caf1575b721bfb6414c87c0abfe704820f5553ce5d4b",
+  "c13_classifier_sha256": "cf21ae82864d5f4b5ba9fbbb76da34a3a6908b9509f19aafb5b74a032cfc5c73",
+  "results": {
+    "10": {
+      "count": 16,
+      "predicted_class9_count": 16,
+      "mean_classifier_probability_class9": 0.9161418676376343,
+      "pairwise_raw_pixel_rmse_mean": 0.31797994039952754,
+      "pixel_rmse_vs_300_step_display_images": 0.0646192654967308
+    },
+    "30": {
+      "count": 16,
+      "predicted_class9_count": 13,
+      "mean_classifier_probability_class9": 0.7758179903030396,
+      "pairwise_raw_pixel_rmse_mean": 0.3448625856389602,
+      "pixel_rmse_vs_300_step_display_images": 0.0288991779088974
+    },
+    "100": {
+      "count": 16,
+      "predicted_class9_count": 13,
+      "mean_classifier_probability_class9": 0.7856168746948242,
+      "pairwise_raw_pixel_rmse_mean": 0.34382503603895503,
+      "pixel_rmse_vs_300_step_display_images": 0.010344253852963448
+    },
+    "300": {
+      "count": 16,
+      "predicted_class9_count": 13,
+      "mean_classifier_probability_class9": 0.7631964087486267,
+      "pairwise_raw_pixel_rmse_mean": 0.3491394055386384,
+      "pixel_rmse_vs_300_step_display_images": 0.0
+    }
+  },
+  "limitations": "class9 classifier may be fooled by generated artifacts; display-clipped pixel RMSE measures path change, not error to true data distribution"
+}

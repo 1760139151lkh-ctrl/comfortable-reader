@@ -1,0 +1,37 @@
+{
+  "identity": "8-kHz quantized speech for unconditional sample-level modeling; not text-to-speech",
+  "source_archive_sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+  "source_split_sha256": "aa7f4d036e377e55c61c2b1a8bc2bd0349c423b83cff208adbe736be772f46ed",
+  "speaker": "1272",
+  "training_chapters": [
+    "128104",
+    "141231"
+  ],
+  "validation_chapters": [
+    "135031"
+  ],
+  "speaker_is_prior_train_split": true,
+  "other_speakers_or_prior_test_clips_loaded": false,
+  "sample_rate_original": 16000,
+  "sample_rate_model": 8000,
+  "resampling": "scipy.signal.resample_poly(up=1,down=2), with FIR antialias filter",
+  "quantization": "mu-law companding mu=255, uniform nearest of 256 discrete bins",
+  "sequence_input_samples": 512,
+  "each_sequence_has_next_sample_target": true,
+  "counts": {
+    "train": {
+      "clips": 48,
+      "seconds": 346.145,
+      "chunks": 5373
+    },
+    "validation": {
+      "clips": 25,
+      "seconds": 134.89000000000001,
+      "chunks": 2091
+    }
+  },
+  "train_npy_sha256": "5b6f174a30be8de042851afda05a174c395eb028590a8d264c41d948a2123a07",
+  "validation_npy_sha256": "f980e7263eec91ba931e3af3494118c796109aa1d45e90c1140e783dc5cbb114",
+  "example_clip_id": "1272-128104-0000",
+  "example_quantization_rmse": 0.0007633413925523694
+}

@@ -1,0 +1,175 @@
+{
+  "identity": "LINQS Cora original source with author-internal 140/500/1000 node-label split; all node words and citation edges visible transductively",
+  "test_labels": 1000,
+  "training_labels": 140,
+  "validation_labels": 500,
+  "remaining_labels_unused": 1068,
+  "graph_input": {
+    "real_undirected_model_edges": 5278,
+    "source_directed_citation_rows": 5429,
+    "real_edge_same_label_after_test": {
+      "same_label_pairs": 4275,
+      "pairs": 5278,
+      "fraction": 0.8099658961727927
+    },
+    "rewired_edge_same_label_after_test": {
+      "same_label_pairs": 932,
+      "pairs": 5278,
+      "fraction": 0.17658203865100416
+    }
+  },
+  "models": {
+    "mlp": {
+      "validation_selected_epoch": 64,
+      "checkpoint_sha256": "8eebdee3c1cfc6234ce3ac452b58fffaaf793633638c4d416e04b97399ce12ad",
+      "test": {
+        "nodes": 1000,
+        "nll": 1.4024080038070679,
+        "accuracy": 0.5290000438690186,
+        "per_class": {
+          "Case_Based": {
+            "nodes": 96,
+            "accuracy": 0.5729166865348816
+          },
+          "Genetic_Algorithms": {
+            "nodes": 145,
+            "accuracy": 0.6896551847457886
+          },
+          "Neural_Networks": {
+            "nodes": 315,
+            "accuracy": 0.460317462682724
+          },
+          "Probabilistic_Methods": {
+            "nodes": 155,
+            "accuracy": 0.4580644965171814
+          },
+          "Reinforcement_Learning": {
+            "nodes": 79,
+            "accuracy": 0.5063291192054749
+          },
+          "Rule_Learning": {
+            "nodes": 79,
+            "accuracy": 0.594936728477478
+          },
+          "Theory": {
+            "nodes": 131,
+            "accuracy": 0.5419847369194031
+          }
+        }
+      }
+    },
+    "gcn": {
+      "validation_selected_epoch": 130,
+      "checkpoint_sha256": "57f5db74fb988bc99a84cb218966c2721ed299e0a54dee5e07657054cce7f728",
+      "test": {
+        "nodes": 1000,
+        "nll": 0.737296998500824,
+        "accuracy": 0.7720000147819519,
+        "per_class": {
+          "Case_Based": {
+            "nodes": 96,
+            "accuracy": 0.7291666865348816
+          },
+          "Genetic_Algorithms": {
+            "nodes": 145,
+            "accuracy": 0.931034505367279
+          },
+          "Neural_Networks": {
+            "nodes": 315,
+            "accuracy": 0.7460317611694336
+          },
+          "Probabilistic_Methods": {
+            "nodes": 155,
+            "accuracy": 0.6903225779533386
+          },
+          "Reinforcement_Learning": {
+            "nodes": 79,
+            "accuracy": 0.8481012582778931
+          },
+          "Rule_Learning": {
+            "nodes": 79,
+            "accuracy": 0.8607594966888428
+          },
+          "Theory": {
+            "nodes": 131,
+            "accuracy": 0.6870229244232178
+          }
+        }
+      },
+      "same_trained_weights_wrong_edges_diagnostic": {
+        "nodes": 1000,
+        "nll": 1.487640619277954,
+        "accuracy": 0.46700000762939453,
+        "per_class": {
+          "Case_Based": {
+            "nodes": 96,
+            "accuracy": 0.3020833432674408
+          },
+          "Genetic_Algorithms": {
+            "nodes": 145,
+            "accuracy": 0.4275861978530884
+          },
+          "Neural_Networks": {
+            "nodes": 315,
+            "accuracy": 0.6158730387687683
+          },
+          "Probabilistic_Methods": {
+            "nodes": 155,
+            "accuracy": 0.37419354915618896
+          },
+          "Reinforcement_Learning": {
+            "nodes": 79,
+            "accuracy": 0.3544303774833679
+          },
+          "Rule_Learning": {
+            "nodes": 79,
+            "accuracy": 0.3544303774833679
+          },
+          "Theory": {
+            "nodes": 131,
+            "accuracy": 0.5190839767456055
+          }
+        }
+      }
+    },
+    "rewired": {
+      "validation_selected_epoch": 56,
+      "checkpoint_sha256": "7119fb91e6b6e47b2c6f50a347225202226a07700a4bf6dbce1d40f0941913b5",
+      "test": {
+        "nodes": 1000,
+        "nll": 1.865203857421875,
+        "accuracy": 0.27800002694129944,
+        "per_class": {
+          "Case_Based": {
+            "nodes": 96,
+            "accuracy": 0.3020833432674408
+          },
+          "Genetic_Algorithms": {
+            "nodes": 145,
+            "accuracy": 0.3931034505367279
+          },
+          "Neural_Networks": {
+            "nodes": 315,
+            "accuracy": 0.24761904776096344
+          },
+          "Probabilistic_Methods": {
+            "nodes": 155,
+            "accuracy": 0.17419354617595673
+          },
+          "Reinforcement_Learning": {
+            "nodes": 79,
+            "accuracy": 0.26582279801368713
+          },
+          "Rule_Learning": {
+            "nodes": 79,
+            "accuracy": 0.2531645596027374
+          },
+          "Theory": {
+            "nodes": 131,
+            "accuracy": 0.35114502906799316
+          }
+        }
+      }
+    }
+  }
+}

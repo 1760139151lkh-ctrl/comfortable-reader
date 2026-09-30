@@ -1,0 +1,118 @@
+{
+  "identity": "author-internal holdout from official COCO2017 validation; 500 distinct test images / 2501 human captions; same training-fitted vocabulary",
+  "test_images": 500,
+  "test_captions": 2501,
+  "models": {
+    "image_conditioned": {
+      "selected_epoch": 8,
+      "checkpoint_sha256": "5cb4afb4a07a705104c4625bf8698f354e97246458e7609d36dfcf3a8869119b",
+      "true_image_teacher_forced": {
+        "captions": 2501,
+        "target_tokens": 30626,
+        "nll_per_target_token": 3.1351693426847285
+      },
+      "cyclically_wrong_image_teacher_forced": {
+        "captions": 2501,
+        "target_tokens": 30626,
+        "nll_per_target_token": 3.6433609916563947
+      },
+      "first_six_fixed_examples": [
+        {
+          "image_id": 724,
+          "source_file": "000000000724.jpg",
+          "reference_first_caption": "A stop sign is mounted upside-down on it's post. ",
+          "generated": "a black and white photo of a car on a bench.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 1503,
+          "source_file": "000000001503.jpg",
+          "reference_first_caption": "A computer on a desk next to a laptop.",
+          "generated": "a small dog sitting on a bed next to a laptop.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 1532,
+          "source_file": "000000001532.jpg",
+          "reference_first_caption": "A street scene with focus on the street signs on an overpass.",
+          "generated": "a large group of people standing on a beach with a kite.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 2473,
+          "source_file": "000000002473.jpg",
+          "reference_first_caption": "A man flying through the air while riding skis.",
+          "generated": "a man flying a kite on a beach.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 4795,
+          "source_file": "000000004795.jpg",
+          "reference_first_caption": "A cat observing a computer screen next to a laptop and a cordless phone.",
+          "generated": "a man holding a baseball bat at a ball.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 5600,
+          "source_file": "000000005600.jpg",
+          "reference_first_caption": "A pan filled with onions sitting next to a pan of stew.",
+          "generated": "a cat laying on a couch with a couch and a dog on it.",
+          "eos_reached_before_30": true
+        }
+      ]
+    },
+    "text_only": {
+      "selected_epoch": 11,
+      "checkpoint_sha256": "2b75792af743bb1a52256e3b85b15af1fc0d3f61591e32da623d958f44c47300",
+      "true_image_teacher_forced": {
+        "captions": 2501,
+        "target_tokens": 30626,
+        "nll_per_target_token": 3.0622527344770374
+      },
+      "first_six_fixed_examples": [
+        {
+          "image_id": 724,
+          "source_file": "000000000724.jpg",
+          "reference_first_caption": "A stop sign is mounted upside-down on it's post. ",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 1503,
+          "source_file": "000000001503.jpg",
+          "reference_first_caption": "A computer on a desk next to a laptop.",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 1532,
+          "source_file": "000000001532.jpg",
+          "reference_first_caption": "A street scene with focus on the street signs on an overpass.",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 2473,
+          "source_file": "000000002473.jpg",
+          "reference_first_caption": "A man flying through the air while riding skis.",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 4795,
+          "source_file": "000000004795.jpg",
+          "reference_first_caption": "A cat observing a computer screen next to a laptop and a cordless phone.",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        },
+        {
+          "image_id": 5600,
+          "source_file": "000000005600.jpg",
+          "reference_first_caption": "A pan filled with onions sitting next to a pan of stew.",
+          "generated": "a man and woman are playing a video game.",
+          "eos_reached_before_30": true
+        }
+      ]
+    }
+  }
+}

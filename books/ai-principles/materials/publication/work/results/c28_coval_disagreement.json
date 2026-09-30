@@ -1,0 +1,56 @@
+{
+  "scope": "descriptive human-rank analysis of CoVal; synthetic prompts and model candidates, no learner/user labels, no demographics or free-text rationales exported",
+  "source_sha256": "e107b7d233baedbc8c1b9c3f9aef9739592b93f6f202b9e4503b9cd3ca00d759",
+  "prompts": 1078,
+  "assessments": 18384,
+  "assessments_missing_personal_rank_in_file": 13483,
+  "prompts_with_at_least_two_personal_strict_tops": 321,
+  "personal_and_world_strict_tops_both": 4190,
+  "personal_to_world_top_changed_same_annotator": 966,
+  "prompts_with_multiple_personal_top_choices": 312,
+  "prompts_with_multiple_world_top_choices": 1054,
+  "prompts_personal_vs_world_unique_majority_changed": 32,
+  "personal_pair_comparisons_with_two_or_more_non_tie_votes": 1922,
+  "pairs_with_both_preferences_observed": 1673,
+  "pair_majority_at_most_60_percent": 370,
+  "pair_majority_strength_mean": 0.7641249883206702,
+  "world_pair_comparisons_with_two_or_more_non_tie_votes": 6465,
+  "world_pairs_with_both_preferences_observed": 5748,
+  "world_pair_majority_at_most_60_percent": 1177,
+  "assessment_subjectivity_counts": {
+    "The correct answer depends on a person's values or culture": 8650,
+    "There is a single correct answer to this prompt": 5272,
+    "I'm unsure whether there is a single correct answer to this question": 2911,
+    "The correct answer depends on something else (the time, the weather, etc)": 1551
+  },
+  "prompts_with_multiple_personal_tops_by_majority_subjectivity": {
+    "The correct answer depends on a person's values or culture": 202,
+    "There is a single correct answer to this prompt": 90,
+    "I'm unsure whether there is a single correct answer to this question": 17,
+    "The correct answer depends on something else (the time, the weather, etc)": 3
+  },
+  "example_without_text": {
+    "prompt_id": "6b346e96-a9ba-5297-9c7e-d033c9753c53",
+    "assessments": 14,
+    "personal_top_counts": {
+      "A": 7,
+      "B": 5,
+      "C": 1
+    },
+    "world_top_counts": {
+      "A": 8,
+      "B": 3
+    },
+    "pair_AB_personal_counts": {
+      "A": 7,
+      "B": 6
+    },
+    "subjectivity_counts": {
+      "The correct answer depends on a person's values or culture": 10,
+      "There is a single correct answer to this prompt": 1,
+      "I'm unsure whether there is a single correct answer to this question": 2,
+      "The correct answer depends on something else (the time, the weather, etc)": 1
+    },
+    "topic": "first record; prompt asks about eating beef; no response/rationale text copied"
+  }
+}

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>导读</title><link rel="stylesheet" href="style.css"/></head><body><p>本书沿着问题识别、模型选择、算法求解、验证、实施与反馈的顺序，整理运筹学与相邻方法之间的关系。原教学整理稿中的私人对话开场已在公开版改为这段说明；后续方法与公式保持原稿。</p><div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>拿到题目</mtext><mo>→</mo><mtext>识别任务</mtext><mo>→</mo><mtext>识别结构</mtext><mo>→</mo><mtext>选择模型家族</mtext></mrow></math></div>
+<h1 id="一先建立总蓝图现实问题经过七层变成答案">一、先建立总蓝图：现实问题经过七层变成答案</h1>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>现实系统</mtext><mo>→</mo><mtext>任务识别</mtext><mo>→</mo><mtext>结构抽象</mtext><mo>→</mo><mtext>模型选择</mtext><mo>→</mo><mtext>参数获取</mtext><mo>→</mo><mtext>模型求解</mtext><mo>→</mo><mtext>验证与决策</mtext></mrow></menclose></mrow></math></div>
+<p>这七层分别是：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>核心问题</th>
+<th>典型产物</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0. 现实层</td>
+<td>现实中发生了什么？边界在哪里？</td>
+<td>对象、流程、利益相关者</td>
+</tr>
+<tr>
+<td>1. 任务层</td>
+<td>题目究竟要我回答什么？</td>
+<td>描述、预测、解释、评价、优化、控制</td>
+</tr>
+<tr>
+<td>2. 结构层</td>
+<td>这个系统有什么数学骨架？</td>
+<td>动态/静态、随机/确定、连续/离散、网络/空间</td>
+</tr>
+<tr>
+<td>3. 模型层</td>
+<td>用什么数学语言表达？</td>
+<td>回归、微分方程、数学规划、图模型、排队模型</td>
+</tr>
+<tr>
+<td>4. 数据层</td>
+<td>参数从哪里来？不确定性怎样处理？</td>
+<td>参数估计、数据清洗、分布拟合</td>
+</tr>
+<tr>
+<td>5. 求解层</td>
+<td>怎样算出结果？</td>
+<td>数值算法、优化算法、仿真、机器学习</td>
+</tr>
+<tr>
+<td>6. 验证层</td>
+<td>这个结果可信吗、稳不稳、能不能执行？</td>
+<td>检验、灵敏度、鲁棒性、误差分析</td>
+</tr>
+<tr>
+<td>7. 决策层</td>
+<td>最终给现实世界什么？</td>
+<td>方案、预测、政策建议、风险说明</td>
+</tr>
+</tbody>
+</table>
+<p>你以前容易混乱，是因为把“模型层”和“求解层”混在了一起。例如：</p>
+<ul>
+<li>数学规划是<strong>模型语言</strong>；</li>
+<li>分支定界是<strong>求解算法</strong>；</li>
+<li>排队论是<strong>特定系统的模型体系</strong>；</li>
+<li>仿真是<strong>研究和检验模型的方法</strong>；</li>
+<li>运筹学则跨越了模型、求解和决策几层。</li>
+</ul>
+<hr/>
+</body></html>

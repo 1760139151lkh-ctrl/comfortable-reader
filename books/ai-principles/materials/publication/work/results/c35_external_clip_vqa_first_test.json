@@ -1,0 +1,32 @@
+{
+  "identity": "frozen externally trained OpenAI CLIP ViT-B/32 visual features + locally trained yes/no question head; author-internal 987 VQA v2 validation questions",
+  "external_training_overlap_with_coco_images": "UNKNOWN",
+  "test_question_count": 987,
+  "majority_yes_accuracy": 0.5268490374873354,
+  "arms": {
+    "image_question": {
+      "selected_epoch": 2,
+      "checkpoint_sha256": "b279acca03028b2294d78054efe852c0b5c0b1ede1f6c3aa315d8cb678f60338",
+      "true_images": {
+        "accuracy": 0.49949341438703143,
+        "binary_nll": 0.6996808052062988,
+        "both_correct_of_21_opposite_answer_same_question_pairs": 2
+      },
+      "cyclic_wrong_images": {
+        "accuracy": 0.48429584599797365,
+        "binary_nll": 0.6993893980979919,
+        "both_correct_of_21_opposite_answer_same_question_pairs": 1
+      },
+      "prediction_changes": 147
+    },
+    "question_only": {
+      "selected_epoch": 1,
+      "checkpoint_sha256": "ed7b419cff563b907d8592ce60a7f49a78eb5288727adef29e70285ef86d8b10",
+      "true_images": {
+        "accuracy": 0.45592705167173253,
+        "binary_nll": 0.6944593787193298,
+        "both_correct_of_21_opposite_answer_same_question_pairs": 0
+      }
+    }
+  }
+}

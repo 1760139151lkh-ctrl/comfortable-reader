@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>10. 公式里的参数从哪里来：(F)、τ 与 η</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="10-公式里的参数从哪里来f-τ-与-η">10. 公式里的参数从哪里来：(F)、<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>τ</mi></mrow></math></span> 与 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>η</mi></mrow></math></span></h2>
+<p>这一节专门回答一种很重要的追问：公式会算了，但为什么偏偏这样写？这些字母究竟是问题给的、算法学出来的，还是人为设置的？</p>
+<h3 id="101-差分进化里的-f-是什么">10.1 差分进化里的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi></mrow></math></span> 是什么？</h3>
+<p>差分变异常写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>1</mn></msub></mrow></msub><mo>+</mo><mi>F</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>2</mn></msub></mrow></msub><mo>−</mo><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>3</mn></msub></mrow></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>这里的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>v</mi><mi>i</mi></msub></mrow></math></span> 是新生成的变异向量，不是粒子群中的速度。<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi></mrow></math></span> 叫作<strong>差分缩放因子</strong>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mi>F</mi><mo>=</mo><mtext>沿种群差分方向迈步的缩放倍数</mtext></mrow></menclose></mrow></math></div>
+<p>具体算一次。设</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>1</mn></msub></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mi>;</mi><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>2</mn></msub></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>8</mn><mo>,</mo><mn>6</mn><mo stretchy="false">)</mo><mi>;</mi><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>3</mn></msub></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>2</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>先计算种群差分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>2</mn></msub></mrow></msub><mo>−</mo><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>3</mn></msub></mrow></msub><mo>=</mo><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi><mo>=</mo><mn>0.5</mn></mrow></math></span>，则</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mo stretchy="false">(</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mo>+</mo><mn>0.5</mn><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>5</mn><mo>,</mo><mn>6</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi><mo>=</mo><mn>1</mn></mrow></math></span>，则</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>v</mi><mi>i</mi></msub><mo>=</mo><mo stretchy="false">(</mo><mn>3</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mo>+</mo><mo stretchy="false">(</mo><mn>4</mn><mo>,</mo><mn>4</mn><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>7</mn><mo>,</mo><mn>8</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>所以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi></mrow></math></span> 越大，差分步通常越大；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi></mrow></math></span> 越小，搜索越保守。常见实现允许 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0</mn><mo>&lt;</mo><mi>F</mi><mo>≤</mo><mn>2</mn></mrow></math></span>，工程上可从 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.5</mn></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>0.8</mn></mrow></math></span> 一类数值起步，但这只是调参起点，不是数学定理。</p>
+<p>为什么要使用两个解的差？因为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>2</mn></msub></mrow></msub><mo>−</mo><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>3</mn></msub></mrow></msub></mrow></math></div>
+<p>同时给出了方向与尺度。当种群分散时，解与解相距较远，差分自然较大；当种群聚集时，差分自然缩小。因此搜索步长会随群体状态自适应：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>种群分散</mtext><mo>⇒</mo><mtext>大步探索</mtext><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>种群集中</mtext><mo>⇒</mo><mtext>小步细化</mtext><mo>.</mo></mrow></math></div>
+<p>为什么还要加在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>x</mi><mrow><msub><mi>r</mi><mn>1</mn></msub></mrow></msub></mrow></math></span> 上？因为差分本身只是一个位移向量，不一定是合理候选位置。完整公式相当于：</p>
+<blockquote>
+<p>从种群中的一个已有位置出发，沿种群内部观察到的差异方向走一步。</p>
+</blockquote>
+<p>这比完全随机生成方向更充分地利用了当前种群的信息。之后仍要进行交叉、边界处理和一对一选择；单独一个差分公式不是完整算法。</p>
+<h3 id="102-蚁群中的-τ-i-j-从哪里来">10.2 蚁群中的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 从哪里来？</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mtext>算法运行过程中积累的历史经验</mtext></mrow></menclose></mrow></math></div>
+<p>它不是原问题天然给出的。开始时通常给所有允许边相同或相近的值：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><msub><mi>τ</mi><mn>0</mn></msub><mo>.</mo></mrow></math></div>
+<p>每轮结束后，优秀路线中的边得到增量，所有边同时蒸发：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>←</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo stretchy="false">)</mo><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>+</mo><munder><mo>∑</mo><mi>k</mi></munder><mi>Δ</mi><msubsup><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>k</mi><mo stretchy="false">)</mo></mrow></msubsup><mo>.</mo></mrow></math></div>
+<p>所以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 回答的是：</p>
+<blockquote>
+<p>根据过去的搜索结果，选择 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi><mo>→</mo><mi>j</mi></mrow></math></span> 这一步曾经有多成功？</p>
+</blockquote>
+<p>它属于算法的<strong>学习状态</strong>。如果重新运行并清空信息素，这些历史经验也会消失。</p>
+<h3 id="103-η-i-j-又从哪里来">10.3 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span> 又从哪里来？</h3>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mtext>根据问题结构人为设计的即时启发</mtext></mrow></menclose></mrow></math></div>
+<p>它通常不是算法从历史中学习出来的。例如 TSP 中常设</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><mn>1</mn></mrow><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></mfrac><mo>,</mo></mrow></math></div>
+<p>因为从眼前看，距离短的城市通常更值得优先访问。在调度问题中，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>η</mi></mrow></math></span> 可以由处理时间、截止期限、延误风险或剩余容量构造。</p>
+<p>因此二者的来源完全不同：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span>：搜索历史创造和更新的经验；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span>：建模者从当前问题结构中提取的先验启发。</li>
+</ul>
+<p>选择概率中的</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mi>α</mi></mrow></msubsup><msubsup><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mi>β</mi></mrow></msubsup></mrow></math></div>
+<p>把二者结合起来。<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 控制对历史经验的信任，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 控制对眼前启发的信任。<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi></mrow></math></span> 过大容易过早集中；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>β</mi></mrow></math></span> 过大则会退化得很像贪心算法。</p>
+<p>这几个量可以按来源分成三类：</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>来源</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span></td>
+<td>原始问题数据</td>
+<td>城市间距离</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>η</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mn>1</mn><mo>/</mo><msub><mi>d</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span></td>
+<td>建模选择</td>
+<td>利用距离构造的即时启发</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>τ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow></math></span></td>
+<td>算法运行状态</td>
+<td>历史搜索经验</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>α</mi><mo>,</mo><mi>β</mi><mo>,</mo><mi>ρ</mi><mo>,</mo><mi>Q</mi></mrow></math></span></td>
+<td>工程超参数</td>
+<td>控制经验、启发、蒸发和增量尺度</td>
+</tr>
+</tbody>
+</table>
+<p>把“数据”“建模选择”“学习状态”和“超参数”分开，就不会觉得公式中的每个字母都是凭空冒出来的。</p>
+<hr/>
+</body></html>

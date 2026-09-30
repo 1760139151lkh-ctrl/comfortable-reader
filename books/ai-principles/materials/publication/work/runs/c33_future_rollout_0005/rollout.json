@@ -1,0 +1,47 @@
+{
+  "identity": "four autoregressive applications of one-step model on a real author-validation video, starting from two actual frames; not text-to-video or world simulation",
+  "source_archive_sha256": "e3e41bd99deb7b3beb9785f78b209de272bb0fa60ff4432ffa88118907a797de",
+  "data_manifest_sha256": "25f751175efa6125050813e9d7cab6eae9e1ae309a3b033b46b586ccdf34612b",
+  "train_report_sha256": "001e8cd22100e306e1ec19d2e135157e6f0a3912bcdcd4cbc7d53cdcc52a96ef",
+  "checkpoint_sha256": "c836e5bec43a3e4a137939ac025cffbeb50c7d0535ff5b735b8dddfe52f723f8",
+  "validation_video_id": "0005",
+  "original_action": "baseball_pitch",
+  "original_official_split": "train",
+  "author_partition": "validation",
+  "initial_past_and_current_frame_indices_zero_based": [
+    18,
+    23
+  ],
+  "predicted_targets_gap_in_frame_indices": 5,
+  "records": [
+    {
+      "step": 1,
+      "real_frame_index_zero_based": 28,
+      "model_mse_per_rgb_coordinate": 0.0027700657956302166,
+      "copy_initial_current_mse_per_rgb_coordinate": 0.00371420755982399
+    },
+    {
+      "step": 2,
+      "real_frame_index_zero_based": 33,
+      "model_mse_per_rgb_coordinate": 0.0038510470185428858,
+      "copy_initial_current_mse_per_rgb_coordinate": 0.005646991543471813
+    },
+    {
+      "step": 3,
+      "real_frame_index_zero_based": 38,
+      "model_mse_per_rgb_coordinate": 0.004875194281339645,
+      "copy_initial_current_mse_per_rgb_coordinate": 0.006615801248699427
+    },
+    {
+      "step": 4,
+      "real_frame_index_zero_based": 43,
+      "model_mse_per_rgb_coordinate": 0.005462948232889175,
+      "copy_initial_current_mse_per_rgb_coordinate": 0.0072915395721793175
+    }
+  ],
+  "chosen_preview_fps_not_source_camera_fps": 4,
+  "source_real_fps": "UNKNOWN",
+  "figure_sha256": "377910e4028c2d8c3e3fcc7511125df543b116b2dd76a0de5c91d8e09adac348",
+  "mp4_sha256": "4373dba7985aacca68309cc43342dda82033be754c990dbea51f343f61c0f258",
+  "limits": "same validation source used to select one-step model; rolling out beyond trained single horizon accumulates error; MSE/copy are pixel-level and no human video preference was collected"
+}

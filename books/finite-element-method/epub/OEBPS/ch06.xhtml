@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第六章　刚度矩阵为什么叫“刚度”</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第六章-刚度矩阵为什么叫刚度">第六章　刚度矩阵为什么叫“刚度”</h1>
+<p>在一个三角形上写</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><msub><mi>U</mi><mn>1</mn></msub><msub><mi>φ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>U</mi><mn>2</mn></msub><msub><mi>φ</mi><mn>2</mn></msub><mo>+</mo><msub><mi>U</mi><mn>3</mn></msub><msub><mi>φ</mi><mn>3</mn></msub><mo>.</mo></mrow></math></div>
+<p>对它求梯度：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><msub><mi>U</mi><mi>i</mi></msub><mo>∇</mo><msub><mi>φ</mi><mi>i</mi></msub><mo>.</mo></mrow></math></div>
+<p>于是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">|</mo><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><msup><mo stretchy="false">|</mo><mn>2</mn></msup><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><msub><mi>U</mi><mi>i</mi></msub><msub><mi>U</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mo>∇</mo><msub><mi>φ</mi><mi>i</mi></msub><mo>·</mo><mo>∇</mo><msub><mi>φ</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>在三角形上积分：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>∫</mo><mi>T</mi></msub><mo stretchy="false">|</mo><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><msup><mo stretchy="false">|</mo><mn>2</mn></msup><mo>,</mo><mi>d</mi><mi>A</mi><mo>=</mo><munder><mo>∑</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><msub><mi>U</mi><mi>i</mi></msub><msubsup><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow><mrow><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></msubsup><msub><mi>U</mi><mi>j</mi></msub><mo>.</mo></mrow></math></div>
+<p>根据矩阵乘法定义，右边正是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>U</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>K</mi><mrow><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></msup><mi>U</mi></mrow></math></span>，所以</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msup><mi>U</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>K</mi><mrow><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></msup><mi>U</mi><mo>=</mo><msub><mo>∫</mo><mi>T</mi></msub><mo stretchy="false">|</mo><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><msup><mo stretchy="false">|</mo><mn>2</mn></msup><mo>,</mo><mi>d</mi><mi>A</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这不是额外冒出来的定理，只是把矩阵乘法完整展开后得到的恒等式。</p>
+<p>右边衡量函数变化得多剧烈：节点值越接近，函数越平缓，梯度能量越小；节点值差别越大，能量越大。</p>
+<p>如果三个节点值都等于同一个常数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>c</mi></mrow></math></span>，那么 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><mi>c</mi></mrow></math></span>，所以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><mo>=</mo><mn>0</mn></mrow></math></span>。因此</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>K</mi><mrow><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></msup><mo>(</mo><mtable><mtr><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd></mtr><mtr><mtd><mn>1</mn></mtd></mtr></mtable><mo>)</mo><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>这也说明单个 Poisson 三角形的刚度矩阵不是正定的：常值模式不产生梯度。施加适当的固定边界条件后，整体矩阵通常才变成正定矩阵。</p>
+<p>在弹性力学中，位移变化越剧烈，形变能越大，材料产生的恢复力越强，关系类似</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>F</mi><mo>=</mo><mi>K</mi><mi>U</mi><mo>.</mo></mrow></math></div>
+<p>因此称为刚度矩阵。热传导等问题沿用了同一名称，尽管此时 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>K</mi></mrow></math></span> 不代表机械意义上的“硬”。</p>
+<p>还可以把它理解成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msup><mi>K</mi><mrow><mo stretchy="false">(</mo><mi>e</mi><mo stretchy="false">)</mo></mrow></msup><mtext> 是基函数梯度的 Gram 矩阵。</mtext></mrow></menclose></mrow></math></div>
+<p>普通 Gram 矩阵记录一组向量之间的点积；这里记录的是基函数梯度之间的积分点积。</p>
+<hr/>
+</body></html>

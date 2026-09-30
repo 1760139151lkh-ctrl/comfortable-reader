@@ -1,0 +1,50 @@
+{
+  "test_identity": "author held-out 4 speakers from the official LibriSpeech dev-clean development set; not official test-clean",
+  "source_archive_sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+  "chapter_split_sha256": "aa7f4d036e377e55c61c2b1a8bc2bd0349c423b83cff208adbe736be772f46ed",
+  "feature_manifest_sha256": "e95f660bfaaa7b5548a79a14751f7b4766c6489e73c91b9ea567b75bcdb725cd",
+  "train_report_sha256": "9fe34ed1f08a22dd1807b6c271f655a5ea2c592d40b6ca01959ae0ae99934af6",
+  "best_checkpoint_sha256": "37a90610e75dd49bb703f3cac26bafcd5f7fb45c9944fc51104d4c485b5fe42b",
+  "selected_epoch": 1,
+  "selection_rule": "smallest validation CTC loss before first test open",
+  "decoding": "greedy per frame, collapse repeats and blanks, no language model",
+  "test_clips": 290,
+  "test_speakers": [
+    "5694",
+    "6241",
+    "6295",
+    "8842"
+  ],
+  "test_metrics": {
+    "mean_ctc_loss": 1.2765301359110865,
+    "character_error_rate": 0.35171420918708984,
+    "word_error_rate": 0.8177537495640042,
+    "character_edits": 10505,
+    "reference_characters": 29868,
+    "word_edits": 4689,
+    "reference_words": 5734,
+    "examples": [
+      {
+        "id": "5694-64025-0000",
+        "reference": "SHILOH",
+        "hypothesis": "SIO"
+      },
+      {
+        "id": "8842-304647-0007",
+        "reference": "MOST WONDERFUL",
+        "hypothesis": "MOETO ONDERFUL"
+      },
+      {
+        "id": "5694-64038-0008",
+        "reference": "A MAN IN THE WELL",
+        "hypothesis": "THE AN AON THE WIL"
+      },
+      {
+        "id": "6295-244435-0014",
+        "reference": "BEAUREGARD AT ONCE WROTE AN ORDER",
+        "hypothesis": "EIL IVLORE HANCU LAVIN ORGER"
+      }
+    ]
+  },
+  "no_transcription_quality_claim_beyond_this_custom_split": true
+}

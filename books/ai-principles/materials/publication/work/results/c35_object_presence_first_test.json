@@ -1,0 +1,82 @@
+{
+  "identity": "Six-category fixed-template binary questions from COCO official instance annotations, NOT natural human VQA",
+  "category_choice": "after viewing per-category counts across all splits; test models never used for selection",
+  "test_questions": 990,
+  "selected_epoch": 4,
+  "checkpoint_sha256": "b6962e240f3eedda2445e1933c1d1a2d14401991724b6209d69dbdfdbdeac8e7",
+  "balanced_question_only_chance": 0.5,
+  "real_image": {
+    "macro_nll": 0.6239061607299122,
+    "macro_accuracy": 0.6555395753484896,
+    "total_accuracy": 0.6414141414141414,
+    "per_category": {
+      "person": {
+        "questions": 498,
+        "nll": 0.6548790750374277,
+        "accuracy": 0.6164658634538153
+      },
+      "car": {
+        "questions": 94,
+        "nll": 0.7138078092260564,
+        "accuracy": 0.5851063829787234
+      },
+      "bottle": {
+        "questions": 82,
+        "nll": 0.571766242930075,
+        "accuracy": 0.7073170731707317
+      },
+      "cup": {
+        "questions": 86,
+        "nll": 0.6695816579253174,
+        "accuracy": 0.6046511627906976
+      },
+      "chair": {
+        "questions": 120,
+        "nll": 0.6015794745335976,
+        "accuracy": 0.6833333333333333
+      },
+      "dining table": {
+        "questions": 110,
+        "nll": 0.5318227047269994,
+        "accuracy": 0.7363636363636363
+      }
+    }
+  },
+  "cyclically_wrong_image": {
+    "macro_nll": 0.9101897573876716,
+    "macro_accuracy": 0.48321682563289353,
+    "total_accuracy": 0.5050505050505051,
+    "per_category": {
+      "person": {
+        "questions": 498,
+        "nll": 0.7428941132732664,
+        "accuracy": 0.5381526104417671
+      },
+      "car": {
+        "questions": 94,
+        "nll": 0.9323698001259819,
+        "accuracy": 0.48936170212765956
+      },
+      "bottle": {
+        "questions": 82,
+        "nll": 0.8093166616631717,
+        "accuracy": 0.47560975609756095
+      },
+      "cup": {
+        "questions": 86,
+        "nll": 1.0117268406374509,
+        "accuracy": 0.46511627906976744
+      },
+      "chair": {
+        "questions": 120,
+        "nll": 0.8441166351238887,
+        "accuracy": 0.4583333333333333
+      },
+      "dining table": {
+        "questions": 110,
+        "nll": 1.1207144935022701,
+        "accuracy": 0.4727272727272727
+      }
+    }
+  }
+}

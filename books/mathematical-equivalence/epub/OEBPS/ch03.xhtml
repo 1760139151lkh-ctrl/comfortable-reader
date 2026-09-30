@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第一章　一个看似悖论的起点</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第一章-一个看似悖论的起点">第一章　一个看似悖论的起点</h2>
+<h3 id="11-所有定理都等价到底哪里对">1.1 “所有定理都等价”到底哪里对</h3>
+<p>先固定三样东西：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>语言 </mtext><mi>L</mi><mspace width="1em"/><mo>+</mo><mspace width="1em"/><mtext>理论 </mtext><mi>T</mi><mspace width="1em"/><mo>+</mo><mspace width="1em"/><mtext>证明演算 </mtext><mi mathvariant="sans-serif">C</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>严格地说，理论 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 可以看作 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi></mrow></math></span> 中的一组句子（通常是公理及其背景假设）；<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="sans-serif">C</mi></mrow></math></span> 是我们允许使用的证明规则与公理模式。记号</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>A</mi></mrow></math></div>
+<p>表示：存在一个有限的、可由 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="sans-serif">C</mi></mrow></math></span> 检查的证明，从 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 推出句子 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span>。</p>
+<p>在通常的经典或直觉主义演算中，如果</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>A</mi><mo>,</mo><mspace width="2em"/><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>B</mi><mo>,</mo></mrow></math></div>
+<p>那么确实有</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>A</mi><mo>→</mo><mi>B</mi><mo>,</mo><mspace width="2em"/><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>B</mi><mo>→</mo><mi>A</mi><mo>,</mo></mrow></math></div>
+<p>从而</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>A</mi><mo>↔</mo><mi>B</mi><mo>.</mo></mrow></math></div>
+<p>原因并不神秘。要证明 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>→</mo><mi>B</mi></mrow></math></span>，暂时假设 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span>；但 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 原本已经能从 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 无条件证明，所以仍然得到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span>；再用蕴涵引入或演绎定理卸掉假设 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span>。这一步依赖于所用证明关系具有通常的弱化与蕴涵引入性质，不能未经说明搬到所有非经典逻辑中。</p>
+<p>同一个前提也给出一个以后会反复使用的精确桥梁。对同语言句子 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow></math></span>，在具有通常 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>↔</mo></mrow></math></span> 规则和演绎定理的演算中，</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mo stretchy="false">(</mo><mi>A</mi><mo>↔</mo><mi>B</mi><mo stretchy="false">)</mo><mspace width="1em"/><mi>⟺</mi><mspace width="1em"/><mi>T</mi><mo>+</mo><mi>A</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>B</mi><mtext> 且 </mtext><mi>T</mi><mo>+</mo><mi>B</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>从左到右只用双条件式的两个消去规则；从右到左先分别卸掉假设 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>,</mo><mi>B</mi></mrow></math></span>，得到两条蕴涵，再合成双条件式。这个桥梁只比较<strong>句子</strong>。若写的是开放公式，还须先指定赋值语义，或先进行恰当的量词闭包。</p>
+<p>因此，在一个足够强的固定理论内部，已经可证的句子确实都落入同一个“可证等价类”，也都等价于一个固定的逻辑定理（把 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⊤</mo></mrow></math></span> 当作这种定理的缩写）。这不是错误；错误在于把它误读为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>“</mtext><mi>A</mi><mtext> 和 </mtext><mi>B</mi><mtext> 具有同样的数学内容”</mtext></mrow></menclose></mrow></math></div>
+<p>或</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>“只给 </mtext><mi>A</mi><mtext> 本身，就能推出 </mtext><mi>B</mi><mtext>。”</mtext></mrow></menclose></mrow></math></div>
+<p>真正偷偷完成工作的往往是巨大的背景 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span>，而不是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span>。</p>
+<p>例如，设</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mi>:</mi><mspace width="1em"/><mn>1</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn>2</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>B</mi><mi>:</mi><mspace width="1em"/><mtext>勾股定理的一个正式版本。</mtext></mrow></math></div>
+<p>在某个足够强的基础理论中，它们都可证，于是形式上可以得到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊢</mo><mi>A</mi><mo>↔</mo><mi>B</mi></mrow></math></span>。但是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>A</mi><mo>⊢</mo><mi>B</mi></mrow></math></div>
+<p>并不随之成立；后者意味着不携带那套完整背景，只以 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span> 为前提就能构造 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>B</mi></mrow></math></span> 的证明。这显然是另一个、强得多的问题。</p>
+<h3 id="12-勾股定理不是裸写的-a-2-b-2-c-2">1.2 勾股定理不是裸写的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup></mrow></math></span></h3>
+<p>这里顺手修正一个常见的类型错误。单独的</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup></mrow></math></div>
+<p>含有自由变量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>a</mi><mo>,</mo><mi>b</mi><mo>,</mo><mi>c</mi></mrow></math></span>，是一个开放公式，不是一个完整的勾股定理。一个几何或分析语境下的正式陈述必须至少说明对象及条件，例如示意性地写成</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∀</mo><mi>a</mi><mspace width="0.167em"/><mo>∀</mo><mi>b</mi><mspace width="0.167em"/><mo>∀</mo><mi>c</mi><mspace width="0.167em"/><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">T</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">S</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi></mrow><mo stretchy="false">(</mo><mi>a</mi><mo>,</mo><mi>b</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo><mo>→</mo><msup><mi>a</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo><mo>.</mo></mrow></math></div>
+<p>或者在欧氏几何语言中量化三角形和边长对象。这个细节不是吹毛求疵：本书后面正是靠“自由变量是否已被处理”来区分公式和句子。</p>
+<h3 id="13-不一致时平凡化发生在哪里">1.3 不一致时，平凡化发生在哪里</h3>
+<p>在采用爆炸原理的经典证明系统中，</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><mo>⊢</mo><mi>A</mi><mo>,</mo><mspace width="2em"/><mi>T</mi><mo>⊢</mo><mi>¬</mi><mi>A</mi><mspace width="1em"/><mi>⟹</mi><mspace width="1em"/><mi>T</mi><mo>⊢</mo><mi>B</mi><mspace width="1em"/><mtext>（任意 </mtext><mi>B</mi><mtext>）</mtext><mo>.</mo></mrow></math></div>
+<p>这叫爆炸原理，或 ex falso quodlibet。此时所有公式都可证，任何“理论内可证等价”都失去区分力。</p>
+<p>但要注意三层限定：</p>
+<ol>
+<li>这是<strong>采用爆炸原理</strong>的演算中的结论；旁一致逻辑不必接受它；</li>
+<li>“句法不一致”是同时可证 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>,</mo><mi>¬</mi><mi>A</mi></mrow></math></span>；</li>
+<li>“没有模型”是语义概念。对经典一阶逻辑的标准、可靠且完备演算，二者可联系起来；离开这些前提，不应混称。</li>
+</ol>
+<p>下面四种现象尤其不能互换：</p>
+<table>
+<thead>
+<tr>
+<th>已知事实</th>
+<th>真正能推出的结论</th>
+<th>不能偷换成</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊢</mo><mi>A</mi><mo>,</mo><mtext> </mtext><mi>T</mi><mo>⊢</mo><mi>B</mi></mrow></math></span></td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊢</mo><mo stretchy="false">(</mo><mi>A</mi><mo>↔</mo><mi>B</mi><mo stretchy="false">)</mo></mrow></math></span>（在通常演算中）</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi><mo>⊢</mo><mi>B</mi></mrow></math></span></td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊢</mo><mi>C</mi><mo>,</mo><mtext> </mtext><mi>T</mi><mo>⊢</mo><mi>¬</mi><mi>C</mi></mrow></math></span></td>
+<td>经典爆炸演算中的句法平凡化</td>
+<td>所有逻辑都爆炸</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mo stretchy="false">(</mo><mi>T</mi><mo stretchy="false">)</mo><mo>=</mo><mo>∅</mo></mrow></math></span></td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊧</mo><mi>D</mi></mrow></math></span> 对任意 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>D</mi></mrow></math></span> 真空成立</td>
+<td>“<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊢</mo><mi>D</mi></mrow></math></span> 按定义成立”</td>
+</tr>
+<tr>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>⊢</mo><mi>B</mi></mrow></math></span></td>
+<td>由弱化得到 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>+</mo><mi>A</mi><mo>⊢</mo><mi>B</mi></mrow></math></span></td>
+<td>某份证明实际依赖 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>A</mi></mrow></math></span></td>
+</tr>
+</tbody>
+</table>
+<p>第三行只有再调用相应逻辑的完备性定理时，才能由语义真空转成形式可证；第四行正是弱背景检验要排除的冗余。</p>
+<hr/>
+</body></html>

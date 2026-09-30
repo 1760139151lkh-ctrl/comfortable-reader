@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十九章　结语　把整条逻辑重新压缩一次</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十九章-结语-把整条逻辑重新压缩一次">第十九章　结语　把整条逻辑重新压缩一次</h1>
+<p>有限元的完整流程是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>建立物理或数学模型</mtext><mi>⟶</mi><mtext>推导弱形式</mtext><mi>⟶</mi><mtext>划分网格</mtext><mi>⟶</mi><mtext>选择有限元空间</mtext></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>⟶</mi><mtext>计算局部矩阵</mtext><mi>⟶</mi><mtext>组装整体矩阵</mtext><mi>⟶</mi><mtext>施加边界条件</mtext><mi>⟶</mi><mi>K</mi><mi>U</mi><mo>=</mo><mi>F</mi></mrow></math></div>
+<p>从数学上看，它的核心链条是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>K</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mi>a</mi><mo stretchy="false">(</mo><msub><mi>φ</mi><mi>j</mi></msub><mo>,</mo><msub><mi>φ</mi><mi>i</mi></msub><mo stretchy="false">)</mo><mi>⟹</mi><msup><mi>U</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mi>K</mi><mi>U</mi><mo>=</mo><mo>∫</mo><mo stretchy="false">|</mo><mo>∇</mo><msub><mi>u</mi><mi>h</mi></msub><msup><mo stretchy="false">|</mo><mn>2</mn></msup><mi>⟹</mi><mtext>Galerkin 正交</mtext><mi>⟹</mi><mtext>Céa 引理</mtext><mi>⟹</mi><mtext>误差随网格细化而下降</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>如果把本书新增的比较视角也放进来，整张地图可以再压缩成三句话：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>有限差分：用差商把连续方程变成离散规则。</mtext></mrow></menclose></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>有限元：用弱形式和有限维函数空间把连续场变成可解的系数系统。</mtext></mrow></menclose></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>经典元胞自动机：给定离散格点、有限状态、有限邻域和统一局部规则，研究构型如何演化。</mtext></mrow></menclose></mrow></math></div>
+<p>因此，时间、空间和状态值是否离散，是描述一个模型的三个坐标轴；它们不能单独定义有限差分或有限元。严格的区分来自构造方式：</p>
+<ul>
+<li>有限差分从导数和差商出发；</li>
+<li>有限元从弱形式、有限维空间和投影出发；</li>
+<li>元胞自动机从局部状态更新和全局同步映射出发。</li>
+</ul>
+<p>有限元不是随便画一条折线，也不是把物体切碎后凭经验拼起来。它是在合适弱形式下，用有限维分片多项式空间对真实解进行 Galerkin 近似；局部计算之所以能拼成整体，是积分的可加性；计算之所以可能可靠，是投影结构、逼近理论和实际验证共同起作用。</p>
+<p>最值得记住的图景有三个：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><msub><mi>u</mi><mi>h</mi></msub><mtext> 是 </mtext><mi>u</mi><mtext> 在有限元空间中的投影。</mtext></mrow></menclose></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>不断计算小矩阵，把它们装进一个大稀疏矩阵，然后求解 </mtext><mi>K</mi><mi>U</mi><mo>=</mo><mi>F</mi><mo>.</mo></mrow></menclose></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>看到局部更新公式时，先问“它在逼近什么，或它本身要解释什么”。</mtext></mrow></menclose></mrow></math></div>
+</body></html>

@@ -1,0 +1,167 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>四、第三步：选择数学模型家族</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="四第三步选择数学模型家族">四、第三步：选择数学模型家族</h1>
+<p>这里才轮到“它属于什么学科”。</p>
+<h2 id="a-代数约束型模型">A. 代数约束型模型</h2>
+<p>基本形式：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mo>min</mo><mi>x</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>s.t.</mtext><mspace width="1em"/><msub><mi>g</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo>,</mo><mspace width="2em"/><msub><mi>h</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>属于：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>数学规划</mtext></mrow></menclose></mrow></math></div>
+<p>内部包括：</p>
+<ul>
+<li>线性规划；</li>
+<li>二次规划；</li>
+<li>非线性规划；</li>
+<li>整数规划；</li>
+<li>混合整数规划；</li>
+<li>多目标规划；</li>
+<li>随机规划；</li>
+<li>鲁棒优化。</li>
+</ul>
+<p>这是运筹学最主要的通用建模语言。</p>
+<hr/>
+<h2 id="b-离散组合型模型">B. 离散组合型模型</h2>
+<p>当方案本身是排列、路径、集合、匹配、调度时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>组合优化</mtext></mrow></menclose></mrow></math></div>
+<p>例如：</p>
+<ul>
+<li>旅行商；</li>
+<li>背包；</li>
+<li>排班；</li>
+<li>装箱；</li>
+<li>切割；</li>
+<li>路由；</li>
+<li>设施选址。</li>
+</ul>
+<p>组合优化问题经常可以写成整数规划，但也可能利用图论或特殊算法直接求解。</p>
+<hr/>
+<h2 id="c-网络模型">C. 网络模型</h2>
+<p>当对象和关系自然形成“点—边”结构时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>图论与网络优化</mtext></mrow></menclose></mrow></math></div>
+<p>典型模型：</p>
+<ul>
+<li>最短路；</li>
+<li>最大流；</li>
+<li>最小费用流；</li>
+<li>匹配；</li>
+<li>指派；</li>
+<li>运输网络；</li>
+<li>通信网络。</li>
+</ul>
+<p>图论描述结构，网络优化在结构上寻找最好方案。</p>
+<hr/>
+<h2 id="d-动态机理模型">D. 动态机理模型</h2>
+<p>当问题强调“某些量如何随时间变化”时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>微分方程与动力系统</mtext></mrow></menclose></mrow></math></div>
+<p>例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mfrac><mrow><mi>d</mi><mi>x</mi></mrow><mrow><mi>d</mi><mi>t</mi></mrow></mfrac><mo>=</mo><mi>F</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>适用于：</p>
+<ul>
+<li>人口变化；</li>
+<li>传染病传播；</li>
+<li>物理运动；</li>
+<li>化学反应；</li>
+<li>生态系统；</li>
+<li>热传导和流体。</li>
+</ul>
+<p>它主要描述世界如何演化，不一定直接回答“应该怎样做”。</p>
+<hr/>
+<h2 id="e-随机模型">E. 随机模型</h2>
+<p>当随机性是系统本质而不仅是测量误差时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>概率论与随机过程</mtext></mrow></menclose></mrow></math></div>
+<p>包括：</p>
+<ul>
+<li>马尔可夫链；</li>
+<li>泊松过程；</li>
+<li>更新过程；</li>
+<li>随机微分方程；</li>
+<li>排队过程；</li>
+<li>生存与可靠性模型。</li>
+</ul>
+<p>概率论是语言，随机过程是随时间变化的随机系统模型。</p>
+<hr/>
+<h2 id="f-统计模型">F. 统计模型</h2>
+<p>当需要根据有限数据推断总体规律时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>统计推断</mtext></mrow></menclose></mrow></math></div>
+<p>包括：</p>
+<ul>
+<li>参数估计；</li>
+<li>假设检验；</li>
+<li>回归；</li>
+<li>方差分析；</li>
+<li>贝叶斯推断；</li>
+<li>置信区间。</li>
+</ul>
+<p>统计学主要负责：</p>
+<blockquote>
+<p>从数据中获得模型参数、规律和不确定性。</p>
+</blockquote>
+<hr/>
+<h2 id="g-机器学习模型">G. 机器学习模型</h2>
+<p>当系统机理难以明确写出，但拥有大量数据时，可以使用：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>数据驱动模型</mtext></mrow></menclose></mrow></math></div>
+<p>包括：</p>
+<ul>
+<li>决策树；</li>
+<li>随机森林；</li>
+<li>支持向量机；</li>
+<li>神经网络；</li>
+<li>聚类；</li>
+<li>降维；</li>
+<li>深度学习。</li>
+</ul>
+<p>机器学习通常主要服务于：</p>
+<ul>
+<li>预测；</li>
+<li>分类；</li>
+<li>表征；</li>
+<li>数据驱动近似。</li>
+</ul>
+<p>它也可以与运筹学连接：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>机器学习预测参数</mtext><mo>→</mo><mtext>运筹学优化决策</mtext><mo>.</mo></mrow></math></div>
+<hr/>
+<h2 id="h-多主体模型">H. 多主体模型</h2>
+<p>当不同参与者会相互反应时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>博弈论</mtext></mrow></menclose></mrow></math></div>
+<p>例如：</p>
+<ul>
+<li>企业定价竞争；</li>
+<li>拍卖；</li>
+<li>军事对抗；</li>
+<li>多智能体决策；</li>
+<li>交通参与者策略互动。</li>
+</ul>
+<p>单主体优化问“我怎样最好”，博弈论问“别人会根据我的动作改变策略，那我怎样做”。</p>
+<hr/>
+<h2 id="i-控制模型">I. 控制模型</h2>
+<p>当需要不断观察系统并实时调整时，进入：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>控制理论</mtext></mrow></menclose></mrow></math></div>
+<p>典型结构：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>观测状态</mtext><mo>→</mo><mtext>采取控制</mtext><mo>→</mo><mtext>系统变化</mtext><mo>→</mo><mtext>重新观测</mtext><mo>.</mo></mrow></math></div>
+<p>控制理论和动态规划高度相关：</p>
+<ul>
+<li>控制理论偏连续时间、反馈与稳定性；</li>
+<li>动态规划偏最优性递推；</li>
+<li>MDP 和强化学习偏随机序贯决策。</li>
+</ul>
+<hr/>
+<h2 id="j-仿真模型">J. 仿真模型</h2>
+<p>有些系统太复杂，无法写出简单解析公式或直接优化，于是建立一个“虚拟系统”反复运行：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>仿真</mtext></mrow></menclose></mrow></math></div>
+<p>包括：</p>
+<ul>
+<li>蒙特卡洛仿真；</li>
+<li>离散事件仿真；</li>
+<li>Agent-based simulation；</li>
+<li>系统动力学仿真。</li>
+</ul>
+<p>仿真不一定直接找最优解，它通常回答：</p>
+<ul>
+<li>某个方案实施后效果如何？</li>
+<li>系统在随机扰动下表现怎样？</li>
+<li>模型的长期行为是什么？</li>
+</ul>
+<p>然后还可以把仿真和优化结合成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>仿真优化</mtext><mo>.</mo></mrow></math></div>
+<hr/>
+</body></html>

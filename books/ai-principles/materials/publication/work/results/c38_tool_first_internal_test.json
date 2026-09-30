@@ -1,0 +1,6937 @@
+{
+  "scope": "one free assistant line, optional actual read-only tool execution, then one free final line; no constrained action grammar or host correction of model choice",
+  "split": "test",
+  "split_sha256": "6170d497928d4f2cfbb1df565caa6db8c7f4910e2035112613df2e4a9a7c72f4",
+  "data_manifest_sha256": "61062747975d022a851d1fadb7c303bbd2b4597f572bd5f4ee99424bea53cbbe",
+  "format_version": 3,
+  "model_kind": "trained",
+  "model_checkpoint_sha256": "e000f24e5422fc5a0d2e1712b50229b8b1425930c9e154ac345eb85f8226a95d",
+  "copy_gate_checkpoint_sha256": "0f2621455ea5cc2946df4b3ccd55fc47e77720e4cbdb600ac6be6d22fc028e43",
+  "parent_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced",
+  "selected_training_step": 2200,
+  "device": "cuda",
+  "torch": "2.11.0+cu128",
+  "rows": 167,
+  "by_kind": {
+    "multiply": {
+      "rows": 100,
+      "route_correct": 100,
+      "call_parse_valid": 97,
+      "name_correct": 97,
+      "arguments_correct": 92,
+      "answer_correct": 92,
+      "task_success": 92,
+      "observation_followed": 97
+    },
+    "title": {
+      "rows": 40,
+      "route_correct": 40,
+      "call_parse_valid": 40,
+      "name_correct": 40,
+      "arguments_correct": 29,
+      "answer_correct": 22,
+      "task_success": 22,
+      "observation_followed": 33
+    },
+    "direct": {
+      "rows": 12,
+      "route_correct": 12,
+      "call_parse_valid": 0,
+      "name_correct": 0,
+      "arguments_correct": 0,
+      "answer_correct": 12,
+      "task_success": 12,
+      "observation_followed": 0
+    },
+    "missing": {
+      "rows": 15,
+      "route_correct": 15,
+      "call_parse_valid": 15,
+      "name_correct": 15,
+      "arguments_correct": 12,
+      "answer_correct": 14,
+      "task_success": 12,
+      "observation_followed": 15
+    }
+  },
+  "overall_task_success": 138,
+  "overall_route_correct": 167,
+  "traces": [
+    {
+      "kind": "multiply",
+      "question": "Multiply 26 by 59.",
+      "expected_action": "call mul(26,59)",
+      "expected_answer": "1534",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          24,
+          14,
+          23,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(26,59)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1534",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1534",
+      "final": {
+        "token_ids": [
+          981,
+          21,
+          22,
+          201
+        ],
+        "text": " 1534\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 322?",
+      "expected_action": "call title(322)",
+      "expected_answer": "Xenon",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          20,
+          20,
+          11,
+          201
+        ],
+        "text": " call title(322)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Xenon",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Xenon",
+      "final": {
+        "token_ids": [
+          1623,
+          3237,
+          201
+        ],
+        "text": " Xenon\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 82 by 50.",
+      "expected_action": "call mul(82,50)",
+      "expected_answer": "4100",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          20,
+          14,
+          23,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(82,50)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4100",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4100",
+      "final": {
+        "token_ids": [
+          5091,
+          397,
+          201
+        ],
+        "text": " 4100\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 89 by 78.",
+      "expected_action": "call mul(89,78)",
+      "expected_answer": "6942",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          27,
+          14,
+          25,
+          26,
+          11,
+          201
+        ],
+        "text": " call mul(89,78)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "6942",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "6942",
+      "final": {
+        "token_ids": [
+          6557,
+          22,
+          20,
+          201
+        ],
+        "text": " 6942\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 328?",
+      "expected_action": "call title(328)",
+      "expected_answer": "Pokiri",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          20,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(328)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Pokiri",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Pokiri",
+      "final": {
+        "token_ids": [
+          355,
+          535,
+          340,
+          75,
+          201
+        ],
+        "text": " Pokiri\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 86 by 87.",
+      "expected_action": "call mul(86,87)",
+      "expected_answer": "7482",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          24,
+          14,
+          26,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(86,87)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "7482",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "7482",
+      "final": {
+        "token_ids": [
+          6664,
+          26,
+          20,
+          201
+        ],
+        "text": " 7482\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 69?",
+      "expected_action": "call title(69)",
+      "expected_answer": "French cruiser Sully",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          27,
+          11,
+          201
+        ],
+        "text": " call title(69)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "French cruiser Sully",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "French cruiser Sully",
+      "final": {
+        "token_ids": [
+          1615,
+          7797,
+          306,
+          2320,
+          201
+        ],
+        "text": " French cruiser Sully\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 10?",
+      "expected_action": "call title(10)",
+      "expected_answer": "Jacqueline Fernandez",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          18,
+          27,
+          11,
+          201
+        ],
+        "text": " call title(109)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Fastra II",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Fastra II",
+      "final": {
+        "token_ids": [
+          369,
+          469,
+          379,
+          1245,
+          201
+        ],
+        "text": " Fastra II\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 32 by 27.",
+      "expected_action": "call mul(32,27)",
+      "expected_answer": "864",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          20,
+          14,
+          20,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(32,27)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "864",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "864",
+      "final": {
+        "token_ids": [
+          7481,
+          22,
+          201
+        ],
+        "text": " 864\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 568?",
+      "expected_action": "call title(568)",
+      "expected_answer": "Georgian scripts",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          26,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(588)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Wilhelm Busch",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Wilhelm Busch",
+      "final": {
+        "token_ids": [
+          4791,
+          3715,
+          201
+        ],
+        "text": " Wilhelm Busch\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 52 by 54.",
+      "expected_action": "call mul(52,54)",
+      "expected_answer": "2808",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          22,
+          14,
+          23,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(54,54)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "2916",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "2916",
+      "final": {
+        "token_ids": [
+          2246,
+          19,
+          24,
+          201
+        ],
+        "text": " 2916\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 375?",
+      "expected_action": "call title(375)",
+      "expected_answer": "Cougar",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          25,
+          23,
+          11,
+          201
+        ],
+        "text": " call title(375)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Cougars",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Cougar",
+      "final": {
+        "token_ids": [
+          312,
+          300,
+          3165,
+          85,
+          201
+        ],
+        "text": " Cougars\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 51 by 87.",
+      "expected_action": "call mul(51,87)",
+      "expected_answer": "4437",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          19,
+          14,
+          26,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(51,87)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4437",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4437",
+      "final": {
+        "token_ids": [
+          3926,
+          21,
+          25,
+          201
+        ],
+        "text": " 4437\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 90 by 40.",
+      "expected_action": "call mul(90,40)",
+      "expected_answer": "3600",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          18,
+          14,
+          22,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(90,40)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3600",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3600",
+      "final": {
+        "token_ids": [
+          2809,
+          397,
+          201
+        ],
+        "text": " 3600\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Copy the word cedarwood.",
+      "expected_action": "cedarwood",
+      "expected_answer": "cedarwood",
+      "first": {
+        "token_ids": [
+          277,
+          4829,
+          2510,
+          201
+        ],
+        "text": " cedarwood\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "cedarwood",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "direct",
+      "question": "Repeat the word lemon.",
+      "expected_action": "lemon",
+      "expected_answer": "lemon",
+      "first": {
+        "token_ids": [
+          474,
+          5027,
+          201
+        ],
+        "text": " lemon\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "lemon",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 94 by 55.",
+      "expected_action": "call mul(94,55)",
+      "expected_answer": "5170",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          22,
+          14,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(94,5)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": null,
+      "answer_correct": false,
+      "task_success": false,
+      "observation": null,
+      "tool_error": "multiply arguments outside 10..99"
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 81 by 72.",
+      "expected_action": "call mul(81,72)",
+      "expected_answer": "5832",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          19,
+          14,
+          25,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(81,72)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5832",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5832",
+      "final": {
+        "token_ids": [
+          7397,
+          21,
+          20,
+          201
+        ],
+        "text": " 5832\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 84 by 74.",
+      "expected_action": "call mul(84,74)",
+      "expected_answer": "6216",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          22,
+          14,
+          25,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(84,74)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "6216",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "6216",
+      "final": {
+        "token_ids": [
+          5594,
+          19,
+          24,
+          201
+        ],
+        "text": " 6216\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 92 by 67.",
+      "expected_action": "call mul(92,67)",
+      "expected_answer": "6164",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          20,
+          14,
+          24,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(92,67)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "6164",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "6164",
+      "final": {
+        "token_ids": [
+          5561,
+          24,
+          22,
+          201
+        ],
+        "text": " 6164\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 600?",
+      "expected_action": "call title(600)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          26,
+          20,
+          11,
+          201
+        ],
+        "text": " call title(182)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Tawny nurse shark",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Tawny nurse shark",
+      "final": {
+        "token_ids": [
+          301,
+          3466,
+          91,
+          318,
+          8078,
+          7030,
+          201
+        ],
+        "text": " Tawny nurse shark\n",
+        "stop": "newline",
+        "copy_source_token_count": 7,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Copy the word raven.",
+      "expected_action": "raven",
+      "expected_answer": "raven",
+      "first": {
+        "token_ids": [
+          830,
+          1088,
+          201
+        ],
+        "text": " raven\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "raven",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 709?",
+      "expected_action": "call title(709)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          18,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(707)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": false,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 82 by 34.",
+      "expected_action": "call mul(82,34)",
+      "expected_answer": "2788",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          20,
+          14,
+          21,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(82,34)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2788",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2788",
+      "final": {
+        "token_ids": [
+          1939,
+          26,
+          26,
+          201
+        ],
+        "text": " 2788\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 72 by 67.",
+      "expected_action": "call mul(72,67)",
+      "expected_answer": "4824",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          20,
+          14,
+          24,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(72,67)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4824",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4824",
+      "final": {
+        "token_ids": [
+          4132,
+          20,
+          22,
+          201
+        ],
+        "text": " 4824\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 641?",
+      "expected_action": "call title(641)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          22,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(641)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 663?",
+      "expected_action": "call title(663)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          24,
+          21,
+          11,
+          201
+        ],
+        "text": " call title(663)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 49 by 71.",
+      "expected_action": "call mul(49,71)",
+      "expected_answer": "3479",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          27,
+          14,
+          25,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(49,71)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3479",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3479",
+      "final": {
+        "token_ids": [
+          4313,
+          25,
+          27,
+          201
+        ],
+        "text": " 3479\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 25 by 77.",
+      "expected_action": "call mul(25,77)",
+      "expected_answer": "1925",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          23,
+          14,
+          25,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(25,77)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1925",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1925",
+      "final": {
+        "token_ids": [
+          1473,
+          23,
+          201
+        ],
+        "text": " 1925\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 58 by 80.",
+      "expected_action": "call mul(58,80)",
+      "expected_answer": "4640",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          26,
+          14,
+          26,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(58,80)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4640",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4640",
+      "final": {
+        "token_ids": [
+          4748,
+          22,
+          18,
+          201
+        ],
+        "text": " 4640\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 493?",
+      "expected_action": "call title(493)",
+      "expected_answer": "Moment of Surrender",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          27,
+          21,
+          11,
+          201
+        ],
+        "text": " call title(493)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Moment of Surrender",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Moment of Surrender",
+      "final": {
+        "token_ids": [
+          324,
+          314,
+          307,
+          283,
+          3372,
+          5367,
+          201
+        ],
+        "text": " Moment of Surrender\n",
+        "stop": "newline",
+        "copy_source_token_count": 7,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 631?",
+      "expected_action": "call title(631)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          19,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(611)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": false,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 626?",
+      "expected_action": "call title(626)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          20,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(626)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 621?",
+      "expected_action": "call title(621)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          20,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(621)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 28 by 86.",
+      "expected_action": "call mul(28,86)",
+      "expected_answer": "2408",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          26,
+          14,
+          26,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(28,86)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2408",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2408",
+      "final": {
+        "token_ids": [
+          1743,
+          18,
+          26,
+          201
+        ],
+        "text": " 2408\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 39 by 96.",
+      "expected_action": "call mul(39,96)",
+      "expected_answer": "3744",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          27,
+          14,
+          27,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(39,96)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3744",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3744",
+      "final": {
+        "token_ids": [
+          4131,
+          22,
+          22,
+          201
+        ],
+        "text": " 3744\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 53?",
+      "expected_action": "call title(53)",
+      "expected_answer": "Paul Thomas Anderson",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          5892,
+          11,
+          201
+        ],
+        "text": " call title(530)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "The Good Terrorist",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "The Good Terrorist",
+      "final": {
+        "token_ids": [
+          326,
+          4854,
+          3090,
+          8141,
+          201
+        ],
+        "text": " The Good Terrorist\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 56 by 23.",
+      "expected_action": "call mul(56,23)",
+      "expected_answer": "1288",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          24,
+          14,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(56,23)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1288",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1288",
+      "final": {
+        "token_ids": [
+          902,
+          26,
+          26,
+          201
+        ],
+        "text": " 1288\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 29 by 25.",
+      "expected_action": "call mul(29,25)",
+      "expected_answer": "725",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          27,
+          14,
+          20,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(29,25)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "725",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "725",
+      "final": {
+        "token_ids": [
+          5690,
+          23,
+          201
+        ],
+        "text": " 725\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 409?",
+      "expected_action": "call title(409)",
+      "expected_answer": "Hydnellum peckii",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          18,
+          27,
+          11,
+          201
+        ],
+        "text": " call title(409)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Hydnellum pecki",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Hydnellum peckii",
+      "final": {
+        "token_ids": [
+          347,
+          2604,
+          7139,
+          392,
+          289,
+          327,
+          1946,
+          201
+        ],
+        "text": " Hydnellum pecki\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 46 by 23.",
+      "expected_action": "call mul(46,23)",
+      "expected_answer": "1058",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          24,
+          14,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(46,23)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1058",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1058",
+      "final": {
+        "token_ids": [
+          878,
+          23,
+          26,
+          201
+        ],
+        "text": " 1058\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 74 by 15.",
+      "expected_action": "call mul(74,15)",
+      "expected_answer": "1110",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          22,
+          14,
+          19,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(74,15)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1110",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1110",
+      "final": {
+        "token_ids": [
+          985,
+          19,
+          18,
+          201
+        ],
+        "text": " 1110\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 41 by 45.",
+      "expected_action": "call mul(41,45)",
+      "expected_answer": "1845",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          19,
+          14,
+          22,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(41,45)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1845",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1845",
+      "final": {
+        "token_ids": [
+          2975,
+          23,
+          201
+        ],
+        "text": " 1845\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 92 by 25.",
+      "expected_action": "call mul(92,25)",
+      "expected_answer": "2300",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          20,
+          14,
+          20,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(92,25)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2300",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2300",
+      "final": {
+        "token_ids": [
+          1690,
+          397,
+          201
+        ],
+        "text": " 2300\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 33 by 64.",
+      "expected_action": "call mul(33,64)",
+      "expected_answer": "2112",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          21,
+          14,
+          24,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(33,64)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2112",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2112",
+      "final": {
+        "token_ids": [
+          1657,
+          19,
+          20,
+          201
+        ],
+        "text": " 2112\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 542?",
+      "expected_action": "call title(542)",
+      "expected_answer": "Islais Creek",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          22,
+          20,
+          11,
+          201
+        ],
+        "text": " call title(542)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Islais Creek",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Islais Creek",
+      "final": {
+        "token_ids": [
+          1049,
+          6123,
+          280,
+          3103,
+          201
+        ],
+        "text": " Islais Creek\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 29 by 89.",
+      "expected_action": "call mul(29,89)",
+      "expected_answer": "2581",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          27,
+          14,
+          26,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(29,89)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2581",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2581",
+      "final": {
+        "token_ids": [
+          1346,
+          26,
+          19,
+          201
+        ],
+        "text": " 2581\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 46 by 88.",
+      "expected_action": "call mul(46,88)",
+      "expected_answer": "4048",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          24,
+          14,
+          26,
+          26,
+          11,
+          201
+        ],
+        "text": " call mul(46,88)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4048",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4048",
+      "final": {
+        "token_ids": [
+          2278,
+          22,
+          26,
+          201
+        ],
+        "text": " 4048\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 87 by 62.",
+      "expected_action": "call mul(87,62)",
+      "expected_answer": "5394",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          25,
+          14,
+          24,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(87,62)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5394",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5394",
+      "final": {
+        "token_ids": [
+          4865,
+          27,
+          22,
+          201
+        ],
+        "text": " 5394\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 82 by 94.",
+      "expected_action": "call mul(82,94)",
+      "expected_answer": "7708",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          20,
+          14,
+          27,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(82,94)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "7708",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "7708",
+      "final": {
+        "token_ids": [
+          5949,
+          18,
+          26,
+          201
+        ],
+        "text": " 7708\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 40 by 56.",
+      "expected_action": "call mul(40,56)",
+      "expected_answer": "2240",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          18,
+          14,
+          23,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(40,56)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2240",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2240",
+      "final": {
+        "token_ids": [
+          1749,
+          22,
+          18,
+          201
+        ],
+        "text": " 2240\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 18 by 75.",
+      "expected_action": "call mul(18,75)",
+      "expected_answer": "1350",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          26,
+          14,
+          25,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(18,75)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1350",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1350",
+      "final": {
+        "token_ids": [
+          1151,
+          23,
+          18,
+          201
+        ],
+        "text": " 1350\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 718?",
+      "expected_action": "call title(718)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          19,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(718)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 43 by 60.",
+      "expected_action": "call mul(43,60)",
+      "expected_answer": "2580",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          21,
+          14,
+          24,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(43,60)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2580",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2580",
+      "final": {
+        "token_ids": [
+          1346,
+          26,
+          18,
+          201
+        ],
+        "text": " 2580\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 77?",
+      "expected_action": "call title(77)",
+      "expected_answer": "Edward Creutz",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(71)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Mutinus elegans",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Mutinus elegans",
+      "final": {
+        "token_ids": [
+          324,
+          351,
+          4552,
+          1192,
+          708,
+          85,
+          201
+        ],
+        "text": " Mutinus elegans\n",
+        "stop": "newline",
+        "copy_source_token_count": 7,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 88 by 75.",
+      "expected_action": "call mul(88,75)",
+      "expected_answer": "6600",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          26,
+          14,
+          25,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(88,75)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "6600",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "6600",
+      "final": {
+        "token_ids": [
+          6045,
+          397,
+          201
+        ],
+        "text": " 6600\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 635?",
+      "expected_action": "call title(635)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          21,
+          23,
+          11,
+          201
+        ],
+        "text": " call title(635)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 33 by 69.",
+      "expected_action": "call mul(33,69)",
+      "expected_answer": "2277",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          21,
+          14,
+          24,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(33,69)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2277",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2277",
+      "final": {
+        "token_ids": [
+          1749,
+          25,
+          25,
+          201
+        ],
+        "text": " 2277\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 34 by 77.",
+      "expected_action": "call mul(34,77)",
+      "expected_answer": "2618",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          22,
+          14,
+          25,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(34,77)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2618",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2618",
+      "final": {
+        "token_ids": [
+          1750,
+          19,
+          26,
+          201
+        ],
+        "text": " 2618\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 84 by 27.",
+      "expected_action": "call mul(84,27)",
+      "expected_answer": "2268",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          22,
+          14,
+          20,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(84,27)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2268",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2268",
+      "final": {
+        "token_ids": [
+          1749,
+          24,
+          26,
+          201
+        ],
+        "text": " 2268\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Repeat the word swan.",
+      "expected_action": "swan",
+      "expected_answer": "swan",
+      "first": {
+        "token_ids": [
+          2111,
+          285,
+          201
+        ],
+        "text": " swan\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "swan",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 476?",
+      "expected_action": "call title(476)",
+      "expected_answer": "Robbie Fowler",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          25,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(476)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Robbie Fowler",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Robbie Fowler",
+      "final": {
+        "token_ids": [
+          3693,
+          6997,
+          3746,
+          201
+        ],
+        "text": " Robbie Fowler\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Copy the word meadow.",
+      "expected_action": "meadow",
+      "expected_answer": "meadow",
+      "first": {
+        "token_ids": [
+          766,
+          6953,
+          201
+        ],
+        "text": " meadow\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "meadow",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 407?",
+      "expected_action": "call title(407)",
+      "expected_answer": "Christine Hakim",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          18,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(407)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Christine Hakim",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Christine Hakim",
+      "final": {
+        "token_ids": [
+          1292,
+          480,
+          347,
+          433,
+          338,
+          201
+        ],
+        "text": " Christine Hakim\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 17 by 50.",
+      "expected_action": "call mul(17,50)",
+      "expected_answer": "850",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          25,
+          14,
+          23,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(17,50)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "850",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "850",
+      "final": {
+        "token_ids": [
+          5691,
+          18,
+          201
+        ],
+        "text": " 850\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 213?",
+      "expected_action": "call title(213)",
+      "expected_answer": "Johnny McNichol",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          20,
+          19,
+          21,
+          11,
+          201
+        ],
+        "text": " call title(213)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Johnny McNichol",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Johnny McNichol",
+      "final": {
+        "token_ids": [
+          983,
+          3654,
+          1393,
+          48,
+          5906,
+          201
+        ],
+        "text": " Johnny McNichol\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 655?",
+      "expected_action": "call title(655)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          23,
+          23,
+          11,
+          201
+        ],
+        "text": " call title(655)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 64 by 73.",
+      "expected_action": "call mul(64,73)",
+      "expected_answer": "4672",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          22,
+          14,
+          25,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(64,73)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4672",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4672",
+      "final": {
+        "token_ids": [
+          4748,
+          25,
+          20,
+          201
+        ],
+        "text": " 4672\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 634?",
+      "expected_action": "call title(634)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          21,
+          22,
+          11,
+          201
+        ],
+        "text": " call title(634)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 86 by 69.",
+      "expected_action": "call mul(86,69)",
+      "expected_answer": "5934",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          24,
+          14,
+          24,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(86,69)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5934",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5934",
+      "final": {
+        "token_ids": [
+          5996,
+          21,
+          22,
+          201
+        ],
+        "text": " 5934\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 347?",
+      "expected_action": "call title(347)",
+      "expected_answer": "The Stolen Eagle",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          22,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(347)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "The Stolen Eagle",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "The Stolen Eagle",
+      "final": {
+        "token_ids": [
+          326,
+          468,
+          335,
+          278,
+          8093,
+          201
+        ],
+        "text": " The Stolen Eagle\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 28 by 82.",
+      "expected_action": "call mul(28,82)",
+      "expected_answer": "2296",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          26,
+          14,
+          26,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(28,82)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2296",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2296",
+      "final": {
+        "token_ids": [
+          1749,
+          27,
+          24,
+          201
+        ],
+        "text": " 2296\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 27 by 77.",
+      "expected_action": "call mul(27,77)",
+      "expected_answer": "2079",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          25,
+          14,
+          25,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(27,77)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2079",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2079",
+      "final": {
+        "token_ids": [
+          529,
+          25,
+          27,
+          201
+        ],
+        "text": " 2079\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 43 by 81.",
+      "expected_action": "call mul(43,81)",
+      "expected_answer": "3483",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          19,
+          14,
+          26,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(41,81)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "3321",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "3321",
+      "final": {
+        "token_ids": [
+          3418,
+          20,
+          19,
+          201
+        ],
+        "text": " 3321\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 42 by 70.",
+      "expected_action": "call mul(42,70)",
+      "expected_answer": "2940",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          20,
+          14,
+          25,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(42,70)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2940",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2940",
+      "final": {
+        "token_ids": [
+          2246,
+          22,
+          18,
+          201
+        ],
+        "text": " 2940\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 164?",
+      "expected_action": "call title(164)",
+      "expected_answer": "The Food Album",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          22,
+          11,
+          201
+        ],
+        "text": " call title(14)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "South of Heaven",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "South of Heaven",
+      "final": {
+        "token_ids": [
+          1283,
+          283,
+          557,
+          3417,
+          201
+        ],
+        "text": " South of Heaven\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 79 by 59.",
+      "expected_action": "call mul(79,59)",
+      "expected_answer": "4661",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          27,
+          14,
+          23,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(79,59)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4661",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4661",
+      "final": {
+        "token_ids": [
+          4748,
+          24,
+          19,
+          201
+        ],
+        "text": " 4661\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 33 by 51.",
+      "expected_action": "call mul(33,51)",
+      "expected_answer": "1683",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          21,
+          14,
+          23,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(33,51)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1683",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1683",
+      "final": {
+        "token_ids": [
+          930,
+          26,
+          21,
+          201
+        ],
+        "text": " 1683\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 53 by 85.",
+      "expected_action": "call mul(53,85)",
+      "expected_answer": "4505",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          21,
+          14,
+          26,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(53,85)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "4505",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "4505",
+      "final": {
+        "token_ids": [
+          2836,
+          18,
+          23,
+          201
+        ],
+        "text": " 4505\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 227?",
+      "expected_action": "call title(227)",
+      "expected_answer": "Oldham",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          20,
+          20,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(227)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Oldham",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Oldham",
+      "final": {
+        "token_ids": [
+          2804,
+          201
+        ],
+        "text": " Oldham\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 12 by 82.",
+      "expected_action": "call mul(12,82)",
+      "expected_answer": "984",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          20,
+          14,
+          26,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(12,82)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "984",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "984",
+      "final": {
+        "token_ids": [
+          6046,
+          22,
+          201
+        ],
+        "text": " 984\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 47 by 97.",
+      "expected_action": "call mul(47,97)",
+      "expected_answer": "4559",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          25,
+          14,
+          27,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(47,93)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "4371",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "4371",
+      "final": {
+        "token_ids": [
+          4979,
+          25,
+          19,
+          201
+        ],
+        "text": " 4371\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 53 by 16.",
+      "expected_action": "call mul(53,16)",
+      "expected_answer": "848",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          21,
+          14,
+          19,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(53,16)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "848",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "848",
+      "final": {
+        "token_ids": [
+          8108,
+          26,
+          201
+        ],
+        "text": " 848\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 21 by 20.",
+      "expected_action": "call mul(21,20)",
+      "expected_answer": "420",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          19,
+          14,
+          6754,
+          11,
+          201
+        ],
+        "text": " call mul(21,20)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "420",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "420",
+      "final": {
+        "token_ids": [
+          3840,
+          18,
+          201
+        ],
+        "text": " 420\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 446?",
+      "expected_action": "call title(446)",
+      "expected_answer": "Bath Assembly Rooms",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          22,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(446)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Bath Assembly",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Bath Assembly Rooms",
+      "final": {
+        "token_ids": [
+          7833,
+          4819,
+          201
+        ],
+        "text": " Bath Assembly\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 517?",
+      "expected_action": "call title(517)",
+      "expected_answer": "Katherine Pulaski",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          19,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(517)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Katherine Pulaski",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Katherine Pulaski",
+      "final": {
+        "token_ids": [
+          449,
+          966,
+          480,
+          6957,
+          291,
+          1946,
+          201
+        ],
+        "text": " Katherine Pulaski\n",
+        "stop": "newline",
+        "copy_source_token_count": 7,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 67 by 17.",
+      "expected_action": "call mul(67,17)",
+      "expected_answer": "1139",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          25,
+          14,
+          19,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(67,17)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1139",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1139",
+      "final": {
+        "token_ids": [
+          985,
+          21,
+          27,
+          201
+        ],
+        "text": " 1139\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 90 by 79.",
+      "expected_action": "call mul(90,79)",
+      "expected_answer": "7110",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          18,
+          14,
+          25,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(90,79)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "7110",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "7110",
+      "final": {
+        "token_ids": [
+          5746,
+          19,
+          18,
+          201
+        ],
+        "text": " 7110\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 89 by 41.",
+      "expected_action": "call mul(89,41)",
+      "expected_answer": "3649",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          27,
+          14,
+          22,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(89,41)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3649",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3649",
+      "final": {
+        "token_ids": [
+          2809,
+          22,
+          27,
+          201
+        ],
+        "text": " 3649\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 85 by 32.",
+      "expected_action": "call mul(85,32)",
+      "expected_answer": "2720",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          23,
+          14,
+          21,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(85,32)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2720",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2720",
+      "final": {
+        "token_ids": [
+          1939,
+          6754,
+          201
+        ],
+        "text": " 2720\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 68 by 18.",
+      "expected_action": "call mul(68,18)",
+      "expected_answer": "1224",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          26,
+          14,
+          19,
+          26,
+          11,
+          201
+        ],
+        "text": " call mul(68,18)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1224",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1224",
+      "final": {
+        "token_ids": [
+          7332,
+          22,
+          201
+        ],
+        "text": " 1224\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 617?",
+      "expected_action": "call title(617)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          19,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(617)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 66 by 60.",
+      "expected_action": "call mul(66,60)",
+      "expected_answer": "3960",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          24,
+          14,
+          24,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(66,60)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3960",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3960",
+      "final": {
+        "token_ids": [
+          3681,
+          24,
+          18,
+          201
+        ],
+        "text": " 3960\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 666?",
+      "expected_action": "call title(666)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          24,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(666)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 78 by 16.",
+      "expected_action": "call mul(78,16)",
+      "expected_answer": "1248",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          26,
+          14,
+          19,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(78,16)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1248",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1248",
+      "final": {
+        "token_ids": [
+          902,
+          22,
+          26,
+          201
+        ],
+        "text": " 1248\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 70?",
+      "expected_action": "call title(70)",
+      "expected_answer": "Norman Finkelstein",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          18,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(707)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "not found",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 194?",
+      "expected_action": "call title(194)",
+      "expected_answer": "Hope Highway",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(18)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Gold dollar",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Gold dollar",
+      "final": {
+        "token_ids": [
+          2842,
+          5927,
+          201
+        ],
+        "text": " Gold dollar\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 41 by 83.",
+      "expected_action": "call mul(41,83)",
+      "expected_answer": "3403",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          19,
+          14,
+          26,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(41,83)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3403",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3403",
+      "final": {
+        "token_ids": [
+          4313,
+          18,
+          21,
+          201
+        ],
+        "text": " 3403\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 94 by 23.",
+      "expected_action": "call mul(94,23)",
+      "expected_answer": "2162",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          22,
+          14,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(94,23)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2162",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2162",
+      "final": {
+        "token_ids": [
+          1657,
+          24,
+          20,
+          201
+        ],
+        "text": " 2162\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 17?",
+      "expected_action": "call title(17)",
+      "expected_answer": "Geopyxis carbonaria",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(17)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Geopyxis carbonaria",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Geopyxis carbonaria",
+      "final": {
+        "token_ids": [
+          1404,
+          408,
+          91,
+          90,
+          280,
+          6849,
+          282,
+          492,
+          201
+        ],
+        "text": " Geopyxis carbonaria\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 340?",
+      "expected_action": "call title(340)",
+      "expected_answer": "Harajuku Lovers Tour",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          22,
+          18,
+          11,
+          201
+        ],
+        "text": " call title(340)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Harajuku Lovers",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Harajuku Lovers Tour",
+      "final": {
+        "token_ids": [
+          1991,
+          899,
+          2682,
+          87,
+          382,
+          7709,
+          201
+        ],
+        "text": " Harajuku Lovers\n",
+        "stop": "newline",
+        "copy_source_token_count": 8,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 17 by 16.",
+      "expected_action": "call mul(17,16)",
+      "expected_answer": "272",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          25,
+          14,
+          19,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(17,16)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "272",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "272",
+      "final": {
+        "token_ids": [
+          1939,
+          20,
+          201
+        ],
+        "text": " 272\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 31 by 53.",
+      "expected_action": "call mul(31,53)",
+      "expected_answer": "1643",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          19,
+          14,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(31,5)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": null,
+      "answer_correct": false,
+      "task_success": false,
+      "observation": null,
+      "tool_error": "multiply arguments outside 10..99"
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 46?",
+      "expected_action": "call title(46)",
+      "expected_answer": "Battle of Tellicherry",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(46)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Battle of Tellicherry",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Battle of Tellicherry",
+      "final": {
+        "token_ids": [
+          3520,
+          283,
+          301,
+          481,
+          294,
+          359,
+          553,
+          201
+        ],
+        "text": " Battle of Tellicherry\n",
+        "stop": "newline",
+        "copy_source_token_count": 8,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 14 by 23.",
+      "expected_action": "call mul(14,23)",
+      "expected_answer": "322",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          22,
+          14,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(14,23)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "322",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "322",
+      "final": {
+        "token_ids": [
+          3499,
+          20,
+          201
+        ],
+        "text": " 322\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 41 by 40.",
+      "expected_action": "call mul(41,40)",
+      "expected_answer": "1640",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          19,
+          14,
+          22,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(41,40)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1640",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1640",
+      "final": {
+        "token_ids": [
+          5750,
+          18,
+          201
+        ],
+        "text": " 1640\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 85 by 63.",
+      "expected_action": "call mul(85,63)",
+      "expected_answer": "5355",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          23,
+          14,
+          24,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(85,63)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5355",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5355",
+      "final": {
+        "token_ids": [
+          4865,
+          23,
+          23,
+          201
+        ],
+        "text": " 5355\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 523?",
+      "expected_action": "call title(523)",
+      "expected_answer": "Skye",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call title(523)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Skye",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Skye",
+      "final": {
+        "token_ids": [
+          6875,
+          201
+        ],
+        "text": " Skye\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 353?",
+      "expected_action": "call title(353)",
+      "expected_answer": "Politics of Croatia",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          23,
+          21,
+          11,
+          201
+        ],
+        "text": " call title(353)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Politics of Croatia",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Politics of Croatia",
+      "final": {
+        "token_ids": [
+          1816,
+          276,
+          855,
+          283,
+          5103,
+          201
+        ],
+        "text": " Politics of Croatia\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 15 by 23.",
+      "expected_action": "call mul(15,23)",
+      "expected_answer": "345",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          23,
+          14,
+          20,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(15,23)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "345",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "345",
+      "final": {
+        "token_ids": [
+          4313,
+          23,
+          201
+        ],
+        "text": " 345\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 82 by 45.",
+      "expected_action": "call mul(82,45)",
+      "expected_answer": "3690",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          20,
+          14,
+          22,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(82,45)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3690",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3690",
+      "final": {
+        "token_ids": [
+          2809,
+          27,
+          18,
+          201
+        ],
+        "text": " 3690\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Copy the word coral.",
+      "expected_action": "coral",
+      "expected_answer": "coral",
+      "first": {
+        "token_ids": [
+          2355,
+          287,
+          201
+        ],
+        "text": " coral\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "coral",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 30 by 61.",
+      "expected_action": "call mul(30,61)",
+      "expected_answer": "1830",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          5892,
+          14,
+          24,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(30,61)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1830",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1830",
+      "final": {
+        "token_ids": [
+          2837,
+          18,
+          201
+        ],
+        "text": " 1830\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Copy the word amber.",
+      "expected_action": "amber",
+      "expected_answer": "amber",
+      "first": {
+        "token_ids": [
+          845,
+          441,
+          201
+        ],
+        "text": " amber\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "amber",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 55 by 99.",
+      "expected_action": "call mul(55,99)",
+      "expected_answer": "5445",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          23,
+          14,
+          27,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(55,99)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5445",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5445",
+      "final": {
+        "token_ids": [
+          5124,
+          22,
+          23,
+          201
+        ],
+        "text": " 5445\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 62 by 30.",
+      "expected_action": "call mul(62,30)",
+      "expected_answer": "1860",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          20,
+          14,
+          5892,
+          11,
+          201
+        ],
+        "text": " call mul(62,30)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1860",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1860",
+      "final": {
+        "token_ids": [
+          2526,
+          18,
+          201
+        ],
+        "text": " 1860\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 558?",
+      "expected_action": "call title(558)",
+      "expected_answer": "Ace Attorney",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          26,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(588)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Wilhelm Busch",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Wilhelm Busch",
+      "final": {
+        "token_ids": [
+          4791,
+          3715,
+          201
+        ],
+        "text": " Wilhelm Busch\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 93 by 60.",
+      "expected_action": "call mul(93,60)",
+      "expected_answer": "5580",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          21,
+          14,
+          24,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(93,60)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5580",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5580",
+      "final": {
+        "token_ids": [
+          4866,
+          26,
+          18,
+          201
+        ],
+        "text": " 5580\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 20 by 69.",
+      "expected_action": "call mul(20,69)",
+      "expected_answer": "1380",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          6754,
+          14,
+          24,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(20,69)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1380",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1380",
+      "final": {
+        "token_ids": [
+          1151,
+          26,
+          18,
+          201
+        ],
+        "text": " 1380\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 79 by 33.",
+      "expected_action": "call mul(79,33)",
+      "expected_answer": "2607",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          27,
+          14,
+          21,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(79,33)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2607",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2607",
+      "final": {
+        "token_ids": [
+          1750,
+          18,
+          25,
+          201
+        ],
+        "text": " 2607\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 55 by 71.",
+      "expected_action": "call mul(55,71)",
+      "expected_answer": "3905",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          23,
+          14,
+          25,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(55,71)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3905",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3905",
+      "final": {
+        "token_ids": [
+          3681,
+          18,
+          23,
+          201
+        ],
+        "text": " 3905\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 30 by 74.",
+      "expected_action": "call mul(30,74)",
+      "expected_answer": "2220",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          5892,
+          14,
+          25,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(30,74)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2220",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2220",
+      "final": {
+        "token_ids": [
+          1749,
+          6754,
+          201
+        ],
+        "text": " 2220\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 38?",
+      "expected_action": "call title(38)",
+      "expected_answer": "West End Girls",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(38)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "West End Girl",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "West End Girls",
+      "final": {
+        "token_ids": [
+          1744,
+          4809,
+          5478,
+          201
+        ],
+        "text": " West End Girl\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 487?",
+      "expected_action": "call title(487)",
+      "expected_answer": "Inocybe praetervisa",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          26,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(487)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Inocybe praetervisa",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Inocybe praetervisa",
+      "final": {
+        "token_ids": [
+          422,
+          440,
+          91,
+          1635,
+          1978,
+          334,
+          1163,
+          280,
+          67,
+          201
+        ],
+        "text": " Inocybe praetervisa\n",
+        "stop": "newline",
+        "copy_source_token_count": 10,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 714?",
+      "expected_action": "call title(714)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          19,
+          22,
+          11,
+          201
+        ],
+        "text": " call title(714)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 42 by 17.",
+      "expected_action": "call mul(42,17)",
+      "expected_answer": "714",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          20,
+          14,
+          19,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(42,17)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "714",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "714",
+      "final": {
+        "token_ids": [
+          5746,
+          22,
+          201
+        ],
+        "text": " 714\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 99 by 16.",
+      "expected_action": "call mul(99,16)",
+      "expected_answer": "1584",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          27,
+          14,
+          19,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(99,16)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1584",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1584",
+      "final": {
+        "token_ids": [
+          981,
+          26,
+          22,
+          201
+        ],
+        "text": " 1584\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Say exactly swan.",
+      "expected_action": "swan",
+      "expected_answer": "swan",
+      "first": {
+        "token_ids": [
+          2111,
+          285,
+          201
+        ],
+        "text": " swan\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "swan",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 31?",
+      "expected_action": "call title(31)",
+      "expected_answer": "Michael Jordan",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          21,
+          19,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(311)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Maggie Simpson",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Maggie Simpson",
+      "final": {
+        "token_ids": [
+          7945,
+          1814,
+          8167,
+          201
+        ],
+        "text": " Maggie Simpson\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 64 by 24.",
+      "expected_action": "call mul(64,24)",
+      "expected_answer": "1536",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          22,
+          14,
+          20,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(64,24)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1536",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1536",
+      "final": {
+        "token_ids": [
+          981,
+          21,
+          24,
+          201
+        ],
+        "text": " 1536\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 419?",
+      "expected_action": "call title(419)",
+      "expected_answer": "Cyclone Graham",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(41)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Sholay",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Sholay",
+      "final": {
+        "token_ids": [
+          7858,
+          201
+        ],
+        "text": " Sholay\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Return lemon.",
+      "expected_action": "lemon",
+      "expected_answer": "lemon",
+      "first": {
+        "token_ids": [
+          474,
+          5027,
+          201
+        ],
+        "text": " lemon\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "lemon",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 218?",
+      "expected_action": "call title(218)",
+      "expected_answer": "Super Science Stories",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          20,
+          19,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(218)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Super Science Stories",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Super Science Stories",
+      "final": {
+        "token_ids": [
+          2759,
+          5786,
+          468,
+          1570,
+          201
+        ],
+        "text": " Super Science Stories\n",
+        "stop": "newline",
+        "copy_source_token_count": 5,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Repeat the word red.",
+      "expected_action": "red",
+      "expected_answer": "red",
+      "first": {
+        "token_ids": [
+          2059,
+          201
+        ],
+        "text": " red\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "red",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 97 by 36.",
+      "expected_action": "call mul(97,36)",
+      "expected_answer": "3492",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          21,
+          14,
+          21,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(93,36)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "3348",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "3348",
+      "final": {
+        "token_ids": [
+          3418,
+          22,
+          26,
+          201
+        ],
+        "text": " 3348\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 56 by 52.",
+      "expected_action": "call mul(56,52)",
+      "expected_answer": "2912",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          24,
+          14,
+          23,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(56,52)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2912",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2912",
+      "final": {
+        "token_ids": [
+          2246,
+          19,
+          20,
+          201
+        ],
+        "text": " 2912\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 480?",
+      "expected_action": "call title(480)",
+      "expected_answer": "Marshall Applewhite",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          26,
+          18,
+          11,
+          201
+        ],
+        "text": " call title(480)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Marsh0 Applewhite",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Marshall Applewhite",
+      "final": {
+        "token_ids": [
+          6616,
+          18,
+          5025,
+          201
+        ],
+        "text": " Marsh0 Applewhite\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 12 by 16.",
+      "expected_action": "call mul(12,16)",
+      "expected_answer": "192",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          20,
+          14,
+          19,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(12,16)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "192",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "192",
+      "final": {
+        "token_ids": [
+          1473,
+          201
+        ],
+        "text": " 192\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 15 by 10.",
+      "expected_action": "call mul(15,10)",
+      "expected_answer": "150",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          23,
+          14,
+          19,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(15,10)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "150",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "150",
+      "final": {
+        "token_ids": [
+          4243,
+          201
+        ],
+        "text": " 150\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 72 by 25.",
+      "expected_action": "call mul(72,25)",
+      "expected_answer": "1800",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          20,
+          14,
+          20,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(72,25)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1800",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1800",
+      "final": {
+        "token_ids": [
+          574,
+          397,
+          201
+        ],
+        "text": " 1800\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 97 by 65.",
+      "expected_action": "call mul(97,65)",
+      "expected_answer": "6305",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          27,
+          23,
+          14,
+          24,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(95,65)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "6175",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "6175",
+      "final": {
+        "token_ids": [
+          5561,
+          25,
+          23,
+          201
+        ],
+        "text": " 6175\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 52 by 31.",
+      "expected_action": "call mul(52,31)",
+      "expected_answer": "1612",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          20,
+          14,
+          21,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(52,31)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1612",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1612",
+      "final": {
+        "token_ids": [
+          7637,
+          20,
+          201
+        ],
+        "text": " 1612\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 83 by 20.",
+      "expected_action": "call mul(83,20)",
+      "expected_answer": "1660",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          21,
+          14,
+          6754,
+          11,
+          201
+        ],
+        "text": " call mul(83,20)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1660",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1660",
+      "final": {
+        "token_ids": [
+          7861,
+          18,
+          201
+        ],
+        "text": " 1660\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 78 by 80.",
+      "expected_action": "call mul(78,80)",
+      "expected_answer": "6240",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          26,
+          14,
+          26,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(78,80)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "6240",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "6240",
+      "final": {
+        "token_ids": [
+          5594,
+          22,
+          18,
+          201
+        ],
+        "text": " 6240\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 78 by 48.",
+      "expected_action": "call mul(78,48)",
+      "expected_answer": "3744",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          26,
+          14,
+          22,
+          26,
+          11,
+          201
+        ],
+        "text": " call mul(78,48)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3744",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3744",
+      "final": {
+        "token_ids": [
+          4131,
+          22,
+          22,
+          201
+        ],
+        "text": " 3744\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 404?",
+      "expected_action": "call title(404)",
+      "expected_answer": "Ernie Cooksey",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          18,
+          22,
+          11,
+          201
+        ],
+        "text": " call title(404)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Ernie Cooksey",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Ernie Cooksey",
+      "final": {
+        "token_ids": [
+          3940,
+          80,
+          543,
+          7225,
+          5556,
+          201
+        ],
+        "text": " Ernie Cooksey\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 439?",
+      "expected_action": "call title(439)",
+      "expected_answer": "Corpus Christi Bay",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          22,
+          21,
+          27,
+          11,
+          201
+        ],
+        "text": " call title(439)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Corpus Christi",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Corpus Christi Bay",
+      "final": {
+        "token_ids": [
+          2769,
+          348,
+          1292,
+          75,
+          201
+        ],
+        "text": " Corpus Christi\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": false
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 192?",
+      "expected_action": "call title(192)",
+      "expected_answer": "Ceratopsia",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          27,
+          23,
+          11,
+          201
+        ],
+        "text": " call title(195)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": false,
+      "answer": "Super Mario Land",
+      "answer_correct": false,
+      "task_success": false,
+      "observation": "Super Mario Land",
+      "final": {
+        "token_ids": [
+          2759,
+          5597,
+          4050,
+          201
+        ],
+        "text": " Super Mario Land\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "missing",
+      "question": "What is the title of WikiText article 636?",
+      "expected_action": "call title(636)",
+      "expected_answer": "not found",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          24,
+          21,
+          24,
+          11,
+          201
+        ],
+        "text": " call title(636)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "not found",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "NOT_FOUND",
+      "final": {
+        "token_ids": [
+          475,
+          889,
+          201
+        ],
+        "text": " not found\n",
+        "stop": "newline",
+        "copy_source_token_count": 9,
+        "found_status": false
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 82 by 37.",
+      "expected_action": "call mul(82,37)",
+      "expected_answer": "3034",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          20,
+          14,
+          21,
+          25,
+          11,
+          201
+        ],
+        "text": " call mul(82,37)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3034",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3034",
+      "final": {
+        "token_ids": [
+          1407,
+          21,
+          22,
+          201
+        ],
+        "text": " 3034\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 32 by 36.",
+      "expected_action": "call mul(32,36)",
+      "expected_answer": "1152",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          21,
+          20,
+          14,
+          21,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(32,36)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1152",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1152",
+      "final": {
+        "token_ids": [
+          985,
+          23,
+          20,
+          201
+        ],
+        "text": " 1152\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 67 by 29.",
+      "expected_action": "call mul(67,29)",
+      "expected_answer": "1943",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          25,
+          14,
+          20,
+          27,
+          11,
+          201
+        ],
+        "text": " call mul(67,29)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "1943",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "1943",
+      "final": {
+        "token_ids": [
+          6320,
+          201
+        ],
+        "text": " 1943\n",
+        "stop": "newline",
+        "copy_source_token_count": 2,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 21 by 66.",
+      "expected_action": "call mul(21,66)",
+      "expected_answer": "1386",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          20,
+          19,
+          14,
+          24,
+          11,
+          201
+        ],
+        "text": " call mul(21,6)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": null,
+      "answer_correct": false,
+      "task_success": false,
+      "observation": null,
+      "tool_error": "multiply arguments outside 10..99"
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 71 by 43.",
+      "expected_action": "call mul(71,43)",
+      "expected_answer": "3053",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          25,
+          19,
+          14,
+          22,
+          21,
+          11,
+          201
+        ],
+        "text": " call mul(71,43)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "3053",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "3053",
+      "final": {
+        "token_ids": [
+          1407,
+          23,
+          21,
+          201
+        ],
+        "text": " 3053\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 57 by 51.",
+      "expected_action": "call mul(57,51)",
+      "expected_answer": "2907",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          23,
+          25,
+          14,
+          23,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(57,51)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "2907",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "2907",
+      "final": {
+        "token_ids": [
+          2246,
+          18,
+          25,
+          201
+        ],
+        "text": " 2907\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 13 by 45.",
+      "expected_action": "call mul(13,45)",
+      "expected_answer": "585",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          19,
+          21,
+          14,
+          22,
+          23,
+          11,
+          201
+        ],
+        "text": " call mul(13,45)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "585",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "585",
+      "final": {
+        "token_ids": [
+          7397,
+          23,
+          201
+        ],
+        "text": " 585\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 86 by 82.",
+      "expected_action": "call mul(86,82)",
+      "expected_answer": "7052",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          24,
+          14,
+          26,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(86,82)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "7052",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "7052",
+      "final": {
+        "token_ids": [
+          3407,
+          23,
+          20,
+          201
+        ],
+        "text": " 7052\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 141?",
+      "expected_action": "call title(141)",
+      "expected_answer": "AIL Storm",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          19,
+          22,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(141)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "AIL Storm",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "AIL Storm",
+      "final": {
+        "token_ids": [
+          3982,
+          46,
+          3765,
+          201
+        ],
+        "text": " AIL Storm\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 78?",
+      "expected_action": "call title(78)",
+      "expected_answer": "Leanne Del Toso",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          25,
+          26,
+          11,
+          201
+        ],
+        "text": " call title(78)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Leanne Del Toso",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Leanne Del Toso",
+      "final": {
+        "token_ids": [
+          828,
+          851,
+          71,
+          3595,
+          301,
+          381,
+          81,
+          201
+        ],
+        "text": " Leanne Del Toso\n",
+        "stop": "newline",
+        "copy_source_token_count": 8,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 62 by 12.",
+      "expected_action": "call mul(62,12)",
+      "expected_answer": "744",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          20,
+          14,
+          19,
+          20,
+          11,
+          201
+        ],
+        "text": " call mul(62,12)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "744",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "744",
+      "final": {
+        "token_ids": [
+          6664,
+          22,
+          201
+        ],
+        "text": " 744\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Say exactly river.",
+      "expected_action": "river",
+      "expected_answer": "river",
+      "first": {
+        "token_ids": [
+          2557,
+          201
+        ],
+        "text": " river\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "river",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 84 by 70.",
+      "expected_action": "call mul(84,70)",
+      "expected_answer": "5880",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          26,
+          22,
+          14,
+          25,
+          18,
+          11,
+          201
+        ],
+        "text": " call mul(84,70)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5880",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5880",
+      "final": {
+        "token_ids": [
+          7397,
+          26,
+          18,
+          201
+        ],
+        "text": " 5880\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "direct",
+      "question": "Say exactly cloud.",
+      "expected_action": "cloud",
+      "expected_answer": "cloud",
+      "first": {
+        "token_ids": [
+          7244,
+          201
+        ],
+        "text": " cloud\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": false,
+      "name_correct": false,
+      "arguments_correct": false,
+      "answer": "cloud",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": null
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 51?",
+      "expected_action": "call title(51)",
+      "expected_answer": "Species of Allosaurus",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          23,
+          19,
+          11,
+          201
+        ],
+        "text": " call title(51)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Species of Allosaurus",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Species of Allosaurus",
+      "final": {
+        "token_ids": [
+          4300,
+          411,
+          283,
+          1219,
+          2995,
+          201
+        ],
+        "text": " Species of Allosaurus\n",
+        "stop": "newline",
+        "copy_source_token_count": 6,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "title",
+      "question": "What is the title of WikiText article 27?",
+      "expected_action": "call title(27)",
+      "expected_answer": "Zagreb Synagogue",
+      "first": {
+        "token_ids": [
+          863,
+          1742,
+          10,
+          20,
+          25,
+          11,
+          201
+        ],
+        "text": " call title(27)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "Zagreb Synagogue",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "Zagreb Synagogue",
+      "final": {
+        "token_ids": [
+          968,
+          6037,
+          68,
+          306,
+          1651,
+          395,
+          4291,
+          201
+        ],
+        "text": " Zagreb Synagogue\n",
+        "stop": "newline",
+        "copy_source_token_count": 8,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 62 by 84.",
+      "expected_action": "call mul(62,84)",
+      "expected_answer": "5208",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          24,
+          20,
+          14,
+          26,
+          22,
+          11,
+          201
+        ],
+        "text": " call mul(62,84)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "5208",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "5208",
+      "final": {
+        "token_ids": [
+          4265,
+          18,
+          26,
+          201
+        ],
+        "text": " 5208\n",
+        "stop": "newline",
+        "copy_source_token_count": 4,
+        "found_status": true
+      },
+      "observation_followed": true
+    },
+    {
+      "kind": "multiply",
+      "question": "Multiply 40 by 21.",
+      "expected_action": "call mul(40,21)",
+      "expected_answer": "840",
+      "first": {
+        "token_ids": [
+          863,
+          295,
+          371,
+          10,
+          22,
+          18,
+          14,
+          20,
+          19,
+          11,
+          201
+        ],
+        "text": " call mul(40,21)\n",
+        "stop": "newline"
+      },
+      "route_correct": true,
+      "call_parse_valid": true,
+      "name_correct": true,
+      "arguments_correct": true,
+      "answer": "840",
+      "answer_correct": true,
+      "task_success": true,
+      "observation": "840",
+      "final": {
+        "token_ids": [
+          8108,
+          18,
+          201
+        ],
+        "text": " 840\n",
+        "stop": "newline",
+        "copy_source_token_count": 3,
+        "found_status": true
+      },
+      "observation_followed": true
+    }
+  ],
+  "limitations": "fixed English templates and at most one call; title catalog uses C18 train article titles, some words seen in parent pretraining; not API-Bank/Tau-bench or multi-tool planning"
+}

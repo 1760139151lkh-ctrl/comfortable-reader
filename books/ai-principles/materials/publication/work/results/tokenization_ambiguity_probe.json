@@ -1,0 +1,26 @@
+{
+  "source_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "raw_string": " the",
+  "canonical_encoder_ids": [
+    263
+  ],
+  "alternative_generated_id_paths": [
+    [
+      259,
+      260
+    ],
+    [
+      223,
+      86,
+      260
+    ]
+  ],
+  "all_decoded_strings": [
+    " the",
+    " the",
+    " the"
+  ],
+  "special_eos_id": 2,
+  "meaning": "确定性编码器只选一条规范路径；生成模型的完整词表仍可输出其他编号路径，它们也会解回同一字串。一个规范路径的概率不是所有解码路径概率之和。"
+}

@@ -1,0 +1,124 @@
+{
+  "scope": "prompt-grouped CoVal world-view votes; small TF-IDF/length/overlap pairwise reward proxy; not C25 LM, not visual/user aesthetic; test opened after validation C choice",
+  "source_manifest_sha256": "b7192fdda56d55f56cf594458eeaa395eabc684ca7a2c095c50963cc42f4a489",
+  "source_counts": {
+    "train": 766,
+    "validation": 147,
+    "test": 165
+  },
+  "feature_design": {
+    "text": "train-response TF-IDF unigrams/bigrams max12000, min_df3",
+    "numeric": [
+      "log response length",
+      "prompt-response word overlap",
+      "response distinct-word ratio",
+      "question mark count"
+    ],
+    "pair_feature": "candidate A minus B, no intercept or candidate index features",
+    "training": "each human non-tie world vote weights logistic pair likelihood"
+  },
+  "train_fit": {
+    "feature_count": 12004,
+    "pair_label_rows": 8685,
+    "weighted_individual_votes": 69214.0
+  },
+  "validation_C_selection": [
+    {
+      "C": 0.01,
+      "validation": {
+        "prompts": 147,
+        "world_non_tie_ballots_across_six_pairs": 12370,
+        "vote_cross_entropy": 0.6356808545280591,
+        "constant_half_vote_cross_entropy": 0.6931471805599453,
+        "pair_majority_accuracy": 0.722877358490566,
+        "pair_majority_items": 848,
+        "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.6871341313699314,
+        "mean_human_pairwise_win_rate_of_longest_candidate": 0.5691554579522041,
+        "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8157562535784045
+      }
+    },
+    {
+      "C": 0.1,
+      "validation": {
+        "prompts": 147,
+        "world_non_tie_ballots_across_six_pairs": 12370,
+        "vote_cross_entropy": 0.6032214241209114,
+        "constant_half_vote_cross_entropy": 0.6931471805599453,
+        "pair_majority_accuracy": 0.7429245283018868,
+        "pair_majority_items": 848,
+        "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.7078121283540186,
+        "mean_human_pairwise_win_rate_of_longest_candidate": 0.5691554579522041,
+        "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8157562535784045
+      }
+    },
+    {
+      "C": 1.0,
+      "validation": {
+        "prompts": 147,
+        "world_non_tie_ballots_across_six_pairs": 12370,
+        "vote_cross_entropy": 0.6186307563533744,
+        "constant_half_vote_cross_entropy": 0.6931471805599453,
+        "pair_majority_accuracy": 0.7252358490566038,
+        "pair_majority_items": 848,
+        "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.6939903455392681,
+        "mean_human_pairwise_win_rate_of_longest_candidate": 0.5691554579522041,
+        "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8157562535784045
+      }
+    },
+    {
+      "C": 10.0,
+      "validation": {
+        "prompts": 147,
+        "world_non_tie_ballots_across_six_pairs": 12370,
+        "vote_cross_entropy": 0.6467205269504493,
+        "constant_half_vote_cross_entropy": 0.6931471805599453,
+        "pair_majority_accuracy": 0.7028301886792453,
+        "pair_majority_items": 848,
+        "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.6736261368372738,
+        "mean_human_pairwise_win_rate_of_longest_candidate": 0.5691554579522041,
+        "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8157562535784045
+      }
+    }
+  ],
+  "selected_C": 0.1,
+  "selected_numeric_coefficients_on_standardized_features": [
+    0.027555943540022235,
+    0.20494427728201492,
+    -0.12941654709815498,
+    -0.0437246542265477
+  ],
+  "train": {
+    "prompts": 766,
+    "world_non_tie_ballots_across_six_pairs": 69214,
+    "vote_cross_entropy": 0.5354790534520597,
+    "constant_half_vote_cross_entropy": 0.6931471805599453,
+    "pair_majority_accuracy": 0.9031674208144796,
+    "pair_majority_items": 4420,
+    "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.7889962742517983,
+    "mean_human_pairwise_win_rate_of_longest_candidate": 0.5680882507515739,
+    "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8054204014112313
+  },
+  "validation": {
+    "prompts": 147,
+    "world_non_tie_ballots_across_six_pairs": 12370,
+    "vote_cross_entropy": 0.6032214241209114,
+    "constant_half_vote_cross_entropy": 0.6931471805599453,
+    "pair_majority_accuracy": 0.7429245283018868,
+    "pair_majority_items": 848,
+    "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.7078121283540186,
+    "mean_human_pairwise_win_rate_of_longest_candidate": 0.5691554579522041,
+    "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8157562535784045
+  },
+  "test": {
+    "prompts": 165,
+    "world_non_tie_ballots_across_six_pairs": 13398,
+    "vote_cross_entropy": 0.6067388552345098,
+    "constant_half_vote_cross_entropy": 0.6931471805599453,
+    "pair_majority_accuracy": 0.7365648050579557,
+    "pair_majority_items": 949,
+    "mean_human_pairwise_win_rate_of_proxy_selected_candidate": 0.7192883850693483,
+    "mean_human_pairwise_win_rate_of_longest_candidate": 0.5914162523597019,
+    "mean_human_pairwise_win_rate_of_empirical_best_candidate": 0.8132241218763107
+  },
+  "test_opened_once": true
+}

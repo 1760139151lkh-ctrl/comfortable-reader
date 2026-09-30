@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十二章　为什么不让其他方法直接解</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十二章-为什么不让其他方法直接解">第十二章　为什么不让其他方法直接解</h1>
+<p>“解微分方程”并不是一个可以交给万能工具的一步操作。不同方法有不同优势。</p>
+<ul>
+<li><strong>解析方法</strong>能给出精确公式，但通常只适用于几何、系数和边界条件都较简单的问题。</li>
+<li><strong>有限差分法</strong>直接用差商近似导数，实现简单，适合规则区域和结构化网格。</li>
+<li><strong>有限体积法</strong>从控制体的流入、流出和积累出发，强调离散守恒，常用于流体和守恒律。</li>
+<li><strong>谱方法</strong>使用全局高阶基函数，在规则区域和高度光滑问题上可能非常高效。</li>
+<li><strong>边界元法</strong>在合适问题中只离散边界，但适用范围受限，且常产生稠密矩阵。</li>
+</ul>
+<p>不存在“有限元总是最好”。选择方法取决于</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>方程类型、几何形状、守恒要求、解的光滑性、局部特征和所需精度。</mtext></mrow></menclose></mrow></math></div>
+<p>有限元被广泛采用，是因为它把复杂几何、局部材料、复杂边界、局部加密和稀疏线性代数很好地结合在了一起。</p>
+<p>还有一个容易混淆的边界：二维和三维空间是有限元的常规舞台；如果未知函数真的是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><msub><mi>x</mi><mn>2</mn></msub><mo>,</mo><mo>⋯</mo><mo>,</mo><msub><mi>x</mi><mrow><mn>20</mn></mrow></msub><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>标准网格会遭遇维数灾难。每个方向只取十个点就会产生 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mn>10</mn><mrow><mn>20</mn></mrow></msup></mrow></math></span> 个网格点。此时通常要考虑蒙特卡洛、稀疏网格、低秩近似、降维或其他专门方法。</p>
+<hr/>
+</body></html>

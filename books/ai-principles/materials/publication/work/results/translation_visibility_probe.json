@@ -1,0 +1,32 @@
+{
+  "scope": "随机权重、同一合法源句、两种真实译码结构；只核输入可见性，不评价翻译质量。",
+  "source_valid_ids": [
+    4,
+    5,
+    3
+  ],
+  "target_input_original": [
+    2,
+    6,
+    7,
+    8
+  ],
+  "target_input_changed_from_third_step": [
+    2,
+    6,
+    9,
+    10
+  ],
+  "results": {
+    "fixed_summary": {
+      "unchanged_earlier_target_steps_max_logit_gap": 0.0,
+      "changed_later_target_steps_max_logit_gap": 0.18987227976322174,
+      "changed_only_source_padding_max_logit_gap": 0.0
+    },
+    "soft_read": {
+      "unchanged_earlier_target_steps_max_logit_gap": 0.0,
+      "changed_later_target_steps_max_logit_gap": 0.293568879365921,
+      "changed_only_source_padding_max_logit_gap": 0.0
+    }
+  }
+}

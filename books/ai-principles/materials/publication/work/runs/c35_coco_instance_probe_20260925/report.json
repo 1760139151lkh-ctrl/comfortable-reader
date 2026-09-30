@@ -1,0 +1,29 @@
+{
+  "scope": "One original COCO 2017 validation image and human instance annotations; no learned detection/segmentation or official benchmark test",
+  "image_id": 724,
+  "source_image_sha256": "5c0e559c75d3969c8e3e297b61f61063f78045c9d4802b526ba616361f3823fd",
+  "source_instance_json_sha256": "e8c7f7908f1d7278341fae127d0da654f102f11bd7b21d8aeefa635b8c810b6f",
+  "image_width_height": [
+    375,
+    500
+  ],
+  "stop_sign_instances": 2,
+  "large_box_xywh": [
+    120.07,
+    71.83,
+    134.49,
+    153.08
+  ],
+  "large_box_area": 20587.7292,
+  "large_annotation_polygon_area": 16433.58065,
+  "large_rasterized_mask_pixels": 16600,
+  "small_box_xywh": [
+    202.38,
+    259.9,
+    19.01,
+    26.06
+  ],
+  "author_horizontal_shift_px": 20,
+  "large_box_vs_shifted_box_iou": 0.7410835652793065,
+  "figure_sha256": "b228d1366b48d90358e09f2b070b4126ad466f437c8c6218710643ee03ec2984"
+}

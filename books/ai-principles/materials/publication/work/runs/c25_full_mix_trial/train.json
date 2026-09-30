@@ -1,0 +1,378 @@
+{
+  "scope": "C19 exact 4.93M random-pretrained WikiText LM continued on Dolly sft_v2 response-only labels; no test opened, no external pretrained weights",
+  "mode": "full-mix",
+  "base": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+    "c19_selected_epoch": 4,
+    "c19_validation_nll": 5.816161129656105
+  },
+  "sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+  "data_split": {
+    "train_records": 5482,
+    "validation_records": 678,
+    "test_records_not_opened": 691
+  },
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "parameters": {
+    "total_model_parameters_including_frozen": 4930304,
+    "trainable_parameters": 4930304,
+    "frozen_parameters": 0
+  },
+  "adapter_routes": [],
+  "optimizer": {
+    "name": "AdamW",
+    "learning_rate": 0.0002,
+    "weight_decay": 0.01,
+    "batch_records": 64,
+    "epochs_planned": 3,
+    "gradient_clip_norm": 1.0,
+    "mixed_old_wikitext": "each Dolly batch also draws 64 fixed-split C18 train blocks; loss=0.9*mean_response_NLL+0.1*mean_WikiText_target_NLL"
+  },
+  "baseline_validation": {
+    "response_nll": 8.039782446076549,
+    "response_targets_including_eos": 29295,
+    "records": 678,
+    "categories": {
+      "brainstorming": {
+        "records": 127,
+        "targets": 6679,
+        "response_nll": 8.636200999799541
+      },
+      "classification": {
+        "records": 163,
+        "targets": 5160,
+        "response_nll": 8.878654568694358
+      },
+      "closed_qa": {
+        "records": 12,
+        "targets": 220,
+        "response_nll": 7.198727347634056
+      },
+      "creative_writing": {
+        "records": 12,
+        "targets": 616,
+        "response_nll": 7.635756282063274
+      },
+      "general_qa": {
+        "records": 87,
+        "targets": 5375,
+        "response_nll": 7.439547050653502
+      },
+      "information_extraction": {
+        "records": 3,
+        "targets": 103,
+        "response_nll": 6.926635371828542
+      },
+      "open_qa": {
+        "records": 271,
+        "targets": 11048,
+        "response_nll": 7.636638275183775
+      },
+      "summarization": {
+        "records": 3,
+        "targets": 94,
+        "response_nll": 7.153677108439993
+      }
+    }
+  },
+  "baseline_wiki_validation": {
+    "nll": 5.816161308255167,
+    "perplexity": 335.68100135078936,
+    "targets": 284331,
+    "blocks": 2253
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "optimizer_steps": 86,
+      "online_train_response_nll": 6.347795529349613,
+      "mixed_wiki_online_nll": 5.943200455343402,
+      "mixed_wiki_targets_seen": 693968,
+      "validation": {
+        "response_nll": 5.872445036482335,
+        "response_targets_including_eos": 29295,
+        "records": 678,
+        "categories": {
+          "brainstorming": {
+            "records": 127,
+            "targets": 6679,
+            "response_nll": 5.914320673730527
+          },
+          "classification": {
+            "records": 163,
+            "targets": 5160,
+            "response_nll": 5.520570601603781
+          },
+          "closed_qa": {
+            "records": 12,
+            "targets": 220,
+            "response_nll": 5.73346901806918
+          },
+          "creative_writing": {
+            "records": 12,
+            "targets": 616,
+            "response_nll": 5.972392490931919
+          },
+          "general_qa": {
+            "records": 87,
+            "targets": 5375,
+            "response_nll": 5.936099372154058
+          },
+          "information_extraction": {
+            "records": 3,
+            "targets": 103,
+            "response_nll": 5.455959801535005
+          },
+          "open_qa": {
+            "records": 271,
+            "targets": 11048,
+            "response_nll": 5.98105814783233
+          },
+          "summarization": {
+            "records": 3,
+            "targets": 94,
+            "response_nll": 5.934063525910073
+          }
+        }
+      },
+      "wiki_validation": {
+        "nll": 6.002587179148159,
+        "perplexity": 404.47388739465754,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    {
+      "epoch": 2,
+      "optimizer_steps": 86,
+      "online_train_response_nll": 5.635620277349848,
+      "mixed_wiki_online_nll": 5.871713837110541,
+      "mixed_wiki_targets_seen": 692884,
+      "validation": {
+        "response_nll": 5.61500089339051,
+        "response_targets_including_eos": 29295,
+        "records": 678,
+        "categories": {
+          "brainstorming": {
+            "records": 127,
+            "targets": 6679,
+            "response_nll": 5.577002909569384
+          },
+          "classification": {
+            "records": 163,
+            "targets": 5160,
+            "response_nll": 5.169695541100909
+          },
+          "closed_qa": {
+            "records": 12,
+            "targets": 220,
+            "response_nll": 5.585267639160156
+          },
+          "creative_writing": {
+            "records": 12,
+            "targets": 616,
+            "response_nll": 5.782945013665533
+          },
+          "general_qa": {
+            "records": 87,
+            "targets": 5375,
+            "response_nll": 5.743516774554585
+          },
+          "information_extraction": {
+            "records": 3,
+            "targets": 103,
+            "response_nll": 5.260891108836942
+          },
+          "open_qa": {
+            "records": 271,
+            "targets": 11048,
+            "response_nll": 5.775512815039716
+          },
+          "summarization": {
+            "records": 3,
+            "targets": 94,
+            "response_nll": 5.902405434466423
+          }
+        }
+      },
+      "wiki_validation": {
+        "nll": 5.9569512582276465,
+        "perplexity": 386.43020061578176,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    {
+      "epoch": 3,
+      "optimizer_steps": 86,
+      "online_train_response_nll": 5.406872993529537,
+      "mixed_wiki_online_nll": 5.8500588062450465,
+      "mixed_wiki_targets_seen": 693950,
+      "validation": {
+        "response_nll": 5.492693432379673,
+        "response_targets_including_eos": 29295,
+        "records": 678,
+        "categories": {
+          "brainstorming": {
+            "records": 127,
+            "targets": 6679,
+            "response_nll": 5.41442940816638
+          },
+          "classification": {
+            "records": 163,
+            "targets": 5160,
+            "response_nll": 5.020370274181514
+          },
+          "closed_qa": {
+            "records": 12,
+            "targets": 220,
+            "response_nll": 5.505494793978604
+          },
+          "creative_writing": {
+            "records": 12,
+            "targets": 616,
+            "response_nll": 5.69031893742549
+          },
+          "general_qa": {
+            "records": 87,
+            "targets": 5375,
+            "response_nll": 5.651242749946062
+          },
+          "information_extraction": {
+            "records": 3,
+            "targets": 103,
+            "response_nll": 5.165250907823878
+          },
+          "open_qa": {
+            "records": 271,
+            "targets": 11048,
+            "response_nll": 5.673133126037178
+          },
+          "summarization": {
+            "records": 3,
+            "targets": 94,
+            "response_nll": 5.7414669280356545
+          }
+        }
+      },
+      "wiki_validation": {
+        "nll": 5.942112389477405,
+        "perplexity": 380.73834835337186,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    }
+  ],
+  "best_epoch": 3,
+  "best_validation_response_nll": 5.492693432379673,
+  "best_wiki_validation_nll": 5.942112389477405,
+  "fixed_validation_prompts": [
+    {
+      "source_row": 7,
+      "category": "open_qa",
+      "prompt": "Instruction:\nWho gave the UN the land in NY to build their HQ\nResponse:\n",
+      "reference_response": "John D Rockerfeller"
+    },
+    {
+      "source_row": 88,
+      "category": "brainstorming",
+      "prompt": "Instruction:\nGive me some ideas to manage my manager.\nResponse:\n",
+      "reference_response": "1. Be honest\n2. Communicate\n3. Understand goals\n4. Stay calm\n5. Solve problems\n6. Be positive\n7. Share your knowledge\n8. Be caring\n9. Practice positive reinforcement\n10. Be a strong performer"
+    },
+    {
+      "source_row": 107,
+      "category": "general_qa",
+      "prompt": "Instruction:\nWhat is the tallest mountain in the continental US?\nResponse:\n",
+      "reference_response": "Mt. Whitney, which is 14500 ft,  is the tallest mountain in the continental US. Although if we were to include the state of Alaska, then the tallest mountain is actually Mt Denali, which is 20,320 ft. Mt. Whitney is actually only the 17th tallest mountain in all of the US, where the tallest 1-16 are all mountains in Alaska."
+    },
+    {
+      "source_row": 129,
+      "category": "classification",
+      "prompt": "Instruction:\nWhich is a species of fish? Sea dragon or Red bearded\nResponse:\n",
+      "reference_response": "Sea dragon"
+    }
+  ],
+  "baseline_generations": [
+    {
+      "source_row": 7,
+      "category": "open_qa",
+      "prompt": "Instruction:\nWho gave the UN the land in NY to build their HQ\nResponse:\n",
+      "reference_response": "John D Rockerfeller",
+      "continuation": "i . \n = = = = = = \n The first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first",
+      "new_token_count": 48,
+      "ended_with_eos": false
+    },
+    {
+      "source_row": 88,
+      "category": "brainstorming",
+      "prompt": "Instruction:\nGive me some ideas to manage my manager.\nResponse:\n",
+      "reference_response": "1. Be honest\n2. Communicate\n3. Understand goals\n4. Stay calm\n5. Solve problems\n6. Be positive\n7. Share your knowledge\n8. Be caring\n9. Practice positive reinforcement\n10. Be a strong performer",
+      "continuation": "i , and the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time . \n = = = = = = = =",
+      "new_token_count": 48,
+      "ended_with_eos": false
+    },
+    {
+      "source_row": 107,
+      "category": "general_qa",
+      "prompt": "Instruction:\nWhat is the tallest mountain in the continental US?\nResponse:\n",
+      "reference_response": "Mt. Whitney, which is 14500 ft,  is the tallest mountain in the continental US. Although if we were to include the state of Alaska, then the tallest mountain is actually Mt Denali, which is 20,320 ft. Mt. Whitney is actually only the 17th tallest mountain in all of the US, where the tallest 1-16 are all mountains in Alaska.",
+      "continuation": "i , and the first time . \n = = = = = = \n The first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the",
+      "new_token_count": 48,
+      "ended_with_eos": false
+    },
+    {
+      "source_row": 129,
+      "category": "classification",
+      "prompt": "Instruction:\nWhich is a species of fish? Sea dragon or Red bearded\nResponse:\n",
+      "reference_response": "Sea dragon",
+      "continuation": "i , and the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the first time of the",
+      "new_token_count": 48,
+      "ended_with_eos": false
+    }
+  ],
+  "selected_generations": [
+    {
+      "source_row": 7,
+      "category": "open_qa",
+      "prompt": "Instruction:\nWho gave the UN the land in NY to build their HQ\nResponse:\n",
+      "reference_response": "John D Rockerfeller",
+      "continuation": "The following are the world.",
+      "new_token_count": 8,
+      "ended_with_eos": true
+    },
+    {
+      "source_row": 88,
+      "category": "brainstorming",
+      "prompt": "Instruction:\nGive me some ideas to manage my manager.\nResponse:\n",
+      "reference_response": "1. Be honest\n2. Communicate\n3. Understand goals\n4. Stay calm\n5. Solve problems\n6. Be positive\n7. Share your knowledge\n8. Be caring\n9. Practice positive reinforcement\n10. Be a strong performer",
+      "continuation": "The",
+      "new_token_count": 3,
+      "ended_with_eos": true
+    },
+    {
+      "source_row": 107,
+      "category": "general_qa",
+      "prompt": "Instruction:\nWhat is the tallest mountain in the continental US?\nResponse:\n",
+      "reference_response": "Mt. Whitney, which is 14500 ft,  is the tallest mountain in the continental US. Although if we were to include the state of Alaska, then the tallest mountain is actually Mt Denali, which is 20,320 ft. Mt. Whitney is actually only the 17th tallest mountain in all of the US, where the tallest 1-16 are all mountains in Alaska.",
+      "continuation": "The following are the most of the world, the world, the world, the world, the world, the United States, the United States, the United States, the United States, the United States, the United States, the United",
+      "new_token_count": 48,
+      "ended_with_eos": false
+    },
+    {
+      "source_row": 129,
+      "category": "classification",
+      "prompt": "Instruction:\nWhich is a species of fish? Sea dragon or Red bearded\nResponse:\n",
+      "reference_response": "Sea dragon",
+      "continuation": "The is a bicient, and a bicient.",
+      "new_token_count": 15,
+      "ended_with_eos": true
+    }
+  ],
+  "checkpoint_path": "work/runs/c25_full_mix_trial/best.pt",
+  "checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced",
+  "elapsed_seconds": 15.631136199925095,
+  "peak_gpu_allocated_bytes": 2144291328,
+  "test_opened": false
+}

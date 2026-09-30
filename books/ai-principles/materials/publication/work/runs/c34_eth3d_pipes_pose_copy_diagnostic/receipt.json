@@ -1,0 +1,30 @@
+{
+  "identity": "post-hoc diagnostic after C34 original training/test was already inspected; not new held-out evaluation",
+  "field_run_report_sha256": "6d4bf6c72054311c657578d314548e47edaccf46db265e1f63002f47c13d344e",
+  "precomputed_renders_sha256": "bbf69094349e676bd858e020e10c8f6ca2ee97a6a405dd0dc40141b6c7811c7b",
+  "selection_formula": "Euclidean camera-center distance + 2*(1 - cosine between optical axes); uses known camera poses, no target pixels in selection; coefficient introduced after inspecting first center-only baseline",
+  "rows": [
+    {
+      "partition": "val",
+      "target_view_index": 3,
+      "chosen_train_view_index": 4,
+      "pose_score": 0.8402016530875638,
+      "center_distance": 0.7823231317996167,
+      "view_axis_cosine": 0.9710607393560264,
+      "copy_mse": 0.026964355260133743,
+      "trained_grid_mse": 0.05026724562048912
+    },
+    {
+      "partition": "test",
+      "target_view_index": 10,
+      "chosen_train_view_index": 1,
+      "pose_score": 0.37004155781258463,
+      "center_distance": 0.27799861726706054,
+      "view_axis_cosine": 0.953978529727238,
+      "copy_mse": 0.040497008711099625,
+      "trained_grid_mse": 0.03603590652346611
+    }
+  ],
+  "figure_sha256": "24ee599aa15ba8488b4f41692e486835552ac7b518b316cb15f2247c81b80276",
+  "limit": "same-pixel image copy without geometric reprojection, not a mature novel-view system; val/test pixels were already opened by first radiance-grid run"
+}

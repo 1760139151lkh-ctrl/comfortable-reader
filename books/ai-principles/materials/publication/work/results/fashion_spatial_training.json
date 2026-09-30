@@ -1,0 +1,804 @@
+{
+  "purpose": "four fixed architectures/input-order arms on 2017 Fashion-MNIST; no pretrained weights",
+  "data_manifest": "data/fashion_mnist/manifest.json",
+  "data_manifest_sha256": "0e99922a3f8f8e173e6c8cd9b35c71f8b7456f866353e865bb8f0df4d6421060",
+  "official_source": "https://github.com/zalandoresearch/fashion-mnist/blob/master/README.md",
+  "split_seed": 20260924,
+  "pixel_permutation_seed": 20260925,
+  "training_seed": 20260924,
+  "epochs": 5,
+  "batch_size": 256,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "selection": "lowest validation cross-entropy; tie keeps earlier epoch",
+  "normalization": "uint8 / 255, no fitted mean or std",
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "torch_version": "2.11.0+cu128",
+  "python_version": "3.13.14",
+  "arms": {
+    "mlp_original": {
+      "arm": "mlp_original",
+      "parameters": 101770,
+      "epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.7123745658874512,
+          "train_accuracy": 0.76528,
+          "validation_loss": 0.5030222887039184,
+          "validation_accuracy": 0.827,
+          "validation_correct": 8270
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.4628272525405884,
+          "train_accuracy": 0.83892,
+          "validation_loss": 0.4341309910774231,
+          "validation_accuracy": 0.8492,
+          "validation_correct": 8492
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.41914658644676206,
+          "train_accuracy": 0.85268,
+          "validation_loss": 0.40358464884757994,
+          "validation_accuracy": 0.8594,
+          "validation_correct": 8594
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.39182788383483885,
+          "train_accuracy": 0.86124,
+          "validation_loss": 0.39475840034484866,
+          "validation_accuracy": 0.8623,
+          "validation_correct": 8623
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.3755427645492554,
+          "train_accuracy": 0.86736,
+          "validation_loss": 0.38773137044906614,
+          "validation_accuracy": 0.8633,
+          "validation_correct": 8633
+        }
+      ],
+      "chosen_epoch": 5,
+      "chosen_validation_loss": 0.38773137044906614,
+      "checkpoint": "results/fashion_mlp_original_best.pt",
+      "checkpoint_sha256": "c1d0db409466218f702c220f420bc3aa45e80d900de622a878d148540c3d9d10",
+      "train_seconds": 1.2584221999859437,
+      "peak_cuda_allocated_mib_including_resident_data": 440.69921875,
+      "official_test": {
+        "loss": 0.4104470937252045,
+        "accuracy": 0.8541,
+        "correct": 8541,
+        "total": 10000,
+        "confusion_true_rows_predicted_columns": [
+          [
+            822,
+            6,
+            17,
+            31,
+            4,
+            0,
+            108,
+            0,
+            11,
+            1
+          ],
+          [
+            4,
+            969,
+            2,
+            19,
+            3,
+            0,
+            1,
+            0,
+            2,
+            0
+          ],
+          [
+            19,
+            3,
+            804,
+            7,
+            94,
+            0,
+            68,
+            0,
+            5,
+            0
+          ],
+          [
+            37,
+            29,
+            14,
+            821,
+            53,
+            0,
+            41,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            2,
+            137,
+            16,
+            747,
+            1,
+            91,
+            0,
+            6,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            918,
+            0,
+            44,
+            3,
+            34
+          ],
+          [
+            142,
+            4,
+            126,
+            22,
+            73,
+            0,
+            610,
+            0,
+            23,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            21,
+            0,
+            916,
+            0,
+            63
+          ],
+          [
+            5,
+            1,
+            9,
+            4,
+            4,
+            2,
+            8,
+            5,
+            962,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            25,
+            0,
+            972
+          ]
+        ],
+        "per_class_accuracy": [
+          0.822,
+          0.969,
+          0.804,
+          0.821,
+          0.747,
+          0.918,
+          0.61,
+          0.916,
+          0.962,
+          0.972
+        ],
+        "two_pixel_right_down_shift": {
+          "loss": 2.071397514343262,
+          "accuracy": 0.4208,
+          "correct": 4208,
+          "total": 10000
+        }
+      }
+    },
+    "mlp_permuted": {
+      "arm": "mlp_permuted",
+      "parameters": 101770,
+      "epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.7021896280574799,
+          "train_accuracy": 0.76988,
+          "validation_loss": 0.4952988649845123,
+          "validation_accuracy": 0.8324,
+          "validation_correct": 8324
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.45736868686676024,
+          "train_accuracy": 0.84092,
+          "validation_loss": 0.4314285699605942,
+          "validation_accuracy": 0.8514,
+          "validation_correct": 8514
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.4155615440559387,
+          "train_accuracy": 0.85624,
+          "validation_loss": 0.4028149946689606,
+          "validation_accuracy": 0.861,
+          "validation_correct": 8610
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.38918474115371704,
+          "train_accuracy": 0.86332,
+          "validation_loss": 0.3909015969276428,
+          "validation_accuracy": 0.8638,
+          "validation_correct": 8638
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.3733951843452454,
+          "train_accuracy": 0.86922,
+          "validation_loss": 0.38551414008140567,
+          "validation_accuracy": 0.8634,
+          "validation_correct": 8634
+        }
+      ],
+      "chosen_epoch": 5,
+      "chosen_validation_loss": 0.38551414008140567,
+      "checkpoint": "results/fashion_mlp_permuted_best.pt",
+      "checkpoint_sha256": "af270af283341579bca70fbbdf966a4258ac8b4eb61fd2b21de2c32c91a3c1e4",
+      "train_seconds": 0.9491743999533355,
+      "peak_cuda_allocated_mib_including_resident_data": 441.087890625,
+      "official_test": {
+        "loss": 0.4074954481124878,
+        "accuracy": 0.8556,
+        "correct": 8556,
+        "total": 10000,
+        "confusion_true_rows_predicted_columns": [
+          [
+            820,
+            5,
+            14,
+            35,
+            4,
+            0,
+            106,
+            0,
+            15,
+            1
+          ],
+          [
+            3,
+            971,
+            0,
+            19,
+            3,
+            0,
+            2,
+            0,
+            2,
+            0
+          ],
+          [
+            14,
+            6,
+            800,
+            8,
+            98,
+            0,
+            66,
+            0,
+            8,
+            0
+          ],
+          [
+            32,
+            26,
+            14,
+            832,
+            52,
+            0,
+            39,
+            0,
+            5,
+            0
+          ],
+          [
+            0,
+            2,
+            148,
+            21,
+            743,
+            1,
+            78,
+            0,
+            7,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            926,
+            0,
+            38,
+            2,
+            33
+          ],
+          [
+            140,
+            4,
+            121,
+            25,
+            74,
+            0,
+            614,
+            0,
+            22,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            23,
+            0,
+            912,
+            0,
+            65
+          ],
+          [
+            1,
+            1,
+            11,
+            5,
+            4,
+            2,
+            7,
+            5,
+            964,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            24,
+            1,
+            974
+          ]
+        ],
+        "per_class_accuracy": [
+          0.82,
+          0.971,
+          0.8,
+          0.832,
+          0.743,
+          0.926,
+          0.614,
+          0.912,
+          0.964,
+          0.974
+        ]
+      }
+    },
+    "cnn_original": {
+      "arm": "cnn_original",
+      "parameters": 105866,
+      "epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 0.7851789788913727,
+          "train_accuracy": 0.7265,
+          "validation_loss": 0.49721436357498167,
+          "validation_accuracy": 0.8214,
+          "validation_correct": 8214
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.4510650623321533,
+          "train_accuracy": 0.83704,
+          "validation_loss": 0.40833674085140226,
+          "validation_accuracy": 0.8537,
+          "validation_correct": 8537
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.38632127226829527,
+          "train_accuracy": 0.86224,
+          "validation_loss": 0.36408285822868347,
+          "validation_accuracy": 0.8711,
+          "validation_correct": 8711
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.3497707159614563,
+          "train_accuracy": 0.87394,
+          "validation_loss": 0.3332112300395966,
+          "validation_accuracy": 0.882,
+          "validation_correct": 8820
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.3293734452342987,
+          "train_accuracy": 0.8837,
+          "validation_loss": 0.3276688980102539,
+          "validation_accuracy": 0.8834,
+          "validation_correct": 8834
+        }
+      ],
+      "chosen_epoch": 5,
+      "chosen_validation_loss": 0.3276688980102539,
+      "checkpoint": "results/fashion_cnn_original_best.pt",
+      "checkpoint_sha256": "cf21ae82864d5f4b5ba9fbbb76da34a3a6908b9509f19aafb5b74a032cfc5c73",
+      "train_seconds": 1.695749600068666,
+      "peak_cuda_allocated_mib_including_resident_data": 482.5322265625,
+      "official_test": {
+        "loss": 0.343289932346344,
+        "accuracy": 0.8779,
+        "correct": 8779,
+        "total": 10000,
+        "confusion_true_rows_predicted_columns": [
+          [
+            858,
+            0,
+            23,
+            26,
+            3,
+            2,
+            73,
+            0,
+            15,
+            0
+          ],
+          [
+            1,
+            977,
+            1,
+            15,
+            2,
+            0,
+            2,
+            0,
+            2,
+            0
+          ],
+          [
+            14,
+            0,
+            868,
+            10,
+            45,
+            0,
+            58,
+            0,
+            5,
+            0
+          ],
+          [
+            22,
+            19,
+            14,
+            878,
+            25,
+            0,
+            38,
+            0,
+            4,
+            0
+          ],
+          [
+            1,
+            4,
+            135,
+            33,
+            723,
+            0,
+            101,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0,
+            958,
+            0,
+            26,
+            1,
+            14
+          ],
+          [
+            145,
+            4,
+            106,
+            23,
+            61,
+            0,
+            645,
+            0,
+            16,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            15,
+            0,
+            929,
+            1,
+            55
+          ],
+          [
+            4,
+            2,
+            4,
+            5,
+            2,
+            1,
+            4,
+            5,
+            973,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            25,
+            1,
+            970
+          ]
+        ],
+        "per_class_accuracy": [
+          0.858,
+          0.977,
+          0.868,
+          0.878,
+          0.723,
+          0.958,
+          0.645,
+          0.929,
+          0.973,
+          0.97
+        ],
+        "two_pixel_right_down_shift": {
+          "loss": 1.12338561296463,
+          "accuracy": 0.5815,
+          "correct": 5815,
+          "total": 10000
+        }
+      }
+    },
+    "cnn_permuted": {
+      "arm": "cnn_permuted",
+      "parameters": 105866,
+      "epochs": [
+        {
+          "epoch": 1,
+          "train_loss": 1.124514972229004,
+          "train_accuracy": 0.62592,
+          "validation_loss": 0.6866778906822204,
+          "validation_accuracy": 0.7489,
+          "validation_correct": 7489
+        },
+        {
+          "epoch": 2,
+          "train_loss": 0.6115112588500976,
+          "train_accuracy": 0.78034,
+          "validation_loss": 0.5477791049957276,
+          "validation_accuracy": 0.8028,
+          "validation_correct": 8028
+        },
+        {
+          "epoch": 3,
+          "train_loss": 0.518379354686737,
+          "train_accuracy": 0.81702,
+          "validation_loss": 0.49354761710166933,
+          "validation_accuracy": 0.8283,
+          "validation_correct": 8283
+        },
+        {
+          "epoch": 4,
+          "train_loss": 0.4662268414115906,
+          "train_accuracy": 0.83448,
+          "validation_loss": 0.44998940629959105,
+          "validation_accuracy": 0.8424,
+          "validation_correct": 8424
+        },
+        {
+          "epoch": 5,
+          "train_loss": 0.43663709436416626,
+          "train_accuracy": 0.84306,
+          "validation_loss": 0.44118727469444274,
+          "validation_accuracy": 0.8449,
+          "validation_correct": 8449
+        }
+      ],
+      "chosen_epoch": 5,
+      "chosen_validation_loss": 0.44118727469444274,
+      "checkpoint": "results/fashion_cnn_permuted_best.pt",
+      "checkpoint_sha256": "50097259ac7f1c4a6c58cbbf4ab629456a8ff3e349f0a0eddb8e4fb25440f572",
+      "train_seconds": 1.591809600009583,
+      "peak_cuda_allocated_mib_including_resident_data": 482.93798828125,
+      "official_test": {
+        "loss": 0.4584463675022125,
+        "accuracy": 0.8386,
+        "correct": 8386,
+        "total": 10000,
+        "confusion_true_rows_predicted_columns": [
+          [
+            810,
+            2,
+            24,
+            35,
+            2,
+            5,
+            106,
+            0,
+            16,
+            0
+          ],
+          [
+            4,
+            959,
+            7,
+            23,
+            2,
+            1,
+            1,
+            0,
+            3,
+            0
+          ],
+          [
+            17,
+            1,
+            854,
+            8,
+            60,
+            1,
+            45,
+            0,
+            13,
+            1
+          ],
+          [
+            34,
+            15,
+            13,
+            866,
+            27,
+            1,
+            38,
+            0,
+            5,
+            1
+          ],
+          [
+            0,
+            1,
+            219,
+            27,
+            656,
+            3,
+            84,
+            0,
+            10,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            0,
+            934,
+            0,
+            31,
+            3,
+            30
+          ],
+          [
+            153,
+            1,
+            175,
+            36,
+            61,
+            5,
+            542,
+            0,
+            27,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            56,
+            0,
+            847,
+            0,
+            97
+          ],
+          [
+            2,
+            1,
+            16,
+            4,
+            2,
+            9,
+            12,
+            2,
+            950,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            12,
+            0,
+            19,
+            1,
+            968
+          ]
+        ],
+        "per_class_accuracy": [
+          0.81,
+          0.959,
+          0.854,
+          0.866,
+          0.656,
+          0.934,
+          0.542,
+          0.847,
+          0.95,
+          0.968
+        ]
+      }
+    }
+  },
+  "test_predictions_csv": "results/fashion_test_predictions.csv",
+  "test_predictions_csv_sha256": "22b69fcdde32de40aa7bb03c966962e3fc37299e1800ccc1ce7883f84e04bda6",
+  "limits": "one seed and five epochs, fixed architectures and optimizer; no natural-scene, detection or image-language evaluation"
+}

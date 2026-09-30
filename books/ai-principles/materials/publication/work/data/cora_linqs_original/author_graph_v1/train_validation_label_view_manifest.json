@@ -1,0 +1,8 @@
+{
+  "scope": "Training loader may read only these 140 train + 500 validation labels; test and unused labels are absent from this JSON",
+  "parent_split_sha256": "405b30f9338009ba8aaa089bd1fcb49ecca06e2b592007fc13c39caa2735fd98",
+  "full_original_labels_file_sha256": "0e6d3f649c9d23c67e069f58866bf19b8c14a9e836484369f5426300ae8f90e8",
+  "visible_label_file_sha256": "7c9576a6a7178e6a4243c02d2d039953336632ab8ca1e84bf7474f65d4f32b31",
+  "train_labels": 140,
+  "validation_labels": 500
+}

@@ -1,0 +1,38 @@
+{
+  "width": 96,
+  "ffn_inner_width": 192,
+  "heads": 4,
+  "rows": [
+    {
+      "positions": 18,
+      "qkv_and_output_linear_multiplications": 663552,
+      "score_and_weighted_value_multiplications": 62208,
+      "two_ffn_linears_multiplications": 663552,
+      "included_total_multiplications": 1389312,
+      "position_pair_fraction_of_included_total": 0.04477611940298507,
+      "one_attention_weight_matrix_entries": 1296,
+      "one_fp32_attention_weight_matrix_mib": 0.00494384765625
+    },
+    {
+      "positions": 128,
+      "qkv_and_output_linear_multiplications": 4718592,
+      "score_and_weighted_value_multiplications": 3145728,
+      "two_ffn_linears_multiplications": 4718592,
+      "included_total_multiplications": 12582912,
+      "position_pair_fraction_of_included_total": 0.25,
+      "one_attention_weight_matrix_entries": 65536,
+      "one_fp32_attention_weight_matrix_mib": 0.25
+    },
+    {
+      "positions": 512,
+      "qkv_and_output_linear_multiplications": 18874368,
+      "score_and_weighted_value_multiplications": 50331648,
+      "two_ffn_linears_multiplications": 18874368,
+      "included_total_multiplications": 88080384,
+      "position_pair_fraction_of_included_total": 0.5714285714285714,
+      "one_attention_weight_matrix_entries": 1048576,
+      "one_fp32_attention_weight_matrix_mib": 4.0
+    }
+  ],
+  "scope": "一层密集自身读取的Q/K/V/输出四次线性映射、两次位置配对矩阵乘及两次逐位置FFN线性层；仅数乘法项，不含偏置、激活、归一化、softmax、词表输出、反向传播或硬件时间。"
+}

@@ -1,0 +1,975 @@
+{
+  "identity": "post-hoc disparity search-range revision after reading first 256-range GT metrics of non-learned OpenCV stereo on all 27 ETH3D two-view TRAIN scene pairs; not ETH3D official hidden test or new NeRF model",
+  "source_extraction_manifest_sha256": "45966798e12fe85074836a1e3f369b2ccc4de8c8800b4b4e240abd667b74873d",
+  "opencv_version": "4.13.0",
+  "parameters": {
+    "block_match": "StereoBM numDisparities=64 blockSize=15",
+    "semi_global": "StereoSGBM numDisparities=64 blockSize=5 P1=200 P2=800 disp12MaxDiff=1 uniquenessRatio=10 speckleWindow=50 speckleRange=2 MODE_SGBM_3WAY"
+  },
+  "evaluation": "only laser-reference finite positive disparity and mask0nocc=255; missing/invalid algorithm disparity counts bad in Bad1/Bad3, coverage reported separately; no GT input to algorithms or parameter selection",
+  "scenes": {
+    "delivery_area_1l": {
+      "camera": {
+        "fx_pixels": 541.764,
+        "baseline_as_calib": 59.9101,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 330771,
+          "predicted_valid_among_evaluable": 172499,
+          "coverage": 0.5215058152014536,
+          "bad_gt_1px_including_missing": 163611,
+          "bad_gt_3px_including_missing": 159795,
+          "bad1_rate_including_missing": 0.49463526125325374,
+          "bad3_rate_including_missing": 0.48309857877504375,
+          "median_abs_px_on_predicted_valid": 0.13905048370361328,
+          "mean_abs_px_on_predicted_valid": 0.3574144244194031,
+          "ground_truth_median_disparity_px": 6.327888488769531,
+          "ground_truth_median_depth_in_baseline_units": 5129.220509179887
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 330771,
+          "predicted_valid_among_evaluable": 301106,
+          "coverage": 0.910315595986347,
+          "bad_gt_1px_including_missing": 67099,
+          "bad_gt_3px_including_missing": 31764,
+          "bad1_rate_including_missing": 0.20285635681483563,
+          "bad3_rate_including_missing": 0.09603018402459708,
+          "median_abs_px_on_predicted_valid": 0.26447176933288574,
+          "mean_abs_px_on_predicted_valid": 0.4654100239276886,
+          "ground_truth_median_disparity_px": 6.327888488769531,
+          "ground_truth_median_depth_in_baseline_units": 5129.220509179887
+        }
+      }
+    },
+    "delivery_area_1s": {
+      "camera": {
+        "fx_pixels": 711.415,
+        "baseline_as_calib": 59.9701,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 203005,
+          "predicted_valid_among_evaluable": 141797,
+          "coverage": 0.6984901849708135,
+          "bad_gt_1px_including_missing": 63042,
+          "bad_gt_3px_including_missing": 61573,
+          "bad1_rate_including_missing": 0.31054407526908206,
+          "bad3_rate_including_missing": 0.3033078003004852,
+          "median_abs_px_on_predicted_valid": 0.12479352951049805,
+          "mean_abs_px_on_predicted_valid": 0.22290068864822388,
+          "ground_truth_median_disparity_px": 9.591935157775879,
+          "ground_truth_median_depth_in_baseline_units": 4447.864585168088
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 203005,
+          "predicted_valid_among_evaluable": 183920,
+          "coverage": 0.905987537252777,
+          "bad_gt_1px_including_missing": 24422,
+          "bad_gt_3px_including_missing": 19314,
+          "bad1_rate_including_missing": 0.12030245560454177,
+          "bad3_rate_including_missing": 0.09514051378044876,
+          "median_abs_px_on_predicted_valid": 0.18928837776184082,
+          "mean_abs_px_on_predicted_valid": 0.3084566593170166,
+          "ground_truth_median_disparity_px": 9.591935157775879,
+          "ground_truth_median_depth_in_baseline_units": 4447.864585168088
+        }
+      }
+    },
+    "delivery_area_2l": {
+      "camera": {
+        "fx_pixels": 541.764,
+        "baseline_as_calib": 59.8896,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 361026,
+          "predicted_valid_among_evaluable": 116198,
+          "coverage": 0.32185493565560375,
+          "bad_gt_1px_including_missing": 254555,
+          "bad_gt_3px_including_missing": 246283,
+          "bad1_rate_including_missing": 0.7050877222139126,
+          "bad3_rate_including_missing": 0.6821752449962053,
+          "median_abs_px_on_predicted_valid": 0.19065499305725098,
+          "mean_abs_px_on_predicted_valid": 0.6538496017456055,
+          "ground_truth_median_disparity_px": 4.472873687744141,
+          "ground_truth_median_depth_in_baseline_units": 7253.955687141495
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 361026,
+          "predicted_valid_among_evaluable": 323678,
+          "coverage": 0.8965503869527403,
+          "bad_gt_1px_including_missing": 115174,
+          "bad_gt_3px_including_missing": 43276,
+          "bad1_rate_including_missing": 0.31901857483948526,
+          "bad3_rate_including_missing": 0.1198694830843208,
+          "median_abs_px_on_predicted_valid": 0.45626938343048096,
+          "mean_abs_px_on_predicted_valid": 0.7216678261756897,
+          "ground_truth_median_disparity_px": 4.472873687744141,
+          "ground_truth_median_depth_in_baseline_units": 7253.955687141495
+        }
+      }
+    },
+    "delivery_area_2s": {
+      "camera": {
+        "fx_pixels": 711.415,
+        "baseline_as_calib": 59.9701,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 223748,
+          "predicted_valid_among_evaluable": 104853,
+          "coverage": 0.46862094856713804,
+          "bad_gt_1px_including_missing": 125787,
+          "bad_gt_3px_including_missing": 120430,
+          "bad1_rate_including_missing": 0.5621815613994315,
+          "bad3_rate_including_missing": 0.5382394479503727,
+          "median_abs_px_on_predicted_valid": 0.1599445343017578,
+          "mean_abs_px_on_predicted_valid": 0.541767418384552,
+          "ground_truth_median_disparity_px": 6.417292594909668,
+          "ground_truth_median_depth_in_baseline_units": 6648.2286822173155
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 223748,
+          "predicted_valid_among_evaluable": 183816,
+          "coverage": 0.8215313656434918,
+          "bad_gt_1px_including_missing": 62886,
+          "bad_gt_3px_including_missing": 45989,
+          "bad1_rate_including_missing": 0.2810572608470243,
+          "bad3_rate_including_missing": 0.2055392673900996,
+          "median_abs_px_on_predicted_valid": 0.28290343284606934,
+          "mean_abs_px_on_predicted_valid": 1.668845295906067,
+          "ground_truth_median_disparity_px": 6.417292594909668,
+          "ground_truth_median_depth_in_baseline_units": 6648.2286822173155
+        }
+      }
+    },
+    "delivery_area_3l": {
+      "camera": {
+        "fx_pixels": 541.764,
+        "baseline_as_calib": 59.8897,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 399215,
+          "predicted_valid_among_evaluable": 160862,
+          "coverage": 0.40294578109539975,
+          "bad_gt_1px_including_missing": 244161,
+          "bad_gt_3px_including_missing": 240032,
+          "bad1_rate_including_missing": 0.6116027704369825,
+          "bad3_rate_including_missing": 0.6012599726964167,
+          "median_abs_px_on_predicted_valid": 0.1387888789176941,
+          "mean_abs_px_on_predicted_valid": 0.45087549090385437,
+          "ground_truth_median_disparity_px": 4.372209548950195,
+          "ground_truth_median_depth_in_baseline_units": 7420.980871923345
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 399215,
+          "predicted_valid_among_evaluable": 365807,
+          "coverage": 0.9163157696980324,
+          "bad_gt_1px_including_missing": 100945,
+          "bad_gt_3px_including_missing": 41187,
+          "bad1_rate_including_missing": 0.2528587352679634,
+          "bad3_rate_including_missing": 0.10316997106822139,
+          "median_abs_px_on_predicted_valid": 0.34787440299987793,
+          "mean_abs_px_on_predicted_valid": 0.623349130153656,
+          "ground_truth_median_disparity_px": 4.372209548950195,
+          "ground_truth_median_depth_in_baseline_units": 7420.980871923345
+        }
+      }
+    },
+    "delivery_area_3s": {
+      "camera": {
+        "fx_pixels": 711.415,
+        "baseline_as_calib": 59.9496,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 263101,
+          "predicted_valid_among_evaluable": 112189,
+          "coverage": 0.4264103899263021,
+          "bad_gt_1px_including_missing": 156433,
+          "bad_gt_3px_including_missing": 154197,
+          "bad1_rate_including_missing": 0.594573946887317,
+          "bad3_rate_including_missing": 0.58607530948191,
+          "median_abs_px_on_predicted_valid": 0.1506805419921875,
+          "mean_abs_px_on_predicted_valid": 1.2165650129318237,
+          "ground_truth_median_disparity_px": 3.6183462142944336,
+          "ground_truth_median_depth_in_baseline_units": 11786.888859753964
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 263101,
+          "predicted_valid_among_evaluable": 219637,
+          "coverage": 0.8348010839943596,
+          "bad_gt_1px_including_missing": 71102,
+          "bad_gt_3px_including_missing": 52295,
+          "bad1_rate_including_missing": 0.2702460271910787,
+          "bad3_rate_including_missing": 0.19876397277091307,
+          "median_abs_px_on_predicted_valid": 0.3281869888305664,
+          "mean_abs_px_on_predicted_valid": 2.144207000732422,
+          "ground_truth_median_disparity_px": 3.6183462142944336,
+          "ground_truth_median_depth_in_baseline_units": 11786.888859753964
+        }
+      }
+    },
+    "electro_1l": {
+      "camera": {
+        "fx_pixels": 543.757,
+        "baseline_as_calib": 59.8102,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 369772,
+          "predicted_valid_among_evaluable": 231897,
+          "coverage": 0.6271350994666984,
+          "bad_gt_1px_including_missing": 144214,
+          "bad_gt_3px_including_missing": 140912,
+          "bad1_rate_including_missing": 0.39000789675800224,
+          "bad3_rate_including_missing": 0.3810780697294549,
+          "median_abs_px_on_predicted_valid": 0.22939395904541016,
+          "mean_abs_px_on_predicted_valid": 0.4722730815410614,
+          "ground_truth_median_disparity_px": 8.246146202087402,
+          "ground_truth_median_depth_in_baseline_units": 3943.92897292646
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 369772,
+          "predicted_valid_among_evaluable": 328693,
+          "coverage": 0.8889072185022122,
+          "bad_gt_1px_including_missing": 64232,
+          "bad_gt_3px_including_missing": 51447,
+          "bad1_rate_including_missing": 0.17370704109559404,
+          "bad3_rate_including_missing": 0.13913168114405633,
+          "median_abs_px_on_predicted_valid": 0.28977203369140625,
+          "mean_abs_px_on_predicted_valid": 0.5520017743110657,
+          "ground_truth_median_disparity_px": 8.246146202087402,
+          "ground_truth_median_depth_in_baseline_units": 3943.92897292646
+        }
+      }
+    },
+    "electro_1s": {
+      "camera": {
+        "fx_pixels": 713.679,
+        "baseline_as_calib": 60.1,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 224717,
+          "predicted_valid_among_evaluable": 119602,
+          "coverage": 0.5322338763867442,
+          "bad_gt_1px_including_missing": 107490,
+          "bad_gt_3px_including_missing": 106762,
+          "bad1_rate_including_missing": 0.47833497243199224,
+          "bad3_rate_including_missing": 0.475095342141449,
+          "median_abs_px_on_predicted_valid": 0.1185464859008789,
+          "mean_abs_px_on_predicted_valid": 0.33988267183303833,
+          "ground_truth_median_disparity_px": 10.8676118850708,
+          "ground_truth_median_depth_in_baseline_units": 3946.783189683312
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 224717,
+          "predicted_valid_among_evaluable": 197155,
+          "coverage": 0.8773479532033625,
+          "bad_gt_1px_including_missing": 40494,
+          "bad_gt_3px_including_missing": 30991,
+          "bad1_rate_including_missing": 0.18019998486985853,
+          "bad3_rate_including_missing": 0.13791123947008904,
+          "median_abs_px_on_predicted_valid": 0.1889514923095703,
+          "mean_abs_px_on_predicted_valid": 0.3598368465900421,
+          "ground_truth_median_disparity_px": 10.8676118850708,
+          "ground_truth_median_depth_in_baseline_units": 3946.783189683312
+        }
+      }
+    },
+    "electro_2l": {
+      "camera": {
+        "fx_pixels": 543.757,
+        "baseline_as_calib": 59.8202,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 204227,
+          "predicted_valid_among_evaluable": 181422,
+          "coverage": 0.8883350389517547,
+          "bad_gt_1px_including_missing": 26126,
+          "bad_gt_3px_including_missing": 24573,
+          "bad1_rate_including_missing": 0.12792627811210075,
+          "bad3_rate_including_missing": 0.12032199464321564,
+          "median_abs_px_on_predicted_valid": 0.27723002433776855,
+          "mean_abs_px_on_predicted_valid": 0.343367338180542,
+          "ground_truth_median_disparity_px": 6.681049346923828,
+          "ground_truth_median_depth_in_baseline_units": 4868.644250678493
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 204227,
+          "predicted_valid_among_evaluable": 197927,
+          "coverage": 0.9691519730495968,
+          "bad_gt_1px_including_missing": 12476,
+          "bad_gt_3px_including_missing": 8265,
+          "bad1_rate_including_missing": 0.06108888638622709,
+          "bad3_rate_including_missing": 0.04046967345160043,
+          "median_abs_px_on_predicted_valid": 0.20798397064208984,
+          "mean_abs_px_on_predicted_valid": 0.32899507880210876,
+          "ground_truth_median_disparity_px": 6.681049346923828,
+          "ground_truth_median_depth_in_baseline_units": 4868.644250678493
+        }
+      }
+    },
+    "electro_2s": {
+      "camera": {
+        "fx_pixels": 713.679,
+        "baseline_as_calib": 60.1004,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 95712,
+          "predicted_valid_among_evaluable": 53583,
+          "coverage": 0.5598357572718154,
+          "bad_gt_1px_including_missing": 44179,
+          "bad_gt_3px_including_missing": 43688,
+          "bad1_rate_including_missing": 0.4615826646606486,
+          "bad3_rate_including_missing": 0.456452691407556,
+          "median_abs_px_on_predicted_valid": 0.15839862823486328,
+          "mean_abs_px_on_predicted_valid": 0.4716048836708069,
+          "ground_truth_median_disparity_px": 7.929649829864502,
+          "ground_truth_median_depth_in_baseline_units": 5409.115697651723
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 95712,
+          "predicted_valid_among_evaluable": 70790,
+          "coverage": 0.7396146773654296,
+          "bad_gt_1px_including_missing": 28282,
+          "bad_gt_3px_including_missing": 26380,
+          "bad1_rate_including_missing": 0.2954906385824139,
+          "bad3_rate_including_missing": 0.27561852223336675,
+          "median_abs_px_on_predicted_valid": 0.149918794631958,
+          "mean_abs_px_on_predicted_valid": 0.3639668822288513,
+          "ground_truth_median_disparity_px": 7.929649829864502,
+          "ground_truth_median_depth_in_baseline_units": 5409.115697651723
+        }
+      }
+    },
+    "electro_3l": {
+      "camera": {
+        "fx_pixels": 543.757,
+        "baseline_as_calib": 59.8295,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 266377,
+          "predicted_valid_among_evaluable": 92793,
+          "coverage": 0.34835214752024385,
+          "bad_gt_1px_including_missing": 180090,
+          "bad_gt_3px_including_missing": 176013,
+          "bad1_rate_including_missing": 0.6760718830829989,
+          "bad3_rate_including_missing": 0.660766507618901,
+          "median_abs_px_on_predicted_valid": 0.24616622924804688,
+          "mean_abs_px_on_predicted_valid": 0.7018428444862366,
+          "ground_truth_median_disparity_px": 9.747438430786133,
+          "ground_truth_median_depth_in_baseline_units": 3337.565008746224
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 266377,
+          "predicted_valid_among_evaluable": 247032,
+          "coverage": 0.9273773636612771,
+          "bad_gt_1px_including_missing": 43894,
+          "bad_gt_3px_including_missing": 23223,
+          "bad1_rate_including_missing": 0.16478149389774643,
+          "bad3_rate_including_missing": 0.08718095030727127,
+          "median_abs_px_on_predicted_valid": 0.2681232690811157,
+          "mean_abs_px_on_predicted_valid": 0.47295257449150085,
+          "ground_truth_median_disparity_px": 9.747438430786133,
+          "ground_truth_median_depth_in_baseline_units": 3337.565008746224
+        }
+      }
+    },
+    "electro_3s": {
+      "camera": {
+        "fx_pixels": 713.679,
+        "baseline_as_calib": 60.0992,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 208437,
+          "predicted_valid_among_evaluable": 86287,
+          "coverage": 0.4139716077279946,
+          "bad_gt_1px_including_missing": 125117,
+          "bad_gt_3px_including_missing": 123930,
+          "bad1_rate_including_missing": 0.6002629091763938,
+          "bad3_rate_including_missing": 0.5945681428920969,
+          "median_abs_px_on_predicted_valid": 0.1150503158569336,
+          "mean_abs_px_on_predicted_valid": 0.700112521648407,
+          "ground_truth_median_disparity_px": 13.078609466552734,
+          "ground_truth_median_depth_in_baseline_units": 3279.518137344105
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 208437,
+          "predicted_valid_among_evaluable": 141526,
+          "coverage": 0.6789869361005963,
+          "bad_gt_1px_including_missing": 121854,
+          "bad_gt_3px_including_missing": 117418,
+          "bad1_rate_including_missing": 0.5846082989104622,
+          "bad3_rate_including_missing": 0.5633260889381444,
+          "median_abs_px_on_predicted_valid": 0.36562681198120117,
+          "mean_abs_px_on_predicted_valid": 16.703346252441406,
+          "ground_truth_median_disparity_px": 13.078609466552734,
+          "ground_truth_median_depth_in_baseline_units": 3279.518137344105
+        }
+      }
+    },
+    "facade_1s": {
+      "camera": {
+        "fx_pixels": 713.178,
+        "baseline_as_calib": 57.8202,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 196669,
+          "predicted_valid_among_evaluable": 161004,
+          "coverage": 0.8186546939273602,
+          "bad_gt_1px_including_missing": 36273,
+          "bad_gt_3px_including_missing": 35863,
+          "bad1_rate_including_missing": 0.1844367948176886,
+          "bad3_rate_including_missing": 0.18235207378895504,
+          "median_abs_px_on_predicted_valid": 0.09033334255218506,
+          "mean_abs_px_on_predicted_valid": 0.1398405134677887,
+          "ground_truth_median_disparity_px": 2.8263580799102783,
+          "ground_truth_median_depth_in_baseline_units": 14589.83378245867
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 196669,
+          "predicted_valid_among_evaluable": 178093,
+          "coverage": 0.905546883342062,
+          "bad_gt_1px_including_missing": 18753,
+          "bad_gt_3px_including_missing": 18630,
+          "bad1_rate_including_missing": 0.09535310598009854,
+          "bad3_rate_including_missing": 0.09472768967147847,
+          "median_abs_px_on_predicted_valid": 0.21138310432434082,
+          "mean_abs_px_on_predicted_valid": 0.22428415715694427,
+          "ground_truth_median_disparity_px": 2.8263580799102783,
+          "ground_truth_median_depth_in_baseline_units": 14589.83378245867
+        }
+      }
+    },
+    "forest_1s": {
+      "camera": {
+        "fx_pixels": 712.53,
+        "baseline_as_calib": 59.6101,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 122711,
+          "predicted_valid_among_evaluable": 104419,
+          "coverage": 0.8509343090676468,
+          "bad_gt_1px_including_missing": 21070,
+          "bad_gt_3px_including_missing": 18849,
+          "bad1_rate_including_missing": 0.17170424819290855,
+          "bad3_rate_including_missing": 0.15360481130461,
+          "median_abs_px_on_predicted_valid": 0.10050487518310547,
+          "mean_abs_px_on_predicted_valid": 0.21292565762996674,
+          "ground_truth_median_disparity_px": 12.898070335388184,
+          "ground_truth_median_depth_in_baseline_units": 3293.049537531592
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 122711,
+          "predicted_valid_among_evaluable": 113723,
+          "coverage": 0.9267547326645533,
+          "bad_gt_1px_including_missing": 14013,
+          "bad_gt_3px_including_missing": 10084,
+          "bad1_rate_including_missing": 0.11419514142986366,
+          "bad3_rate_including_missing": 0.08217682196380112,
+          "median_abs_px_on_predicted_valid": 0.16384601593017578,
+          "mean_abs_px_on_predicted_valid": 0.31340646743774414,
+          "ground_truth_median_disparity_px": 12.898070335388184,
+          "ground_truth_median_depth_in_baseline_units": 3293.049537531592
+        }
+      }
+    },
+    "forest_2s": {
+      "camera": {
+        "fx_pixels": 712.53,
+        "baseline_as_calib": 59.61,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 119039,
+          "predicted_valid_among_evaluable": 97704,
+          "coverage": 0.8207730239669352,
+          "bad_gt_1px_including_missing": 22431,
+          "bad_gt_3px_including_missing": 21555,
+          "bad1_rate_including_missing": 0.18843404262468602,
+          "bad3_rate_including_missing": 0.18107510983795227,
+          "median_abs_px_on_predicted_valid": 0.104461669921875,
+          "mean_abs_px_on_predicted_valid": 0.17150144279003143,
+          "ground_truth_median_disparity_px": 13.779433250427246,
+          "ground_truth_median_depth_in_baseline_units": 3082.413661583872
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 119039,
+          "predicted_valid_among_evaluable": 105230,
+          "coverage": 0.8839960013104948,
+          "bad_gt_1px_including_missing": 15623,
+          "bad_gt_3px_including_missing": 14617,
+          "bad1_rate_including_missing": 0.13124270197162274,
+          "bad3_rate_including_missing": 0.12279169011836456,
+          "median_abs_px_on_predicted_valid": 0.1656208038330078,
+          "mean_abs_px_on_predicted_valid": 0.30161285400390625,
+          "ground_truth_median_disparity_px": 13.779433250427246,
+          "ground_truth_median_depth_in_baseline_units": 3082.413661583872
+        }
+      }
+    },
+    "playground_1l": {
+      "camera": {
+        "fx_pixels": 542.019,
+        "baseline_as_calib": 59.5549,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 216801,
+          "predicted_valid_among_evaluable": 177505,
+          "coverage": 0.818746223495279,
+          "bad_gt_1px_including_missing": 43153,
+          "bad_gt_3px_including_missing": 41872,
+          "bad1_rate_including_missing": 0.19904428485108464,
+          "bad3_rate_including_missing": 0.1931356405182633,
+          "median_abs_px_on_predicted_valid": 0.19413185119628906,
+          "mean_abs_px_on_predicted_valid": 0.4229060411453247,
+          "ground_truth_median_disparity_px": 9.206304550170898,
+          "ground_truth_median_depth_in_baseline_units": 3506.2806327106337
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 216801,
+          "predicted_valid_among_evaluable": 194386,
+          "coverage": 0.8966102554877514,
+          "bad_gt_1px_including_missing": 27006,
+          "bad_gt_3px_including_missing": 23282,
+          "bad1_rate_including_missing": 0.12456584609849586,
+          "bad3_rate_including_missing": 0.10738880355717917,
+          "median_abs_px_on_predicted_valid": 0.2688727378845215,
+          "mean_abs_px_on_predicted_valid": 0.3598324954509735,
+          "ground_truth_median_disparity_px": 9.206304550170898,
+          "ground_truth_median_depth_in_baseline_units": 3506.2806327106337
+        }
+      }
+    },
+    "playground_1s": {
+      "camera": {
+        "fx_pixels": 712.295,
+        "baseline_as_calib": 59.9799,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 98495,
+          "predicted_valid_among_evaluable": 87290,
+          "coverage": 0.8862378800954364,
+          "bad_gt_1px_including_missing": 11963,
+          "bad_gt_3px_including_missing": 11609,
+          "bad1_rate_including_missing": 0.12145794202751409,
+          "bad3_rate_including_missing": 0.11786385095690137,
+          "median_abs_px_on_predicted_valid": 0.10403060913085938,
+          "mean_abs_px_on_predicted_valid": 0.19412675499916077,
+          "ground_truth_median_disparity_px": 16.692148208618164,
+          "ground_truth_median_depth_in_baseline_units": 2559.489787446405
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 98495,
+          "predicted_valid_among_evaluable": 96259,
+          "coverage": 0.9772983400172598,
+          "bad_gt_1px_including_missing": 2831,
+          "bad_gt_3px_including_missing": 2411,
+          "bad1_rate_including_missing": 0.028742575765267273,
+          "bad3_rate_including_missing": 0.024478399918777604,
+          "median_abs_px_on_predicted_valid": 0.18036651611328125,
+          "mean_abs_px_on_predicted_valid": 0.23946933448314667,
+          "ground_truth_median_disparity_px": 16.692148208618164,
+          "ground_truth_median_depth_in_baseline_units": 2559.489787446405
+        }
+      }
+    },
+    "playground_2l": {
+      "camera": {
+        "fx_pixels": 542.019,
+        "baseline_as_calib": 59.5589,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 230422,
+          "predicted_valid_among_evaluable": 131969,
+          "coverage": 0.5727274305404866,
+          "bad_gt_1px_including_missing": 118612,
+          "bad_gt_3px_including_missing": 116983,
+          "bad1_rate_including_missing": 0.5147598753591237,
+          "bad3_rate_including_missing": 0.5076902379113105,
+          "median_abs_px_on_predicted_valid": 0.15894699096679688,
+          "mean_abs_px_on_predicted_valid": 2.9424633979797363,
+          "ground_truth_median_disparity_px": 9.928457260131836,
+          "ground_truth_median_depth_in_baseline_units": 3251.467430770851
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 230422,
+          "predicted_valid_among_evaluable": 162460,
+          "coverage": 0.7050542048936299,
+          "bad_gt_1px_including_missing": 98704,
+          "bad_gt_3px_including_missing": 94539,
+          "bad1_rate_including_missing": 0.4283618751681697,
+          "bad3_rate_including_missing": 0.41028634418588505,
+          "median_abs_px_on_predicted_valid": 0.2551760673522949,
+          "mean_abs_px_on_predicted_valid": 3.4465136528015137,
+          "ground_truth_median_disparity_px": 9.928457260131836,
+          "ground_truth_median_depth_in_baseline_units": 3251.467430770851
+        }
+      }
+    },
+    "playground_2s": {
+      "camera": {
+        "fx_pixels": 712.295,
+        "baseline_as_calib": 59.9729,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 125915,
+          "predicted_valid_among_evaluable": 98924,
+          "coverage": 0.7856411070960568,
+          "bad_gt_1px_including_missing": 28867,
+          "bad_gt_3px_including_missing": 28256,
+          "bad1_rate_including_missing": 0.229257832664893,
+          "bad3_rate_including_missing": 0.2244053528173768,
+          "median_abs_px_on_predicted_valid": 0.0938425064086914,
+          "mean_abs_px_on_predicted_valid": 0.3600643575191498,
+          "ground_truth_median_disparity_px": 12.414764404296875,
+          "ground_truth_median_depth_in_baseline_units": 3440.93495569797
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 125915,
+          "predicted_valid_among_evaluable": 114792,
+          "coverage": 0.9116626295516816,
+          "bad_gt_1px_including_missing": 14099,
+          "bad_gt_3px_including_missing": 11746,
+          "bad1_rate_including_missing": 0.11197236230790612,
+          "bad3_rate_including_missing": 0.09328515268236509,
+          "median_abs_px_on_predicted_valid": 0.16184282302856445,
+          "mean_abs_px_on_predicted_valid": 0.2849048674106598,
+          "ground_truth_median_disparity_px": 12.414764404296875,
+          "ground_truth_median_depth_in_baseline_units": 3440.93495569797
+        }
+      }
+    },
+    "playground_3l": {
+      "camera": {
+        "fx_pixels": 542.019,
+        "baseline_as_calib": 59.5499,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 171079,
+          "predicted_valid_among_evaluable": 146994,
+          "coverage": 0.8592170868429205,
+          "bad_gt_1px_including_missing": 32363,
+          "bad_gt_3px_including_missing": 29477,
+          "bad1_rate_including_missing": 0.18916991565300242,
+          "bad3_rate_including_missing": 0.1723005161358203,
+          "median_abs_px_on_predicted_valid": 0.20138192176818848,
+          "mean_abs_px_on_predicted_valid": 0.5656769275665283,
+          "ground_truth_median_disparity_px": 16.818801879882812,
+          "ground_truth_median_depth_in_baseline_units": 1919.1127571760717
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 171079,
+          "predicted_valid_among_evaluable": 163347,
+          "coverage": 0.9548045055208413,
+          "bad_gt_1px_including_missing": 14702,
+          "bad_gt_3px_including_missing": 12262,
+          "bad1_rate_including_missing": 0.08593690634151474,
+          "bad3_rate_including_missing": 0.07167448956330116,
+          "median_abs_px_on_predicted_valid": 0.2144641876220703,
+          "mean_abs_px_on_predicted_valid": 0.5544471740722656,
+          "ground_truth_median_disparity_px": 16.818801879882812,
+          "ground_truth_median_depth_in_baseline_units": 1919.1127571760717
+        }
+      }
+    },
+    "playground_3s": {
+      "camera": {
+        "fx_pixels": 712.295,
+        "baseline_as_calib": 59.9804,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 87366,
+          "predicted_valid_among_evaluable": 77430,
+          "coverage": 0.8862715472838404,
+          "bad_gt_1px_including_missing": 12440,
+          "bad_gt_3px_including_missing": 11714,
+          "bad1_rate_including_missing": 0.14238948790147196,
+          "bad3_rate_including_missing": 0.13407961907378158,
+          "median_abs_px_on_predicted_valid": 0.11657023429870605,
+          "mean_abs_px_on_predicted_valid": 0.4012892246246338,
+          "ground_truth_median_disparity_px": 18.0780029296875,
+          "ground_truth_median_depth_in_baseline_units": 2363.2995819182192
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 87366,
+          "predicted_valid_among_evaluable": 84414,
+          "coverage": 0.9662111118741845,
+          "bad_gt_1px_including_missing": 4956,
+          "bad_gt_3px_including_missing": 3968,
+          "bad1_rate_including_missing": 0.05672687315431633,
+          "bad3_rate_including_missing": 0.04541812604445666,
+          "median_abs_px_on_predicted_valid": 0.17521142959594727,
+          "mean_abs_px_on_predicted_valid": 0.33437851071357727,
+          "ground_truth_median_disparity_px": 18.0780029296875,
+          "ground_truth_median_depth_in_baseline_units": 2363.2995819182192
+        }
+      }
+    },
+    "terrace_1s": {
+      "camera": {
+        "fx_pixels": 711.499,
+        "baseline_as_calib": 59.9391,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 132547,
+          "predicted_valid_among_evaluable": 102917,
+          "coverage": 0.7764566531117264,
+          "bad_gt_1px_including_missing": 31278,
+          "bad_gt_3px_including_missing": 30328,
+          "bad1_rate_including_missing": 0.23597667242563014,
+          "bad3_rate_including_missing": 0.228809403456887,
+          "median_abs_px_on_predicted_valid": 0.09076166152954102,
+          "mean_abs_px_on_predicted_valid": 0.1887381374835968,
+          "ground_truth_median_disparity_px": 2.2773749828338623,
+          "ground_truth_median_depth_in_baseline_units": 18726.21330802207
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 132547,
+          "predicted_valid_among_evaluable": 112872,
+          "coverage": 0.8515620874105034,
+          "bad_gt_1px_including_missing": 28795,
+          "bad_gt_3px_including_missing": 26275,
+          "bad1_rate_including_missing": 0.21724369468943092,
+          "bad3_rate_including_missing": 0.19823157068813327,
+          "median_abs_px_on_predicted_valid": 0.21525263786315918,
+          "mean_abs_px_on_predicted_valid": 2.7677266597747803,
+          "ground_truth_median_disparity_px": 2.2773749828338623,
+          "ground_truth_median_depth_in_baseline_units": 18726.21330802207
+        }
+      }
+    },
+    "terrace_2s": {
+      "camera": {
+        "fx_pixels": 711.499,
+        "baseline_as_calib": 59.9432,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 160672,
+          "predicted_valid_among_evaluable": 121347,
+          "coverage": 0.7552467138020315,
+          "bad_gt_1px_including_missing": 43734,
+          "bad_gt_3px_including_missing": 40210,
+          "bad1_rate_including_missing": 0.2721942840071699,
+          "bad3_rate_including_missing": 0.25026140211113324,
+          "median_abs_px_on_predicted_valid": 0.1068277359008789,
+          "mean_abs_px_on_predicted_valid": 0.24299605190753937,
+          "ground_truth_median_disparity_px": 10.632137298583984,
+          "ground_truth_median_depth_in_baseline_units": 4011.3784894897562
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 160672,
+          "predicted_valid_among_evaluable": 141631,
+          "coverage": 0.8814914857598088,
+          "bad_gt_1px_including_missing": 27428,
+          "bad_gt_3px_including_missing": 20640,
+          "bad1_rate_including_missing": 0.17070802628958376,
+          "bad3_rate_including_missing": 0.12846046604262099,
+          "median_abs_px_on_predicted_valid": 0.2141561508178711,
+          "mean_abs_px_on_predicted_valid": 0.4500291049480438,
+          "ground_truth_median_disparity_px": 10.632137298583984,
+          "ground_truth_median_depth_in_baseline_units": 4011.3784894897562
+        }
+      }
+    },
+    "terrains_1l": {
+      "camera": {
+        "fx_pixels": 529.673,
+        "baseline_as_calib": 60.3801,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 392592,
+          "predicted_valid_among_evaluable": 186943,
+          "coverage": 0.47617628479439217,
+          "bad_gt_1px_including_missing": 213799,
+          "bad_gt_3px_including_missing": 207471,
+          "bad1_rate_including_missing": 0.544583180502914,
+          "bad3_rate_including_missing": 0.5284646656070424,
+          "median_abs_px_on_predicted_valid": 0.15921592712402344,
+          "mean_abs_px_on_predicted_valid": 0.38880738615989685,
+          "ground_truth_median_disparity_px": 28.49188232421875,
+          "ground_truth_median_depth_in_baseline_units": 1122.4849360028052
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 392592,
+          "predicted_valid_among_evaluable": 321769,
+          "coverage": 0.819601520153238,
+          "bad_gt_1px_including_missing": 142926,
+          "bad_gt_3px_including_missing": 98368,
+          "bad1_rate_including_missing": 0.3640573419733464,
+          "bad3_rate_including_missing": 0.25056037820434446,
+          "median_abs_px_on_predicted_valid": 0.3516674041748047,
+          "mean_abs_px_on_predicted_valid": 2.162365674972534,
+          "ground_truth_median_disparity_px": 28.49188232421875,
+          "ground_truth_median_depth_in_baseline_units": 1122.4849360028052
+        }
+      }
+    },
+    "terrains_1s": {
+      "camera": {
+        "fx_pixels": 693.622,
+        "baseline_as_calib": 60.0796,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 255350,
+          "predicted_valid_among_evaluable": 150790,
+          "coverage": 0.5905228118269042,
+          "bad_gt_1px_including_missing": 109757,
+          "bad_gt_3px_including_missing": 105471,
+          "bad1_rate_including_missing": 0.4298296455844919,
+          "bad3_rate_including_missing": 0.4130448404151165,
+          "median_abs_px_on_predicted_valid": 0.11734390258789062,
+          "mean_abs_px_on_predicted_valid": 0.26422467827796936,
+          "ground_truth_median_disparity_px": 37.15932846069336,
+          "ground_truth_median_depth_in_baseline_units": 1121.4554739677715
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 255350,
+          "predicted_valid_among_evaluable": 221876,
+          "coverage": 0.868909340121402,
+          "bad_gt_1px_including_missing": 71630,
+          "bad_gt_3px_including_missing": 47319,
+          "bad1_rate_including_missing": 0.2805169375367143,
+          "bad3_rate_including_missing": 0.1853103583317016,
+          "median_abs_px_on_predicted_valid": 0.2495098114013672,
+          "mean_abs_px_on_predicted_valid": 1.5091512203216553,
+          "ground_truth_median_disparity_px": 37.15932846069336,
+          "ground_truth_median_depth_in_baseline_units": 1121.4554739677715
+        }
+      }
+    },
+    "terrains_2l": {
+      "camera": {
+        "fx_pixels": 529.673,
+        "baseline_as_calib": 60.381,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 262738,
+          "predicted_valid_among_evaluable": 57014,
+          "coverage": 0.21699944431334636,
+          "bad_gt_1px_including_missing": 210683,
+          "bad_gt_3px_including_missing": 207858,
+          "bad1_rate_including_missing": 0.8018748715450372,
+          "bad3_rate_including_missing": 0.7911227154046997,
+          "median_abs_px_on_predicted_valid": 0.20391273498535156,
+          "mean_abs_px_on_predicted_valid": 0.7486922144889832,
+          "ground_truth_median_disparity_px": 31.224868774414062,
+          "ground_truth_median_depth_in_baseline_units": 1024.2536059080492
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 262738,
+          "predicted_valid_among_evaluable": 208569,
+          "coverage": 0.7938288332863918,
+          "bad_gt_1px_including_missing": 112511,
+          "bad_gt_3px_including_missing": 75202,
+          "bad1_rate_including_missing": 0.4282250759311558,
+          "bad3_rate_including_missing": 0.28622429949226985,
+          "median_abs_px_on_predicted_valid": 0.4570484161376953,
+          "mean_abs_px_on_predicted_valid": 2.7135977745056152,
+          "ground_truth_median_disparity_px": 31.224868774414062,
+          "ground_truth_median_depth_in_baseline_units": 1024.2536059080492
+        }
+      }
+    },
+    "terrains_2s": {
+      "camera": {
+        "fx_pixels": 693.622,
+        "baseline_as_calib": 60.082,
+        "doffs_pixels": 0.0
+      },
+      "methods": {
+        "block_match": {
+          "evaluable_gt_pixels": 191603,
+          "predicted_valid_among_evaluable": 38736,
+          "coverage": 0.2021680245090108,
+          "bad_gt_1px_including_missing": 156444,
+          "bad_gt_3px_including_missing": 154577,
+          "bad1_rate_including_missing": 0.8165007854783067,
+          "bad3_rate_including_missing": 0.8067566791751695,
+          "median_abs_px_on_predicted_valid": 0.17955970764160156,
+          "mean_abs_px_on_predicted_valid": 0.8324740529060364,
+          "ground_truth_median_disparity_px": 39.839263916015625,
+          "ground_truth_median_depth_in_baseline_units": 1046.0584084046473
+        },
+        "semi_global": {
+          "evaluable_gt_pixels": 191603,
+          "predicted_valid_among_evaluable": 159973,
+          "coverage": 0.8349190774674718,
+          "bad_gt_1px_including_missing": 79171,
+          "bad_gt_3px_including_missing": 55916,
+          "bad1_rate_including_missing": 0.41320334232762534,
+          "bad3_rate_including_missing": 0.29183259134773465,
+          "median_abs_px_on_predicted_valid": 0.4057731628417969,
+          "mean_abs_px_on_predicted_valid": 3.7144253253936768,
+          "ground_truth_median_disparity_px": 39.839263916015625,
+          "ground_truth_median_depth_in_baseline_units": 1046.0584084046473
+        }
+      }
+    }
+  },
+  "example_figure_sha256": "4c6b43ca41679e0201293426269e464d88e4e08a8a12fb034bc049d3074400e5",
+  "example_scene": "delivery_area_1s",
+  "aggregate": {
+    "block_match": {
+      "gt_pixels": 5914107,
+      "coverage": 0.5605187731638944,
+      "bad1_rate_including_missing": 0.46121451640966254,
+      "bad3_rate_including_missing": 0.44981955855719213,
+      "mean_of_scene_bad1_rates": 0.40942317797474215
+    },
+    "semi_global": {
+      "gt_pixels": 5914107,
+      "coverage": 0.8691897187521295,
+      "bad1_rate_including_missing": 0.2411197497779462,
+      "bad3_rate_including_missing": 0.17023838087474574,
+      "mean_of_scene_bad1_rates": 0.22063953930638308
+    }
+  }
+}

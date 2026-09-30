@@ -1,0 +1,43 @@
+{
+  "identity": "VQA v2 official val2014 answers overlapping author-internal 500 test images; binary representative yes/no answers only, not official VQA scoring",
+  "test_images": 500,
+  "question_only_majority_accuracy": 0.5268490374873354,
+  "models": {
+    "image_question": {
+      "selected_epoch": 2,
+      "checkpoint_sha256": "cb3d326af0df2f22b97ec7ee3d1f729dda07482c524e56906d2e72a97d1dc367",
+      "true_images": {
+        "questions": 987,
+        "yes_fraction": 0.5268490374873354,
+        "accuracy": 0.513677811550152,
+        "binary_nll": 0.6935665011405945,
+        "same_question_opposite_pairs": 21,
+        "both_correct_pairs": 4,
+        "both_correct_fraction": 0.19047619047619047
+      },
+      "cyclically_wrong_images": {
+        "questions": 987,
+        "yes_fraction": 0.5268490374873354,
+        "accuracy": 0.49544072948328266,
+        "binary_nll": 0.699211835861206,
+        "same_question_opposite_pairs": 21,
+        "both_correct_pairs": 0,
+        "both_correct_fraction": 0.0
+      },
+      "predictions_changed_after_wrong_image": 228
+    },
+    "question_only": {
+      "selected_epoch": 1,
+      "checkpoint_sha256": "7f06b312ca5daac54a0bbbe7d0c42e9c690334b70ecbbb048fddaa27c0e933a7",
+      "true_images": {
+        "questions": 987,
+        "yes_fraction": 0.5268490374873354,
+        "accuracy": 0.49037487335359675,
+        "binary_nll": 0.6932821273803711,
+        "same_question_opposite_pairs": 21,
+        "both_correct_pairs": 0,
+        "both_correct_fraction": 0.0
+      }
+    }
+  }
+}

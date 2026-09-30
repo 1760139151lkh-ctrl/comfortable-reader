@@ -1,0 +1,43 @@
+{
+  "scope": "first two actual train blocks; one update; disposable model, not full training",
+  "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "config": {
+    "vocab": 8192,
+    "context": 128,
+    "width": 192,
+    "heads": 4,
+    "inner": 768,
+    "layers": 4,
+    "batch_size": 64,
+    "epochs": 4,
+    "warmup_steps": 100,
+    "peak_lr": 0.0003,
+    "final_lr": 1e-05,
+    "beta1": 0.9,
+    "beta2": 0.95,
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "seed": 20260924,
+    "diagnostic_train_blocks": 1024,
+    "checkpoint_interval_steps": 100
+  },
+  "parameters": 4930304,
+  "targets": 256,
+  "nll_before_step": 9.161785125732422,
+  "nll_same_batch_after_step": 9.156415939331055,
+  "raw_gradient_norm": 3.318399667739868,
+  "clip_norm": 1.0,
+  "first_step_lr": 2.9999999999999997e-06,
+  "elapsed_seconds": 0.45703000004868954,
+  "peak_gpu_allocated_bytes": 131601920,
+  "environment": {
+    "python": "3.13.14",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.4.6",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "gpu_total_bytes": 25650855936,
+    "bf16_supported": true
+  }
+}

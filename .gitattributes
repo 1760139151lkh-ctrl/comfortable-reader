@@ -1,0 +1,2 @@
+# Resource identities bind actual bytes across platforms. Do not rewrite EOLs.
+* -text

@@ -1,0 +1,710 @@
+{
+  "task": "character CTC recognition from random weights on author speaker split of official LibriSpeech dev-clean",
+  "official_benchmark": false,
+  "source_archive_sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+  "chapter_split_sha256": "aa7f4d036e377e55c61c2b1a8bc2bd0349c423b83cff208adbe736be772f46ed",
+  "feature_manifest_sha256": "e95f660bfaaa7b5548a79a14751f7b4766c6489e73c91b9ea567b75bcdb725cd",
+  "code_sha256": "b56c67649e3267e1878efe09d7fe2c4702dd5532859365eb84633190a3d357a2",
+  "init_checkpoint_sha256": "478d8095c68370f8784344b166f620649e0d616b2ac821260053646c4a9e27aa",
+  "optimizer_restarted_at_initial_checkpoint": true,
+  "seed": 20260924,
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "train_clips": 2180,
+  "validation_clips": 233,
+  "test_clips_read": 0,
+  "architecture": "Conv1d stride2 + Conv1d + 3-layer bidirectional GRU width192 + character head",
+  "parameters": 2049053,
+  "alphabet": " ABCDEFGHIJKLMNOPQRSTUVWXYZ'",
+  "blank_id": 0,
+  "ctc_reduction": "PyTorch mean: path NLL divided by target length, then batch mean",
+  "decoding": "framewise argmax, collapse consecutive equal ids then remove blank; no language model",
+  "optimizer": "AdamW",
+  "learning_rate": 0.00015,
+  "epochs": 18,
+  "batch_size": 8,
+  "initial_validation": {
+    "mean_ctc_loss": 1.2109682053455468,
+    "character_error_rate": 0.34401133947554924,
+    "word_error_rate": 0.8168010500656291,
+    "character_edits": 9708,
+    "reference_characters": 28220,
+    "word_edits": 4356,
+    "reference_words": 5333,
+    "examples": [
+      {
+        "id": "1919-142785-0021",
+        "reference": "TO PICKLE EGGS",
+        "hypothesis": "TO PEKELE AS"
+      },
+      {
+        "id": "2078-142845-0023",
+        "reference": "HOT ROLLS",
+        "hypothesis": "HATD NOS"
+      },
+      {
+        "id": "1919-142785-0048",
+        "reference": "FRENCH FORCEMEAT",
+        "hypothesis": "FRENC FORSH MET"
+      },
+      {
+        "id": "2078-142845-0003",
+        "reference": "SEVENTEEN EIGHTEEN",
+        "hypothesis": "SEVEN TE A TANG"
+      }
+    ]
+  },
+  "best_epoch_by_validation_ctc_loss": 1,
+  "best_checkpoint_sha256": "37a90610e75dd49bb703f3cac26bafcd5f7fb45c9944fc51104d4c485b5fe42b",
+  "history": [
+    {
+      "epoch": 1,
+      "train_mean_ctc_loss": 0.7125310439582265,
+      "validation": {
+        "mean_ctc_loss": 1.1960453383400715,
+        "character_error_rate": 0.33490432317505314,
+        "word_error_rate": 0.8046127882992687,
+        "character_edits": 9451,
+        "reference_characters": 28220,
+        "word_edits": 4291,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PECKEL EIKCE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORCH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE A TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 32.020159099949524
+    },
+    {
+      "epoch": 2,
+      "train_mean_ctc_loss": 0.6672988068619999,
+      "validation": {
+        "mean_ctc_loss": 1.2176305833292622,
+        "character_error_rate": 0.3336286321757619,
+        "word_error_rate": 0.8012375773485843,
+        "character_edits": 9415,
+        "reference_characters": 28220,
+        "word_edits": 4273,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKELE IS"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENG FORSH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.709315999993123
+    },
+    {
+      "epoch": 3,
+      "train_mean_ctc_loss": 0.6348400796772143,
+      "validation": {
+        "mean_ctc_loss": 1.2157418692060806,
+        "character_error_rate": 0.33171509567682494,
+        "word_error_rate": 0.7935495968498031,
+        "character_edits": 9361,
+        "reference_characters": 28220,
+        "word_edits": 4232,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PIKELE ICE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HATD NOOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENC FORSH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVENTE A TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.694928299984895
+    },
+    {
+      "epoch": 4,
+      "train_mean_ctc_loss": 0.6018887748412036,
+      "validation": {
+        "mean_ctc_loss": 1.225731662926244,
+        "character_error_rate": 0.3284904323175053,
+        "word_error_rate": 0.7912994562160135,
+        "character_edits": 9270,
+        "reference_characters": 28220,
+        "word_edits": 4220,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PICKEL ICE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORCH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE A TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.64543080003932
+    },
+    {
+      "epoch": 5,
+      "train_mean_ctc_loss": 0.57182611391085,
+      "validation": {
+        "mean_ctc_loss": 1.2259196569991213,
+        "character_error_rate": 0.32668320340184265,
+        "word_error_rate": 0.7897993624601538,
+        "character_edits": 9219,
+        "reference_characters": 28220,
+        "word_edits": 4212,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKELE AKCE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORSH LEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE NEY TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.11630019999575
+    },
+    {
+      "epoch": 6,
+      "train_mean_ctc_loss": 0.542962539742846,
+      "validation": {
+        "mean_ctc_loss": 1.2519371750017092,
+        "character_error_rate": 0.3273919206236712,
+        "word_error_rate": 0.7905494093380836,
+        "character_edits": 9239,
+        "reference_characters": 28220,
+        "word_edits": 4216,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PECKELE EINCE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NROS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENC FORTH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.999659799970686
+    },
+    {
+      "epoch": 7,
+      "train_mean_ctc_loss": 0.5149333373122259,
+      "validation": {
+        "mean_ctc_loss": 1.2735620747308363,
+        "character_error_rate": 0.3272856130403969,
+        "word_error_rate": 0.785111569473092,
+        "character_edits": 9236,
+        "reference_characters": 28220,
+        "word_edits": 4187,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKEL ICE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NROS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORSH LEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE EY TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.461957499966957
+    },
+    {
+      "epoch": 8,
+      "train_mean_ctc_loss": 0.4882925643833405,
+      "validation": {
+        "mean_ctc_loss": 1.2815338265742355,
+        "character_error_rate": 0.33040396881644224,
+        "word_error_rate": 0.7907369210575661,
+        "character_edits": 9324,
+        "reference_characters": 28220,
+        "word_edits": 4217,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PIKELE IGKCE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NROS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCHE FORSH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TANG"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.947441200027242
+    },
+    {
+      "epoch": 9,
+      "train_mean_ctc_loss": 0.4620772468387534,
+      "validation": {
+        "mean_ctc_loss": 1.272950086982465,
+        "character_error_rate": 0.32338766832034016,
+        "word_error_rate": 0.7858616163510219,
+        "character_edits": 9126,
+        "reference_characters": 28220,
+        "word_edits": 4191,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKELE AKXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOLS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCH FORSH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.88571870001033
+    },
+    {
+      "epoch": 10,
+      "train_mean_ctc_loss": 0.4384357452665994,
+      "validation": {
+        "mean_ctc_loss": 1.3142709281823155,
+        "character_error_rate": 0.32381289865343726,
+        "word_error_rate": 0.7815488468029251,
+        "character_edits": 9138,
+        "reference_characters": 28220,
+        "word_edits": 4168,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PIKE IGXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "AT NOS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENC FORSH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TAIN"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.830265199998394
+    },
+    {
+      "epoch": 11,
+      "train_mean_ctc_loss": 0.41594996796835454,
+      "validation": {
+        "mean_ctc_loss": 1.326780942888219,
+        "character_error_rate": 0.32512402551381997,
+        "word_error_rate": 0.7832364522782674,
+        "character_edits": 9175,
+        "reference_characters": 28220,
+        "word_edits": 4177,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKEL IXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "AT NROLS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCH FORTH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE ME TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.663671199930832
+    },
+    {
+      "epoch": 12,
+      "train_mean_ctc_loss": 0.3938478729320229,
+      "validation": {
+        "mean_ctc_loss": 1.3223659240125074,
+        "character_error_rate": 0.32172218284904325,
+        "word_error_rate": 0.7725482842677668,
+        "character_edits": 9079,
+        "reference_characters": 28220,
+        "word_edits": 4120,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PICKEL IGKXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NROALLS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORTE MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE A TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 32.14744640002027
+    },
+    {
+      "epoch": 13,
+      "train_mean_ctc_loss": 0.38295350241551707,
+      "validation": {
+        "mean_ctc_loss": 1.3421570016590822,
+        "character_error_rate": 0.31987951807228915,
+        "word_error_rate": 0.7740483780236265,
+        "character_edits": 9027,
+        "reference_characters": 28220,
+        "word_edits": 4128,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PIKELE EKXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NOALS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORTH LEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TY E TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 32.837356099975295
+    },
+    {
+      "epoch": 14,
+      "train_mean_ctc_loss": 0.36266449991989574,
+      "validation": {
+        "mean_ctc_loss": 1.3857941294944338,
+        "character_error_rate": 0.3232104890148831,
+        "word_error_rate": 0.7708606787924245,
+        "character_edits": 9121,
+        "reference_characters": 28220,
+        "word_edits": 4111,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PECKEL EGGKXE"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "AT NOLS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORTH MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TAIN"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.4344645999372
+    },
+    {
+      "epoch": 15,
+      "train_mean_ctc_loss": 0.3430453338207455,
+      "validation": {
+        "mean_ctc_loss": 1.3890667442600102,
+        "character_error_rate": 0.3195251594613749,
+        "word_error_rate": 0.7761110069379337,
+        "character_edits": 9017,
+        "reference_characters": 28220,
+        "word_edits": 4139,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PEKAL AGX"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "APE NOALS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORTH LEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TY A TAIN"
+          }
+        ]
+      },
+      "elapsed_seconds": 30.208480599918403
+    },
+    {
+      "epoch": 16,
+      "train_mean_ctc_loss": 0.32501103831540556,
+      "validation": {
+        "mean_ctc_loss": 1.4241000296220248,
+        "character_error_rate": 0.319950389794472,
+        "word_error_rate": 0.7776111006937934,
+        "character_edits": 9029,
+        "reference_characters": 28220,
+        "word_edits": 4147,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PICKEL AX"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT NMROALS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORTE MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.192143899970688
+    },
+    {
+      "epoch": 17,
+      "train_mean_ctc_loss": 0.30794509466088144,
+      "validation": {
+        "mean_ctc_loss": 1.4446638428602097,
+        "character_error_rate": 0.32044649184975194,
+        "word_error_rate": 0.7717982373898369,
+        "character_edits": 9043,
+        "reference_characters": 28220,
+        "word_edits": 4116,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PECKE IS"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAT MUALS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCFORTH LEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE EY TAIN"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.475662000011653
+    },
+    {
+      "epoch": 18,
+      "train_mean_ctc_loss": 0.29343017194796045,
+      "validation": {
+        "mean_ctc_loss": 1.471347783768126,
+        "character_error_rate": 0.3233167965981573,
+        "word_error_rate": 0.7719857491093194,
+        "character_edits": 9124,
+        "reference_characters": 28220,
+        "word_edits": 4117,
+        "reference_words": 5333,
+        "examples": [
+          {
+            "id": "1919-142785-0021",
+            "reference": "TO PICKLE EGGS",
+            "hypothesis": "TO PICKEL IGKX"
+          },
+          {
+            "id": "2078-142845-0023",
+            "reference": "HOT ROLLS",
+            "hypothesis": "HAPT NUOALS"
+          },
+          {
+            "id": "1919-142785-0048",
+            "reference": "FRENCH FORCEMEAT",
+            "hypothesis": "FRENCE FORT MEK"
+          },
+          {
+            "id": "2078-142845-0003",
+            "reference": "SEVENTEEN EIGHTEEN",
+            "hypothesis": "SEVEN TE E TAING"
+          }
+        ]
+      },
+      "elapsed_seconds": 31.46141670003999
+    }
+  ],
+  "wall_seconds": 564.9558320000069
+}

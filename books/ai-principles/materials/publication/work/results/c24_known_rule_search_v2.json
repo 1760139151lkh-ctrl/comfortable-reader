@@ -1,0 +1,148 @@
+{
+  "scope": "complete public rules of 3x3 tic-tac-toe; exact minimax and random-rollout UCT; no learned policy/value network and no AlphaZero scale",
+  "board": [
+    "OO.",
+    ".X.",
+    ".X."
+  ],
+  "board_internal": [
+    -1,
+    -1,
+    0,
+    0,
+    1,
+    0,
+    0,
+    1,
+    0
+  ],
+  "player_to_act": "X",
+  "terminal_payoff": "winner +1 for X, -1 for O; draw 0",
+  "exact_action_values_from_X_perspective": {
+    "2": 0,
+    "3": -1,
+    "5": -1,
+    "6": -1,
+    "8": -1
+  },
+  "exact_best_value": 0,
+  "searches": [
+    {
+      "simulations": 20,
+      "seed": 20260924,
+      "root_visits": 20,
+      "move_visit_counts": {
+        "2": 3,
+        "6": 2,
+        "5": 5,
+        "8": 5,
+        "3": 5
+      },
+      "root_player_estimated_values": {
+        "2": -0.0,
+        "6": -0.0,
+        "5": 0.6,
+        "8": 0.2,
+        "3": 0.6
+      },
+      "search_policy_from_visits": {
+        "2": 0.15,
+        "6": 0.1,
+        "5": 0.25,
+        "8": 0.25,
+        "3": 0.25
+      },
+      "chosen_by_most_visits": 5,
+      "exact_value_of_chosen_action": -1,
+      "best_exact_value": 0
+    },
+    {
+      "simulations": 100,
+      "seed": 20260924,
+      "root_visits": 100,
+      "move_visit_counts": {
+        "2": 53,
+        "6": 12,
+        "5": 12,
+        "8": 11,
+        "3": 12
+      },
+      "root_player_estimated_values": {
+        "2": 0.20754716981132076,
+        "6": -0.3333333333333333,
+        "5": -0.3333333333333333,
+        "8": -0.36363636363636365,
+        "3": -0.3333333333333333
+      },
+      "search_policy_from_visits": {
+        "2": 0.53,
+        "6": 0.12,
+        "5": 0.12,
+        "8": 0.11,
+        "3": 0.12
+      },
+      "chosen_by_most_visits": 2,
+      "exact_value_of_chosen_action": 0,
+      "best_exact_value": 0
+    },
+    {
+      "simulations": 500,
+      "seed": 20260924,
+      "root_visits": 500,
+      "move_visit_counts": {
+        "2": 417,
+        "6": 22,
+        "5": 20,
+        "8": 21,
+        "3": 20
+      },
+      "root_player_estimated_values": {
+        "2": 0.05275779376498801,
+        "6": -0.5454545454545454,
+        "5": -0.6,
+        "8": -0.5714285714285714,
+        "3": -0.6
+      },
+      "search_policy_from_visits": {
+        "2": 0.834,
+        "6": 0.044,
+        "5": 0.04,
+        "8": 0.042,
+        "3": 0.04
+      },
+      "chosen_by_most_visits": 2,
+      "exact_value_of_chosen_action": 0,
+      "best_exact_value": 0
+    },
+    {
+      "simulations": 2000,
+      "seed": 20260924,
+      "root_visits": 2000,
+      "move_visit_counts": {
+        "2": 1895,
+        "6": 28,
+        "5": 25,
+        "8": 27,
+        "3": 25
+      },
+      "root_player_estimated_values": {
+        "2": 0.016358839050131926,
+        "6": -0.6428571428571429,
+        "5": -0.68,
+        "8": -0.6666666666666666,
+        "3": -0.68
+      },
+      "search_policy_from_visits": {
+        "2": 0.9475,
+        "6": 0.014,
+        "5": 0.0125,
+        "8": 0.0135,
+        "3": 0.0125
+      },
+      "chosen_by_most_visits": 2,
+      "exact_value_of_chosen_action": 0,
+      "best_exact_value": 0
+    }
+  ],
+  "why_rules_matter": "each tree rollout executes hypothetical legal moves using a known transition and terminal-winner rule; unknown game dynamics would require a learned or provided simulator"
+}

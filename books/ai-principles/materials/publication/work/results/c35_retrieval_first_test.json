@@ -1,0 +1,100 @@
+{
+  "test_identity": "author-internal 500 complete images from official COCO2017 validation; one fixed first caption/image",
+  "test_images": 500,
+  "candidate_texts": 500,
+  "chance_r1": 0.002,
+  "chance_r5": 0.01,
+  "test_opened_for_metrics": true,
+  "results": {
+    "true": {
+      "selected_epoch": 29,
+      "checkpoint_sha256": "90bdbd78576d6a33c8d5901dfad91e0feb80bc05c88c6720a10571035a4f3012",
+      "metrics": {
+        "image_to_text": {
+          "r1": 0.006000000052154064,
+          "r5": 0.04600000008940697,
+          "r10": 0.09200000017881393,
+          "median_rank": 90.0,
+          "mean_rank": 123.89399719238281
+        },
+        "text_to_image": {
+          "r1": 0.017999999225139618,
+          "r5": 0.07000000029802322,
+          "r10": 0.15399999916553497,
+          "median_rank": 71.0,
+          "mean_rank": 104.21600341796875
+        }
+      },
+      "mean_cosine_true_pair": 0.23854169249534607,
+      "mean_cosine_shifted_text": 0.03339918702840805,
+      "first_three_fixed_examples": [
+        {
+          "image_id": 724,
+          "true_caption": "A stop sign is mounted upside-down on it's post. ",
+          "top_caption_image_id": 46872,
+          "top_caption": "A man standing along side of a truck trailer.",
+          "top_is_same_image": false
+        },
+        {
+          "image_id": 1503,
+          "true_caption": "A computer on a desk next to a laptop.",
+          "top_caption_image_id": 268996,
+          "top_caption": "A green street sign on a pole in front of a tall building.",
+          "top_is_same_image": false
+        },
+        {
+          "image_id": 1532,
+          "true_caption": "A street scene with focus on the street signs on an overpass.",
+          "top_caption_image_id": 303499,
+          "top_caption": "Two people riding on the back of horses near a tall building.",
+          "top_is_same_image": false
+        }
+      ]
+    },
+    "wrong": {
+      "selected_epoch": 1,
+      "checkpoint_sha256": "784bf2d7bd0054a81dc718cd9d11116667706d57475f00b4902bb39c357f72d3",
+      "metrics": {
+        "image_to_text": {
+          "r1": 0.004000000189989805,
+          "r5": 0.014000000432133675,
+          "r10": 0.02199999988079071,
+          "median_rank": 243.0,
+          "mean_rank": 250.1219940185547
+        },
+        "text_to_image": {
+          "r1": 0.0,
+          "r5": 0.006000000052154064,
+          "r10": 0.026000000536441803,
+          "median_rank": 255.0,
+          "mean_rank": 254.45599365234375
+        }
+      },
+      "mean_cosine_true_pair": -0.00019598945800680667,
+      "mean_cosine_shifted_text": -0.00010702535655582324,
+      "first_three_fixed_examples": [
+        {
+          "image_id": 724,
+          "true_caption": "A stop sign is mounted upside-down on it's post. ",
+          "top_caption_image_id": 415882,
+          "top_caption": "a woman lying on a bed underneath a blanket",
+          "top_is_same_image": false
+        },
+        {
+          "image_id": 1503,
+          "true_caption": "A computer on a desk next to a laptop.",
+          "top_caption_image_id": 228436,
+          "top_caption": "there is a bike that is parked on a small bridge",
+          "top_is_same_image": false
+        },
+        {
+          "image_id": 1532,
+          "true_caption": "A street scene with focus on the street signs on an overpass.",
+          "top_caption_image_id": 228436,
+          "top_caption": "there is a bike that is parked on a small bridge",
+          "top_is_same_image": false
+        }
+      ]
+    }
+  }
+}

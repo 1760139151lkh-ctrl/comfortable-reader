@@ -1,0 +1,17 @@
+{
+  "scope": "one full train block future/prefix edits and first article padded tail; no test arrays",
+  "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "best_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "first_full_block_index": 0,
+  "future_edited_position": 10,
+  "earlier_logits_max_change_after_future_edit": 0.0,
+  "later_logits_max_change_after_prefix_edit": 3.25,
+  "tail_block_index": 39,
+  "tail_real_positions": 114,
+  "real_logits_max_change_after_masked_pad_edit": 0.0,
+  "latest_checkpoint_epoch": 4,
+  "latest_checkpoint_global_step": 1336,
+  "optimizer_state_parameter_entries": 51,
+  "saved_cpu_rng": true,
+  "saved_cuda_rng_count": 1
+}

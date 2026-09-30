@@ -1,0 +1,317 @@
+{
+  "scope": "author-driven local host experiment; no model trained to write; all effects confined to fresh work/runs directory",
+  "initial": {
+    "content": "Start\n",
+    "version": 0,
+    "content_sha256": "34e4fd548706409f320dd4e33d551d13c4c193520e7d13059f2eda806d32f6db",
+    "remaining_write_budget": 3,
+    "operations": [],
+    "events": []
+  },
+  "normal": {
+    "receipt": {
+      "op_id": "op-normal",
+      "subject": "author_demo",
+      "tool": "append_note",
+      "doc_id": "lesson_note",
+      "before_version": 0,
+      "after_version": 1,
+      "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+      "status": "committed"
+    },
+    "replayed": false
+  },
+  "same_id_replay": {
+    "receipt": {
+      "after_version": 1,
+      "before_version": 0,
+      "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+      "doc_id": "lesson_note",
+      "op_id": "op-normal",
+      "status": "committed",
+      "subject": "author_demo",
+      "tool": "append_note"
+    },
+    "replayed": true
+  },
+  "same_id_different_text": {
+    "rejected": "KeyConflict",
+    "reason": "same operation ID has different parameters"
+  },
+  "unapproved_tool": {
+    "rejected": "Denied",
+    "reason": "tool or document not in this subject's host grant"
+  },
+  "unapproved_document": {
+    "rejected": "Denied",
+    "reason": "tool or document not in this subject's host grant"
+  },
+  "killed_before_commit": {
+    "fault": "pause_before_commit",
+    "child_marker": "inside transaction, before COMMIT",
+    "caller_received_reply": false,
+    "child_exit_code": 1
+  },
+  "after_before_commit_kill": {
+    "content": "Start\nalpha\n",
+    "version": 1,
+    "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+    "remaining_write_budget": 2,
+    "operations": [
+      {
+        "op_id": "op-normal",
+        "receipt": {
+          "after_version": 1,
+          "before_version": 0,
+          "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+          "doc_id": "lesson_note",
+          "op_id": "op-normal",
+          "status": "committed",
+          "subject": "author_demo",
+          "tool": "append_note"
+        }
+      }
+    ],
+    "events": [
+      {
+        "seq": 1,
+        "op_id": "op-normal",
+        "event": "committed",
+        "detail": {
+          "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+          "version": 1
+        }
+      }
+    ]
+  },
+  "before_commit_same_id_retry": {
+    "receipt": {
+      "op_id": "op-before",
+      "subject": "author_demo",
+      "tool": "append_note",
+      "doc_id": "lesson_note",
+      "before_version": 1,
+      "after_version": 2,
+      "content_sha256": "fd8967ef61efce3dff9ba9e4dd63696675e0c6b5000b1a09036017e9060c715f",
+      "status": "committed"
+    },
+    "replayed": false
+  },
+  "killed_after_commit_before_reply": {
+    "fault": "pause_after_commit",
+    "child_marker": "COMMIT finished, before reply",
+    "caller_received_reply": false,
+    "child_exit_code": 1
+  },
+  "after_after_commit_kill": {
+    "content": "Start\nalpha\nbeta\ngamma\n",
+    "version": 3,
+    "content_sha256": "52518ee89955040d462557c7e8f67a6ecd2f354f60d406c0c50faf1cb6223768",
+    "remaining_write_budget": 0,
+    "operations": [
+      {
+        "op_id": "op-normal",
+        "receipt": {
+          "after_version": 1,
+          "before_version": 0,
+          "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+          "doc_id": "lesson_note",
+          "op_id": "op-normal",
+          "status": "committed",
+          "subject": "author_demo",
+          "tool": "append_note"
+        }
+      },
+      {
+        "op_id": "op-before",
+        "receipt": {
+          "after_version": 2,
+          "before_version": 1,
+          "content_sha256": "fd8967ef61efce3dff9ba9e4dd63696675e0c6b5000b1a09036017e9060c715f",
+          "doc_id": "lesson_note",
+          "op_id": "op-before",
+          "status": "committed",
+          "subject": "author_demo",
+          "tool": "append_note"
+        }
+      },
+      {
+        "op_id": "op-after",
+        "receipt": {
+          "after_version": 3,
+          "before_version": 2,
+          "content_sha256": "52518ee89955040d462557c7e8f67a6ecd2f354f60d406c0c50faf1cb6223768",
+          "doc_id": "lesson_note",
+          "op_id": "op-after",
+          "status": "committed",
+          "subject": "author_demo",
+          "tool": "append_note"
+        }
+      }
+    ],
+    "events": [
+      {
+        "seq": 1,
+        "op_id": "op-normal",
+        "event": "committed",
+        "detail": {
+          "content_sha256": "3e50e3278f53d82a115fce5eedd5c52b56dce3cf8efdb270b4c09aa06ea63697",
+          "version": 1
+        }
+      },
+      {
+        "seq": 2,
+        "op_id": "op-before",
+        "event": "committed",
+        "detail": {
+          "content_sha256": "fd8967ef61efce3dff9ba9e4dd63696675e0c6b5000b1a09036017e9060c715f",
+          "version": 2
+        }
+      },
+      {
+        "seq": 3,
+        "op_id": "op-after",
+        "event": "committed",
+        "detail": {
+          "content_sha256": "52518ee89955040d462557c7e8f67a6ecd2f354f60d406c0c50faf1cb6223768",
+          "version": 3
+        }
+      }
+    ]
+  },
+  "after_commit_same_id_retry": {
+    "receipt": {
+      "after_version": 3,
+      "before_version": 2,
+      "content_sha256": "52518ee89955040d462557c7e8f67a6ecd2f354f60d406c0c50faf1cb6223768",
+      "doc_id": "lesson_note",
+      "op_id": "op-after",
+      "status": "committed",
+      "subject": "author_demo",
+      "tool": "append_note"
+    },
+    "replayed": true
+  },
+  "stale_new_operation": {
+    "rejected": "StaleVersion",
+    "reason": "expected 1, current 3"
+  },
+  "exhausted_budget": {
+    "rejected": "Denied",
+    "reason": "write budget exhausted"
+  },
+  "final_local": {
+    "content": "Start\nalpha\nbeta\ngamma\n",
+    "version": 3,
+    "remaining_budget": 0,
+    "committed_operations": [
+      "op-normal",
+      "op-before",
+      "op-after"
+    ],
+    "final_note_sha256": "e18ebeed0a9d7a3855c5b6511011c355bc045d11402751144c0c3a5f8b6cd056",
+    "sqlite_sha256_after_close": "c44de5a743618ee27855ed13f01b0b54d3692b0a0cbb6659887b12ff3c77e021"
+  },
+  "concurrent_same_id": {
+    "replayed_flags": [
+      false,
+      true
+    ],
+    "effect_count": 1,
+    "content": "Start\nonce\n"
+  },
+  "same_text_distinct_logical_ids": {
+    "first": {
+      "receipt": {
+        "op_id": "op-intent-a",
+        "subject": "author_demo",
+        "tool": "append_note",
+        "doc_id": "lesson_note",
+        "before_version": 0,
+        "after_version": 1,
+        "content_sha256": "44ffd3ee5ae395cd936c9d5fecdbf6c1e3a27c37ce8bf0efa0cf99844354c70c",
+        "status": "committed"
+      },
+      "replayed": false
+    },
+    "second": {
+      "receipt": {
+        "op_id": "op-intent-b",
+        "subject": "author_demo",
+        "tool": "append_note",
+        "doc_id": "lesson_note",
+        "before_version": 1,
+        "after_version": 2,
+        "content_sha256": "bbce0e61ff0a5d55594d61b3f2a904980fa84bafc3f573f43716f25a213a4997",
+        "status": "committed"
+      },
+      "replayed": false
+    },
+    "final_version": 2,
+    "content": "Start\nsame\nsame\n",
+    "lesson": "different operation IDs represent two authorized append intents even with identical text"
+  },
+  "cancel_before_dispatch": {
+    "status": "cancelled_before_dispatch"
+  },
+  "cancelled_execution_rejected": {
+    "rejected": "Cancelled",
+    "reason": "operation was cancelled before dispatch"
+  },
+  "cancel_after_commit": {
+    "status": "already_committed",
+    "receipt": {
+      "after_version": 1,
+      "before_version": 0,
+      "content_sha256": "9c0981ef5bf6b6e325f36bbbd1e61a0957a48e06689d9afec31830de8941f683",
+      "doc_id": "lesson_note",
+      "op_id": "op-cancel-late",
+      "status": "committed",
+      "subject": "author_demo",
+      "tool": "append_note"
+    }
+  },
+  "cancel_note": "cancellation request after commit did not roll back the effect",
+  "separate_remote_worlds": {
+    "none_yet": {
+      "caller_visible_sha256": "c1020de54b6b9b803d92c714c894bfb1e6ed0f740e8dfe2ffd6be31a161ac532",
+      "remote_effects_before_retry": 0,
+      "same_id_retry": {
+        "effect_row_id": 1,
+        "replayed": false
+      },
+      "same_id_changed_payload": {
+        "rejected": "KeyConflict",
+        "reason": "remote mock: same ID with different content"
+      },
+      "remote_effects_after_retry": 1
+    },
+    "applied_reply_lost": {
+      "caller_visible_sha256": "c1020de54b6b9b803d92c714c894bfb1e6ed0f740e8dfe2ffd6be31a161ac532",
+      "remote_effects_before_retry": 1,
+      "same_id_retry": {
+        "effect_row_id": 1,
+        "replayed": true
+      },
+      "same_id_changed_payload": {
+        "rejected": "KeyConflict",
+        "reason": "remote mock: same ID with different content"
+      },
+      "remote_effects_after_retry": 1
+    },
+    "applied_no_remote_dedupe": {
+      "caller_visible_sha256": "c1020de54b6b9b803d92c714c894bfb1e6ed0f740e8dfe2ffd6be31a161ac532",
+      "remote_effects_before_retry": 1,
+      "same_id_retry": {
+        "effect_row_id": 2,
+        "replayed": false
+      },
+      "remote_effects_after_retry": 2
+    }
+  },
+  "source": {
+    "program_sha256": "a767b78eef372c23600dc76b22d7055e3e0b404ef3675a58d82c72e49e62b3e5",
+    "receipt_boundary": "same local SQLite transaction for note change, op_id record, budget decrement and receipt; remote simulation uses separate physical databases",
+    "limits": "application allowlist is not OS sandbox; remote worlds are a controlled simulation and no external API was called"
+  }
+}

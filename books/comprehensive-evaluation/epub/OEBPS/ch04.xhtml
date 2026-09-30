@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>4. 权重到底表示什么？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="4-权重到底表示什么">4. 权重到底表示什么？</h2>
+<p>综合评分最常见的形式是：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>S</mi><mi>i</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>w</mi><mi>j</mi></msub><msub><mi>z</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>,</mo><msub><mi>w</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn><mo>,</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>n</mi></mrow></munderover><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>这个公式本身很简单，真正难的是解释 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>w</mi><mi>j</mi></msub></mrow></math></span>。</p>
+<h3 id="41-偏好权重">4.1 偏好权重</h3>
+<p>偏好权重表达“决策者愿意让哪个指标更影响结论”。AHP、专家打分和直接赋权属于这一类。它是价值判断，不会仅凭数据自动产生。</p>
+<h3 id="42-区分度权重">4.2 区分度权重</h3>
+<p>熵权法根据当前样本的离散程度赋权。某指标能明显区分对象，就获得较高权重；所有对象数值接近，权重就较低。</p>
+<p>它回答的是：</p>
+<blockquote>
+<p>这列数据在当前样本中提供了多少区分信息？</p>
+</blockquote>
+<p>它不自动回答：</p>
+<blockquote>
+<p>这个指标在现实决策中有多重要？</p>
+</blockquote>
+<p>若五家医院在“手术安全合格率”上都接近 100%，该指标的熵权可能很低，但不能据此说安全不重要。</p>
+<h3 id="43-方差贡献权重">4.3 方差贡献权重</h3>
+<p>PCA 综合得分有时按主成分方差贡献率加权。此时权重表达“该方向解释了多少总体变异”，仍不等于政策重要性。</p>
+<h3 id="44-模型内生权重">4.4 模型内生权重</h3>
+<p>DEA 会让每个决策单元在约束下选择对自己最有利的投入、产出权重。这种权重服务于效率边界，不宜直接解释为统一的社会偏好。</p>
+<p>因此，看到一组权重时，第一句话不应是“第一项最重要”，而应先问：<strong>重要是按谁的偏好、哪种信息、哪个样本和什么模型而言？</strong></p>
+<hr/>
+</body></html>

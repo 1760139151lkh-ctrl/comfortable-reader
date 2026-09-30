@@ -1,0 +1,163 @@
+{
+  "identity": "internal reprojection consistency of supplied ETH3D/COLMAP SfM points and observed 2D tracks; NOT independent laser-scan 3D accuracy",
+  "data_manifest_sha256": "b6b5500cd1d7d55511a0dd0d23ab3e4ac6ada6eb351f85523fa05e80baa7c4e6",
+  "points3d_sha256": "a6e8675d728a2204a78fb0c8ef73cdb20bd277f7b22001fe7e369b95e361ab92",
+  "images_txt_sha256": "52313d210be6c18191fea051655a41f6b67a365e4ef3d99b8bc8940c63eb1256",
+  "matched_observations": 7807,
+  "median_reprojection_error_original_pixels": 0.6628873700916483,
+  "p95_reprojection_error_original_pixels": 2.6635616300642337,
+  "per_view": {
+    "DSC_0634.JPG": {
+      "observed_triangulated_points": 1004,
+      "median_reprojection_error_pixels": 0.5981532215073733,
+      "p95_error_pixels": 2.4057582400720654
+    },
+    "DSC_0635.JPG": {
+      "observed_triangulated_points": 1062,
+      "median_reprojection_error_pixels": 0.534005540498498,
+      "p95_error_pixels": 2.504720361861784
+    },
+    "DSC_0636.JPG": {
+      "observed_triangulated_points": 935,
+      "median_reprojection_error_pixels": 0.6343327982266993,
+      "p95_error_pixels": 2.649822006317008
+    },
+    "DSC_0637.JPG": {
+      "observed_triangulated_points": 262,
+      "median_reprojection_error_pixels": 0.8691720066974875,
+      "p95_error_pixels": 2.6098910185910467
+    },
+    "DSC_0638.JPG": {
+      "observed_triangulated_points": 272,
+      "median_reprojection_error_pixels": 0.9160024494574934,
+      "p95_error_pixels": 2.869192519767304
+    },
+    "DSC_0639.JPG": {
+      "observed_triangulated_points": 239,
+      "median_reprojection_error_pixels": 0.7704150532437426,
+      "p95_error_pixels": 3.207332910390309
+    },
+    "DSC_0640.JPG": {
+      "observed_triangulated_points": 407,
+      "median_reprojection_error_pixels": 0.7263962599166965,
+      "p95_error_pixels": 2.5883495929579197
+    },
+    "DSC_0641.JPG": {
+      "observed_triangulated_points": 191,
+      "median_reprojection_error_pixels": 0.6242300159260515,
+      "p95_error_pixels": 2.838306859678315
+    },
+    "DSC_0642.JPG": {
+      "observed_triangulated_points": 402,
+      "median_reprojection_error_pixels": 0.8747628304150941,
+      "p95_error_pixels": 2.924972263101278
+    },
+    "DSC_0643.JPG": {
+      "observed_triangulated_points": 886,
+      "median_reprojection_error_pixels": 0.7173132692323481,
+      "p95_error_pixels": 2.6761396692593813
+    },
+    "DSC_0644.JPG": {
+      "observed_triangulated_points": 923,
+      "median_reprojection_error_pixels": 0.5516684922042117,
+      "p95_error_pixels": 2.4296202405787453
+    },
+    "DSC_0645.JPG": {
+      "observed_triangulated_points": 776,
+      "median_reprojection_error_pixels": 0.6083039705796881,
+      "p95_error_pixels": 2.6282117158144644
+    },
+    "DSC_0646.JPG": {
+      "observed_triangulated_points": 156,
+      "median_reprojection_error_pixels": 0.8500318324094448,
+      "p95_error_pixels": 2.7696089411786553
+    },
+    "DSC_0647.JPG": {
+      "observed_triangulated_points": 292,
+      "median_reprojection_error_pixels": 1.0113162585470454,
+      "p95_error_pixels": 3.1113802083230064
+    }
+  },
+  "illustrated_point_id": 2943,
+  "illustrated_point_world_coordinates": [
+    0.590752,
+    2.29558,
+    0.809109
+  ],
+  "illustrated_views": [
+    {
+      "view_name": "DSC_0634.JPG",
+      "actual_uv": [
+        4524.53,
+        1303.99
+      ],
+      "predicted_uv": [
+        4524.571341289792,
+        1304.161080287622
+      ],
+      "residual_pixels": 0.17600445180323143
+    },
+    {
+      "view_name": "DSC_0635.JPG",
+      "actual_uv": [
+        4589.12,
+        1220.96
+      ],
+      "predicted_uv": [
+        4589.463015386249,
+        1221.0087183344367
+      ],
+      "residual_pixels": 0.346457834828319
+    },
+    {
+      "view_name": "DSC_0636.JPG",
+      "actual_uv": [
+        4336.13,
+        1157.58
+      ],
+      "predicted_uv": [
+        4336.437847540152,
+        1157.4242674558855
+      ],
+      "residual_pixels": 0.34499671487392414
+    },
+    {
+      "view_name": "DSC_0638.JPG",
+      "actual_uv": [
+        546.976,
+        1179.76
+      ],
+      "predicted_uv": [
+        544.9589632064976,
+        1178.7894873273528
+      ],
+      "residual_pixels": 2.238377151891752
+    },
+    {
+      "view_name": "DSC_0642.JPG",
+      "actual_uv": [
+        5256.67,
+        897.596
+      ],
+      "predicted_uv": [
+        5258.12091900534,
+        897.4050677222135
+      ],
+      "residual_pixels": 1.4634278577217885
+    },
+    {
+      "view_name": "DSC_0643.JPG",
+      "actual_uv": [
+        3771.17,
+        2277.69
+      ],
+      "predicted_uv": [
+        3770.9558122242565,
+        2278.190822347316
+      ],
+      "residual_pixels": 0.544701227141138
+    }
+  ],
+  "figure_sha256": "0b19c8fe21700eedd97cc082b3bde1a6598c5e2a98c7308b3e927ee001679de9",
+  "limits": "SfM cameras and 3D points were jointly estimated upstream; low reprojection error does not independently prove true geometry or generalization to new views"
+}

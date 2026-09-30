@@ -1,0 +1,137 @@
+{
+  "source": "data\\c42_commonroad\\ITA_Foggia-6_1_T-1.xml",
+  "source_sha256": "2563a7dd4eedb60ef460d37afe4c0b718510092289f81341eb967bd3f741b8b4",
+  "scenario_id": "ITA_Foggia-6_1_T-1",
+  "dt_seconds": 0.1,
+  "road_source": "OpenStreetMap road geometry; SUMO simulated traffic, as XML header states",
+  "lanelets": 101,
+  "route_lanelets": [
+    "82212",
+    "78050",
+    "83276",
+    "79895"
+  ],
+  "route_length_m": 147.1010520269443,
+  "start_route_projection_m": 21.25773664422765,
+  "start_xy_heading_speed": [
+    -71.563138,
+    -864.15028,
+    -2.9747406,
+    9.1886594
+  ],
+  "goal_lanelet": "79895",
+  "dynamic_obstacles": 10,
+  "obstacles_by_initial_route_distance": [
+    {
+      "id": "326",
+      "speed_m_s": 7.8686014,
+      "distance_to_route_m": 1.4711470085720195,
+      "route_position_m": 7.451373227761412,
+      "initial_xy": [
+        -57.665977,
+        -865.84282
+      ],
+      "available_steps": 37
+    },
+    {
+      "id": "323",
+      "speed_m_s": 1.9969559,
+      "distance_to_route_m": 3.4820748866442988,
+      "route_position_m": 47.939123524779305,
+      "initial_xy": [
+        -91.376162,
+        -881.22133
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "32",
+      "speed_m_s": 1.860688,
+      "distance_to_route_m": 3.4911288283661888,
+      "route_position_m": 72.71897479839237,
+      "initial_xy": [
+        -118.04902,
+        -882.045
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "35",
+      "speed_m_s": 2.769934,
+      "distance_to_route_m": 3.4946275514808924,
+      "route_position_m": 83.9406825370885,
+      "initial_xy": [
+        -125.69844,
+        -873.03911
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "37",
+      "speed_m_s": 1.7536231,
+      "distance_to_route_m": 3.501460987832184,
+      "route_position_m": 98.87882376462578,
+      "initial_xy": [
+        -135.02193,
+        -861.36775
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "319",
+      "speed_m_s": 0.030324315,
+      "distance_to_route_m": 3.5800040941322977,
+      "route_position_m": 21.820721163983674,
+      "initial_xy": [
+        -71.415921,
+        -867.50977
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "318",
+      "speed_m_s": 1.0954813,
+      "distance_to_route_m": 3.6015206726541105,
+      "route_position_m": 64.44711987189457,
+      "initial_xy": [
+        -109.5451,
+        -887.01227
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "38",
+      "speed_m_s": 0.69888902,
+      "distance_to_route_m": 3.937870570829371,
+      "route_position_m": 54.466980615818336,
+      "initial_xy": [
+        -97.357351,
+        -885.76751
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "312",
+      "speed_m_s": 0.036215488,
+      "distance_to_route_m": 4.909366555356198,
+      "route_position_m": 92.02211128766311,
+      "initial_xy": [
+        -131.84525,
+        -867.60517
+      ],
+      "available_steps": 34
+    },
+    {
+      "id": "344",
+      "speed_m_s": 0.0,
+      "distance_to_route_m": 18.521336163819264,
+      "route_position_m": 65.05305849002723,
+      "initial_xy": [
+        -115.31662,
+        -900.86784
+      ],
+      "available_steps": 37
+    }
+  ],
+  "figure": "road_and_route.png"
+}

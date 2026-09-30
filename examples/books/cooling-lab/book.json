@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "id": "urn:uuid:64262e95-69e9-5179-b0c8-808c4797486a",
+  "slug": "cooling-lab",
+  "revision": "0.1.1",
+  "revisionModified": "2026-09-27T00:00:00Z",
+  "language": "zh-CN",
+  "title": "三杯读数与一个局部趋势",
+  "description": "换一部独立的小书，仍用相同的实验能力考察下降趋势和线性假设的边界。",
+  "authorship": "舒适阅读书库创作示例；AI 辅助编写；合成数据，不是现实测量。",
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "scope": "authoring_example"
+  },
+  "chapters": [
+    {
+      "id": "c01",
+      "title": "读数在下降，能用直线解释多久",
+      "source": "chapters/01.md",
+      "question": "初始的三段读数能支持下降趋势，能否推及所有时间？"
+    }
+  ],
+  "resources": [
+    {
+      "id": "cooling-points",
+      "kind": "data",
+      "title": "三次人工构造的温度读数",
+      "path": "data/cooling.csv",
+      "description": "数值演示，不是真实杯子的测温记录。",
+      "minimumUnit": "file",
+      "rights": "approved",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "python-fit",
+      "kind": "code",
+      "title": "同一能力的可运行 Python 代码",
+      "path": "code/fit_line.py",
+      "description": "与前一本书的程序字节一致，但本书可以独立携带与维护自己的版本。",
+      "minimumUnit": "file",
+      "downloadChunkBytes": 1024,
+      "rights": "approved",
+      "license": "MIT"
+    }
+  ],
+  "sources": [
+    {
+      "id": "construction",
+      "title": "本书的人造温度记录",
+      "creator": "示例内容编写者",
+      "year": "2026",
+      "kind": "teaching_construction",
+      "url": null,
+      "locator": "第一章数据表",
+      "supports": "这不是采集的真实物理数据；这里只展示同一计算方法在另一任务里的边界。"
+    }
+  ],
+  "activities": [
+    {
+      "id": "fit-cooling",
+      "chapter": "c01",
+      "anchor": "cooling-fit",
+      "title": "核对下降趋势",
+      "question": "负斜率要从数据和更新中出现，不能只改界面文字。",
+      "capability": "least-squares@1",
+      "required": [
+        "cooling-points"
+      ],
+      "optional": [
+        "python-fit"
+      ],
+      "parameters": {
+        "rate": {
+          "type": "number",
+          "label": "步长",
+          "default": 0.12,
+          "min": 0.01,
+          "max": 0.3
+        },
+        "steps": {
+          "type": "integer",
+          "label": "更新次数",
+          "default": 100,
+          "min": 1,
+          "max": 200
+        }
+      },
+      "observe": "三条读数下的负斜率、更新轨迹，以及把短时间直线外推的限制。",
+      "outputs": [
+        "trace",
+        "plot",
+        "summary"
+      ]
+    }
+  ],
+  "example": true,
+  "author": "舒适阅读书库项目"
+}

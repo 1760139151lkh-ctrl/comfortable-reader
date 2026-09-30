@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>9. 没有一种算法“总体最好”：到底应该怎么选？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="9-没有一种算法总体最好到底应该怎么选">9. 没有一种算法“总体最好”：到底应该怎么选？</h2>
+<p>前面介绍了许多算法，很自然会追问：究竟哪一种最好？</p>
+<p>结论是：<strong>不存在脱离问题结构的“总体最好算法”。</strong> 真正决定效果的不是名字有多新，而是</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>算法的搜索方式，是否匹配问题本身的结构</mtext></mrow></menclose></mrow></math></div>
+<p>甚至很多时候，正确答案是这些智能优化算法都不该用。</p>
+<table>
+<thead>
+<tr>
+<th>问题特征</th>
+<th>优先考虑</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>线性规划、凸优化</td>
+<td>专门的精确算法，不优先使用智能优化</td>
+</tr>
+<tr>
+<td>混合整数线性规划</td>
+<td>Gurobi、CPLEX、SCIP、CP-SAT 等</td>
+</tr>
+<tr>
+<td>光滑连续函数且梯度可得</td>
+<td>梯度下降、牛顿法、L-BFGS 等</td>
+</tr>
+<tr>
+<td>连续黑箱、不可导，评价成本尚可</td>
+<td>差分进化 DE；也可比较粒子群 PSO</td>
+</tr>
+<tr>
+<td>排列、路径、调度、分配</td>
+<td>专用局部搜索、禁忌搜索、模拟退火</td>
+</tr>
+<tr>
+<td>解由可重组的模块构成</td>
+<td>遗传算法 GA</td>
+</tr>
+<tr>
+<td>需要一步一步构造路径</td>
+<td>蚁群算法 ACO</td>
+</tr>
+<tr>
+<td>一次真实评价非常昂贵</td>
+<td>贝叶斯优化、代理模型、多保真优化</td>
+</tr>
+<tr>
+<td>完全不知道从哪里开始</td>
+<td>先做模拟退火或简单局部搜索基线</td>
+</tr>
+</tbody>
+</table>
+<p>最重要的原则可以写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>能利用问题结构的专用算法，通常优先于通用元启发式算法</mtext></mrow></menclose></mrow></math></div>
+<p>例如旅行商问题中，2-opt、3-opt、Lin–Kernighan 一类专用路线改进方法，往往比随手写一个遗传算法或蚁群算法更可靠。原因不是它们的名字更高级，而是它们直接利用了“路线由边组成”这一结构。</p>
+<h3 id="模拟退火适合作为入门基线">模拟退火：适合作为入门基线</h3>
+<p>如果一个问题很容易定义</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>当前解</mtext><mi>⟶</mi><mtext>随机邻居</mtext><mo>,</mo></mrow></math></div>
+<p>而且局部最优很多，模拟退火通常是很好的第一版。它实现简单、内存占用小，可以用来回答一个基本问题：</p>
+<blockquote>
+<p>仅靠局部修改，这个问题能不能逐渐找到明显更好的解？</p>
+</blockquote>
+<p>它的弱点是方向相对盲目，温度和邻域尺度也可能敏感。</p>
+<h3 id="禁忌搜索组合优化中的强力实干派">禁忌搜索：组合优化中的强力实干派</h3>
+<p>若问题是排列、路径、调度或分配，而且能够明确描述“交换两个元素”“移动一个任务”“反转一段路线”，禁忌搜索通常比通用遗传算法更值得优先尝试。它会系统检查邻域，利用记忆避免马上走回头路。</p>
+<h3 id="遗传算法只有重组有意义时才真正合适">遗传算法：只有“重组”有意义时才真正合适</h3>
+<p>遗传算法最有价值的前提是：两个优秀解的局部结构能够被有意义地组合。例如一个解包含若干相对独立的模块，父代 A 的第一模块很好，父代 B 的第二模块很好，交叉才可能把两者优点组合起来。</p>
+<p>如果交叉只是把好结构打碎，再用修复算法勉强拼回可行解，那么遗传算法可能只是增加了复杂度。TSP 中不能随便截断两条路线再拼接，必须使用 OX、PMX 等排列专用交叉；即便合法，也仍要检查优秀的相邻边是否真的得到继承。</p>
+<h3 id="差分进化与粒子群连续黑箱的常见选择">差分进化与粒子群：连续黑箱的常见选择</h3>
+<p>当</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>d</mi></msup></mrow></math></div>
+<p>且目标函数不可导、不光滑或只能通过仿真获得时，差分进化往往是参数较少、表现稳健的默认选项。粒子群直观、容易实现，但群体可能过早集中，边界处理和速度控制也会明显影响结果。</p>
+<h3 id="蚁群算法适合逐步构造的组合解">蚁群算法：适合逐步构造的组合解</h3>
+<p>蚁群算法不是所有离散问题的通用答案。它更适合把完整解写成一系列局部选择的情形，例如不断选择下一个城市、下一条边或下一个任务，并且能够为这些局部选择定义有意义的信息素和启发值。</p>
+<p>因此选算法之前，先问五个问题：</p>
+<ol>
+<li>决策变量是连续、整数、排列、集合还是树？</li>
+<li>约束能否由表示方式或邻域操作天然保持？</li>
+<li>一次 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 的评价有多贵？</li>
+<li>是否需要最优性证明或可验证的上下界？</li>
+<li>问题里有哪些结构可以被算法直接利用？</li>
+</ol>
+<hr/>
+</body></html>

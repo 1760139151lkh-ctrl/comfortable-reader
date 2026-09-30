@@ -1,0 +1,519 @@
+{
+  "data_manifest": "data/wikitext2_raw/manifest.json",
+  "data_manifest_sha256": "ecea402a01a6c2f9a68057011daf0691d2f5421478ba86718e36b62e47df6eda",
+  "vocab_sha256": "f715a5167532a6c35d66ab9f0cc9ea3c6b7db794f5d20d70d2242d3c4cc4923e",
+  "same_mapped_target_definition": "two preceding mapped words, BOS/BOS at each article start, EOS at article end; PARA inside",
+  "vocab_size": 10004,
+  "training_targets": 2063579,
+  "distinct_trigrams": 1168476,
+  "distinct_bigrams": 421697,
+  "lower_order_count_definition": "N1+(.,v,w): number of distinct left words u with c(u,v,w)>0; raw c(v,w) is retained only for comparison",
+  "lower_order_example_the_game": {
+    "raw_bigram_count": 763,
+    "distinct_left_contexts": 171
+  },
+  "distinct_histories": 421667,
+  "discount_candidates": [
+    0.5,
+    0.75,
+    1.0
+  ],
+  "validation_by_discount": {
+    "0.5": {
+      "targets": 215046,
+      "mean_nll_nats": 5.0258309700815005,
+      "perplexity_on_mapped_vocabulary": 152.29675759498778,
+      "unseen_trigram_target_fraction": 0.4773862336430345,
+      "unseen_context_fraction": 0.13376672897891614,
+      "unknown_target_fraction": 0.1175422932767873,
+      "unknown_target_mean_nll": 2.216753679451921,
+      "known_target_mean_nll": 5.399996648749997,
+      "first_six_scored_examples": [
+        {
+          "context_ids": [
+            1,
+            1
+          ],
+          "target_id": 12,
+          "probability": 0.9995848855932102
+        },
+        {
+          "context_ids": [
+            1,
+            12
+          ],
+          "target_id": 0,
+          "probability": 0.19021497188107916
+        },
+        {
+          "context_ids": [
+            12,
+            0
+          ],
+          "target_id": 0,
+          "probability": 0.05457560019700516
+        },
+        {
+          "context_ids": [
+            0,
+            0
+          ],
+          "target_id": 12,
+          "probability": 0.005231098499254911
+        },
+        {
+          "context_ids": [
+            0,
+            12
+          ],
+          "target_id": 3,
+          "probability": 0.06013771496101993
+        },
+        {
+          "context_ids": [
+            12,
+            3
+          ],
+          "target_id": 0,
+          "probability": 0.08918050143274583
+        }
+      ]
+    },
+    "0.75": {
+      "targets": 215046,
+      "mean_nll_nats": 4.897449815203195,
+      "perplexity_on_mapped_vocabulary": 133.94775223238437,
+      "unseen_trigram_target_fraction": 0.4773862336430345,
+      "unseen_context_fraction": 0.13376672897891614,
+      "unknown_target_fraction": 0.1175422932767873,
+      "unknown_target_mean_nll": 2.1671246498310044,
+      "known_target_mean_nll": 5.261125806567091,
+      "first_six_scored_examples": [
+        {
+          "context_ids": [
+            1,
+            1
+          ],
+          "target_id": 12,
+          "probability": 0.9990659925847232
+        },
+        {
+          "context_ids": [
+            1,
+            12
+          ],
+          "target_id": 0,
+          "probability": 0.19192379272914867
+        },
+        {
+          "context_ids": [
+            12,
+            0
+          ],
+          "target_id": 0,
+          "probability": 0.05608961012615669
+        },
+        {
+          "context_ids": [
+            0,
+            0
+          ],
+          "target_id": 12,
+          "probability": 0.0052988498597867926
+        },
+        {
+          "context_ids": [
+            0,
+            12
+          ],
+          "target_id": 3,
+          "probability": 0.06019969156770357
+        },
+        {
+          "context_ids": [
+            12,
+            3
+          ],
+          "target_id": 0,
+          "probability": 0.08978870430719461
+        }
+      ]
+    },
+    "1.0": {
+      "targets": 215046,
+      "mean_nll_nats": 4.9563235452147385,
+      "perplexity_on_mapped_vocabulary": 142.07051874550712,
+      "unseen_trigram_target_fraction": 0.4773862336430345,
+      "unseen_context_fraction": 0.13376672897891614,
+      "unknown_target_fraction": 0.1175422932767873,
+      "unknown_target_mean_nll": 2.155283061050845,
+      "known_target_mean_nll": 5.329418731036505,
+      "first_six_scored_examples": [
+        {
+          "context_ids": [
+            1,
+            1
+          ],
+          "target_id": 12,
+          "probability": 0.9983395423728412
+        },
+        {
+          "context_ids": [
+            1,
+            12
+          ],
+          "target_id": 0,
+          "probability": 0.19414461462668256
+        },
+        {
+          "context_ids": [
+            12,
+            0
+          ],
+          "target_id": 0,
+          "probability": 0.057646419160284616
+        },
+        {
+          "context_ids": [
+            0,
+            0
+          ],
+          "target_id": 12,
+          "probability": 0.005371848721488762
+        },
+        {
+          "context_ids": [
+            0,
+            12
+          ],
+          "target_id": 3,
+          "probability": 0.060261429696641715
+        },
+        {
+          "context_ids": [
+            12,
+            3
+          ],
+          "target_id": 0,
+          "probability": 0.09064190200625641
+        }
+      ]
+    }
+  },
+  "selected_discount": 0.75,
+  "test_selected_discount": {
+    "targets": 242531,
+    "mean_nll_nats": 4.822399851168673,
+    "perplexity_on_mapped_vocabulary": 124.26294580872349,
+    "unseen_trigram_target_fraction": 0.4626996136576355,
+    "unseen_context_fraction": 0.12714663280158,
+    "unknown_target_fraction": 0.1256746560233537,
+    "unknown_target_mean_nll": 2.1678257612028373,
+    "known_target_mean_nll": 5.203965692698282,
+    "first_six_scored_examples": [
+      {
+        "context_ids": [
+          1,
+          1
+        ],
+        "target_id": 12,
+        "probability": 0.9990659925847232
+      },
+      {
+        "context_ids": [
+          1,
+          12
+        ],
+        "target_id": 612,
+        "probability": 3.1181111143786664e-05
+      },
+      {
+        "context_ids": [
+          12,
+          612
+        ],
+        "target_id": 0,
+        "probability": 0.24177385954844355
+      },
+      {
+        "context_ids": [
+          612,
+          0
+        ],
+        "target_id": 12,
+        "probability": 0.0007500652681686606
+      },
+      {
+        "context_ids": [
+          0,
+          12
+        ],
+        "target_id": 3,
+        "probability": 0.06019969156770357
+      },
+      {
+        "context_ids": [
+          12,
+          3
+        ],
+        "target_id": 612,
+        "probability": 8.385294601437354e-05
+      }
+    ]
+  },
+  "unigram_validation": {
+    "targets": 215046,
+    "mean_nll_nats": 6.186269388265989,
+    "perplexity_on_mapped_vocabulary": 486.02953237887994,
+    "unseen_trigram_target_fraction": 0.4773862336430345,
+    "unseen_context_fraction": 0.13376672897891614,
+    "unknown_target_fraction": 0.1175422932767873,
+    "unknown_target_mean_nll": 2.323647297112807,
+    "known_target_mean_nll": 6.700765953023781,
+    "first_six_scored_examples": [
+      {
+        "context_ids": [
+          1,
+          1
+        ],
+        "target_id": 12,
+        "probability": 0.014329473211347856
+      },
+      {
+        "context_ids": [
+          1,
+          12
+        ],
+        "target_id": 0,
+        "probability": 0.09791580550102516
+      },
+      {
+        "context_ids": [
+          12,
+          0
+        ],
+        "target_id": 0,
+        "probability": 0.09791580550102516
+      },
+      {
+        "context_ids": [
+          0,
+          0
+        ],
+        "target_id": 12,
+        "probability": 0.014329473211347856
+      },
+      {
+        "context_ids": [
+          0,
+          12
+        ],
+        "target_id": 3,
+        "probability": 0.005363981703632378
+      },
+      {
+        "context_ids": [
+          12,
+          3
+        ],
+        "target_id": 0,
+        "probability": 0.09791580550102516
+      }
+    ]
+  },
+  "unigram_test": {
+    "targets": 242531,
+    "mean_nll_nats": 6.121585105547138,
+    "perplexity_on_mapped_vocabulary": 455.58627478934886,
+    "unseen_trigram_target_fraction": 0.4626996136576355,
+    "unseen_context_fraction": 0.12714663280158,
+    "unknown_target_fraction": 0.1256746560233537,
+    "unknown_target_mean_nll": 2.3236472971130704,
+    "known_target_mean_nll": 6.667496911669677,
+    "first_six_scored_examples": [
+      {
+        "context_ids": [
+          1,
+          1
+        ],
+        "target_id": 12,
+        "probability": 0.014329473211347856
+      },
+      {
+        "context_ids": [
+          1,
+          12
+        ],
+        "target_id": 612,
+        "probability": 0.00014925525022303483
+      },
+      {
+        "context_ids": [
+          12,
+          612
+        ],
+        "target_id": 0,
+        "probability": 0.09791580550102516
+      },
+      {
+        "context_ids": [
+          612,
+          0
+        ],
+        "target_id": 12,
+        "probability": 0.014329473211347856
+      },
+      {
+        "context_ids": [
+          0,
+          12
+        ],
+        "target_id": 3,
+        "probability": 0.005363981703632378
+      },
+      {
+        "context_ids": [
+          12,
+          3
+        ],
+        "target_id": 612,
+        "probability": 0.00014925525022303483
+      }
+    ]
+  },
+  "normalization_checks": [
+    {
+      "context_ids": [
+        1,
+        1
+      ],
+      "discount": 0.5,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        1,
+        1
+      ],
+      "discount": 0.75,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        1,
+        1
+      ],
+      "discount": 1.0,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        4,
+        79
+      ],
+      "discount": 0.5,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        4,
+        79
+      ],
+      "discount": 0.75,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        4,
+        79
+      ],
+      "discount": 1.0,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        99999,
+        99999
+      ],
+      "discount": 0.5,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        99999,
+        99999
+      ],
+      "discount": 0.75,
+      "probability_sum": 1.0
+    },
+    {
+      "context_ids": [
+        99999,
+        99999
+      ],
+      "discount": 1.0,
+      "probability_sum": 1.0
+    }
+  ],
+  "source_context_the_game": {
+    "context": [
+      "the",
+      "game"
+    ],
+    "history_count": 763,
+    "top_next_words": [
+      {
+        "token": "'s",
+        "probability": 0.19819078750029157
+      },
+      {
+        "token": ".",
+        "probability": 0.13842663061863833
+      },
+      {
+        "token": ",",
+        "probability": 0.13748709370979473
+      },
+      {
+        "token": "was",
+        "probability": 0.05289986488984546
+      },
+      {
+        "token": "in",
+        "probability": 0.03309725647803159
+      },
+      {
+        "token": "and",
+        "probability": 0.029202056349018794
+      },
+      {
+        "token": "to",
+        "probability": 0.02911660082608096
+      },
+      {
+        "token": "with",
+        "probability": 0.028040352111606257
+      },
+      {
+        "token": "\"",
+        "probability": 0.021608743980876918
+      },
+      {
+        "token": "<unk>",
+        "probability": 0.018328311792097877
+      },
+      {
+        "token": "as",
+        "probability": 0.017241882586985054
+      },
+      {
+        "token": "had",
+        "probability": 0.01511787691291348
+      }
+    ]
+  },
+  "saved_counts": "results/word_ngram_counts.npz",
+  "saved_counts_sha256": "c42c662ff30d4927319feacc22b67fd3fbf98ae34ee1a2dcc3d91e84595c8bb3",
+  "seconds_including_count_build_validation_test": 6.117185799987055,
+  "note": "single-discount interpolated Kneser-Ney with continuation counts at both lower orders; not the original 1995 backoff implementation or modified multi-discount variants; word vocabulary maps unseen words to UNK"
+}

@@ -1,0 +1,24 @@
+{
+  "c42_report_sha256": "ae7aed1d3053f45a867ae941bd95800ed2ea23cc366b3119264f5b3579cd7f56",
+  "c42_trace_sha256": "7b42b26f8d277ab1a05763fb1d20affc427e2b1abf0c74d6b158fce0404b25c6",
+  "same_tick": 30,
+  "same_time_seconds": 3.0,
+  "conditions": "two author-written policies on one author kinematic vehicle and one author-created stopped car",
+  "candidates": {
+    "stress_no_brake": {
+      "route_progress_m": 20.491431925307644,
+      "author_stopped_car_overlap_at_tick": true,
+      "progress_only_score": 20.491431925307644,
+      "feasible_under_sampled_no_collision_rule": false
+    },
+    "stress_with_brake": {
+      "route_progress_m": 18.411262266138856,
+      "author_stopped_car_overlap_at_tick": false,
+      "progress_only_score": 18.411262266138856,
+      "feasible_under_sampled_no_collision_rule": true
+    }
+  },
+  "progress_only_prefers": "stress_no_brake",
+  "require_no_sampled_overlap_prefers": "stress_with_brake",
+  "boundary": "The progress score omits collision and would prefer the collided candidate in this fixed pair; no RL agent was trained to exploit a reward, and discrete overlap cannot certify continuous safety."
+}

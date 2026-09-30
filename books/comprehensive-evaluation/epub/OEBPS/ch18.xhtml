@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>18. 一个完整算例：熵权—TOPSIS 怎样一步步得到排序</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="18-一个完整算例熵权topsis-怎样一步步得到排序">18. 一个完整算例：熵权—TOPSIS 怎样一步步得到排序</h2>
+<p>下面用五个对象 A—E 的四项指标走完一条完整计算链。前三项是效益型，成本越小越好。</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th style="text-align:right">质量</th>
+<th style="text-align:right">创新</th>
+<th style="text-align:right">覆盖</th>
+<th style="text-align:right">成本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">80</td>
+<td style="text-align:right">72</td>
+<td style="text-align:right">90</td>
+<td style="text-align:right">76</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">92</td>
+<td style="text-align:right">65</td>
+<td style="text-align:right">82</td>
+<td style="text-align:right">70</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">78</td>
+<td style="text-align:right">88</td>
+<td style="text-align:right">86</td>
+<td style="text-align:right">85</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">86</td>
+<td style="text-align:right">80</td>
+<td style="text-align:right">94</td>
+<td style="text-align:right">68</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">84</td>
+<td style="text-align:right">75</td>
+<td style="text-align:right">88</td>
+<td style="text-align:right">72</td>
+</tr>
+</tbody>
+</table>
+<h3 id="181-第一步同向化与极差标准化">18.1 第一步：同向化与极差标准化</h3>
+<p>对质量、创新、覆盖使用效益型公式，对成本使用成本型公式，得到：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Z</mi><mo>≈</mo><mo>[</mo><mtable><mtr><mtd><mn>0.1429</mn></mtd><mtd><mn>0.3043</mn></mtd><mtd><mn>0.6667</mn></mtd><mtd><mn>0.5294</mn></mtd></mtr><mtr><mtd><mn>1.0000</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0.8824</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>1.0000</mn></mtd><mtd><mn>0.3333</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0.5714</mn></mtd><mtd><mn>0.6522</mn></mtd><mtd><mn>1.0000</mn></mtd><mtd><mn>1.0000</mn></mtd></mtr><mtr><mtd><mn>0.4286</mn></mtd><mtd><mn>0.4348</mn></mtd><mtd><mn>0.5000</mn></mtd><mtd><mn>0.7647</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>例如 A 的成本为 76，样本成本最小值 68、最大值 85，因此：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>z</mi><mrow><mi>A</mi><mo>,</mo><mtext>成本</mtext></mrow></msub><mo>=</mo><mfrac><mrow><mn>85</mn><mo>−</mo><mn>76</mn></mrow><mrow><mn>85</mn><mo>−</mo><mn>68</mn></mrow></mfrac><mo>=</mo><mfrac><mn>9</mn><mrow><mn>17</mn></mrow></mfrac><mo>≈</mo><mn>0.5294</mn><mo>.</mo></mrow></math></div>
+<p>成本越低，转换后的数值越大。</p>
+<h3 id="182-第二步计算熵权">18.2 第二步：计算熵权</h3>
+<p>每列除以列和后得到比例矩阵：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>P</mi><mo>≈</mo><mo>[</mo><mtable><mtr><mtd><mn>0.0667</mn></mtd><mtd><mn>0.1273</mn></mtd><mtd><mn>0.2667</mn></mtd><mtd><mn>0.1667</mn></mtd></mtr><mtr><mtd><mn>0.4667</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0.2778</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0.4182</mn></mtd><mtd><mn>0.1333</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0.2667</mn></mtd><mtd><mn>0.2727</mn></mtd><mtd><mn>0.4000</mn></mtd><mtd><mn>0.3148</mn></mtd></mtr><mtr><mtd><mn>0.2000</mn></mtd><mtd><mn>0.1818</mn></mtd><mtd><mn>0.2000</mn></mtd><mtd><mn>0.2407</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>这里 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>m</mi><mo>=</mo><mn>5</mn></mrow></math></span>，所以：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>k</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mi>ln</mi><mn>5</mn></mrow></mfrac><mo>.</mo></mrow></math></div>
+<p>逐列计算熵、差异系数与权重：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th style="text-align:right">熵 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>e</mi><mi>j</mi></msub></mrow></math></span></th>
+<th style="text-align:right">差异系数 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>d</mi><mi>j</mi></msub></mrow></math></span></th>
+<th style="text-align:right">权重 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>w</mi><mi>j</mi></msub></mrow></math></span></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>质量</td>
+<td style="text-align:right">0.7522</td>
+<td style="text-align:right">0.2478</td>
+<td style="text-align:right">0.3152</td>
+</tr>
+<tr>
+<td>创新</td>
+<td style="text-align:right">0.8023</td>
+<td style="text-align:right">0.1977</td>
+<td style="text-align:right">0.2515</td>
+</tr>
+<tr>
+<td>覆盖</td>
+<td style="text-align:right">0.8137</td>
+<td style="text-align:right">0.1863</td>
+<td style="text-align:right">0.2370</td>
+</tr>
+<tr>
+<td>成本</td>
+<td style="text-align:right">0.8457</td>
+<td style="text-align:right">0.1543</td>
+<td style="text-align:right">0.1963</td>
+</tr>
+</tbody>
+</table>
+<p>质量在当前样本中分布最不均匀，因此熵最低、熵权最高。这个结论只涉及样本区分度，不代表质量在任何政策场景下都必然最重要。</p>
+<h3 id="183-第三步为-topsis-做向量归一化">18.3 第三步：为 TOPSIS 做向量归一化</h3>
+<p>TOPSIS 的向量归一化矩阵为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mo>≈</mo><mo>[</mo><mtable><mtr><mtd><mn>0.1155</mn></mtd><mtd><mn>0.2329</mn></mtd><mtd><mn>0.4961</mn></mtd><mtd><mn>0.3256</mn></mtd></mtr><mtr><mtd><mn>0.8083</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0.5427</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0.7654</mn></mtd><mtd><mn>0.2481</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0.4619</mn></mtd><mtd><mn>0.4992</mn></mtd><mtd><mn>0.7442</mn></mtd><mtd><mn>0.6150</mn></mtd></mtr><mtr><mtd><mn>0.3464</mn></mtd><mtd><mn>0.3328</mn></mtd><mtd><mn>0.3721</mn></mtd><mtd><mn>0.4703</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>乘以熵权后：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>V</mi><mo>≈</mo><mo>[</mo><mtable><mtr><mtd><mn>0.0364</mn></mtd><mtd><mn>0.0586</mn></mtd><mtd><mn>0.1176</mn></mtd><mtd><mn>0.0639</mn></mtd></mtr><mtr><mtd><mn>0.2548</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0</mn></mtd><mtd><mn>0.1065</mn></mtd></mtr><mtr><mtd><mn>0</mn></mtd><mtd><mn>0.1925</mn></mtd><mtd><mn>0.0588</mn></mtd><mtd><mn>0</mn></mtd></mtr><mtr><mtd><mn>0.1456</mn></mtd><mtd><mn>0.1255</mn></mtd><mtd><mn>0.1764</mn></mtd><mtd><mn>0.1207</mn></mtd></mtr><mtr><mtd><mn>0.1092</mn></mtd><mtd><mn>0.0837</mn></mtd><mtd><mn>0.0882</mn></mtd><mtd><mn>0.0923</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>因为每列都有一个标准化值为 0，负理想点恰为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>v</mi><mo>−</mo></msup><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>正理想点为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>v</mi><mo>+</mo></msup><mo>≈</mo><mo stretchy="false">(</mo><mn>0.2548</mn><mo>,</mo><mn>0.1925</mn><mo>,</mo><mn>0.1764</mn><mo>,</mo><mn>0.1207</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<h3 id="184-第四步距离贴近度与排序">18.4 第四步：距离、贴近度与排序</h3>
+<p>计算两个距离和相对贴近度：</p>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>D</mi><mi>i</mi><mo>+</mo></msubsup></mrow></math></span></th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msubsup><mi>D</mi><mi>i</mi><mo>−</mo></msubsup></mrow></math></span></th>
+<th style="text-align:right"><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>C</mi><mi>i</mi></msub></mrow></math></span></th>
+<th style="text-align:right">排名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td style="text-align:right">0.2689</td>
+<td style="text-align:right">0.1506</td>
+<td style="text-align:right">0.3589</td>
+<td style="text-align:right">5</td>
+</tr>
+<tr>
+<td>B</td>
+<td style="text-align:right">0.2615</td>
+<td style="text-align:right">0.2762</td>
+<td style="text-align:right">0.5137</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td>C</td>
+<td style="text-align:right">0.3055</td>
+<td style="text-align:right">0.2013</td>
+<td style="text-align:right">0.3971</td>
+<td style="text-align:right">4</td>
+</tr>
+<tr>
+<td>D</td>
+<td style="text-align:right">0.1281</td>
+<td style="text-align:right">0.2875</td>
+<td style="text-align:right">0.6918</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td>E</td>
+<td style="text-align:right">0.2040</td>
+<td style="text-align:right">0.1877</td>
+<td style="text-align:right">0.4792</td>
+<td style="text-align:right">3</td>
+</tr>
+</tbody>
+</table>
+<p>最终排序为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>&gt;</mo><mi>B</mi><mo>&gt;</mo><mi>E</mi><mo>&gt;</mo><mi>C</mi><mo>&gt;</mo><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>D 没有在每个指标上都最好，但四项表现较均衡，且离正理想点最近、离负理想点最远。</p>
+<h3 id="185-同一数据换方法为什么局部顺序会变">18.5 同一数据换方法，为什么局部顺序会变？</h3>
+<p>仍以每列 1 为理想参考序列、取 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ρ</mi><mo>=</mo><mn>0.5</mn></mrow></math></span>，使用相同熵权计算灰色关联度：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>γ</mi><mi>A</mi></msub><mo>=</mo><mn>0.4646</mn><mo>,</mo><msub><mi>γ</mi><mi>B</mi></msub><mo>=</mo><mn>0.6370</mn><mo>,</mo><msub><mi>γ</mi><mi>C</mi></msub><mo>=</mo><mn>0.5236</mn><mo>,</mo><msub><mi>γ</mi><mi>D</mi></msub><mo>=</mo><mn>0.7513</mn><mo>,</mo><msub><mi>γ</mi><mi>E</mi></msub><mo>=</mo><mn>0.5171</mn><mo>.</mo></mrow></math></div>
+<p>灰色关联排序为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>&gt;</mo><mi>B</mi><mo>&gt;</mo><mi>C</mi><mo>&gt;</mo><mi>E</mi><mo>&gt;</mo><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>C 与 E 的顺序和 TOPSIS 相反。原因不是某个公式算错，而是两种方法对偏差的聚合方式不同：TOPSIS 计算整体欧氏距离，灰色关联先把每个局部差异映射成关联系数再平均。</p>
+<p>这种不一致正是值得报告的信息。如果最终决策高度依赖 C 与 E 谁在前，就应回到问题目的，判断哪种距离观更合适，而不是不断更换方法直到得到期望排名。</p>
+<h3 id="186-权重变化会怎样">18.6 权重变化会怎样？</h3>
+<p>若使用第 5 章 AHP 权重：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><mi>w</mi><mrow><mi>A</mi><mi>H</mi><mi>P</mi></mrow></msup><mo>≈</mo><mo stretchy="false">(</mo><mn>0.4829</mn><mo>,</mo><mn>0.2720</mn><mo>,</mo><mn>0.1570</mn><mo>,</mo><mn>0.0882</mn><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>质量的影响显著增强，TOPSIS 贴近度变为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mn>0.2436</mn><mo>,</mo><mn>0.6222</mn><mo>,</mo><mn>0.3452</mn><mo>,</mo><mn>0.6150</mn><mo>,</mo><mn>0.4395</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>此时排序为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>B</mi><mo>&gt;</mo><mi>D</mi><mo>&gt;</mo><mi>E</mi><mo>&gt;</mo><mi>C</mi><mo>&gt;</mo><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>B 依靠质量第一升至首位。两组排序分别忠实反映了两种权重语义：熵权强调当前样本的差异结构，AHP 权重强调给定偏好。不能只说其中一个“更客观”；应问哪一种更符合决策目的。</p>
+<p>若取二者各一半的线性组合，排序又变为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>D</mi><mo>&gt;</mo><mi>B</mi><mo>&gt;</mo><mi>E</mi><mo>&gt;</mo><mi>C</mi><mo>&gt;</mo><mi>A</mi><mo>.</mo></mrow></math></div>
+<p>这说明 D、B 的首位竞争对权重来源敏感，而 E、C、A 的相对位置在这几组设定下较稳定。</p>
+<hr/>
+</body></html>

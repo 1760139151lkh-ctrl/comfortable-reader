@@ -1,0 +1,135 @@
+{
+  "identity": "Author-generated exact heat-equation fields; no physical measurements",
+  "equation": "u_t=0.15 u_xx on x,t in [0,1], homogeneous endpoint values",
+  "single_initial_field": "sin(pi*x)+0.25*sin(2*pi*x)",
+  "steps": 2000,
+  "device": "cuda",
+  "data_only": {
+    "training": {
+      "steps": 2000,
+      "seconds": 5.915287500014529,
+      "history": [
+        {
+          "step": 1,
+          "data_loss": 0.42701372504234314,
+          "physics_loss": null
+        },
+        {
+          "step": 100,
+          "data_loss": 0.05940937623381615,
+          "physics_loss": null
+        },
+        {
+          "step": 500,
+          "data_loss": 6.419840065063909e-05,
+          "physics_loss": null
+        },
+        {
+          "step": 1000,
+          "data_loss": 3.129940159851685e-05,
+          "physics_loss": null
+        },
+        {
+          "step": 2000,
+          "data_loss": 1.6378124200855382e-05,
+          "physics_loss": null
+        }
+      ],
+      "parameter_count": 2241
+    },
+    "evaluation": {
+      "grid_rmse": 0.2791162625813043,
+      "final_t_rmse": 0.3237985488496125,
+      "residual_probe_rmse": 1.3062347173690796
+    }
+  },
+  "pinn": {
+    "training": {
+      "steps": 2000,
+      "seconds": 15.633795299916528,
+      "history": [
+        {
+          "step": 1,
+          "data_loss": 0.42701372504234314,
+          "physics_loss": 0.00019095445168204606
+        },
+        {
+          "step": 100,
+          "data_loss": 0.029522892087697983,
+          "physics_loss": 0.007859348319470882
+        },
+        {
+          "step": 500,
+          "data_loss": 0.0006709435256198049,
+          "physics_loss": 0.0003078850277233869
+        },
+        {
+          "step": 1000,
+          "data_loss": 0.000246315699769184,
+          "physics_loss": 5.4796495533082634e-05
+        },
+        {
+          "step": 2000,
+          "data_loss": 0.00019717968825716525,
+          "physics_loss": 0.00017297882004640996
+        }
+      ],
+      "parameter_count": 2241
+    },
+    "evaluation": {
+      "grid_rmse": 0.009926937791849444,
+      "final_t_rmse": 0.008478933095422567,
+      "residual_probe_rmse": 0.006940858904272318
+    }
+  },
+  "finite_difference": {
+    "dx": 0.02,
+    "dt": 0.001,
+    "stability_ratio": 0.37499999999999994,
+    "final_t_rmse": 9.713309196156652e-05
+  },
+  "spectral_operator": {
+    "task": "map initial field to its field at t=0.1 for a three-mode heat family",
+    "train_examples": 256,
+    "heldout_examples": 64,
+    "learned_gains": [
+      0.8623931119791406,
+      0.5531222335705456,
+      0.263844176168857
+    ],
+    "analytic_gains": [
+      0.86239311187577,
+      0.5531222339142944,
+      0.26384417557115664
+    ],
+    "heldout_rmse_grid64": 2.7248159031820545e-10,
+    "same_coefficients_grid128_rmse": 2.735356819399946e-10,
+    "unrepresented_mode4_grid128_rmse": 0.06592947184311475,
+    "note": "A three-gain learned Fourier multiplier, not a full FNO and not a telescope fit."
+  },
+  "sparse_identification": {
+    "library": [
+      "1",
+      "a",
+      "a^2"
+    ],
+    "true_coefficient_on_a": -1.4804406601634037,
+    "true_derivative_fit": [
+      0.0,
+      -1.4804406601634037,
+      0.0
+    ],
+    "noisy_difference_fit": [
+      0.0,
+      -1.4770902511208892,
+      0.0
+    ],
+    "first_mode_projection_max_error": 1.1102230246251565e-16,
+    "noise_std_in_a": 0.01,
+    "raw_derivative_rmse_due_noise": 0.732523617855633,
+    "meaning": "First Fourier-mode amplitude of an analytically generated heat solution, not recovered from observations."
+  },
+  "code_sha256": "20eefc3076387ff8fd6f0128201cd7e3391c9dff00f9b98e14048f7d91beddd1",
+  "figure": "work\\runs\\c45_heat_projected_current.png",
+  "figure_sha256": "6862935aa718b5a787e06b7f583def0c5b3c05e04453e92973e9f5602a5c238f"
+}

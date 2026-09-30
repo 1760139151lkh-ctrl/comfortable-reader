@@ -1,0 +1,9 @@
+{
+  "nodes": 2708,
+  "real_citation_pairs": 5278,
+  "trained_gcn_selected_epoch": 130,
+  "consistent_node_renaming_max_logit_difference": 1.9073486328125e-06,
+  "graph_mean_readout_invariance_max_difference": 1.1920928955078125e-07,
+  "inconsistent_reorder_features_only_mean_logit_difference": 1.3166898488998413,
+  "meaning": "PAP^T and PX yield P f(A,X); permuting only X changes the graph input"
+}

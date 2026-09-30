@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十章　理论可靠不等于一次计算就可信</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第十章-理论可靠不等于一次计算就可信">第十章　理论可靠不等于一次计算就可信</h1>
+<p>有限元可能输出许多小数位，但小数位不等于真实性。常见失败来源包括：</p>
+<ul>
+<li>物理模型本身错误；</li>
+<li>材料参数不准确；</li>
+<li>边界条件设置错误；</li>
+<li>网格过粗或严重畸变；</li>
+<li>尖角、裂纹附近没有局部加密；</li>
+<li>非线性迭代没有真正收敛；</li>
+<li>时间步长过大；</li>
+<li>后处理把应力或通量解释错了。</li>
+</ul>
+<p>因此实际工作至少要做网格收敛检验。比如逐步使用更细网格，关心的结果为</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>10.51</mn><mo>,</mo><mspace width="0.278em"/><mn>10.28</mn><mo>,</mo><mspace width="0.278em"/><mn>10.24</mn><mo>,</mo></mrow></math></div>
+<p>说明结果正在稳定。若结果在</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>10.5</mn><mo>,</mo><mspace width="0.278em"/><mn>15.7</mn><mo>,</mo><mspace width="0.278em"/><mn>8.2</mn></mrow></math></div>
+<p>之间乱跳，就不能仅凭最后一次计算相信它。</p>
+<p>有限元的可信度来自两层：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>适用条件下的数学收敛理论</mtext><mo>+</mo><mtext>针对当前模型的数值验证</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>还应区分三件事：</p>
+<ol>
+<li>方程是否正确描述现实；</li>
+<li>离散方法是否正确求解方程；</li>
+<li>程序实现是否正确执行离散方法。</li>
+</ol>
+<p>这三层中任意一层出错，漂亮的云图都可能毫无意义。</p>
+<hr/>
+</body></html>

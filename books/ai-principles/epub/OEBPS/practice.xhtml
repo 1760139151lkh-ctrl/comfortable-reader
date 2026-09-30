@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN"><head><meta charset="utf-8"/><title>随书实践准备：先找到目录和解释器</title><link rel="stylesheet" type="text/css" href="style.css"/></head><body><p><a id="practice-start"/></p>
+<h1 id="sec-practice-001">随书实践准备：先找到目录和解释器</h1>
+<p>本书的文字与公式在舒适阅读书库里可以离线阅读；Python 程序要在电脑的 PowerShell 终端运行。你不必在 EPUB 中寻找“运行代码”按钮，也不必先猜作者工作区里的绝对路径。书的配套入口是桌面 <code>AI学习原理</code> 文件夹下的 <code>AI教程_配套练习</code>。它与装有原稿、源码和既有实验数据的 <code>AI教材生产系统_高保真重设计_20260923</code> 是同级文件夹。本书给的 <code>work/code/...</code> 命令，都以<strong>后一个工程文件夹</strong>为当前工作目录。</p>
+<p>在文件资源管理器里打开 <code>AI教程_配套练习</code>，从该文件夹打开 PowerShell，执行：</p>
+<pre><code class="language-powershell">&amp; .\Open-Lab.ps1
+</code></pre>
+<p>它会检查正式目录、导读和第一章程序是否存在，显示实际使用的 Python 路径与版本，然后把当前终端切到教程工程目录；不会训练、下载或改写模型。当前这台 Windows 电脑实测使用 PowerShell、Python 3.13.14；涉及 PyTorch 的既有作者实验使用过 PyTorch 2.11.0+cu128。第一章的独立练习只需 Python 标准库。若你打开的是新的终端窗口，需要再运行一次 <code>Open-Lab.ps1</code>；若它报“教程工程不完整”，先检查上述两个同级文件夹是否仍在一起，而不要把命令中的路径硬改成猜测的旧目录。</p>
+<p>第一章有两种相互核对的写法。<code>AI教程_配套练习/practice/01_first_perceptron.py</code> 是小而完整的学习版本，适合在旁边新建自己的 <code>mine_01.py</code> 逐步写；原工程的 <code>work/code/first_perceptron.py</code> 是保留多种变体和运行收据的作者参考程序。书中的练习会明确说何时新建自己的文件，何时只运行参考程序。前者生成的 JSON 落在 <code>AI教程_配套练习/practice/output</code>；后者按程序原有设计写到教程工程的 <code>work/results</code>。代码里的 <code>__file__</code> 表示当前脚本的位置，因此结果目录不由阅读器决定。</p>
+<p>第二至四章接着提供 <code>02_squared_loss.py</code>、<code>03_chain_rule.py</code>、<code>04_torch_autograd.py</code> 三份完成版。你可以按正文各自新建 <code>mine_02.py</code>、<code>mine_03.py</code>、<code>mine_04.py</code>，先预测并写关键增量，再运行完成版核对。它们依次区分目标和梯度、沿一条隐藏路径传导误差、自动求导与实际改参数；大程序的完整源码则仍在各章的“完整代码”链接中。</p>
+<p>后面的大实验还有各章专用数据、检查点和运行记录；核心图与关键代码已在书内，完整工程仍在原项目的 <code>work</code> 中。照书中具体命令运行前，先看该章说的是“已实际运行的作者记录”还是“给你执行的步骤”。书中引述的作者数字不会因为你打开了 EPUB 就重新产生；随机训练也可能得到不同的具体数值。带 <code>--out</code> 或 <code>--out-dir</code> 的命令可写到你指定的新目录。若命令没有独立输出参数，先读它的源码或本章说明，避免覆盖你想保留的先前结果。</p>
+<p>一个最短的自检是不改任何源码，从工程根目录运行：</p>
+<pre><code class="language-powershell">python ..\AI教程_配套练习\practice\01_first_perceptron.py
+</code></pre>
+<p>应看到查表对新卡片返回 <code>None</code>，每轮更新次数为 <code>[5, 2, 2, 0]</code>，训练参数为 <code>[1.0, 1.0]</code> 和 <code>-3.0</code>，以及新卡片分数 <code>2.0</code>。如果 PowerShell 提示找不到 <code>python</code>，先核 <code>Open-Lab.ps1</code> 报出的解释器路径；如果 Python 提示找不到文件，先核终端当前目录是否真是含 <code>work</code> 的教程工程文件夹。数据下载、GPU 训练或外部模型的章节另有自己的条件，不能把这个标准库自检当作全书实验都已复现。</p>
+</body></html>

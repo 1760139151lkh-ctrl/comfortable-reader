@@ -1,0 +1,632 @@
+{
+  "task": "C38 explicit source-position copy gate with frozen v3 action LM; no new tool decision training and no test read",
+  "command": "python work/code/c38_copy_gate.py --out-dir work\\runs\\c38_copy_gate_400 --steps 400 --lr 0.01 --validate-every 20",
+  "source_manifest_sha256": "61062747975d022a851d1fadb7c303bbd2b4597f572bd5f4ee99424bea53cbbe",
+  "action_checkpoint_sha256": "e000f24e5422fc5a0d2e1712b50229b8b1425930c9e154ac345eb85f8226a95d",
+  "train_rows_with_tool_observation": 2000,
+  "validation_rows_with_tool_observation": 155,
+  "train_final_targets": 9187,
+  "validation_final_targets": 609,
+  "parameters_added": 195,
+  "host_supplied_copy_information": "exact tool observation value token span, answer token ordinal and found/not-found flag; selected action still comes from frozen C38 v3 LM",
+  "history": [
+    {
+      "step": 0,
+      "validation": {
+        "macro_target_nll": 0.7424030154943466,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.1886695772409439,
+            "targets": 362,
+            "mean_copy_gate": 0.11920292675495148,
+            "copy_target_probability_mean": 0.9353655576705933,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 1.9114446640014648,
+            "targets": 202,
+            "mean_copy_gate": 0.11920292675495148,
+            "copy_target_probability_mean": 0.9273412823677063,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.1270948052406311,
+            "targets": 45,
+            "mean_copy_gate": 0.11920292675495148,
+            "copy_target_probability_mean": 3.4497766865371204e-09,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 20,
+      "validation": {
+        "macro_target_nll": 0.7893140986173725,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.14545108377933502,
+            "targets": 362,
+            "mean_copy_gate": 0.20404992997646332,
+            "copy_target_probability_mean": 0.9463678598403931,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 2.222306966781616,
+            "targets": 202,
+            "mean_copy_gate": 0.26194414496421814,
+            "copy_target_probability_mean": 0.9396970272064209,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00018424529116600752,
+            "targets": 45,
+            "mean_copy_gate": 1.74484357557958e-05,
+            "copy_target_probability_mean": 1.0935061744987706e-09,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 40,
+      "validation": {
+        "macro_target_nll": 0.5702783320448361,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.09454504400491714,
+            "targets": 362,
+            "mean_copy_gate": 0.3386063277721405,
+            "copy_target_probability_mean": 0.956741452217102,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 1.6160969734191895,
+            "targets": 202,
+            "mean_copy_gate": 0.4089468717575073,
+            "copy_target_probability_mean": 0.9513522386550903,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00019297871040180326,
+            "targets": 45,
+            "mean_copy_gate": 2.618507824081462e-05,
+            "copy_target_probability_mean": 2.928409459368453e-10,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 60,
+      "validation": {
+        "macro_target_nll": 0.3836486687262853,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.05521843954920769,
+            "targets": 362,
+            "mean_copy_gate": 0.5307038426399231,
+            "copy_target_probability_mean": 0.9656255841255188,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 1.095458984375,
+            "targets": 202,
+            "mean_copy_gate": 0.535723865032196,
+            "copy_target_probability_mean": 0.9613375663757324,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0002685822546482086,
+            "targets": 45,
+            "mean_copy_gate": 0.0001017823233269155,
+            "copy_target_probability_mean": 7.198314166956266e-11,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 80,
+      "validation": {
+        "macro_target_nll": 0.36623128039839986,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.04909369722008705,
+            "targets": 362,
+            "mean_copy_gate": 0.5350753664970398,
+            "copy_target_probability_mean": 0.9725859761238098,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 1.04933762550354,
+            "targets": 202,
+            "mean_copy_gate": 0.5574856996536255,
+            "copy_target_probability_mean": 0.9691630005836487,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00026251847157254815,
+            "targets": 45,
+            "mean_copy_gate": 9.572321869200096e-05,
+            "copy_target_probability_mean": 1.8175315419366456e-11,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 100,
+      "validation": {
+        "macro_target_nll": 0.31094574626573984,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.045120567083358765,
+            "targets": 362,
+            "mean_copy_gate": 0.5719262361526489,
+            "copy_target_probability_mean": 0.977558970451355,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.8874289989471436,
+            "targets": 202,
+            "mean_copy_gate": 0.6116878986358643,
+            "copy_target_probability_mean": 0.974755048751831,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0002876727667171508,
+            "targets": 45,
+            "mean_copy_gate": 0.00012086753122275695,
+            "copy_target_probability_mean": 5.395768033766846e-12,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 120,
+      "validation": {
+        "macro_target_nll": 0.22977980033222897,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.03744787350296974,
+            "targets": 362,
+            "mean_copy_gate": 0.6449015736579895,
+            "copy_target_probability_mean": 0.9813172817230225,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.6515175104141235,
+            "targets": 202,
+            "mean_copy_gate": 0.6863164305686951,
+            "copy_target_probability_mean": 0.9789819121360779,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00037401707959361374,
+            "targets": 45,
+            "mean_copy_gate": 0.00020718426094390452,
+            "copy_target_probability_mean": 1.778330954715912e-12,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 140,
+      "validation": {
+        "macro_target_nll": 0.2126433021427753,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.03716525435447693,
+            "targets": 362,
+            "mean_copy_gate": 0.6439963579177856,
+            "copy_target_probability_mean": 0.9842485785484314,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.600416362285614,
+            "targets": 202,
+            "mean_copy_gate": 0.7063975930213928,
+            "copy_target_probability_mean": 0.9822787046432495,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003482897882349789,
+            "targets": 45,
+            "mean_copy_gate": 0.0001814636489143595,
+            "copy_target_probability_mean": 6.336529608311214e-13,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 160,
+      "validation": {
+        "macro_target_nll": 0.187917032657424,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.03547760099172592,
+            "targets": 362,
+            "mean_copy_gate": 0.656665027141571,
+            "copy_target_probability_mean": 0.9865259528160095,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.5279204249382019,
+            "targets": 202,
+            "mean_copy_gate": 0.7339997291564941,
+            "copy_target_probability_mean": 0.984840452671051,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.000353072042344138,
+            "targets": 45,
+            "mean_copy_gate": 0.00018624502990860492,
+            "copy_target_probability_mean": 2.467302349842132e-13,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 180,
+      "validation": {
+        "macro_target_nll": 0.14712495450900556,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.0273633673787117,
+            "targets": 362,
+            "mean_copy_gate": 0.7010021805763245,
+            "copy_target_probability_mean": 0.9883224964141846,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.413605272769928,
+            "targets": 202,
+            "mean_copy_gate": 0.7750144600868225,
+            "copy_target_probability_mean": 0.9868615865707397,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00040622337837703526,
+            "targets": 45,
+            "mean_copy_gate": 0.00023937308287713677,
+            "copy_target_probability_mean": 1.040409688198192e-13,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 200,
+      "validation": {
+        "macro_target_nll": 0.1330528596881777,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.024485301226377487,
+            "targets": 362,
+            "mean_copy_gate": 0.7129977345466614,
+            "copy_target_probability_mean": 0.9898053407669067,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.37430715560913086,
+            "targets": 202,
+            "mean_copy_gate": 0.7924520373344421,
+            "copy_target_probability_mean": 0.988529622554779,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003661222290247679,
+            "targets": 45,
+            "mean_copy_gate": 0.00019930019334424287,
+            "copy_target_probability_mean": 4.5878685778818346e-14,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 220,
+      "validation": {
+        "macro_target_nll": 0.11266082371002994,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.019665181636810303,
+            "targets": 362,
+            "mean_copy_gate": 0.7346184849739075,
+            "copy_target_probability_mean": 0.9910196661949158,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.31792932748794556,
+            "targets": 202,
+            "mean_copy_gate": 0.8135737776756287,
+            "copy_target_probability_mean": 0.9898958802223206,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00038796200533397496,
+            "targets": 45,
+            "mean_copy_gate": 0.00022114145394880325,
+            "copy_target_probability_mean": 2.1362701172378436e-14,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 240,
+      "validation": {
+        "macro_target_nll": 0.10061862841636564,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.017642127349972725,
+            "targets": 362,
+            "mean_copy_gate": 0.7423271536827087,
+            "copy_target_probability_mean": 0.9920173287391663,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.2838425934314728,
+            "targets": 202,
+            "mean_copy_gate": 0.8281629681587219,
+            "copy_target_probability_mean": 0.9910181760787964,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.000371164467651397,
+            "targets": 45,
+            "mean_copy_gate": 0.0002043572603724897,
+            "copy_target_probability_mean": 1.0510263483371005e-14,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 260,
+      "validation": {
+        "macro_target_nll": 0.08085896892589517,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.014971689321100712,
+            "targets": 362,
+            "mean_copy_gate": 0.76763916015625,
+            "copy_target_probability_mean": 0.9928323030471802,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.22721730172634125,
+            "targets": 202,
+            "mean_copy_gate": 0.8510340452194214,
+            "copy_target_probability_mean": 0.991935133934021,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00038791573024354875,
+            "targets": 45,
+            "mean_copy_gate": 0.00022109395649749786,
+            "copy_target_probability_mean": 5.4960872041909335e-15,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 280,
+      "validation": {
+        "macro_target_nll": 0.06802602888395388,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.013604891486465931,
+            "targets": 362,
+            "mean_copy_gate": 0.7824137210845947,
+            "copy_target_probability_mean": 0.9935306310653687,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.19008946418762207,
+            "targets": 202,
+            "mean_copy_gate": 0.8670164942741394,
+            "copy_target_probability_mean": 0.9927207827568054,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003837309777736664,
+            "targets": 45,
+            "mean_copy_gate": 0.00021692030713893473,
+            "copy_target_probability_mean": 2.9655421811925842e-15,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 300,
+      "validation": {
+        "macro_target_nll": 0.06184641250486796,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.01277098897844553,
+            "targets": 362,
+            "mean_copy_gate": 0.7829658389091492,
+            "copy_target_probability_mean": 0.9941258430480957,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.17241033911705017,
+            "targets": 202,
+            "mean_copy_gate": 0.8752081990242004,
+            "copy_target_probability_mean": 0.9933903813362122,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003579094191081822,
+            "targets": 45,
+            "mean_copy_gate": 0.00019109502318315208,
+            "copy_target_probability_mean": 1.659226582355084e-15,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 320,
+      "validation": {
+        "macro_target_nll": 0.060173053556354716,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.012157229706645012,
+            "targets": 362,
+            "mean_copy_gate": 0.783105731010437,
+            "copy_target_probability_mean": 0.9946361184120178,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.168053537607193,
+            "targets": 202,
+            "mean_copy_gate": 0.8773831725120544,
+            "copy_target_probability_mean": 0.9939646124839783,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003083933552261442,
+            "targets": 45,
+            "mean_copy_gate": 0.00014159483544062823,
+            "copy_target_probability_mean": 9.604776580668449e-16,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 340,
+      "validation": {
+        "macro_target_nll": 0.05178568200790323,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.010700015351176262,
+            "targets": 362,
+            "mean_copy_gate": 0.7981861233711243,
+            "copy_target_probability_mean": 0.9950800538063049,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.14434434473514557,
+            "targets": 202,
+            "mean_copy_gate": 0.8893291354179382,
+            "copy_target_probability_mean": 0.9944639801979065,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00031268593738786876,
+            "targets": 45,
+            "mean_copy_gate": 0.0001458879851270467,
+            "copy_target_probability_mean": 5.713054587751004e-16,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 360,
+      "validation": {
+        "macro_target_nll": 0.0398117797934295,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.00855958554893732,
+            "targets": 362,
+            "mean_copy_gate": 0.8271051645278931,
+            "copy_target_probability_mean": 0.99546879529953,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.11054904758930206,
+            "targets": 202,
+            "mean_copy_gate": 0.9082722067832947,
+            "copy_target_probability_mean": 0.9949012994766235,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0003267062420491129,
+            "targets": 45,
+            "mean_copy_gate": 0.000159901799634099,
+            "copy_target_probability_mean": 3.483231089681198e-16,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 380,
+      "validation": {
+        "macro_target_nll": 0.036202262999722734,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.007452523801475763,
+            "targets": 362,
+            "mean_copy_gate": 0.8372814655303955,
+            "copy_target_probability_mean": 0.9958189725875854,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.10085125267505646,
+            "targets": 202,
+            "mean_copy_gate": 0.9133646488189697,
+            "copy_target_probability_mean": 0.9952952861785889,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.00030301252263598144,
+            "targets": 45,
+            "mean_copy_gate": 0.00013620927347801626,
+            "copy_target_probability_mean": 2.1476566699747088e-16,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    },
+    {
+      "step": 400,
+      "validation": {
+        "macro_target_nll": 0.03511197189800441,
+        "by_kind": {
+          "multiply": {
+            "target_nll": 0.006906090769916773,
+            "targets": 362,
+            "mean_copy_gate": 0.8352105617523193,
+            "copy_target_probability_mean": 0.9961300492286682,
+            "plain_lm_target_nll": 0.3322649896144867
+          },
+          "title": {
+            "target_nll": 0.09814838320016861,
+            "targets": 202,
+            "mean_copy_gate": 0.9140093326568604,
+            "copy_target_probability_mean": 0.9956454038619995,
+            "plain_lm_target_nll": 8.40969181060791
+          },
+          "missing": {
+            "target_nll": 0.0002814417239278555,
+            "targets": 45,
+            "mean_copy_gate": 0.00011463632108643651,
+            "copy_target_probability_mean": 1.349347969522232e-16,
+            "plain_lm_target_nll": 0.00016678923566360027
+          }
+        }
+      }
+    }
+  ],
+  "selected_step": 400,
+  "selected_validation_macro_target_nll": 0.03511197189800441,
+  "selected_gate_distance_scale": 5.906280517578125,
+  "checkpoint": "work/runs/c38_copy_gate_400/copy_gate.pt",
+  "checkpoint_sha256": "0f2621455ea5cc2946df4b3ccd55fc47e77720e4cbdb600ac6be6d22fc028e43",
+  "elapsed_seconds": 3.700512300012633,
+  "device": "cuda",
+  "torch": "2.11.0+cu128",
+  "test_opened": false
+}

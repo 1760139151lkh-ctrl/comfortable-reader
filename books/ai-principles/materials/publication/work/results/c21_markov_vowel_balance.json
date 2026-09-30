@@ -1,0 +1,13 @@
+{
+  "source": "Markov 1913 Eugene Onegin study, 2006 English translation pp.591-597",
+  "reported_vowel_count": 8638,
+  "reported_total_letters": 20000,
+  "reported_vowel_after_vowel_count_ratio": "1104/8638",
+  "reported_vowel_after_consonant_count_ratio": "7534/11361",
+  "observed_overall_vowel_fraction": 0.4319,
+  "balance_equation": "p = P(V|V)*p + P(V|C)*(1-p)",
+  "balance_solution_fraction": "1234/2857",
+  "balance_solution_decimal": 0.431921596079804,
+  "balance_minus_observed": 2.15960798039902e-05,
+  "limit": "由长序列相邻计数的频率平衡得到，不独立证明只看前一字母就是充分的一步马尔可夫模型；边界字母和原文四舍五入均会影响末位。"
+}
