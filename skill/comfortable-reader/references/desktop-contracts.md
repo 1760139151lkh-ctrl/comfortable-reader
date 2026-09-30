@@ -19,6 +19,8 @@ Read this file only when changing the reader application, its storage, paginatio
 - The library is complete only when `loadedCandidates == epubCandidates` and no registered root unexpectedly disappeared.
 - Test builds use isolated state and identifiers. Never let a test fixture enter the production roots.
 
+Bind the installed executable to its actual installer payload, not only a standalone EXE beside the installer. Tauri can patch its bundle-type marker while packaging (for example `UNK` to `NSS` for NSIS). If hashes differ, verify the exact changed bytes against current packaging code and record both hashes; a matching version or file size alone is insufficient. Preserve the executable's actual installed hash in runtime evidence.
+
 ## Required regression sequence
 
 Run the synthetic checks first:
