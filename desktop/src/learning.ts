@@ -173,7 +173,7 @@ export function initLearning(adapter:Host):void{
   window.addEventListener('reader-theme-change',()=>{if(!workspace?.open||!activity||activity.presentation!=='linear-classifier@1'||!latestReport)return;const step=showingTrace?trace[traceIndex]:null;drawCards(latestReport.training_rows??[],step?.weights??latestReport.trained_weights,step?.bias??latestReport.trained_bias);});
   const button=document.createElement('button');button.className='study-toggle';button.type='button';button.hidden=true;
   button.innerHTML='<span aria-hidden="true">✧</span><span class="study-toggle-label">随书学习</span>';button.title='打开当前段落的学习材料';button.setAttribute('aria-label','打开随书学习');
-  document.querySelector('.active-book-title')?.after(button);
+  document.querySelector('.top-toolbar .annotation-toggle')?.after(button);
   button.addEventListener('click',async()=>{await host.settle();const current=host.current();if(current){if(!packs.has(current.bookId))await prepareLearning(current.bookId);if(packs.has(current.bookId))void openStudy(current);else host.toast(failures.get(current.bookId)||'学习资料尚未匹配；正文仍可阅读');}});
   dialog=document.createElement('section');dialog.className='study-stage';dialog.setAttribute('aria-label','随书学习');
   document.querySelector('.app-shell')?.append(dialog);

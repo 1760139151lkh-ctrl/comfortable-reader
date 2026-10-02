@@ -85,3 +85,24 @@ export function addPane(tree:LayoutNode|null,pane:number,target:number,rect:Rect
   const actual=targetRect?target:leaves(tree)[0],box=targetRect??rect;
   return replacePane(tree,actual,split(box.width/Math.max(box.height,1)>1.1?'x':'y',leaf(actual),leaf(pane),.58));
 }
+
+export function placeNewPane(tree:LayoutNode|null,pane:number,target:number,placement:Placement):LayoutNode{
+  if(!tree)return leaf(pane);
+  const before=placement==='left'||placement==='top',axis=placement==='top'||placement==='bottom'?'y':'x';
+  return replacePane(tree,target,split(axis,before?leaf(pane):leaf(target),before?leaf(target):leaf(pane)));
+}
+
+/** Insert between two existing groups while retaining their internal proportions. */
+export function insertBetween(tree:LayoutNode,pane:number,splitId:string):LayoutNode{
+  const without=removePane(tree,pane);
+  if(!without)return leaf(pane);
+  const walk=(node:LayoutNode):LayoutNode=>{
+    if(node.kind==='book')return node;
+    if(node.id===splitId){
+      const firstRatio=node.ratio*.7;
+      return split(node.axis,node.first,split(node.axis,leaf(pane),node.second,.3/(1-firstRatio)),firstRatio);
+    }
+    return {...node,first:walk(node.first),second:walk(node.second)};
+  };
+  return walk(without);
+}

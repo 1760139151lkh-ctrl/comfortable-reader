@@ -1,7 +1,7 @@
 {
   "name": "comfortable-reader-desktop",
   "private": true,
-  "version": "0.6.1",
+  "version": "0.7.5",
   "type": "module",
   "scripts": {
     "dev": "vite",

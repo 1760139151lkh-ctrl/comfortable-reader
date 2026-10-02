@@ -4,7 +4,7 @@ import {readFile} from 'node:fs/promises';
 import ts from '../desktop/node_modules/typescript/lib/typescript.js';
 const source=await readFile(new URL('../desktop/src/workspace-layout.ts',import.meta.url),'utf8');
 const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ES2022,target:ts.ScriptTarget.ES2022}}).outputText;
-const {defaultLayout,normalizeWorkspace,measureTree,leaves,movePane,removePane,addPane,resizeSplit,fitsLayout}=await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
+const {defaultLayout,normalizeWorkspace,measureTree,leaves,movePane,removePane,addPane,placeNewPane,insertBetween,resizeSplit,fitsLayout}=await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`);
 const box={x:0,y:0,width:1480,height:850};
 function invariant(tree,ids){
   assert.deepEqual([...leaves(tree)].sort((a,b)=>a-b),[...ids].sort((a,b)=>a-b));
@@ -38,4 +38,18 @@ test('damaged and legacy layouts recover open books without trusting unknown lea
   for(const raw of [null,{}, {version:1,tree,manual:true,focused:19}]){
     const state=normalizeWorkspace(raw,[0,1,2],1480,850);invariant(state.tree,[0,1,2]);assert.equal(state.focused,null);
   }
+});
+
+test('shelf edge placement preserves every old book and the untouched sibling group',()=>{
+  const tree=defaultLayout([0,1,2],1480,850),sibling=structuredClone(tree.second);
+  for(const direction of ['left','right','top','bottom']){
+    const next=placeNewPane(tree,8,0,direction);invariant(next,[0,1,2,8]);assert.deepEqual(next.second,sibling);
+    assert.deepEqual(removePane(next,8),tree);
+  }
+});
+
+test('insertion between groups preserves their internals and total visible coverage',()=>{
+  const tree=defaultLayout([0,1,2],1480,850),next=insertBetween(tree,8,tree.id);
+  invariant(next,[0,1,2,8]);assert.deepEqual(next.first,tree.first);assert.deepEqual(next.second.second,tree.second);
+  const rects=measureTree(next,box).books;assert.ok(rects.get(0).x<rects.get(8).x&&rects.get(8).x<rects.get(1).x);
 });

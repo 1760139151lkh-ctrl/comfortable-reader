@@ -11,8 +11,12 @@ import ePub, {
 } from "epubjs";
 import "./styles.css";
 import "./workspace.css";
+import "./reading-space.css";
+import {ReadingSurfaces,type SurfaceState} from "./reading-surfaces";
+import {ReadingWindow} from './reading-window';
+import {WheelPager,ownsWheel} from "./reading-input";
 import {ReadingWorkspace} from './workspace';
-import {MAX_OPEN_BOOKS,type WorkspaceState} from './workspace-layout';
+import {MAX_OPEN_BOOKS,type LayoutNode,type WorkspaceState} from './workspace-layout';
 import { readingMetricLabel } from './reading-progress';
 import { initLearning, prepareLearning, wireLearningDocument, refreshLearningButton, learningIsOpen, learningReadingProgress, learningCfiFromBodyPosition, flushLearningBeforeClose, closeLearning, holdLearning, learningMemoryBackup } from "./learning";
 import { mountImage } from './image-viewer';
@@ -115,6 +119,7 @@ interface BookProgress {
 
 interface ReaderSession {
   workspace?: WorkspaceState | null;
+  surfaces?: SurfaceState | null;
   lineHeight?: number | null;
   contentWidth?: number | null;
   paneCount: number;
@@ -247,6 +252,8 @@ type InternalSpine = EpubBook["spine"] & {
 
 const MAX_PANES = MAX_OPEN_BOOKS;
 let workspace:ReadingWorkspace;
+let surfaces:ReadingSurfaces;
+let readingWindow:ReadingWindow;
 let toolsVisible=false;
 function requireElement<T extends Element>(root: ParentNode, selector: string): T {
   const element = root.querySelector<T>(selector);
@@ -296,19 +303,16 @@ app.innerHTML = `
   <div class="app-shell" data-theme="paper">
 
     <nav class="workspace-strip" aria-label="阅读空间">
+      <button class="rail-grip" type="button" title="拖到顶部或底部停放工具 · 方向键也可移动" aria-label="移动阅读工具条">⠿</button>
       <button class="workspace-library" type="button" title="书库（Ctrl+L）">${icons.library}<span>书库</span></button>
       <button class="tools-toggle" type="button" aria-label="打开阅读工具" aria-expanded="false" title="阅读工具（F8）">${icons.book}<span>阅读工具</span></button>
-      <div class="workspace-tabs" aria-label="仍然打开的书籍"></div>
       <span class="workspace-space-status" hidden></span>
       <button class="workspace-focus" type="button" hidden>专注一本</button>
       <button class="workspace-toggle" type="button" aria-expanded="false"><span>书籍 · 0</span><span aria-hidden="true">⌄</span></button>
     </nav>
-    <section class="workspace-panel floating-panel" aria-label="打开的书籍与布局" aria-hidden="true" inert>
-      <header><strong>阅读现场</strong><button class="icon-button workspace-panel-close" aria-label="收起阅读现场">${icons.close}</button></header>
+    <section class="workspace-panel" aria-label="正在读的书籍" aria-hidden="true" inert>
       <div class="workspace-books"></div>
-      <button class="text-action workspace-organize" type="button">重新整理布局</button>
-      <p class="settings-help">拖动书名左侧的手柄摆放书籍；拖动细分隔线调整比例。窗口变小时保留原排列。</p>
-      <details class="workspace-move-controls"><summary>用按钮调整位置</summary><p>移动：<strong class="workspace-current-title"></strong></p><label>放到哪本书旁边<select class="workspace-target"></select></label><div class="workspace-placement-buttons">${Object.entries({left:'左侧',right:'右侧',top:'上方',bottom:'下方',swap:'交换'}).map(([value,label])=>`<button type="button" data-place="${value}">${label}</button>`).join('')}</div></details>
+      <details class="workspace-move-controls"><summary>调整摆放</summary><p>移动：<strong class="workspace-current-title"></strong></p><label>放到哪本书旁边<select class="workspace-target"></select></label><div class="workspace-placement-buttons">${Object.entries({left:'左侧',right:'右侧',top:'上方',bottom:'下方',swap:'交换'}).map(([value,label])=>`<button type="button" data-place="${value}">${label}</button>`).join('')}</div><button class="text-action workspace-organize" type="button">恢复阅读布局</button></details>
     </section>
     <header class="top-toolbar" aria-label="阅读工具栏" aria-hidden="true" inert>
       <button class="icon-button library-toggle" type="button" title="书库（Ctrl+L）" aria-label="打开书库" aria-expanded="false">${icons.library}</button>
@@ -328,14 +332,19 @@ app.innerHTML = `
       <button class="icon-button tools-close" type="button" title="回到安静阅读（Escape）" aria-label="收起阅读工具">${icons.close}</button>
     </header>
     <section class="reading-settings floating-panel" aria-label="阅读设置" aria-hidden="true" inert>
-      <header><strong>这本书的排版</strong><button type="button" class="icon-button settings-close" aria-label="关闭阅读设置">${icons.close}</button></header>
+      <header><strong>阅读设置</strong><button type="button" class="icon-button settings-close" aria-label="关闭阅读设置">${icons.close}</button></header>
       <p class="settings-book-title"></p>
-      <label class="setting-row"><span>这本书怎样读</span><select class="reading-mode" aria-label="阅读方式"><option value="paged">翻页 · 可选多栏</option><option value="scroll">连续滚动</option></select></label>
-      <label class="setting-row"><span>这本书同屏页数</span><select class="settings-page-mode" aria-label="这本书同屏页数"><option value="0">自动 · 舒适行宽</option>${Array.from({length:10},(_,i)=>`<option value="${i+1}">${i+1} 页</option>`).join('')}</select></label>
+      <label class="settings-target-row"><span>正在调整</span><select class="settings-target" aria-label="选择要调整的书"></select></label>
+      <label class="setting-row"><span>阅读方式</span><select class="reading-mode" aria-label="阅读方式"><option value="paged">横向翻页</option><option value="scroll">纵向连续</option></select></label>
+      <label class="setting-row"><span>每屏页数</span><select class="settings-page-mode" aria-label="每屏页数"><option value="0">自动 · 舒适行宽</option>${Array.from({length:10},(_,i)=>`<option value="${i+1}">${i+1} 页</option>`).join('')}</select></label>
+      <div class="setting-row font-setting"><label for="reading-font-size">文字大小 <output class="font-scale-label">100%</output></label><div class="font-controls"><button type="button" class="text-button font-down" title="缩小字号">A−</button><input id="reading-font-size" class="font-size-slider" type="range" min="70" max="180" step="5" aria-label="这本书的文字大小"/><button type="button" class="text-button font-up" title="放大字号">A+</button></div></div>
+      <details class="typography-details"><summary>字体、行距与界面</summary>
       <label class="setting-row"><span>正文字体</span><select class="reader-font" aria-label="正文字体"><option value="serif">衬线 · 书籍</option><option value="sans">无衬线 · 清晰</option><option value="publisher">书籍原有字体</option></select></label>
-      <div class="setting-row"><span>阅读字号</span><div class="font-controls"><button type="button" class="text-button font-down" title="缩小字号">A−</button><span class="font-scale-label">100%</span><button type="button" class="text-button font-up" title="放大字号">A+</button></div></div>
       <label class="setting-row"><span>行距</span><input class="reader-line-height" type="range" min="1.35" max="2.15" step="0.05" aria-label="正文行距"/></label>
       <label class="setting-row"><span>连续阅读宽度</span><select class="reader-content-width" aria-label="连续阅读宽度"><option value="34">紧凑</option><option value="44">标准</option><option value="56">舒展</option></select></label>
+      <label class="setting-row"><span>界面大小</span><select class="interface-scale" aria-label="界面控件大小"><option value="1">标准</option><option value="1.15">稍大</option><option value="1.3">大</option></select></label>
+      <p class="settings-help">界面大小只调整工具和面板，正文按上面的文字大小排版。</p></details>
+      <div class="compact-page-actions"><button type="button" data-group-turn="prev">上一屏</button><button type="button" data-group-turn="next">下一屏</button><button type="button" class="compact-fullscreen">全屏</button></div>
       <p class="settings-help">排版只影响当前书。左右键移动一页，PageUp / PageDown 移动一屏。要对照其他书，从书库打开即可。</p>
       <button class="text-action jump-toggle" type="button">跳转到阅读位置…</button>
     </section>
@@ -405,25 +414,25 @@ app.innerHTML = `
           <p class="eyebrow">舒适阅读书库</p>
           <h1>我的书库 <span class="book-count">0</span></h1>
         </div>
+        <button class="library-options-toggle" type="button" aria-label="添加书籍与书库选项" title="添加书籍与书库选项" aria-expanded="false">＋</button>
         <button class="icon-button drawer-close" type="button" title="收起书库" aria-label="收起书库">${icons.close}</button>
       </div>
       <label class="search-box">
         ${icons.search}
         <input type="search" placeholder="搜索书名或作者" autocomplete="off" />
       </label>
+      <div class="shelf-workspace" role="group" aria-label="选择书库范围"><button class="library-all" type="button" aria-pressed="true">全部</button></div>
+      <details class="library-options"><summary hidden>书库选项</summary>
       <div class="library-actions" ${isDesktop ? "" : "hidden"}>
         ${isDesktop ? `<button class="primary-action add-books" type="button">${icons.plus}<span>添加 EPUB</span></button>
         <button class="secondary-action add-folder" type="button" title="加入一个本地书库文件夹">${icons.folder}</button>
         <button class="secondary-action refresh-library" type="button" title="刷新本地书库">${icons.refresh}</button>` : ""}
       </div>
-      <div class="library-audit" role="status" aria-live="polite">
-        <strong>正在核对全部书籍…</strong>
-        <span>将递归扫描所有已登记书库</span>
-      </div>
+      <details class="library-audit"><summary>书库状态</summary><div role="status" aria-live="polite"></div></details>
+      </details>
       <div class="library-list" role="list"></div>
       <div class="drawer-footer">
-        <span class="status-dot"></span>
-        <span>本地保存 · 自动记忆位置</span>
+        <span>阅读位置自动保存</span>
       </div>
     </aside>
 
@@ -458,6 +467,21 @@ app.innerHTML = `
 `;
 
 const shell = requireElement<HTMLElement>(app, ".app-shell");
+const strip=requireElement<HTMLElement>(app,'.workspace-strip');
+const quick=document.createElement('div');quick.className='quick-tools';
+strip.querySelector('.tools-toggle')!.after(quick);
+for(const [selector,label] of [['.contents-toggle','目录'],['.reading-settings-toggle','排版'],['.book-search-toggle','查找'],['.reading-back','返回']]){
+  const button=requireElement<HTMLButtonElement>(app,selector);button.classList.add('quick-action');
+  if(selector!=='.reading-settings-toggle')button.insertAdjacentHTML('beforeend',`<span>${label}</span>`);else button.innerHTML='<b>Aa</b><span>排版</span>';
+  quick.append(button);
+}
+const railCenter=document.createElement('div');railCenter.className='rail-center';quick.after(railCenter);
+railCenter.append(requireElement(app,'.active-book-title'),requireElement(app,'.top-toolbar'));
+const shelfWorkspace=requireElement(app,'.shelf-workspace');
+shelfWorkspace.append(requireElement(app,'.workspace-toggle'),requireElement(app,'.workspace-space-status'));
+requireElement(app,'.library-list').before(requireElement(app,'.workspace-panel'));
+requireElement(app,'.library-options').append(requireElement(app,'.drawer-footer'));
+
 
 const drawer = requireElement<HTMLElement>(app, ".library-drawer");
 const libraryHandle = requireElement<HTMLButtonElement>(app, ".left-library-handle");
@@ -597,6 +621,7 @@ function normalizeSession(session: ReaderSession): ReaderSession {
   while (paneBookIds.length < MAX_PANES) paneBookIds.push(null);
   return {
     workspace:session.workspace??null,
+    surfaces:session.surfaces??null,
     paneCount: Math.min(MAX_PANES, Math.max(1, Number(session.paneCount) || 1)),
     paneBookIds: paneBookIds.slice(0, MAX_PANES),
     activePane: Math.min(
@@ -755,12 +780,21 @@ function readingPreferences(index:number){
 function changeReadingPreference<K extends keyof NonNullable<BookProgress['readingPreferences']>>(key:K,value:NonNullable<BookProgress['readingPreferences']>[K]):void{
   const index=snapshot.session.activePane,id=runtimes[index].bookId;if(!id)return;
   const progress=ensureBookProgress(id,index);progress.readingPreferences={...readingPreferences(index),[key]:value};
-  const rendition=runtimes[index].rendition;if(rendition)for(const contents of visibleContents(rendition))applyReadingTheme(contents);
+  const selected=pendingSelections[index];
+  if(selected?.contents.window.getSelection()?.toString())runtimes[index].layoutAnchorCfi=selected.cfiRange;
   void reflowPane(index,true);syncReadingSettings();savePaneProgress(index,0);
 }
 function syncReadingSettings():void{
   const index=snapshot.session.activePane,prefs=readingPreferences(index),runtime=runtimes[index];
+  const target=requireElement<HTMLSelectElement>(app,'.settings-target');
+  const opened=snapshot.session.paneBookIds.flatMap((id,pane)=>id?[{pane,title:getBook(id)?.title??'已打开的书'}]:[]);
+  const signature=JSON.stringify(opened);
+  if(target.dataset.signature!==signature){target.dataset.signature=signature;target.innerHTML=opened.map(book=>`<option value="${book.pane}">${escapeHtml(book.title)}</option>`).join('');}
+  target.value=String(index);target.title=getBook(runtime.bookId??snapshot.session.paneBookIds[index])?.title??'';
+  requireElement<HTMLElement>(app,'.settings-target-row').hidden=opened.length<2;
+  requireElement<HTMLElement>(app,'.settings-book-title').hidden=opened.length>1;
   fontScaleLabel.textContent=`${prefs.fontScale}%`;
+  const size=requireElement<HTMLInputElement>(app,".font-size-slider");if(document.activeElement!==size)size.value=String(prefs.fontScale);
   requireElement<HTMLSelectElement>(app,'.reader-font').value=prefs.readerFont;
   requireElement<HTMLSelectElement>(app,'.reading-mode').value=runtime.readingMode;
   requireElement<HTMLInputElement>(app,'.reader-line-height').value=String(prefs.lineHeight);
@@ -771,34 +805,36 @@ function syncReadingSettings():void{
 function syncReadingChrome():void{
   for(let index=0;index<MAX_PANES;index++){
     const footer=paneElement(index).querySelector<HTMLElement>('.pane-footer')!;
-    const visible=toolsVisible&&index===snapshot.session.activePane;
+    const visible=Boolean(runtimes[index].bookId);
     footer.inert=!visible;footer.setAttribute('aria-hidden',String(!visible));
   }
 }
 function setToolsVisible(visible:boolean):void{
   toolsVisible=visible;shell.classList.toggle('tools-visible',visible);
+  if(visible)surfaces?.wakeChrome();
   const toolbar=requireElement<HTMLElement>(app,'.top-toolbar');toolbar.classList.toggle('visible',visible);toolbar.inert=!visible;toolbar.setAttribute('aria-hidden',String(!visible));
   const trigger=requireElement<HTMLButtonElement>(app,'.tools-toggle');trigger.setAttribute('aria-expanded',String(visible));trigger.setAttribute('aria-label',visible?'收起阅读工具':'打开阅读工具');
-  if(!visible){closeBookNavigation();setReadingSettings(false);if(toolbar.contains(document.activeElement))trigger.focus({preventScroll:true});}
+  if(!visible){closeBookNavigation(false);setReadingSettings(false,false);if(toolbar.contains(document.activeElement))trigger.focus({preventScroll:true});}
   syncReadingChrome();
 }
 
 function showToast(message: string, kind: "normal" | "error" = "normal"): void {
-  toast.textContent = message;
+  toast.replaceChildren(document.createTextNode(message));
+  if(kind==="error"){const dismiss=document.createElement("button");dismiss.type="button";dismiss.textContent="关闭";dismiss.addEventListener("click",()=>toast.classList.remove("visible"));toast.append(dismiss);}
   toast.dataset.kind = kind;
   toast.classList.add("visible");
   if (toastTimer !== null) window.clearTimeout(toastTimer);
-  toastTimer = window.setTimeout(() => toast.classList.remove("visible"), 2600);
+  toastTimer = kind==="error"?null:window.setTimeout(() => toast.classList.remove("visible"), 2200);
 }
 
 
 
 function openDrawer(): void {
   setToolsVisible(false);
-  setAnnotationPanelVisible(false);
-  workspace?.showPanel(false,false);
-  closeBookNavigation();
-  setReadingSettings(false);
+  setAnnotationPanelVisible(false,false);
+  if(!surfaces?.isDocked("books"))workspace?.showPanel(false,false);
+  closeBookNavigation(false);
+  setReadingSettings(false,false);
   drawer.inert = false;
   drawer.setAttribute("aria-hidden", "false");
   app.querySelector(".library-toggle")?.setAttribute("aria-expanded", "true");
@@ -808,12 +844,14 @@ function openDrawer(): void {
   searchInput.focus({preventScroll:true});
 }
 
-function closeDrawer(): void {
+function closeDrawer(force=true): void {
+  if(!force&&surfaces?.isDocked("library"))return;
   const returnFocus=drawer.contains(document.activeElement);
   drawer.inert = true;
   drawer.setAttribute("aria-hidden", "true");
   app.querySelector(".library-toggle")?.setAttribute("aria-expanded", "false");
   drawer.classList.remove("visible");
+  workspace?.showPanel(false,false);
   shell.classList.remove("drawer-open");
   libraryHandle.setAttribute("aria-expanded", "false");
   if(returnFocus)app.querySelector<HTMLButtonElement>('.workspace-library')?.focus({preventScroll:true});
@@ -876,7 +914,7 @@ function buildPaneShells(): void {
           <strong>空白阅读窗格</strong>
           <span>从左侧书库选择一本书</span>
         </div>
-        <label class="pane-reading-mode"><span class="sr-only">阅读方式</span><select aria-label="这本书的阅读方式"><option value="paged">翻页</option><option value="scroll">连续滚动</option></select></label>
+        <label class="pane-reading-mode"><span class="sr-only">阅读方式</span><select aria-label="这本书的阅读方式"><option value="paged">翻页</option><option value="scroll">纵向连续</option></select></label>
         <label class="pane-page-mode" title="这本书同屏显示的页数">
           <span>同屏</span>
           <select aria-label="这本书的同屏页数">
@@ -884,6 +922,7 @@ function buildPaneShells(): void {
             ${Array.from({ length: 10 }, (_, pageIndex) => `<option value="${pageIndex + 1}">${pageIndex + 1} 页</option>`).join("")}
           </select>
         </label>
+        <button class="pane-settings" type="button" title="调整这本书的字号与阅读方式" aria-label="调整这本书的排版">排版</button>
         <button class="icon-button pane-focus" type="button" title="临时专注 / 返回对照" aria-label="临时专注这本书">${icons.fullscreen}</button>
         <button class="icon-button pane-close" type="button" title="关闭这本书" aria-label="关闭这本书">${icons.close}</button>
       </header>
@@ -912,7 +951,7 @@ function buildPaneShells(): void {
           <button type="button" class="chapter-boundary-prev" hidden>← 上一章</button>
           <button type="button" class="chapter-boundary-next" hidden>下一章 →</button>
         </div>
-        <div class="progress-track"><span></span></div>
+        <div class="progress-track"><span></span><input class="progress-seek" type="range" min="1" max="1" value="1" step="1" aria-label="阅读进度，松开后跳转"/><output class="progress-preview" hidden></output></div>
         <div class="percent-label">0%</div>
       </footer>
     </article>
@@ -994,7 +1033,7 @@ function updatePaneHeader(index: number): void {
   if(modeSelect){modeSelect.value=runtime.readingMode;modeSelect.disabled=!book||Boolean(book.lazyPages);}
   const groupPrev = pane.querySelector<HTMLButtonElement>(".page-hotspot-group-prev");
   const groupNext = pane.querySelector<HTMLButtonElement>(".page-hotspot-group-next");
-  if (title) title.textContent = book?.title ?? "空白阅读窗格";
+  if (title) { title.textContent = book?.title ?? "空白阅读窗格"; title.title=title.textContent; }
   if (subtitle)
     subtitle.textContent = book
       ? editionHeld(book.id) ? "版本已变化 · 原位置与批注待核对" : `${book.author} · ${book.catalogSource ? /^https?:\/\//.test(book.path)?"按章取得内容":"本机正文 · 资料按需取得" : book.lazyPages ? "按需加载 EPUB" : "本机书籍"}`
@@ -1028,6 +1067,37 @@ function updatePaneHeader(index: number): void {
   pane.setAttribute('aria-label',book?.title??'阅读区域');
 }
 
+function wireReadingEdges():void {
+  readerGrid.querySelectorAll<HTMLElement>('.reader-pane').forEach((pane,index)=>{
+    const stage=pane.querySelector<HTMLElement>('.pane-stage')!;
+    const prev=pane.querySelector<HTMLButtonElement>('.page-hotspot-prev')!,next=pane.querySelector<HTMLButtonElement>('.page-hotspot-next')!;
+    pane.append(prev,next);
+    const feedback=document.createElement('div');feedback.className='page-edge-status';feedback.setAttribute('role','status');pane.append(feedback);
+    const measure=()=>requestAnimationFrame(()=>{
+      const p=pane.getBoundingClientRect(),r=stage.getBoundingClientRect();
+      const left=Math.max(0,r.left-p.left),right=Math.max(0,p.right-r.right);
+      prev.style.left=`${Math.max(0,left-34)}px`;prev.style.width=`${Math.min(30,Math.max(0,left-4))}px`;
+      next.style.left=`${r.right-p.left+4}px`;next.style.width=`${Math.min(30,Math.max(0,right-4))}px`;
+      prev.tabIndex=next.tabIndex=runtimes[index].readingMode==='paged'?0:-1;
+    });
+    new ResizeObserver(measure).observe(pane);new ResizeObserver(measure).observe(stage);
+    const seek=pane.querySelector<HTMLInputElement>('.progress-seek')!,preview=pane.querySelector<HTMLOutputElement>('.progress-preview')!;
+    let cancelled=false;
+    seek.addEventListener('focus',()=>{cancelled=false;});
+    seek.addEventListener('pointerdown',()=>{cancelled=false;pane.classList.add('seeking');});
+    seek.addEventListener('input',()=>{
+      pane.classList.add('seeking');preview.hidden=false;
+      const position=runtimes[index].book&&linearSectionCount(runtimes[index].book!)>1||runtimes[index].readingMode==='scroll';
+      preview.textContent=`${position?'阅读位置':'第'} ${seek.value} / ${seek.max}${position?'':' 页'} · 松开跳转`;
+    });
+    seek.addEventListener('change',()=>{pane.classList.remove('seeking');preview.hidden=true;if(cancelled){cancelled=false;updatePaneProgress(index);return;}void jumpToPage(index,Number(seek.value));});
+    const cancel=()=>{cancelled=true;pane.classList.remove('seeking');preview.hidden=true;updatePaneProgress(index);};
+    seek.addEventListener('pointercancel',cancel);
+    seek.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();cancel();seek.blur();}});
+    seek.addEventListener('blur',()=>{pane.classList.remove('seeking');preview.hidden=true;});
+  });
+}
+
 function updatePaneProgress(index: number): void {
   const pane = paneElement(index);
   const runtime = runtimes[index];
@@ -1057,6 +1127,8 @@ function updatePaneProgress(index: number): void {
     if (percentLabel) percentLabel.textContent = studyPosition.percent === null ? studyPosition.kind==='reference'?"资料阅读":"已保存位置" : `${(studyPosition.percent * 100).toFixed(1)}%`;
     if (progressBar) progressBar.style.width = studyPosition.percent === null ? "0%" : `${studyPosition.percent * 100}%`;
   }
+  const seek=pane.querySelector<HTMLInputElement>('.progress-seek')!;
+  if(!pane.classList.contains('seeking')){seek.max=String(studyPosition?.total??Math.max(1,runtime.totalPages));seek.value=String(studyPosition?.position??Math.max(1,runtime.currentPage));seek.disabled=!runtime.bookId||Number(seek.max)<2;seek.setAttribute('aria-valuetext',pageLabel?.textContent??'');}
 }
 
 function updateActiveUi(): void {
@@ -1151,7 +1223,7 @@ function themeRules(theme: ThemeName,index=snapshot.session.activePane): Record<
   const preferences=readingPreferences(index);
   const palette = {
     paper: {
-      background: "#f8f3e9",
+      background: "#f4f0e7",
       text: "#2d2923",
       muted: "#655c50",
       accent: "#a85d3b",
@@ -1160,24 +1232,24 @@ function themeRules(theme: ThemeName,index=snapshot.session.activePane): Record<
       rule: "#d7cbbb",
     },
     light: {
-      background: "#ffffff",
-      text: "#20242a",
-      muted: "#66707b",
-      accent: "#476e91",
-      surface: "#f3f6f8",
-      border: "#cbd3da",
-      rule: "#d8dee4",
+      background: "#faf9f5",
+      text: "#2c2b28",
+      muted: "#716b62",
+      accent: "#96674e",
+      surface: "#f0ede6",
+      border: "#d2ccc2",
+      rule: "#ded8ce",
     },
     night: {
-      background: "#1c1f23",
-      text: "#d9dadd",
-      muted: "#b2b7bd",
-      accent: "#a3b5bd",
-      surface: "#25292e",
-      border: "#43484e",
-      rule: "#33383e",
+      background: "#22211f",
+      text: "#e1ddd5",
+      muted: "#b8b1a6",
+      accent: "#caa080",
+      surface: "#2d2a26",
+      border: "#504a43",
+      rule: "#3b3833",
     },
-    contrast: { background:"#08090b", text:"#ffffff", muted:"#e0e0e0", accent:"#ffe29a", surface:"#16191f", border:"#929292", rule:"#aaaaaa" },
+    contrast: { background:"#08090b", text:"#faf9f5", muted:"#e0e0e0", accent:"#ffe29a", surface:"#16191f", border:"#929292", rule:"#aaaaaa" },
   }[theme];
   const rules: Record<string, Record<string, string>> = {
     html: {
@@ -2051,8 +2123,9 @@ function renderAnnotationPanel(): void {
     .join("");
 }
 
-function setAnnotationPanelVisible(visible: boolean): void {
-  if(visible){closeDrawer();closeBookNavigation();setReadingSettings(false);workspace?.showPanel(false,false);}
+function setAnnotationPanelVisible(visible: boolean,force=true): void {
+  if(!visible&&!force&&surfaces?.isDocked("annotations"))return;
+  if(visible){closeDrawer(false);closeBookNavigation(false);setReadingSettings(false,false);if(!surfaces?.isDocked("books"))workspace?.showPanel(false,false);}
   const wasVisible = annotationPanel.classList.contains("visible");
   const hadFocus = annotationPanel.contains(document.activeElement);
   annotationPanel.inert = !visible;
@@ -2776,6 +2849,7 @@ async function reflowPaneNow(index: number, force = false): Promise<void> {
   }
   runtime.restoringLocation = true;
   positionRenditionCanvas(index);
+  for(const contents of visibleContents(rendition))applyReadingTheme(contents);
   applyAdaptiveFontScale(index, host);
   updatePaneHeader(index);
   runtime.restoringLocation = true;
@@ -3042,7 +3116,7 @@ function handleRelocated(index: number, location: EpubLocation): void {
   updateChapterBoundary(index);if(index===snapshot.session.activePane)markCurrentToc();
 }
 
-async function openBook(bookId: string, index = snapshot.session.activePane,requestedChapter?:string,activate=true): Promise<void> {
+async function openBook(bookId: string, index = snapshot.session.activePane,requestedChapter?:string,activate=true,placement?:LayoutNode): Promise<void> {
   const previousActive=snapshot.session.activePane;
   const alreadyOpen=snapshot.session.paneBookIds.findIndex((id,i)=>id===bookId&&i!==index);
   if(alreadyOpen>=0){setActivePane(alreadyOpen);if(requestedChapter)await openBook(bookId,alreadyOpen,requestedChapter,activate);return;}
@@ -3069,7 +3143,7 @@ async function openBook(bookId: string, index = snapshot.session.activePane,requ
   runtime.openedSourceKey=sourceKey;
   snapshot.session.paneBookIds[index] = bookId;
   snapshot.session.paneCount=Math.max(snapshot.session.paneCount,index+1);
-  if(workspace&&!workspace.ids.includes(index))workspace.added(index,previousActive);
+  if(workspace&&!workspace.ids.includes(index))workspace.added(index,previousActive,placement);
   updatePaneHeader(index);
   updateActiveUi();
   persistSession();
@@ -3261,6 +3335,9 @@ async function openBook(bookId: string, index = snapshot.session.activePane,requ
   }
 }
 
+function focusReadingPane(index:number):void { const pane=paneElement(index);pane.tabIndex=-1;pane.focus({preventScroll:true}); }
+function activateReadingPane(index:number):void { setActivePane(index);focusReadingPane(index); }
+
 function setActivePane(index: number): void {
   if (index < 0 || index >= MAX_PANES) return;
   if(snapshot.session.activePane===index)return;
@@ -3402,7 +3479,7 @@ async function closeBook(index: number): Promise<void> {
 async function openBookInNewPane(bookId: string,requestedChapter?:string): Promise<void> {
   const alreadyOpen = snapshot.session.paneBookIds.findIndex((id) => id === bookId);
   if (alreadyOpen >= 0) {
-    setActivePane(alreadyOpen);
+    activateReadingPane(alreadyOpen);
     if(requestedChapter)await openBook(bookId,alreadyOpen,requestedChapter);
     return;
   }
@@ -3411,15 +3488,20 @@ async function openBookInNewPane(bookId: string,requestedChapter?:string): Promi
     showToast(`已经打开 ${MAX_PANES} 本书。请先关闭一个阅读区域，书和位置会保留。`);return;
   }
   await openBook(bookId, target,requestedChapter);
+  if(snapshot.session.activePane===target&&!document.activeElement?.closest('input,textarea,select,[contenteditable]'))focusReadingPane(target);
 }
 
 function renderLibraryAudit(): void {
-  if(!isDesktop){libraryAudit.innerHTML='<strong>我的书籍</strong><span>这里保留读过的书；完整材料只在主动选择时保存。</span>';return;}
+  if(!isDesktop){libraryAudit.innerHTML='<summary>保存在这台设备</summary><div>完整材料只在主动选择时保存。</div>';return;}
   const scan = snapshot.scan;
   const hasWarning =
     scan.unreadable > 0 || scan.missingRoots > 0 || scan.otherBookFiles > 0 || snapshot.books.some(book=>book.available===false);
   const allCandidatesLoaded = scan.loadedCandidates === scan.epubCandidates;
   libraryAudit.classList.toggle("warning", hasWarning || !allCandidatesLoaded);
+  const options=requireElement<HTMLDetailsElement>(app,'.library-options'),warning=hasWarning||!allCandidatesLoaded;
+  if(warning&&options.dataset.warning!=='true')options.open=true;
+  options.dataset.warning=String(warning);
+  app.querySelector('.library-options-toggle')?.setAttribute('title',warning?'书库有项目需要处理':'添加书籍与书库选项');
 
   const details = [
     `递归扫描 ${scan.rootsScanned} 个书库`,
@@ -3432,13 +3514,7 @@ function renderLibraryAudit(): void {
   if (scan.unreadable) details.push(`不可读 ${scan.unreadable}`);
   const offline=snapshot.books.filter(book=>book.available===false).length;if(offline)details.push(`暂不可用的已登记文件 ${offline}`);
 
-  libraryAudit.innerHTML = `
-    <strong>${
-      !hasWarning && allCandidatesLoaded
-        ? `书目已更新 · ${scan.booksLoaded} 本书`
-        : `已读取 ${scan.booksLoaded} 本，另有项目需处理`
-    }</strong>
-    <span>${details.join(" · ")}</span>`;
+  libraryAudit.innerHTML = `<summary>${hasWarning||!allCandidatesLoaded?'有书籍需要处理':'已收好 '+scan.booksLoaded+' 本书'}</summary><div role="status">${escapeHtml(details.join(' · '))}${scan.issues.map(issue=>`<p>${escapeHtml(issue.path)}：${escapeHtml(issue.message)}</p>`).join('')}<p>文件或文件夹恢复可用后，点击刷新重新读取。</p></div>`;
   libraryAudit.title = [
     `共享书库清单：${snapshot.libraryRoots.join("；") || "尚未登记"}`,
     ...scan.issues.map((issue) => `${issue.path}：${issue.message}`),
@@ -3446,6 +3522,10 @@ function renderLibraryAudit(): void {
 }
 
 function renderLibrary(query = ""): void {
+  if(workspace?.busy)return;
+  const scrollTop=libraryList.scrollTop;
+  const focusedBook=(document.activeElement as HTMLElement)?.closest<HTMLElement>('[data-book-id]')?.dataset.bookId;
+  const focusedAction=(document.activeElement as HTMLElement)?.classList.contains('book-new-pane')?'book-new-pane':'book-main';
   renderLibraryAudit();
   const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
   const books = snapshot.books.filter((book) =>
@@ -3470,21 +3550,23 @@ function renderLibrary(query = ""): void {
       const isOpen = snapshot.session.paneBookIds.includes(book.id);
       return `
         <article class="library-book ${isOpen ? "open" : ""}" role="listitem" data-book-id="${escapeHtml(book.id)}">
-          <button class="book-main" type="button" title="${isOpen?'回到这本书':'打开并加入阅读空间'}">
+          <button class="book-main" type="button" title="${escapeHtml(book.title)} · ${escapeHtml(book.author)} · ${escapeHtml(metric.text)}">
             <span class="mini-cover" style="--cover-hue:${hue}">${escapeHtml(book.title.slice(0, 1))}</span>
             <span class="book-copy">
-              <strong>${escapeHtml(book.title)}</strong>
+              <strong title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</strong>
               <em>${escapeHtml(book.author)}</em>
               ${metric.percent === null ? '' : `<span class="book-progress"><i style="width:${metric.percent}%"></i></span>`}
               <small>${escapeHtml(metric.text)}</small>
             </span>
           </button>
-          <button class="book-new-pane" type="button" title="${isOpen?'回到这本书':'放在旁边对照'}" aria-label="${isOpen?'回到这本书':'放在旁边对照'}">${
-            isOpen ? icons.check : icons.plus
+          <button class="book-new-pane" type="button" title="${isOpen?'回到这本书':'放在旁边对照'}" aria-label="${isOpen?'回到':'并排阅读'} ${escapeHtml(book.title)}">${
+            isOpen ? '回到书中' : '并排读'
           }</button>
         </article>`;
     })
     .join("");
+  libraryList.scrollTop=scrollTop;
+  if(focusedBook)libraryList.querySelector<HTMLButtonElement>(`[data-book-id="${CSS.escape(focusedBook)}"] .${focusedAction}`)?.focus({preventScroll:true});
 }
 
 async function importSelectedBooks(): Promise<void> {
@@ -3563,19 +3645,25 @@ function changeFont(delta: number): void {
 }
 
 async function toggleFullscreen(): Promise<void> {
-  const appWindow = getCurrentWindow();
-  const next = !(await appWindow.isFullscreen());
-  await appWindow.setFullscreen(next);
-  showToast(next ? "已进入全屏，按 F11 退出" : "已退出全屏");
+  await readingWindow.toggle();
 }
 
 function wireEvents(): void {
+  app.addEventListener('click',event=>{
+    const control=(event.target as Element).closest('.page-hotspot,.nav-back,.nav-forward,.nav-group-back,.nav-group-forward,[data-group-turn],.search-result,.chapter-entry>button,.reading-back');
+    if(!control)return;
+    const pane=control.closest<HTMLElement>('.reader-pane')??paneElement(snapshot.session.activePane);
+    // Turning a page returns keyboard control to the book, without stealing
+    // keys from editors, menus or unrelated buttons.
+    pane.tabIndex=-1;pane.focus({preventScroll:true});
+  });
   app.querySelector('.tools-toggle')?.addEventListener('click',()=>setToolsVisible(!toolsVisible));
   app.querySelector('.tools-close')?.addEventListener('click',()=>setToolsVisible(false));
   app.querySelector('.workspace-library')?.addEventListener('click',()=>drawer.classList.contains('visible')?closeDrawer():openDrawer());
   window.addEventListener('reader-learning-ready',event=>{const id=(event as CustomEvent).detail.bookId;for(const [index,runtime] of runtimes.entries()){if(runtime.bookId!==id||!runtime.rendition)continue;for(const contents of visibleContents(runtime.rendition))wireLearningDocument(id,index,contents,runtime.book?.spine.get(contents.sectionIndex)?.href??'');}});
   const scrollPanel=(panel:HTMLElement,list:()=>HTMLElement|null)=>panel.addEventListener('wheel',event=>{
     if(!panel.classList.contains('visible'))return;
+    if(ownsWheel(event.target,panel)){event.stopPropagation();return;}
     event.preventDefault();event.stopPropagation();const target=list();if(target)target.scrollTop+=event.deltaY*(event.deltaMode===1?18:event.deltaMode===2?target.clientHeight:1);
   },{passive:false});
   scrollPanel(drawer,()=>libraryList);
@@ -3595,7 +3683,7 @@ function wireEvents(): void {
     if (drawer.classList.contains("visible")) closeDrawer();
     else openDrawer();
   });
-  app.querySelector(".drawer-close")?.addEventListener("click", closeDrawer);
+  app.querySelector(".drawer-close")?.addEventListener("click", ()=>closeDrawer());
   app.querySelector(".nav-back")?.addEventListener("click", () => navigateActive("prev"));
   app.querySelector(".nav-forward")?.addEventListener("click", () => navigateActive("next"));
   app.querySelector(".nav-group-back")?.addEventListener("click", () =>
@@ -3688,25 +3776,39 @@ function wireEvents(): void {
   app.querySelector(".add-folder")?.addEventListener("click", () => void importFolder());
   app.querySelector(".refresh-library")?.addEventListener("click", () => void refreshLibrary());
 
+  let fontTimer:number|undefined;
+  app.querySelector('.font-size-slider')?.addEventListener('input',event=>{
+    const input=event.target as HTMLInputElement;const pane=snapshot.session.activePane;
+    fontScaleLabel.textContent=`${input.value}%`;window.clearTimeout(fontTimer);
+    fontTimer=window.setTimeout(()=>{if(pane===snapshot.session.activePane)changeReadingPreference('fontScale',Number(input.value));},70);
+  });
+  app.querySelector('.font-size-slider')?.addEventListener('change',event=>{window.clearTimeout(fontTimer);changeReadingPreference('fontScale',Number((event.target as HTMLInputElement).value));});
+  app.querySelectorAll<HTMLButtonElement>('[data-group-turn]').forEach(button=>button.addEventListener('click',()=>navigateActive(button.dataset.groupTurn==='prev'?'prev':'next','group')));
+  app.querySelector('.compact-fullscreen')?.addEventListener('click',()=>void toggleFullscreen().catch(error=>showToast(String(error),'error')));
+  app.querySelector('.interface-scale')?.addEventListener('change',event=>surfaces.setScale(Number((event.target as HTMLSelectElement).value)));
+  app.querySelector('.workspace-organize')?.addEventListener('click',()=>{closeDrawer();closeBookNavigation();setReadingSettings(false);setAnnotationPanelVisible(false);surfaces.reset();workspace.organize();});
   searchInput.addEventListener("input", () => renderLibrary(searchInput.value));
+  const libraryOptions=requireElement<HTMLDetailsElement>(app,'.library-options');
+  app.querySelector('.library-options-toggle')?.addEventListener('click',()=>{libraryOptions.open=!libraryOptions.open;});
+  libraryOptions.addEventListener('toggle',()=>app.querySelector('.library-options-toggle')?.setAttribute('aria-expanded',String(libraryOptions.open)));
   libraryList.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
     const item = target.closest<HTMLElement>(".library-book");
     const bookId = item?.dataset.bookId;
-    if (!bookId) return;
+    if (!bookId||performance.now()<workspace.suppressClickUntil) return;
     if (target.closest(".book-new-pane")) {
       openBookInNewPane(bookId);
-      closeDrawer();
+      closeDrawer(false);
     } else if (target.closest(".book-main")) {
       openBookInNewPane(bookId);
-      closeDrawer();
+      closeDrawer(false);
     }
   });
 
   readerGrid.addEventListener("pointerdown", (event) => {
     const pane = (event.target as HTMLElement).closest<HTMLElement>(".reader-pane");
     if (pane) setActivePane(Number(pane.dataset.paneIndex));
-    if((event.target as Element).closest('.pane-drag-handle,.workspace-divider'))setToolsVisible(false);
+    if((event.target as Element).closest('.pane-drag-handle,.pane-book-meta,.workspace-divider'))setToolsVisible(false);
   });
   readerGrid.addEventListener("pointerdown", handleAnnotationPointerDown);
   readerGrid.addEventListener("input", (event) => {
@@ -3726,6 +3828,8 @@ function wireEvents(): void {
       void navigate(index, "next", "group");
     } else if (target.closest(".page-hotspot-next")) {
       void navigate(index, "next");
+    } else if (target.closest(".pane-settings")) {
+      setActivePane(index);setReadingSettings(true);
     } else if (target.closest(".pane-close")) {
       closeBook(index);
     } else if (target.closest('.pane-focus')) {
@@ -3772,19 +3876,20 @@ function wireEvents(): void {
       else if(drawer.classList.contains('visible'))closeDrawer();
       else if(app.querySelector('.workspace-panel')?.classList.contains('visible'))workspace.showPanel(false);
       else if(toolsVisible)setToolsVisible(false);
-      else workspace.unfocus();
+      else if(!workspace.unfocus())void readingWindow.restore().catch(error=>showToast(String(error),'error'));
       return;
     }
-    if(event.key==='F8'){event.preventDefault();setToolsVisible(!toolsVisible);return;}
-    if(event.ctrlKey&&event.shiftKey&&event.key.toLowerCase()==='f'){event.preventDefault();workspace.focus(snapshot.session.activePane);return;}
-    if (event.altKey && event.key === "ArrowLeft") { event.preventDefault(); returnToPreviousPosition(); return; }
-    if (event.ctrlKey && event.key.toLowerCase() === "f") { event.preventDefault(); openBookNavigation("search"); return; }
-    if (event.ctrlKey && event.key.toLowerCase() === "t") { event.preventDefault(); openBookNavigation("contents"); return; }
     if (event.key === "F11") {
       event.preventDefault();
       void toggleFullscreen().catch((error) => showToast(`无法切换全屏：${String(error)}`, "error"));
       return;
     }
+    if((event.target as Element)?.closest?.("input,textarea,select,[contenteditable],video,audio,[role='slider']"))return;
+    if(event.key==='F8'){event.preventDefault();setToolsVisible(!toolsVisible);return;}
+    if(event.ctrlKey&&event.shiftKey&&event.key.toLowerCase()==='f'){event.preventDefault();workspace.focus(snapshot.session.activePane);return;}
+    if (event.altKey && event.key === "ArrowLeft") { event.preventDefault(); returnToPreviousPosition(); return; }
+    if (event.ctrlKey && event.key.toLowerCase() === "f") { event.preventDefault(); openBookNavigation("search"); return; }
+    if (event.ctrlKey && event.key.toLowerCase() === "t") { event.preventDefault(); openBookNavigation("contents"); return; }
     const target = event.target as HTMLElement | null;
     if (event.ctrlKey && event.key.toLowerCase() === "n") {
       event.preventDefault();
@@ -3808,10 +3913,10 @@ function wireEvents(): void {
     }
     if (event.ctrlKey && /^[1-9]$/.test(event.key)) {
       event.preventDefault();
-      const pane=workspace.ids[Number(event.key)-1];if(pane!==undefined)setActivePane(pane);
+      const pane=workspace.ids[Number(event.key)-1];if(pane!==undefined)activateReadingPane(pane);
       return;
     }
-    if (target instanceof Element && target.closest("button, a[href], summary, input, textarea, select, [contenteditable], [role='button'], [role='link'], [role='tab'], [role='menuitem']")) return;
+    if (target instanceof Element && target.closest("[data-surface],button, a[href], summary, input, textarea, select, [contenteditable], video,audio,[role='button'], [role='link'], [role='tab'], [role='menuitem']")) return;
     if (event.key.toLowerCase() === "g") {
       event.preventDefault();
       openJumpDialog();
@@ -4039,7 +4144,8 @@ function findNormalizedText(section: SearchableSection, query: string): Array<{ 
   return found;
 }
 
-function closeBookNavigation(): void {
+function closeBookNavigation(force=true): void {
+  if(!force&&surfaces?.isDocked("navigation"))return;
   const wasVisible = navigationPanel.classList.contains("visible");
   const hadFocus = navigationPanel.contains(document.activeElement);
   navigationPanel.classList.remove("visible");
@@ -4054,20 +4160,21 @@ function closeBookNavigation(): void {
   }
   navigationReturnFocus = null;
 }
-function setReadingSettings(visible: boolean): void {
+function setReadingSettings(visible: boolean,force=true): void {
+  if(!visible&&!force&&surfaces?.isDocked("settings"))return;
   const wasVisible = settingsPanel.classList.contains("visible");
   const hadFocus = settingsPanel.contains(document.activeElement);
   if (visible && !wasVisible) {
     const starter = document.activeElement;
     settingsReturnFocus = starter instanceof HTMLElement && starter !== document.body ? starter : app.querySelector<HTMLElement>(".reading-settings-toggle");
   }
-  if (visible) { closeDrawer(); closeBookNavigation(); setAnnotationPanelVisible(false);workspace?.showPanel(false,false); }
+  if (visible) { closeDrawer(false); closeBookNavigation(false); setAnnotationPanelVisible(false,false);if(!surfaces?.isDocked("books"))workspace?.showPanel(false,false); }
   settingsPanel.classList.toggle("visible", visible);
   settingsPanel.inert = !visible;
   settingsPanel.setAttribute("aria-hidden", String(!visible));
   app.querySelector(".reading-settings-toggle")?.setAttribute("aria-expanded", String(visible));
   syncReadingSettings();
-  if (visible && !wasVisible) requireElement<HTMLSelectElement>(settingsPanel, ".reading-mode").focus();
+  if (visible && !wasVisible) requireElement<HTMLSelectElement>(settingsPanel, snapshot.session.paneBookIds.filter(Boolean).length>1?".settings-target":".reading-mode").focus();
   if (!visible && wasVisible) {
     if (hadFocus) {
       const trigger = settingsReturnFocus?.isConnected && !settingsReturnFocus.closest("[inert]")
@@ -4083,7 +4190,7 @@ function openBookNavigation(tab: "contents" | "search"): void {
     navigationReturnFocus = starter instanceof HTMLElement && starter !== document.body
       ? starter : app.querySelector<HTMLElement>(tab === "search" ? ".book-search-toggle" : ".contents-toggle");
   }
-  closeDrawer(); setReadingSettings(false);setAnnotationPanelVisible(false);workspace?.showPanel(false,false);
+  closeDrawer(false); setReadingSettings(false,false);setAnnotationPanelVisible(false,false);if(!surfaces?.isDocked("books"))workspace?.showPanel(false,false);
   navigationTab = tab;
   navigationPanel.inert = false;
   navigationPanel.classList.add("visible");
@@ -4118,11 +4225,12 @@ function renderChapterList(): void {
   const render = (items: TocItem[], depth = 0): string => items.map(item => {
     const label=item.label.trim();
     const inferredDepth=depth||(/^[★\s]*[\dA-D]+\.\d/.test(label)?1:0);
-    return `<div class="chapter-entry"><button type="button" data-chapter-href="${escapeHtml(item.href)}" style="--depth:${inferredDepth}">${escapeHtml(label)}</button>${item.subitems?.length ? render(item.subitems, depth + 1) : ""}</div>`;
+    return `<div class="chapter-entry"><button type="button" data-chapter-href="${escapeHtml(item.href)}" title="${escapeHtml(label)}" style="--depth:${inferredDepth}"><span class="chapter-title">${escapeHtml(label)}</span></button>${item.subitems?.length ? render(item.subitems, depth + 1) : ""}</div>`;
   }).join("");
   chapterList.innerHTML = toc?.length ? render(toc) : '<p class="navigation-empty">这本书没有独立目录。</p>';
   markCurrentToc();
-  if (navigationTab === "contents") navigationStatus.textContent = getBook(runtime.bookId)?.title ?? "请先打开一本书";
+  navigationStatus.classList.toggle('navigation-book-title',navigationTab==='contents');
+  if (navigationTab === "contents") { navigationStatus.textContent = getBook(runtime.bookId)?.title ?? "请先打开一本书"; navigationStatus.title=navigationStatus.textContent; }
   else if (!searchHits.length) navigationStatus.textContent = "搜索整本书，结果直接定位到原文。";
 }
 function markCurrentToc():void{
@@ -4215,10 +4323,15 @@ function reflowPane(index:number,force=false):Promise<void> {
 }
 function navigate(index:number,direction:"prev"|"next",distance:NavigationDistance="single"):Promise<void> {
   return enqueuePaneOperation(index,async()=>{
-    const rendition=runtimes[index].rendition;
+    const rendition=runtimes[index].rendition,before=runtimes[index].cfi,beforePage=runtimes[index].currentPage;
     await navigateNow(index,direction,distance);
     if(rendition&&runtimes[index].rendition===rendition)await settleBookLocation(index,rendition);
     runtimes[index].layoutAnchorCfi=runtimes[index].cfi;
+    if(runtimes[index].readingMode==='paged'){
+      const pane=paneElement(index),feedback=pane.querySelector<HTMLElement>('.page-edge-status')!;
+      if(before===runtimes[index].cfi&&beforePage===runtimes[index].currentPage){feedback.textContent=direction==='prev'?'已到开头':'已到末尾';feedback.classList.add('visible');window.setTimeout(()=>feedback.classList.remove('visible'),1000);}
+      else if(!matchMedia('(prefers-reduced-motion: reduce)').matches){const stage=pane.querySelector<HTMLElement>('.pane-stage')!;stage.animate([{opacity:.88,translate:`${direction==='next'?5:-5}px 0`},{opacity:1,translate:'0 0'}],{duration:100,easing:'ease-out'});}
+    }
   });
 }
 async function settleRenditionLayout(index:number):Promise<void> {
@@ -4465,7 +4578,7 @@ function showTextDetail(element:Element,index:number):void {
   content.style.setProperty("--detail-font",readingFontFamily());
   content.replaceChildren(copy);openDetailDialog(dialog);
 }
-const wheelState = Array.from({length:MAX_PANES},()=>({sum:0,last:0,turned:0}));
+const wheelState = Array.from({length:MAX_PANES},()=>new WheelPager());
 function wireBookDocument(index: number, contents: EpubContents): void {
   const frame=contents.window.frameElement as HTMLIFrameElement|null;if(frame)frame.title=`${getBook(runtimes[index].bookId)?.title??'当前书籍'} · ${contents.document.title||'正文'}`;
   if (runtimes[index].bookId) wireLearningDocument(runtimes[index].bookId!, index, contents, runtimes[index].book?.spine.get(contents.sectionIndex)?.href ?? "");
@@ -4492,18 +4605,21 @@ function wireBookDocument(index: number, contents: EpubContents): void {
   },true);
   doc.addEventListener("pointerdown",()=>{
     if(snapshot.session.activePane!==index)setActivePane(index);
-    closeDrawer(); closeBookNavigation(); setReadingSettings(false);
-    workspace.showPanel(false,false);setToolsVisible(false);
+    closeDrawer(false); closeBookNavigation(false); setReadingSettings(false,false);
+    if(!surfaces?.isDocked("books"))workspace.showPanel(false,false);setToolsVisible(false);surfaces?.restChrome();
   });
   doc.addEventListener("keydown",event=>{
+    if(event.key==='F11'){event.preventDefault();window.dispatchEvent(new KeyboardEvent('keydown',{key:'F11',cancelable:true}));return;}
     const target = event.target as HTMLElement;
-    if (target?.closest("input, textarea, select, [contenteditable='true']")) return;
+    if (target?.closest("input, textarea, select, [contenteditable], video, audio, [role='slider']")) return;
     if(event.shiftKey&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(event.key))return;
     const table=target.closest<HTMLTableElement>('table');
     if(table&&runtimes[index].readingMode==='scroll'&&table.scrollWidth>table.clientWidth+2&&['ArrowLeft','ArrowRight'].includes(event.key)){event.preventDefault();table.scrollLeft+=event.key==='ArrowLeft'?-100:100;return;}
     if(target.tagName==='IMG'&&!target.closest('a')&&(event.key==='Enter'||event.key===' ')){event.preventDefault();showFigureViewer(target as HTMLImageElement);return;}
     const expandable=target.closest("[data-reader-detail]");
     if(expandable&&(event.key==="Enter"||event.key===" ")) {event.preventDefault();showTextDetail(expandable,index);return;}
+    if(target?.closest("button,a[href],summary,[role='button'],[role='link']")&&[" ","Enter","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","PageUp","PageDown"].includes(event.key))return;
+    if(ownsWheel(target,doc.body)&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown',' '].includes(event.key))return;
     const relevant = ["ArrowLeft","ArrowRight","PageUp","PageDown"," ","Escape","F8","F11","g"].includes(event.key) || event.ctrlKey && (["f","l","n","t"].includes(event.key.toLowerCase())||/^[1-9]$/.test(event.key));
     if (!relevant) return;
     if(snapshot.session.activePane!==index)setActivePane(index);
@@ -4512,15 +4628,13 @@ function wireBookDocument(index: number, contents: EpubContents): void {
     if(forwarded.defaultPrevented)event.preventDefault();
   });
   doc.addEventListener("wheel",event=>{
-    if(runtimes[index].readingMode==='scroll'){runtimes[index].preserveSemanticFocus=false;if(snapshot.session.activePane!==index)setActivePane(index);return;}
-    if(event.ctrlKey||annotationTool!=="read"||doc.getSelection()?.toString())return;
-    const state=wheelState[index],now=performance.now();
-    const delta=(Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY)*(event.deltaMode===1?18:event.deltaMode===2?400:1);
-    if(Math.abs(delta)<0.5)return;
+    if(event.ctrlKey||ownsWheel(event.target,doc.body))return;
+    if(runtimes[index].readingMode==='scroll'){runtimes[index].preserveSemanticFocus=false;if(snapshot.session.activePane!==index)activateReadingPane(index);return;}
+    if(annotationTool!=="read"||doc.getSelection()?.toString())return;
+    const delta=Math.abs(event.deltaX)>Math.abs(event.deltaY)?event.deltaX:event.deltaY;
     event.preventDefault();
-    if(now-state.last>180||Math.sign(delta)!==Math.sign(state.sum))state.sum=0;
-    state.last=now; state.sum+=delta;
-    if(Math.abs(state.sum)>=55 && now-state.turned>190) { const direction=state.sum>0?"next":"prev";state.sum=0;state.turned=now;if(snapshot.session.activePane!==index){setActivePane(index);contents.window.focus();}void navigate(index,direction); }
+    const direction=wheelState[index].feed(delta,event.deltaMode,performance.now());
+    if(direction){if(snapshot.session.activePane!==index)activateReadingPane(index);void navigate(index,direction>0?'next':'prev');}
   },{passive:false});
   doc.addEventListener("click",event=>{
     const target=event.target as HTMLElement;
@@ -4531,6 +4645,7 @@ function wireBookDocument(index: number, contents: EpubContents): void {
   });
 }
 function wireReadingNavigation(): void {
+  app.querySelector('.settings-target')?.addEventListener('change',event=>{const index=Number((event.target as HTMLSelectElement).value);if(snapshot.session.paneBookIds[index])setActivePane(index);});
   app.querySelector('.reading-mode')?.addEventListener('change',event=>{void setReadingMode(snapshot.session.activePane,(event.target as HTMLSelectElement).value==='scroll'?'scroll':'paged');});
   app.querySelector('.reader-line-height')?.addEventListener('change',event=>changeReadingPreference('lineHeight',Number((event.target as HTMLInputElement).value)));
   app.querySelector('.reader-content-width')?.addEventListener('change',event=>changeReadingPreference('contentWidth',Number((event.target as HTMLSelectElement).value)));
@@ -4538,7 +4653,7 @@ function wireReadingNavigation(): void {
   app.querySelector(".reading-back")?.addEventListener("click",returnToPreviousPosition);
   app.querySelector(".contents-toggle")?.addEventListener("click",()=>navigationPanel.classList.contains("visible")&&navigationTab==="contents"?closeBookNavigation():openBookNavigation("contents"));
   app.querySelector(".book-search-toggle")?.addEventListener("click",()=>openBookNavigation("search"));
-  app.querySelector(".navigation-close")?.addEventListener("click",closeBookNavigation);
+  app.querySelector(".navigation-close")?.addEventListener("click",()=>closeBookNavigation());
   app.querySelector(".reading-settings-toggle")?.addEventListener("click",()=>setReadingSettings(!settingsPanel.classList.contains("visible")));
   app.querySelector(".settings-close")?.addEventListener("click",()=>setReadingSettings(false));
   app.querySelector(".book-search-form")?.addEventListener("submit",event=>{event.preventDefault();void searchCurrentBook();});
@@ -4556,9 +4671,9 @@ function wireReadingNavigation(): void {
   });
   document.addEventListener("pointerdown",event=>{
     const target=event.target as HTMLElement;
-    if(!target.closest(".library-drawer,.library-toggle,.left-library-handle,.workspace-library"))closeDrawer();
-    if(!target.closest(".book-navigation,.contents-toggle,.book-search-toggle"))closeBookNavigation();
-    if(!target.closest(".reading-settings,.reading-settings-toggle"))setReadingSettings(false);
+    if(!target.closest(".library-drawer,.library-toggle,.left-library-handle,.workspace-library"))closeDrawer(false);
+    if(!target.closest(".book-navigation,.contents-toggle,.book-search-toggle"))closeBookNavigation(false);
+    if(!target.closest(".reading-settings,.reading-settings-toggle,.pane-settings"))setReadingSettings(false,false);
   });
 }
 
@@ -4685,11 +4800,21 @@ async function start(): Promise<void> {
   buildPaneShells();
   workspace=new ReadingWorkspace(readerGrid,app,{
     changed:state=>{snapshot.session.workspace=state;persistSession();},
-    activate:setActivePane,
+    activate:activateReadingPane,
     visible:panes=>{queueMicrotask(()=>{if(!readerReady)return;for(const index of panes){const id=snapshot.session.paneBookIds[index];if(id&&!runtimes[index].opening&&!runtimes[index].bookId)void openBook(id,index,undefined,false);}});},
     title:index=>getBook(snapshot.session.paneBookIds[index])?.title??'阅读区域',
     close:index=>{void closeBook(index);},toast:showToast,
+    libraryBook:id=>{const book=getBook(id);if(!book)return null;const existing=snapshot.session.paneBookIds.indexOf(id),pane=existing>=0?existing:snapshot.session.paneBookIds.findIndex(id=>!id);if(pane<0){showToast('已打开12本书，先合上一本即可继续加入。');return null;}return {pane,existing:existing>=0,title:book.title,author:book.author};},
+    open:(id,index,tree)=>{closeDrawer(false);void openBook(id,index,undefined,true,tree).then(()=>{if(snapshot.session.activePane===index&&!document.activeElement?.closest('input,textarea,select,[contenteditable]'))focusReadingPane(index);});},
   });
+  surfaces=new ReadingSurfaces(shell,readerGrid,state=>{snapshot.session.surfaces=state;persistSession();},()=>setToolsVisible(false));
+  surfaces.register('library',drawer,'left',{x:12,y:54,width:280,height:460});
+  surfaces.register('navigation',navigationPanel,'left',{x:12,y:54,width:304,height:420});
+  surfaces.register('settings',settingsPanel,'right',{x:Math.max(8,innerWidth-388),y:54,width:376,height:500});
+  surfaces.register('annotations',annotationPanel,'right',{x:Math.max(8,innerWidth-388),y:54,width:376,height:660});
+  readingWindow=new ReadingWindow(shell,()=>surfaces.render(),message=>showToast(message,'error'));
+  await readingWindow.initialize().catch(error=>showToast(`窗口操作暂不可用：${String(error)}`, 'error'));
+  wireReadingEdges();
   wireEvents();
   await initCatalogue({
     known:uuid=>{const record=snapshot.books.find(book=>book.bookUuid===uuid);return record?{record,sourceHash:snapshot.progress[record.id]?.sourceSha256}:null;},
@@ -4851,6 +4976,9 @@ async function start(): Promise<void> {
       try { await openWebLink(); }
       catch(error) { showToast(`这条书籍链接暂时打不开：${readableError(error)}。可在“发现书籍”中重试。`,"error"); }
     }
+    surfaces.load(snapshot.session.surfaces);
+    snapshot.session.surfaces=structuredClone(surfaces.state);
+    requireElement<HTMLSelectElement>(app,".interface-scale").value=String(surfaces.state.uiScale);
     renderLibrary();
     updateLayoutUi();
     applyTheme();

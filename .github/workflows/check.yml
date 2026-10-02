@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.13'
       - run: npm ci --ignore-scripts --prefix desktop
-      - run: node --test tests/workspace-layout.test.mjs
+      - run: node --test tests/workspace-layout.test.mjs tests/reading-input.test.mjs
       - run: python tools/prepare_release_assets.py --download --github-auth
         env:
           GH_TOKEN: ${{ github.token }}

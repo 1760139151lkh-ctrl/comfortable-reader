@@ -51,7 +51,15 @@ For visual and interaction regressions, inspect text buttons separately from fix
 
 Keep up to 12 distinct books in stable slots. The split tree records relationships and ratios; focus and insufficient-space presentation must never overwrite it. Opening another book may split a local region after manual adjustment; resizing the outer window must not change topology. Closing a pane is not removing a book from the library. Duplicate views of one book are not supported yet.
 
-Toolbars and panels overlay a fixed reading area. Opening or hiding them must not trigger reflow. Dragging starts only on the book handle or separator, preserving text selection and annotations. Check preview, cancel, keyboard movement, and sparse slots after close/reopen.
+The 0.7 tool rail owns a narrow, stable area outside the text. Expanding/collapsing its tools does not change book geometry. Panels may float when explicitly opened; docking reserves real space and reflows with a semantic anchor. Moving a floating panel does not move the books. Panel geometry, docking and UI scale live in session.surfaces; they must not reset book preferences or annotations. Temporarily clamp panels for a small viewport without overwriting their intended large-window geometry.
+
+The compact shelf uses one panel for all books and currently-open books; it must not stack a second book-management overlay. Constrain shelf width, fade overflowing titles, and reveal low-frequency metadata only when needed. Check the actual native window and persisted geometry, not just the ability to resize a large panel. Surface state version 2 migrates the former oversized shelf to the compact default without resetting the workspace tree or personal records.
+
+Full-screen window gestures use the blank safe top edge with no visible grab mark. A downward drag commits on release; cancelling must not change geometry. Restoration clamps the native window to the monitor work area, and close uses the existing save handler. Keep book-layout drag, reading-tool parking and OS-window actions separate; test the native action in addition to any mocked IPC tests.
+
+Shelf dragging adds a book, never replaces another. Preview the complete candidate rectangles without changing live iframe layout; commit only on release. Preserve the shelf query/scroll position on cancellation. Edge drops split a local region, center drops exchange existing books, divider drops insert between groups. Empty space and insufficient-space fallbacks must retain all identities.
+
+Page-turn targets live in book margins outside the EPUB/annotation canvas. Pointer hover never navigates; wheel gestures respect nested scroll owners, including their boundaries. Continuous reading keeps native scrolling. Text input, media controls and local scrolling keep their keyboard events. Progress dragging previews, then commits once. Test shelf dragging, cancel, panel resizing/docking, toolbar parking, sparse slots and restart in the real installed application.
 
 ## Resize and density rules
 

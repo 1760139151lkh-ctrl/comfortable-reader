@@ -70,6 +70,8 @@ pub struct ReaderSession {
     #[serde(default)]
     workspace: Option<serde_json::Value>,
     #[serde(default)]
+    surfaces: Option<serde_json::Value>,
+    #[serde(default)]
     line_height: Option<f64>,
     #[serde(default)]
     content_width: Option<u16>,
@@ -90,6 +92,7 @@ impl Default for ReaderSession {
     fn default() -> Self {
         Self {
             workspace: None,
+            surfaces: None,
             line_height: None,
             content_width: None,
             pane_count: 1,

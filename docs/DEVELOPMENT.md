@@ -33,3 +33,13 @@ Windows 发行构建使用 `python tools/build_desktop.py`，隔离构建加 `--
 本机执行使用 Windows Job Objects，未测试系统保留未验证状态。公开前另用 `tools/audit_release.py` 检查允许发布的文件和资产，保存哈希。不能把一台开发电脑构建成功当作全平台安装通过。
 
 旧候选的独立滚动页面、嵌入式 `public/open` 书目窗口及其构建脚本已退出活动构建。`site` 只保留共用获取、存储、内置计算与 service worker。新入口接续旧来源数据库中的笔记、草稿、收据；跨来源仍须在原地址导出，不能声称能读取其他网站的私有存储。
+
+## 0.7 阅读空间
+
+`reading-surfaces.ts` 管理正文外的窄工具区、面板移动/缩放/真停靠与可见范围校正；会话的可选 `surfaces` 字段与旧数据兼容。版本2将旧大书库归位到紧凑浮动初值，正在读使用书库内的视图；其他面板、书籍空间树和个人记录不随迁移重置。临时小窗口仅约束显示，不覆盖已保存的几何。`workspace.ts` 管理书库拾取与候选布局预览，`workspace-layout.ts` 只处理空间树；松手才提交书籍的真实区域。`reading-input.ts` 将滚轮事件归并为翻页意图，正文与控件的事件路由仍由共享界面拥有。
+
+`site/shared/workspace.mjs` 将随书学习放在实际阅读区域内，因此工具区在顶部或底部时都能保持可达。没有另建阅读前端或替换 EPUB 引擎。
+
+输入/布局检查：`node --test tests/workspace-layout.test.mjs tests/reading-input.test.mjs`。真实书交互回归：按上文配置 Playwright 与只读 `READER_BASELINE` 后运行 `node tests/reader-space-browser.cjs`；它使用内存中的模拟原生 IPC，不能当作安装版验收。
+
+`reading-window.ts` 仅管理全屏顶部空白手势与按需显示的窗口控制。拖动在松手时提交，Escape 取消不改变窗口；恢复位置使用 Tauri 的物理坐标和显示器工作区，关闭沿用原保存链。`node tests/reader-window-browser.cjs` 使用模拟原生窗口验证输入、取消和保存顺序，不能替代 Windows 安装版的真实拖动。
