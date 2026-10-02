@@ -1,0 +1,62 @@
+{
+  "purpose": "soft vs argmax information routing, before any bilingual model training",
+  "source_vectors": [
+    [
+      1.0,
+      0.0
+    ],
+    [
+      0.0,
+      1.0
+    ],
+    [
+      -1.0,
+      0.0
+    ]
+  ],
+  "query": [
+    0.2,
+    0.7
+  ],
+  "scores": [
+    0.2,
+    0.7,
+    -0.2
+  ],
+  "soft_weights": [
+    0.30129182030897,
+    0.4967462328313597,
+    0.20196194685967037
+  ],
+  "soft_context": [
+    0.09932987344929964,
+    0.4967462328313597
+  ],
+  "soft_dcontext_dscore_rows": [
+    [
+      0.2713645419263709,
+      -0.1496655767213838
+    ],
+    [
+      -0.04934174044355529,
+      0.24998941299921232
+    ],
+    [
+      -0.22202280148281558,
+      -0.10032383627782851
+    ]
+  ],
+  "autograd_max_abs_gradient_error": 0.0,
+  "hard_selected_source_index_zero_based": 1,
+  "hard_context": [
+    0.0,
+    1.0
+  ],
+  "hard_score_gradient_under_plain_argmax": null,
+  "hard_context_after_plus_0_01_to_first_score": [
+    0.0,
+    1.0
+  ],
+  "limit": "Argmax has no ordinary score gradient while winner stays fixed; supervised alignments, marginalization, stochastic estimators and other methods may still train hard alignment models.",
+  "torch_version": "2.11.0+cu128"
+}

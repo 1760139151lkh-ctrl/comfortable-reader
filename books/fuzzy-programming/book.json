@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "sourceFormat": "epub-source@1",
+  "id": "urn:uuid:46718883-ae34-5fdd-b8ab-9940d995383a",
+  "slug": "fuzzy-programming",
+  "title": "模糊规划：把“差不多”变成可计算的决定",
+  "author": "舒适阅读书库项目",
+  "authorship": "由项目维护者使用 ChatGPT / Codex 辅助编写和整理；原文所述来源和参考实验各自保留身份。",
+  "description": "把模糊目标、软约束与满意度放在同一条建模路线中，分清定义、取舍与求解。",
+  "revision": "1.0.0",
+  "revisionModified": "2026-09-28T00:00:00Z",
+  "language": "zh-CN",
+  "example": false,
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "attribution": "舒适阅读书库项目 / 1760139151lkh-ctrl",
+    "exceptions": "RIGHTS.md"
+  },
+  "epubSource": {
+    "root": "epub",
+    "files": [
+      "META-INF/container.xml",
+      "OEBPS/ch00.xhtml",
+      "OEBPS/ch02.xhtml",
+      "OEBPS/ch03.xhtml",
+      "OEBPS/ch04.xhtml",
+      "OEBPS/ch05.xhtml",
+      "OEBPS/ch06.xhtml",
+      "OEBPS/content.opf",
+      "OEBPS/nav.xhtml",
+      "OEBPS/publication.xhtml",
+      "OEBPS/style.css"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c00",
+      "title": "模糊规划：把“差不多”变成可计算的决定",
+      "href": "ch00.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c02",
+      "title": "第一章　从一句“最好不要超过”开始",
+      "href": "ch02.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c03",
+      "title": "第二章　标准路线：先分清你说的“模糊”是什么",
+      "href": "ch03.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c04",
+      "title": "第三章　经典方法从哪里来，又不该被说成什么",
+      "href": "ch04.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c05",
+      "title": "第四章　把抽象符号放回具体问题",
+      "href": "ch05.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c06",
+      "title": "第五章　三个现实场景：同一套符号，三种不同语气",
+      "href": "ch06.xhtml",
+      "essential": []
+    }
+  ],
+  "resources": [],
+  "sources": [],
+  "activities": []
+}

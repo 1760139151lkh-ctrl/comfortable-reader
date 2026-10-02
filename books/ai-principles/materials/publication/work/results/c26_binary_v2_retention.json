@@ -1,0 +1,34 @@
+{
+  "scope": "already-used validation data only; retention diagnostic after C26 checkpoint fixed, no C26 test-based tuning",
+  "selected_step": 80,
+  "task_manifest_sha256": "851b8f58d03b13db3617c066ed698ce0551bed913bf60abfe4c01f0418d7da13",
+  "checkpoint_sha256": "4b7a1b54f4d31107509faf0494060c773ce5d6f6b83f024b83d40bfdfe16319e",
+  "results": {
+    "start_c25_full_mix": {
+      "dolly_validation_response": {
+        "response_nll": 5.492693432379673,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "old_wikitext_validation": {
+        "nll": 5.942112502819118,
+        "perplexity": 380.7383915069109,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    },
+    "selected_c26_policy": {
+      "dolly_validation_response": {
+        "response_nll": 5.925257783164789,
+        "response_targets_including_eos": 29295,
+        "records": 678
+      },
+      "old_wikitext_validation": {
+        "nll": 6.041219887373782,
+        "perplexity": 420.40556965205695,
+        "targets": 284331,
+        "blocks": 2253
+      }
+    }
+  }
+}

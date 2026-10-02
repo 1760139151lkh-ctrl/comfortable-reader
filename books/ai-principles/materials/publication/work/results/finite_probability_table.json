@@ -1,0 +1,69 @@
+{
+  "data_identity": "12 条作者制作的 A/B 盒子与红蓝结果记录；未做实体抽取",
+  "assumption_for_likelihood": "各次在已知盒子后按该盒固定比例有放回、条件独立",
+  "counts": {
+    "A": {
+      "red": 6,
+      "blue": 2
+    },
+    "B": {
+      "red": 1,
+      "blue": 3
+    }
+  },
+  "joint": {
+    "A": {
+      "red": "1/2",
+      "blue": "1/6"
+    },
+    "B": {
+      "red": "1/12",
+      "blue": "1/4"
+    }
+  },
+  "p_box": {
+    "A": "2/3",
+    "B": "1/3"
+  },
+  "p_color": {
+    "red": "7/12",
+    "blue": "5/12"
+  },
+  "conditional": {
+    "A": {
+      "red": "3/4",
+      "blue": "1/4"
+    },
+    "B": {
+      "red": "1/4",
+      "blue": "3/4"
+    }
+  },
+  "expected_payoff_given_box": {
+    "A": "5/4",
+    "B": "-1/4"
+  },
+  "overall_expected_payoff": "3/4",
+  "unconditional_training_log_loss_nats": 0.6791932659915257,
+  "conditional_training_log_loss_nats": 0.5623351446188083,
+  "unconditional_record_likelihood": 0.0002886432123477698,
+  "conditional_record_likelihood": 0.0011731982231140137,
+  "marginal_empirical_entropy_bits": 0.9798687566511527,
+  "conditional_empirical_entropy_bits": 0.8112781244591328,
+  "entropy_reduction_bits_on_this_table": 0.16859063219201986,
+  "same_reduction_as_weighted_kl_bits": 0.16859063219202003,
+  "hypothetical_true_red_probability": "3/4",
+  "announced_red_probability": "3/5",
+  "honest_expected_log_loss_nats": 0.5623351446188083,
+  "mismatched_expected_log_loss_nats": 0.6121919007930318,
+  "kl_gap_nats": 0.04985675617422347,
+  "log_ratio_if_red_nats": 0.22314355131420976,
+  "log_ratio_if_blue_nats": -0.4700036292457356,
+  "reverse_kl_nats": 0.05411532090976823,
+  "symmetric_divergence_nats": 0.1039720770839917,
+  "honest_expected_binary_square_loss": 0.1875,
+  "mismatched_expected_binary_square_loss": 0.21000000000000002,
+  "after_one_extra_A_blue_p_red_A": "2/3",
+  "zero_probability_on_observed_event_log_loss": "infinite",
+  "scope": "有限表与假设分布的核算；没有独立测试资料或现实盒子概率。"
+}

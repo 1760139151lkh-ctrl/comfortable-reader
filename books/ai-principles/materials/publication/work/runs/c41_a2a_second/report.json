@@ -1,0 +1,46 @@
+{
+  "sdk_version": "1.0.2",
+  "protocol_version": "1.0",
+  "two_card_declared_same_skill": true,
+  "request_budget": 2,
+  "replies": [
+    {
+      "card_name": "C41 source_reader",
+      "card_skill_ids": [
+        "c40_retrieval_count"
+      ],
+      "interface_version": "1.0",
+      "task_id": "abf76d8a-a309-433d-8afc-5d0ed40f0b7d",
+      "task_state": "TASK_STATE_COMPLETED",
+      "artifact_name": "retrieval_result",
+      "artifact": {
+        "r_at_5_count": 9,
+        "question_count": 12,
+        "source_sha256": "47a31f6459b8fc0339727210c51026a955c4cccc8b82b2bd0fbfbf881ffff161",
+        "source": "C40 published-book retrieval report"
+      }
+    },
+    {
+      "card_name": "C41 unverified",
+      "card_skill_ids": [
+        "c40_retrieval_count"
+      ],
+      "interface_version": "1.0",
+      "task_id": "310763fb-4b24-4a1d-a99d-56bd3846e7c8",
+      "task_state": "TASK_STATE_COMPLETED",
+      "artifact_name": "retrieval_result",
+      "artifact": {
+        "r_at_5_count": 12,
+        "question_count": 12,
+        "source_sha256": "unverified",
+        "source": "plausible assertion without reading"
+      }
+    }
+  ],
+  "accepted_task_id": "abf76d8a-a309-433d-8afc-5d0ed40f0b7d",
+  "rejected_task_id": "310763fb-4b24-4a1d-a99d-56bd3846e7c8",
+  "source_count": 9,
+  "source_report_sha256": "47a31f6459b8fc0339727210c51026a955c4cccc8b82b2bd0fbfbf881ffff161",
+  "reason_rejected": "protocol completed and card advertised skill, but artifact count and source SHA did not match the real report",
+  "scope": "two local deterministic A2A SDK servers over loopback; no LLM worker, no external delegation, no auth or durable task store"
+}

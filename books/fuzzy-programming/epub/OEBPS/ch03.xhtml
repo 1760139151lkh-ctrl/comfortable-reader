@@ -1,0 +1,455 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第二章　标准路线：先分清你说的“模糊”是什么</title><link rel="stylesheet" href="style.css"/></head><body><section class="chapter">
+<h1 id="第二章-标准路线先分清你说的模糊是什么">第二章　标准路线：先分清你说的“模糊”是什么</h1>
+<p>前一章说明了一个软要求为什么不能只靠“存在某个满意度变量”来约束。现在把问题放回模糊规划理论本身，区分软约束、模糊参数、模糊目标和硬约束。</p>
+<p>现在把视线从某一种个人写法移开，直接看<strong>经典模糊规划理论通常怎样处理这类问题</strong>。</p>
+<p>先把最关键的一点钉死：</p>
+<blockquote>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span> 不是模糊规划必然存在的变量。<br/>
+它只在某一类特定模型——“最大化最低满意度”模型——中作为辅助变量出现。</p>
+</blockquote>
+<p>很多模糊规划问题根本不需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>。</p>
+<hr/>
+<h1 id="一首先要区分两种完全不同的模糊">一、首先要区分两种完全不同的“模糊”</h1>
+<p>现实里说“大约”“最好不要超过”，可能对应两种数学含义。</p>
+<h2 id="1-软约束">1. 软约束</h2>
+<p>例如：</p>
+<blockquote>
+<p>成本最好不超过 100 万，最多可以容忍到 120 万。</p>
+</blockquote>
+<p>这里的 100 和 120 都是已知的，问题不是数据不确定，而是“超过一点也可以接受”。</p>
+<p>通常写成：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≲</mo><mn>100.</mn></mrow><annotation encoding="application/x-tex">C(x)\lesssim 100.</annotation></semantics></math></span></span></span>
+<p>定义满意度：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>C</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable columnalign="left left" columnspacing="1em" rowspacing="0.36em"><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mn>1</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mi>C</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>100</mn><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mstyle displaystyle="true" scriptlevel="0"><mfrac><mrow><mn>120</mn><mo>−</mo><mi>C</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><mn>20</mn></mfrac></mstyle><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mn>100</mn><mo>&lt;</mo><mi>C</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>&lt;</mo><mn>120</mn><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mn>0</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mi>C</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mn>120.</mn></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\mu_C(x)=
+\begin{cases}
+1,&amp;C(x)\le100,\\[4pt]
+\dfrac{120-C(x)}{20},&amp;100&lt;C(x)&lt;120,\\[6pt]
+0,&amp;C(x)\ge120.
+\end{cases}</annotation></semantics></math></span></span></span>
+<p>这是<strong>模糊约束或软约束</strong>。</p>
+<h2 id="2-模糊参数">2. 模糊参数</h2>
+<p>例如：</p>
+<blockquote>
+<p>单位成本大约为 100 元。</p>
+</blockquote>
+<p>这里连成本系数本身都不确定，可以写成模糊数：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mover accent="true"><mi>c</mi><mo>~</mo></mover><mo>=</mo><mo stretchy="false">(</mo><mn>90</mn><mo separator="true">,</mo><mn>100</mn><mo separator="true">,</mo><mn>120</mn><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\tilde c=(90,100,120).</annotation></semantics></math></span></span></span>
+<p>这种问题需要处理模糊系数、模糊数、<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>-截集、可能性与必然性等。</p>
+<p>你前面主要问的是第一种：<strong>目标和某些约束是否允许部分满足</strong>。下面重点讨论这一类。</p>
+<hr/>
+<h1 class="" id="二精确目标-少数模糊约束-其他精确约束">二、精确目标 + 少数模糊约束 + 其他精确约束</h1>
+<p class="">这是你提到的第一种情形。</p>
+<p>标准形式是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo separator="true">,</mo><mspace width="2em"/><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>m</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>h</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≲</mo><msub><mi>b</mi><mi>i</mi></msub><mo separator="true">,</mo><mspace width="2em"/><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>r</mi><mi mathvariant="normal">.</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\max\quad &amp;f(x),\\
+\text{s.t.}\quad
+&amp;g_j(x)\le0,\qquad j=1,\dots,m,\\
+&amp;h_i(x)\lesssim b_i,\qquad i=1,\dots,r.
+\end{aligned}</annotation></semantics></math></span></span></span>
+<p>其中：</p>
+<ul>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span></span> 是精确目标；</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_j(x)\le0</annotation></semantics></math></span></span> 是硬约束；</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≲</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">h_i(x)\lesssim b_i</annotation></semantics></math></span></span> 是软约束。</p>
+</li>
+</ul>
+<p>问题在于：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≲</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">h_i(x)\lesssim b_i</annotation></semantics></math></span></span></span>
+<p>本身还没有定义一个普通的可行域。</p>
+<p>你必须告诉模型：</p>
+<blockquote>
+<p>软约束至少要满足到什么程度？</p>
+</blockquote>
+<p class="">标准做法主要有下面三种。</p>
+<hr/>
+<h2 class="" id="标准做法-a给定满意度水平-α-alpha">标准做法 A：给定满意度水平 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span></h2>
+<p class="">这是最直接、最常用的做法。</p>
+<p>决策者选定：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>α</mi><mo>∈</mo><mo stretchy="false">[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">]</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\alpha\in[0,1].</annotation></semantics></math></span></span></span>
+<p class="">要求：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mo separator="true">,</mo><mspace width="2em"/><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>r</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\alpha,
+\qquad i=1,\dots,r.</annotation></semantics></math></span></span></span>
+<p>于是模型变成：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mi mathvariant="normal">.</mi></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;f(x),\\
+\text{s.t.}\quad
+&amp;g_j(x)\le0,\\
+&amp;\mu_i(x)\ge\alpha.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p class="">这里唯一要最大化的仍然是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">f(x).</annotation></semantics></math></span></span></span>
+<p>完全不需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>。</p>
+<h3 class="" id="线性软约束的确定化">线性软约束的确定化</h3>
+<p>假设：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≲</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i^\top x\lesssim b_i</annotation></semantics></math></span></span></span>
+<p>允许最多违反 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i</annotation></semantics></math></span></span>，隶属度为：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mrow><mo fence="true">{</mo><mtable columnalign="left left" columnspacing="1em" rowspacing="0.36em"><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mn>1</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≤</mo><msub><mi>b</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mstyle displaystyle="true" scriptlevel="0"><mfrac><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo>−</mo><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi></mrow><msub><mi>p</mi><mi>i</mi></msub></mfrac></mstyle><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>&lt;</mo><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>&lt;</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><mn>0</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≥</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mi mathvariant="normal">.</mi></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\mu_i(x)=
+\begin{cases}
+1,&amp;a_i^\top x\le b_i,\\[4pt]
+\dfrac{b_i+p_i-a_i^\top x}{p_i},
+&amp;b_i&lt;a_i^\top x&lt;b_i+p_i,\\[6pt]
+0,&amp;a_i^\top x\ge b_i+p_i.
+\end{cases}</annotation></semantics></math></span></span></span>
+<p>要求：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\alpha.</annotation></semantics></math></span></span></span>
+<p>在过渡区间内就是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mfrac><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo>−</mo><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi></mrow><msub><mi>p</mi><mi>i</mi></msub></mfrac><mo>≥</mo><mi>α</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\frac{b_i+p_i-a_i^\top x}{p_i}\ge\alpha.</annotation></semantics></math></span></span></span>
+<p>整理得：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≤</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+a_i^\top x
+\le
+b_i+p_i(1-\alpha)
+}</annotation></semantics></math></span></span></span>
+<p>因此原问题直接变成普通优化：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≤</mo><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{aligned}
+\max\quad &amp;f(x),\\
+\text{s.t.}\quad
+&amp;g_j(x)\le0,\\
+&amp;a_i^\top x\le b_i+p_i(1-\alpha).
+\end{aligned}</annotation></semantics></math></span></span></span>
+<p class="">解释如下：</p>
+<ul>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math></span></span>：完全不允许违反，恢复为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>a</mi><mi>i</mi><mi mathvariant="normal">⊤</mi></msubsup><mi>x</mi><mo>≤</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i^\top x\le b_i</annotation></semantics></math></span></span>；</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">\alpha=0.8</annotation></semantics></math></span></span>：只允许使用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">20\%</annotation></semantics></math></span></span> 的容忍范围；</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math></span></span>：允许一直到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>i</mi></msub><mo>+</mo><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">b_i+p_i</annotation></semantics></math></span></span>。</p>
+</li>
+</ul>
+<p>这就是标准的 <strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>-水平法</strong>。</p>
+<hr/>
+<h2 class="" id="标准做法-b把满意度和原目标看作多目标">标准做法 B：把满意度和原目标看作多目标</h2>
+<p>有时决策者不知道该选：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.6</mn><mo separator="true">,</mo><mspace width="1em"/><mn>0.8</mn><mo separator="true">,</mo><mspace width="1em"/><mtext>还是 </mtext><mn>0.9.</mn></mrow><annotation encoding="application/x-tex">\alpha=0.6,\quad0.8,\quad\text{还是 }0.9.</annotation></semantics></math></span></span></span>
+<p>那么问题本质上就不是一个单目标问题，而是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\max f(x)</annotation></semantics></math></span></span></span>
+<p>同时希望：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><msub><mi>μ</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>max</mi><mo>⁡</mo><msub><mi>μ</mi><mi>r</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\max\mu_1(x),\dots,\max\mu_r(x).</annotation></semantics></math></span></span></span>
+<p>标准写法是一个多目标规划：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">(</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msub><mi>μ</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>μ</mi><mi>r</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo fence="true" maxsize="1.2em" minsize="1.2em" stretchy="true">)</mo></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\max
+\bigl(
+f(x),
+\mu_1(x),
+\dots,
+\mu_r(x)
+\bigr)
+}</annotation></semantics></math></span></span></span>
+<p class="">满足所有精确约束。</p>
+<p>因为这几个目标通常冲突，所以不会自然产生唯一答案，而会得到一组 Pareto 最优解。</p>
+<p class="">例如：</p>
+<ul>
+<li>
+<p>方案 A：利润高，但软约束满意度低；</p>
+</li>
+<li>
+<p>方案 B：利润稍低，但软约束满意度高。</p>
+</li>
+</ul>
+<p>然后决策者从中选择。</p>
+<p class="">在数值计算中，通常采用：</p>
+<ul>
+<li>
+<p class=""><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ε</mi></mrow><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math></span></span>-约束法；</p>
+</li>
+<li>
+<p>加权和法；</p>
+</li>
+<li>
+<p class="">字典序法；</p>
+</li>
+<li>
+<p>生成 Pareto 前沿。</p>
+</li>
+</ul>
+<hr/>
+<h2 class="" id="标准做法-c扫描不同的-α-alpha">标准做法 C：扫描不同的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span></h2>
+<p>这在实际建模里非常常见。</p>
+<p class="">分别令：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn><mo separator="true">,</mo><mtext> </mtext><mn>0.1</mn><mo separator="true">,</mo><mtext> </mtext><mn>0.2</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\alpha=0,\ 0.1,\ 0.2,\dots,1,</annotation></semantics></math></span></span></span>
+<p>对每个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 求：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>F</mi><mo stretchy="false">(</mo><mi>α</mi><mo stretchy="false">)</mo><mo>=</mo><mi>max</mi><mo>⁡</mo><mo stretchy="false">{</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>:</mo><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mo separator="true">,</mo><mtext> </mtext><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">F(\alpha)
+=
+\max\{f(x):\mu_i(x)\ge\alpha,\ g_j(x)\le0\}.</annotation></semantics></math></span></span></span>
+<p>最后得到一条曲线：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>α</mi><mo>⟼</mo><mi>F</mi><mo stretchy="false">(</mo><mi>α</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\alpha\longmapsto F(\alpha).</annotation></semantics></math></span></span></span>
+<p>它回答：</p>
+<blockquote>
+<p class="">如果我要求软约束满足得更严格，最多会损失多少目标值？</p>
+</blockquote>
+<p>例如：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mtable columnalign="center center" columnlines="solid" columnspacing="1em" rowlines="solid none none none none none" rowspacing="0.16em"><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mi>α</mi></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mtext>最大利润</mtext></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>0.5</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>120</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>0.6</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>116</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>0.7</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>109</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>0.8</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>98</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>0.9</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>82</mn></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>1.0</mn></mstyle></mtd><mtd><mstyle displaystyle="false" scriptlevel="0"><mn>60</mn></mstyle></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{array}{c|c}
+\alpha &amp; \text{最大利润}\\
+\hline
+0.5&amp;120\\
+0.6&amp;116\\
+0.7&amp;109\\
+0.8&amp;98\\
+0.9&amp;82\\
+1.0&amp;60
+\end{array}</annotation></semantics></math></span></span></span>
+<p class="">这比随便选一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 更透明。</p>
+<hr/>
+<h1 class="" id="三所以这种情况下-λ-lambda-通常怎么出现">三、所以这种情况下，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span> 通常怎么出现？</h1>
+<p>对于：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\max f(x)</annotation></semantics></math></span></span></span>
+<p class="">加上几条模糊约束，标准方法通常是固定：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>α</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\alpha.</annotation></semantics></math></span></span></span>
+<p>写成：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>α</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\alpha.</annotation></semantics></math></span></span></span>
+<p class="">这里的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 是<strong>外部给定的满意度门槛</strong>，不是决策变量。</p>
+<p class="">只有当研究者想让模型自己寻找“最大的共同满意度”时，才把 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span> 变成变量，并通常改名为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">\max\lambda</annotation></semantics></math></span></span></span>
+<p>满足：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\lambda.</annotation></semantics></math></span></span></span>
+<p>但是一旦这么做，优化目标就变成了：</p>
+<blockquote>
+<p>让软约束满足得尽可能好。</p>
+</blockquote>
+<p>它不再是单纯地最大化 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span></span>。</p>
+<p class="">因此，标准文献里要清楚区分：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>α</mi><mo>=</mo><mtext>预先规定的满意度水平</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{\alpha=\text{预先规定的满意度水平}}</annotation></semantics></math></span></span></span>
+<p>和</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>λ</mi><mo>=</mo><mtext>需要最大化的共同满意度变量</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{\lambda=\text{需要最大化的共同满意度变量}}</annotation></semantics></math></span></span></span>
+<p>它们形式相似，但角色不同。</p>
+<hr/>
+<h1 class="" id="四模糊目标-模糊约束-精确约束">四、模糊目标 + 模糊约束 + 精确约束</h1>
+<p>这是你提到的第二种情况。</p>
+<p>设：</p>
+<ul>
+<li>
+<p class="">原目标不是“严格最大化”，而是一个模糊目标；</p>
+</li>
+<li>
+<p class="">有若干模糊约束；</p>
+</li>
+<li>
+<p>还有若干必须严格满足的精确约束。</p>
+</li>
+</ul>
+<p>例如：</p>
+<blockquote>
+<p class="">利润希望至少达到 100 万左右；<br/>
+成本最好不要超过 60 万；<br/>
+工期大约不超过 30 天；<br/>
+机器数量不能超过 10 台。</p>
+</blockquote>
+<p>定义：</p>
+<ul>
+<li>
+<p class="">目标满意度：</p>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">;</mo></mrow><annotation encoding="application/x-tex">\mu_0(x);</annotation></semantics></math></span></span></span>
+<ul>
+<li>
+<p>模糊约束满意度：</p>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>μ</mi><mi>r</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">;</mo></mrow><annotation encoding="application/x-tex">\mu_1(x),\dots,\mu_r(x);</annotation></semantics></math></span></span></span>
+<ul>
+<li>
+<p class="">精确约束：</p>
+</li>
+</ul>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0.</mn></mrow><annotation encoding="application/x-tex">g_j(x)\le0.</annotation></semantics></math></span></span></span>
+<p class="">这时最经典的标准模型是 <strong>Bellman–Zadeh 最大—最小模型</strong>：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo><mspace width="2em"/><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>r</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo separator="true">,</mo><mspace width="2em"/><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>m</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mn>0</mn><mo>≤</mo><mi>λ</mi><mo>≤</mo><mn>1.</mn></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;\lambda,\\
+\text{s.t.}\quad
+&amp;\mu_0(x)\ge\lambda,\\
+&amp;\mu_i(x)\ge\lambda,
+\qquad i=1,\dots,r,\\
+&amp;g_j(x)\le0,
+\qquad j=1,\dots,m,\\
+&amp;0\le\lambda\le1.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p>这里：</p>
+<ul>
+<li>
+<p class="">模糊目标参加满意度比较；</p>
+</li>
+<li>
+<p>模糊约束也参加满意度比较；</p>
+</li>
+<li>
+<p>精确约束仍然必须严格满足；</p>
+</li>
+<li>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span> 表示所有模糊要求中最低的满意度。</p>
+</li>
+</ul>
+<p>精确约束不会转成：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_j(x)\ge\lambda.</annotation></semantics></math></span></span></span>
+<p class="">它们仍旧原样保留：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0.</mn></mrow><annotation encoding="application/x-tex">g_j(x)\le0.</annotation></semantics></math></span></span></span>
+<hr/>
+<h1 class="" id="五为什么模糊目标和模糊约束能放在一起">五、为什么模糊目标和模糊约束能放在一起？</h1>
+<p class="">在模糊决策理论中，模糊目标和模糊约束本质上都被看成对方案 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span></span> 的模糊集合。</p>
+<p class="">模糊目标：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>G</mi><mo>=</mo><mo stretchy="false">{</mo><mi>x</mi><mo>:</mo><msub><mi>μ</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">G=\{x:\mu_G(x)\}.</annotation></semantics></math></span></span></span>
+<p class="">模糊约束：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>C</mi><mi>i</mi></msub><mo>=</mo><mo stretchy="false">{</mo><mi>x</mi><mo>:</mo><msub><mi>μ</mi><msub><mi>C</mi><mi>i</mi></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">C_i=\{x:\mu_{C_i}(x)\}.</annotation></semantics></math></span></span></span>
+<p class="">一个方案既要属于目标集合，也要属于所有约束集合，因此决策集合取交集：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>D</mi><mo>=</mo><mi>G</mi><mo>∩</mo><msub><mi>C</mi><mn>1</mn></msub><mo>∩</mo><mo>⋯</mo><mo>∩</mo><msub><mi>C</mi><mi>r</mi></msub><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">D=G\cap C_1\cap\cdots\cap C_r.</annotation></semantics></math></span></span></span>
+<p class="">在最经典的模糊集合交运算中：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>D</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>min</mi><mo>⁡</mo><mo stretchy="false">{</mo><msub><mi>μ</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msub><mi>μ</mi><msub><mi>C</mi><mn>1</mn></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>μ</mi><msub><mi>C</mi><mi>r</mi></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\mu_D(x)
+=
+\min
+\{
+\mu_G(x),
+\mu_{C_1}(x),
+\dots,
+\mu_{C_r}(x)
+\}.</annotation></semantics></math></span></span></span>
+<p class="">所以选择最佳决策就是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>x</mi></munder><msub><mi>μ</mi><mi>D</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><munder><mrow><mi>max</mi><mo>⁡</mo></mrow><mi>x</mi></munder><mi>min</mi><mo>⁡</mo><mo stretchy="false">{</mo><msub><mi>μ</mi><mi>G</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><msub><mi>μ</mi><msub><mi>C</mi><mn>1</mn></msub></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo><mo>…</mo><mtext> </mtext><mo stretchy="false">}</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\max_x\mu_D(x)
+=
+\max_x
+\min
+\{
+\mu_G(x),
+\mu_{C_1}(x),
+\dots
+\}.</annotation></semantics></math></span></span></span>
+<p>引入 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span> 后就得到前面的模型。</p>
+<p>所以在这个标准模型中：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span></span>
+<p>确实是整体满意度，而不是某一条单独约束的满意度。</p>
+<hr/>
+<h1 class="" id="六模糊目标不一定必须和模糊约束使用同一个-λ-lambda">六、模糊目标不一定必须和模糊约束使用同一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span></h1>
+<p class="">Bellman–Zadeh 模型只是最经典、最朴素的模型，它默认所有模糊要求同等重要。</p>
+<p>现实中还经常采用其他形式。</p>
+<h2 class="" id="1-目标满意度最大约束设置底线">1. 目标满意度最大，约束设置底线</h2>
+<p>例如：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mn>0</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><msub><mi>α</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0.</mn></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;\mu_0(x),\\
+\text{s.t.}\quad
+&amp;\mu_i(x)\ge\alpha_i,\\
+&amp;g_j(x)\le0.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p>含义是：</p>
+<blockquote>
+<p>模糊约束至少满足到规定水平，然后让模糊目标尽可能满意。</p>
+</blockquote>
+<p>这与普通的“最大化目标、满足约束”结构最接近。</p>
+<h2 class="" id="2-不同模糊要求设置不同门槛">2. 不同模糊要求设置不同门槛</h2>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mn>0.9</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\mu_1(x)\ge0.9,</annotation></semantics></math></span></span></span>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mn>0.7</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\mu_2(x)\ge0.7,</annotation></semantics></math></span></span></span>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mn>3</mn></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mn>0.5.</mn></mrow><annotation encoding="application/x-tex">\mu_3(x)\ge0.5.</annotation></semantics></math></span></span></span>
+<p>因为不同要求的重要性和容忍度可能不同。</p>
+<h2 class="" id="3-加权满意度">3. 加权满意度</h2>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>0</mn></mrow><mi>r</mi></munderover><msub><mi>w</mi><mi>i</mi></msub><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\max
+\sum_{i=0}^{r}w_i\mu_i(x).</annotation></semantics></math></span></span></span>
+<p>这样允许某些满意度降低，由其他满意度提高来补偿。</p>
+<p class="">而 max–min 模型：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><munder><mrow><mi>min</mi><mo>⁡</mo></mrow><mi>i</mi></munder><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\max\min_i\mu_i(x)</annotation></semantics></math></span></span></span>
+<p class="">基本不允许这种补偿，它主要保护“最差的一项”。</p>
+<hr/>
+<h1 id="七把你提到的两类问题标准化">七、把你提到的两类问题标准化</h1>
+<h2 class="" id="情形-a目标精确部分约束模糊部分约束精确">情形 A：目标精确，部分约束模糊，部分约束精确</h2>
+<p class="">最标准的写法之一是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><msub><mi>α</mi><mi>i</mi></msub><mo separator="true">,</mo><mspace width="2em"/><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>r</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0</mn><mo separator="true">,</mo><mspace width="2em"/><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>m</mi><mi mathvariant="normal">.</mi></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;f(x),\\
+\text{s.t.}\quad
+&amp;\mu_i(x)\ge\alpha_i,
+\qquad i=1,\dots,r,\\
+&amp;g_j(x)\le0,
+\qquad j=1,\dots,m.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p>这时通常：</p>
+<ul>
+<li>
+<p>不最大化 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>；</p>
+</li>
+<li>
+<p>不需要引入 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>；</p>
+</li>
+<li>
+<p>直接规定每条模糊约束最低可接受满意度。</p>
+</li>
+</ul>
+<p class="">如果满意度门槛不知道，就把问题作为多目标问题处理，或者扫描 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>。</p>
+<hr/>
+<h2 class="" id="情形-b目标模糊部分约束模糊部分约束精确">情形 B：目标模糊，部分约束模糊，部分约束精确</h2>
+<p class="">经典 max–min 模型：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mtext>目标</mtext></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mrow><mtext>模糊约束</mtext><mo separator="true">,</mo><mi>i</mi></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0.</mn></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;\lambda,\\
+\text{s.t.}\quad
+&amp;\mu_{\text{目标}}(x)\ge\lambda,\\
+&amp;\mu_{\text{模糊约束},i}(x)\ge\lambda,\\
+&amp;g_j(x)\le0.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p class="">或者采用目标—约束分离模型：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtable columnalign="right left" columnspacing="0em" rowspacing="0.25em"><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>max</mi><mo>⁡</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mtext>目标</mtext></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mtext>s.t.</mtext><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>μ</mi><mrow><mtext>模糊约束</mtext><mo separator="true">,</mo><mi>i</mi></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><msub><mi>α</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow/></mstyle></mtd><mtd><mstyle displaystyle="true" scriptlevel="0"><mrow><mrow/><msub><mi>g</mi><mi>j</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≤</mo><mn>0.</mn></mrow></mstyle></mtd></mtr></mtable></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\begin{aligned}
+\max\quad &amp;\mu_{\text{目标}}(x),\\
+\text{s.t.}\quad
+&amp;\mu_{\text{模糊约束},i}(x)\ge\alpha_i,\\
+&amp;g_j(x)\le0.
+\end{aligned}
+}</annotation></semantics></math></span></span></span>
+<p class="">选择哪一种，不是数学自动决定的，而取决于决策者的偏好：</p>
+<ul>
+<li>
+<p>是否把目标和约束视为同等地位；</p>
+</li>
+<li>
+<p class="">是否优先保证最差满意度；</p>
+</li>
+<li>
+<p class="">是否允许不同要求相互补偿；</p>
+</li>
+<li>
+<p>是否有明确的最低满意度标准。</p>
+</li>
+</ul>
+<hr/>
+<h1 id="八最准确的总图">八、最准确的总图</h1>
+<p class="">模糊规划并不存在一个唯一的万能模型。</p>
+<p>标准建模顺序是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtext>先确定哪些是硬约束、哪些是软要求</mtext></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\text{先确定哪些是硬约束、哪些是软要求}
+}</annotation></semantics></math></span></span></span>
+<p>然后：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mtext>为软要求定义隶属度函数</mtext></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\text{为软要求定义隶属度函数}
+}</annotation></semantics></math></span></span></span>
+<p class="">接着选择决策规则：</p>
+<h3 class="" id="已知最低满意度">已知最低满意度</h3>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><msub><mi>α</mi><mi>i</mi></msub><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">\mu_i(x)\ge\alpha_i,</annotation></semantics></math></span></span></span>
+<p class="">然后优化原来的精确目标。</p>
+<h3 class="" id="希望最差满意度尽可能高">希望最差满意度尽可能高</h3>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>max</mi><mo>⁡</mo><mi>λ</mi><mo separator="true">,</mo><mspace width="2em"/><msub><mi>μ</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>≥</mo><mi>λ</mi><mi mathvariant="normal">.</mi></mrow><annotation encoding="application/x-tex">\max\lambda,
+\qquad
+\mu_i(x)\ge\lambda.</annotation></semantics></math></span></span></span>
+<h3 id="同时关心原目标和满意度">同时关心原目标和满意度</h3>
+<p class="">建成多目标规划，求 Pareto 解。</p>
+<h3 class="" id="目标本身也是模糊愿望">目标本身也是模糊愿望</h3>
+<p>把目标也写成满意度，再采用 max–min、加权和或目标—约束分离方法。</p>
+<p>所以最容易记住的一句话是：</p>
+<span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><menclose notation="box"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="false" scriptlevel="0"><mstyle displaystyle="true" scriptlevel="0"><mrow><mi>λ</mi><mtext> 不是模糊规划的固定组成部分，而只是 max–min 模型的辅助变量。</mtext></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{
+\lambda\text{ 不是模糊规划的固定组成部分，而只是 max–min 模型的辅助变量。}
+}</annotation></semantics></math></span></span></span>
+<p>你说的“精确目标加少数模糊约束”，标准处理通常不是最大化 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span></span>，而是先选定满意度水平 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>，再在相应的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span></span>-截集可行域上最大化精确目标。</p>
+</section>
+</body></html>

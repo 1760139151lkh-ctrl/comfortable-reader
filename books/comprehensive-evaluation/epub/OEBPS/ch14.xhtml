@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>14. 因子分析：用少数潜在因素解释指标为什么一起变化</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="14-因子分析用少数潜在因素解释指标为什么一起变化">14. 因子分析：用少数潜在因素解释指标为什么一起变化</h2>
+<p>PCA 关注如何用少数方向保留最大方差；因子分析进一步提出一个生成性解释：多个观测指标之所以相关，是因为它们受少数共同因子驱动，同时各自还有独特误差。</p>
+<h3 id="141-因子模型">14.1 因子模型</h3>
+<p>对标准化后的 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 维观测向量 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>X</mi></mrow></math></span>，设有 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>q</mi><mo>&lt;</mo><mi>n</mi></mrow></math></span> 个共同因子：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo>=</mo><mi>Λ</mi><mi>F</mi><mo>+</mo><mi>ε</mi><mo>.</mo></mrow></math></div>
+<p>其中：</p>
+<ul>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>q</mi></msup></mrow></math></span> 是不可直接观测的共同因子；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Λ</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><mi>n</mi><mo>×</mo><mi>q</mi></mrow></msup></mrow></math></span> 是因子载荷矩阵；</li>
+<li><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ε</mi><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mi>n</mi></msup></mrow></math></span> 是每个指标特有的部分。</li>
+</ul>
+<p>第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 个指标写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>X</mi><mi>i</mi></msub><mo>=</mo><msub><mi>λ</mi><mrow><mi>i</mi><mn>1</mn></mrow></msub><msub><mi>F</mi><mn>1</mn></msub><mo>+</mo><mi>l</mi><mi>a</mi><mi>m</mi><mi>b</mi><mi>d</mi><msub><mi>a</mi><mrow><mi>i</mi><mn>2</mn></mrow></msub><msub><mi>F</mi><mn>2</mn></msub><mo>+</mo><mi>c</mi><mi>d</mi><mi>o</mi><mi>t</mi><mi>s</mi><mo>+</mo><mi>l</mi><mi>a</mi><mi>m</mi><mi>b</mi><mi>d</mi><msub><mi>a</mi><mrow><mi>i</mi><mi>q</mi></mrow></msub><msub><mi>F</mi><mi>q</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>i</mi></msub><mo>.</mo></mrow></math></div>
+<p>在常见的正交因子模型中，假设：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>I</mi><mi>q</mi></msub><mo>,</mo><mo>Cov</mo><mo stretchy="false">(</mo><mi>ε</mi><mo stretchy="false">)</mo><mo>=</mo><mi>Ψ</mi><mo>,</mo><mo>Cov</mo><mo stretchy="false">(</mo><mi>F</mi><mo>,</mo><mi>ε</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Ψ</mi></mrow></math></span> 是对角矩阵，表示各指标独特误差彼此不相关。</p>
+<h3 id="142-协方差分解的完整推导">14.2 协方差分解的完整推导</h3>
+<p>从模型出发：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>=</mo><mo>Cov</mo><mo stretchy="false">(</mo><mi>Λ</mi><mi>F</mi><mo>+</mo><mi>ε</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>展开为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><mi>X</mi><mo stretchy="false">)</mo><mo>=</mo><mi>Λ</mi><mo>Cov</mo><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>+</mo><mo>Cov</mo><mo stretchy="false">(</mo><mi>ε</mi><mo stretchy="false">)</mo><mo>+</mo><mi>Λ</mi><mo>Cov</mo><mo stretchy="false">(</mo><mi>F</mi><mo>,</mo><mi>ε</mi><mo stretchy="false">)</mo><mo>+</mo><mo>Cov</mo><mo stretchy="false">(</mo><mi>ε</mi><mo>,</mo><mi>F</mi><mo stretchy="false">)</mo><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>.</mo></mrow></math></div>
+<p>利用上面的假设，交叉项为 0，得到：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Σ</mi><mo>=</mo><mi>Λ</mi><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>+</mo><mi>Ψ</mi><mo>.</mo></mrow></math></div>
+<p>这就是因子分析的核心：</p>
+<blockquote>
+<p>观测协方差 = 共同因子造成的低秩结构 + 各指标独有的对角方差。</p>
+</blockquote>
+<p>对于两个不同指标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>X</mi><mi>i</mi></msub><mo>,</mo><msub><mi>X</mi><mi>j</mi></msub></mrow></math></span>：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>,</mo><msub><mi>X</mi><mi>j</mi></msub><mo stretchy="false">)</mo><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>q</mi></mrow></munderover><msub><mi>λ</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>λ</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><mo>.</mo></mrow></math></div>
+<p>也就是说，两行载荷向量越同向，两个指标越容易一起变化。</p>
+<h3 id="143-共同度与特殊方差">14.3 共同度与特殊方差</h3>
+<p>第 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>i</mi></mrow></math></span> 个指标的共同度为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>h</mi><mi>i</mi><mn>2</mn></msubsup><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mrow><mi>q</mi></mrow></munderover><msubsup><mi>λ</mi><mrow><mi>i</mi><mi>k</mi></mrow><mn>2</mn></msubsup><mo>.</mo></mrow></math></div>
+<p>它表示该指标方差中被共同因子解释的部分。若指标已标准化：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>1</mn><mo>=</mo><msubsup><mi>h</mi><mi>i</mi><mn>2</mn></msubsup><mo>+</mo><msub><mi>ψ</mi><mi>i</mi></msub><mo>,</mo></mrow></math></div>
+<p>其中 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>ψ</mi><mi>i</mi></msub></mrow></math></span> 是特殊方差，包括指标独特成分和测量误差。</p>
+<p>共同度低意味着当前因子结构解释不了该指标。这并不自动说明该指标“不重要”，只说明它没有被这些共同因子很好概括。</p>
+<h3 id="144-一个四指标双因子例子">14.4 一个四指标、双因子例子</h3>
+<p>设载荷矩阵为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Λ</mi><mo>=</mo><mo>[</mo><mtable><mtr><mtd><mn>0.90</mn></mtd><mtd><mn>0.10</mn></mtd></mtr><mtr><mtd><mn>0.80</mn></mtd><mtd><mn>0.20</mn></mtd></mtr><mtr><mtd><mn>0.10</mn></mtd><mtd><mn>0.85</mn></mtd></mtr><mtr><mtd><mn>0.20</mn></mtd><mtd><mn>0.75</mn></mtd></mtr></mtable><mo>]</mo><mo>.</mo></mrow></math></div>
+<p>指标 1、2 主要加载在因子 1；指标 3、4 主要加载在因子 2。由载荷内积：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>2</mn></msub><mo stretchy="false">)</mo><mo>=</mo><mn>0.90</mn><mo>×</mo><mn>0.80</mn><mo>+</mo><mn>0.10</mn><mo>×</mo><mn>0.20</mn><mo>=</mo><mn>0.74</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mn>3</mn></msub><mo>,</mo><msub><mi>X</mi><mn>4</mn></msub><mo stretchy="false">)</mo><mo>=</mo><mn>0.10</mn><mo>×</mo><mn>0.20</mn><mo>+</mo><mn>0.85</mn><mo>×</mo><mn>0.75</mn><mo>=</mo><mn>0.6575</mn><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><msub><mi>X</mi><mn>1</mn></msub><mo>,</mo><msub><mi>X</mi><mn>3</mn></msub><mo stretchy="false">)</mo><mo>=</mo><mn>0.90</mn><mo>×</mo><mn>0.10</mn><mo>+</mo><mn>0.10</mn><mo>×</mo><mn>0.85</mn><mo>=</mo><mn>0.175</mn><mo>.</mo></mrow></math></div>
+<p>前两项和后两项各自高度相关，而跨组相关较弱。几何上，每个指标对应载荷空间中的一个向量，指标协方差就是两个载荷向量的内积，共同度则是载荷向量长度的平方。</p>
+<h3 id="145-因子载荷怎样估计">14.5 因子载荷怎样估计？</h3>
+<p>主轴因子法先估计共同度，用共同度替换相关矩阵对角线，再反复提取共同结构和更新共同度。</p>
+<p>最大似然因子分析则在多元正态等假设下寻找 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Λ</mi><mo>,</mo><mi>Ψ</mi></mrow></math></span>，使模型协方差：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Σ</mi><mo stretchy="false">(</mo><mi>Λ</mi><mo>,</mo><mi>Ψ</mi><mo stretchy="false">)</mo><mo>=</mo><mi>Λ</mi><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>+</mo><mi>Ψ</mi></mrow></math></div>
+<p>尽量接近样本协方差 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi></mrow></math></span>。忽略常数后，一个典型目标含有：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>log</mi><mo stretchy="false">|</mo><mi>Σ</mi><mo stretchy="false">|</mo><mo>+</mo><mi>o</mi><mi>p</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mrow><mi>t</mi><mi>r</mi></mrow><mo stretchy="false">(</mo><mi>S</mi><msup><mi>Σ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>最大似然方法便于做拟合检验和模型比较，但对分布假设更敏感。</p>
+<h3 id="146-为什么需要旋转">14.6 为什么需要旋转？</h3>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>Q</mi></mrow></math></span> 是正交矩阵，则：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Λ</mi><mi>F</mi><mo>=</mo><mo stretchy="false">(</mo><mi>Λ</mi><mi>Q</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><msup><mi>Q</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mi>F</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>而且：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mi>Λ</mi><mi>Q</mi><mo stretchy="false">)</mo><mo stretchy="false">(</mo><mi>Λ</mi><mi>Q</mi><msup><mo stretchy="false">)</mo><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>=</mo><mi>Λ</mi><mi>Q</mi><msup><mi>Q</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>=</mo><mi>Λ</mi><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>.</mo></mrow></math></div>
+<p>所以不同旋转载荷可以重建同一个协方差结构。旋转不是提高原始拟合，而是寻找更容易解释的坐标轴。</p>
+<p>Varimax 是常见正交旋转，希望每个指标在少数因子上高载荷、其余接近 0。Promax、Oblimin 等斜交旋转允许因子相关。斜交情形下：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>Cov</mo><mo stretchy="false">(</mo><mi>F</mi><mo stretchy="false">)</mo><mo>=</mo><mi>Φ</mi><mo>,</mo></mrow></math></div>
+<p>模型变成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>Σ</mi><mo>=</mo><mi>Λ</mi><mi>Φ</mi><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><mo>+</mo><mi>Ψ</mi><mo>.</mo></mrow></math></div>
+<p>现实中的“经济基础”和“公共服务”可能本来就相关，强迫因子正交有时只是为了计算方便，并非现实必然。</p>
+<h3 id="147-因子个数怎样决定">14.7 因子个数怎样决定？</h3>
+<p>可以综合使用：</p>
+<ul>
+<li>理论预期；</li>
+<li>碎石图；</li>
+<li>平行分析；</li>
+<li>模型拟合指标；</li>
+<li>载荷结构的稳定性与可解释性。</li>
+</ul>
+<p>“特征值大于 1”可以作粗略参考，但不应成为唯一规则。平行分析把真实数据特征值与同规模随机数据比较，通常比机械阈值更可靠。</p>
+<h3 id="148-探索性与验证性因子分析">14.8 探索性与验证性因子分析</h3>
+<p>探索性因子分析 EFA 在事先结构不明确时，让数据帮助发现潜在维度。验证性因子分析 CFA 则先规定哪些指标加载到哪些因子，再检验该结构与数据是否相容。</p>
+<p>EFA 找到的因子名称不是机器证明的客观实体。研究者根据高载荷指标把因子命名为“资源基础”或“创新能力”，这是解释性判断，可能存在多个合理命名。</p>
+<h3 id="149-因子得分并不唯一">14.9 因子得分并不唯一</h3>
+<p>估计模型后，可以为每个对象估计因子得分。回归法的一种形式为：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mi>F</mi><mo>^</mo></mover><mo>=</mo><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>Σ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>X</mi><mo>.</mo></mrow></math></div>
+<p>Bartlett 法常写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mover><mi>F</mi><mo>^</mo></mover><mo>=</mo><mo stretchy="false">(</mo><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>Ψ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>Λ</mi><msup><mo stretchy="false">)</mo><mrow><mo>−</mo><mn>1</mn></mrow></msup><msup><mi>Λ</mi><mrow><mi mathvariant="sans-serif">T</mi></mrow></msup><msup><mi>Ψ</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mi>X</mi><mo>.</mo></mrow></math></div>
+<p>不同方法会给出略有不同的得分，这叫因子得分不确定性。因子模型确定的是协方差结构，不会天然唯一确定每个样本的潜变量真值。</p>
+<h3 id="1410-pca-与因子分析的本质区别">14.10 PCA 与因子分析的本质区别</h3>
+<p>PCA 写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>T</mi><mo>=</mo><mi>X</mi><mi>V</mi><mo>,</mo></mrow></math></div>
+<p>目标是用线性组合尽量保留总方差，通常不区分共同方差和误差方差。</p>
+<p>因子分析写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>X</mi><mo>=</mo><mi>Λ</mi><mi>F</mi><mo>+</mo><mi>ε</mi><mo>,</mo></mrow></math></div>
+<p>目标是解释指标为何相关，并显式保留特殊误差项。</p>
+<p>若目的只是压缩、可视化或消除共线性，PCA 往往更直接；若要研究潜在构念、测量结构与共同原因，因子分析更合适。</p>
+<p>因子分析也不自动证明因果。潜在因子能重构协方差，只说明模型与相关结构相容；真正的因果解释还需要研究设计、时间顺序、干预或额外识别假设。</p>
+<hr/>
+</body></html>

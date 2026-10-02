@@ -1,0 +1,70 @@
+{
+  "source_train_sha256": "5b00264637dbfec36bdeaab5676b0b309ff9eb788d63554ca0a249491c86603d",
+  "c44_training_report_sha256": "d8503e5f0b95837916a7563a283898adf098c3e0b6aa7d4399cf393da6828483",
+  "source_split_sha256": "14f7b847be1ce490852178c65a5a6fc1200e12c4310645a81fbf38e985aa65e9",
+  "source_model_sha256": "dea6092cb002c61cd1654d8c4a7f3e20841890d74a987e8959105139ee7343c5",
+  "script_sha256": "0893484ac0634b3145e9e751eb5cb90e1f08c5b57b2a9b2b749778d1ad2e20bc",
+  "input_scope": "only C44 26048 fit rows from public UCI Adult; same processed features as selected logistic model but separate no-L2 teaching gradient",
+  "four_cells": {
+    "order": [
+      "Female/<=50K",
+      "Female/>50K",
+      "Male/<=50K",
+      "Male/>50K"
+    ],
+    "exact_public_source_counts": [
+      7673,
+      943,
+      12102,
+      5330
+    ],
+    "add_remove_one_l1_sensitivity": 1,
+    "replacement_one_l1_sensitivity": 2,
+    "two_releases_combined_epsilon_if_source_were_private": 2.5,
+    "real_world_boundary": "original UCI rows and exact counts are already public here; adding noise to this copy does not make them private"
+  },
+  "noisy_releases": {
+    "0.5": {
+      "epsilon_add_remove_one": 0.5,
+      "laplace_scale_per_cell": 2.0,
+      "noisy_cells": [
+        7670.7115970132245,
+        941.1206168030633,
+        12101.888319378324,
+        5329.6682476176975
+      ],
+      "observed_log_density_ratio_to_one_removed_neighbor": -0.5,
+      "proof_scope": "all possible outputs via reverse triangle inequality; observed output only a numerical check"
+    },
+    "2.0": {
+      "epsilon_add_remove_one": 2.0,
+      "laplace_scale_per_cell": 0.5,
+      "noisy_cells": [
+        7673.010505112004,
+        942.7871833978967,
+        12101.471909571554,
+        5330.973754752016
+      ],
+      "observed_log_density_ratio_to_one_removed_neighbor": 1.1487335915867334,
+      "proof_scope": "all possible outputs via reverse triangle inequality; observed output only a numerical check"
+    }
+  },
+  "two_simulated_clients": {
+    "Female": {
+      "rows": 8616,
+      "source_label_rate": 0.10944753946146704
+    },
+    "Male": {
+      "rows": 17432,
+      "source_label_rate": 0.3057595227168426
+    }
+  },
+  "same_initial_weights_zero": true,
+  "full_batch_logistic_step_size": 0.2,
+  "one_step_gradient_max_abs_difference": 3.066991105526995e-15,
+  "one_step_parameter_max_abs_difference": 6.175615574477433e-16,
+  "five_local_vs_five_central_weight_l2": 0.009479853825265236,
+  "five_central_train_loss": 0.5330819434376366,
+  "five_local_average_train_loss": 0.5349520859449617,
+  "limit": "same Python process owns both clients and all raw records; no secure aggregation, no DP-trained model, no independent devices or communication measurement"
+}

@@ -1,0 +1,1027 @@
+<!doctype html>
+<html lang="zh-CN" data-theme="paper">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <title>@@TITLE_HTML@@</title>
+  <style>
+    :root {
+      --bg: #f3efe6;
+      --surface: rgba(255, 253, 247, 0.94);
+      --paper: #fffdf8;
+      --ink: #25231f;
+      --muted: #706b61;
+      --line: rgba(66, 57, 42, 0.16);
+      --accent: #8c4f32;
+      --accent-soft: rgba(140, 79, 50, 0.12);
+      --quote: #f5eadc;
+      --code: #f1eee7;
+      --shadow: 0 14px 42px rgba(69, 55, 36, 0.12);
+      --font-size: 18px;
+      --line-height: 1.72;
+      --column-gap: 42px;
+      --toolbar-height: 56px;
+      --status-height: 31px;
+      --reader-pad-x: clamp(22px, 3.2vw, 68px);
+      --reader-pad-y: clamp(15px, 2.1vh, 30px);
+    }
+
+    html[data-theme="sepia"] {
+      --bg: #e9dcc4;
+      --surface: rgba(248, 239, 218, 0.95);
+      --paper: #f8eed8;
+      --ink: #352d24;
+      --muted: #766957;
+      --line: rgba(79, 59, 37, 0.18);
+      --accent: #955227;
+      --accent-soft: rgba(149, 82, 39, 0.13);
+      --quote: #efe0c5;
+      --code: #eadcc5;
+      --shadow: 0 14px 42px rgba(68, 47, 25, 0.16);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #141619;
+      --surface: rgba(29, 32, 36, 0.96);
+      --paper: #1c1f23;
+      --ink: #e7e3da;
+      --muted: #aaa59b;
+      --line: rgba(235, 229, 217, 0.14);
+      --accent: #e1a078;
+      --accent-soft: rgba(225, 160, 120, 0.15);
+      --quote: #292b2d;
+      --code: #25282c;
+      --shadow: 0 16px 48px rgba(0, 0, 0, 0.34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    body {
+      font-family: "Noto Serif SC", "Source Han Serif SC", "Microsoft YaHei UI", "Segoe UI", serif;
+      text-rendering: optimizeLegibility;
+      transition: background-color 180ms ease, color 180ms ease;
+    }
+
+    button, select, input { font: inherit; }
+    button, select { color: inherit; }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible,
+    #viewport:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    #app {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    #toolbar {
+      position: absolute;
+      z-index: 30;
+      inset: 0 0 auto;
+      height: var(--toolbar-height);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px clamp(10px, 1.6vw, 24px);
+      border-bottom: 1px solid var(--line);
+      background: var(--surface);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 4px 20px rgba(30, 28, 24, 0.05);
+      transition: opacity 180ms ease, transform 180ms ease;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scrollbar-width: none;
+    }
+
+    #toolbar::-webkit-scrollbar { display: none; }
+
+    .toolbar-title {
+      flex: 1 1 260px;
+      min-width: 150px;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .tool-group {
+      display: flex;
+      flex: 0 0 auto;
+      align-items: center;
+      gap: 5px;
+      padding-left: 8px;
+      border-left: 1px solid var(--line);
+    }
+
+    .tool-button,
+    .tool-select {
+      min-height: 36px;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      background: transparent;
+      cursor: pointer;
+      transition: background-color 140ms ease, border-color 140ms ease, transform 100ms ease;
+    }
+
+    .tool-button {
+      min-width: 36px;
+      padding: 6px 10px;
+    }
+
+    .tool-button:hover,
+    .tool-select:hover {
+      border-color: var(--line);
+      background: var(--accent-soft);
+    }
+
+    .tool-button:active { transform: translateY(1px); }
+
+    .tool-select {
+      padding: 5px 26px 5px 9px;
+      background-color: var(--paper);
+    }
+
+    .range-wrap {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .range-wrap input { width: 76px; accent-color: var(--accent); }
+
+    #topReveal {
+      position: absolute;
+      z-index: 29;
+      inset: 0 0 auto;
+      height: 12px;
+    }
+
+    #readerShell {
+      position: absolute;
+      z-index: 1;
+      inset: var(--toolbar-height) 0 var(--status-height);
+      padding: var(--reader-pad-y) var(--reader-pad-x);
+      transition: inset 180ms ease, padding 180ms ease;
+    }
+
+    #viewport {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      box-shadow: var(--shadow);
+      scrollbar-width: none;
+      overscroll-behavior: contain;
+      scroll-snap-type: none;
+    }
+
+    #viewport::-webkit-scrollbar { display: none; }
+
+    #track {
+      position: relative;
+      height: 100%;
+      min-width: 100%;
+    }
+
+    #flow {
+      position: absolute;
+      inset: 0 auto auto 0;
+      height: 100%;
+      margin: 0;
+      padding: clamp(20px, 3vh, 42px) clamp(19px, 2.3vw, 42px);
+      column-fill: auto;
+      column-gap: var(--column-gap);
+      overflow: visible;
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      letter-spacing: 0.012em;
+      overflow-wrap: anywhere;
+      hyphens: auto;
+    }
+
+    #flow > :first-child { margin-top: 0; }
+    #flow > :last-child { margin-bottom: 0; }
+
+    #flow h1,
+    #flow h2,
+    #flow h3,
+    #flow h4,
+    #flow h5,
+    #flow h6 {
+      position: relative;
+      color: var(--ink);
+      line-height: 1.28;
+      letter-spacing: 0;
+      break-after: avoid-column;
+      page-break-after: avoid;
+      scroll-margin-top: 20px;
+    }
+
+    #flow h1 {
+      margin: 0.25em 0 0.75em;
+      padding-bottom: 0.36em;
+      border-bottom: 2px solid var(--accent);
+      font-size: 1.68em;
+    }
+
+    #flow h2 {
+      margin: 1.15em 0 0.58em;
+      padding-left: 0.55em;
+      border-left: 4px solid var(--accent);
+      font-size: 1.35em;
+    }
+
+    #flow h3 { margin: 1.05em 0 0.48em; font-size: 1.16em; color: var(--accent); }
+    #flow h4 { margin: 1em 0 0.45em; font-size: 1.05em; }
+    #flow h5, #flow h6 { margin: 0.95em 0 0.4em; font-size: 0.98em; color: var(--muted); }
+
+    #flow p { margin: 0 0 0.85em; text-align: justify; }
+    #flow a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 0.14em; }
+    #flow strong { font-weight: 750; }
+    #flow mark { background: #f2d77b; color: #24211c; padding: 0 0.16em; border-radius: 3px; }
+
+    #flow ul,
+    #flow ol { margin: 0 0 0.9em; padding-left: 1.45em; }
+    #flow li { margin: 0.22em 0; }
+    #flow li::marker { color: var(--accent); font-weight: 700; }
+
+    #flow blockquote {
+      margin: 0.8em 0 1em;
+      padding: 0.72em 0.9em;
+      border-left: 4px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      background: var(--quote);
+      color: color-mix(in srgb, var(--ink) 86%, var(--muted));
+      break-inside: avoid-column;
+    }
+
+    #flow blockquote > :last-child { margin-bottom: 0; }
+
+    #flow code,
+    #flow pre,
+    #flow kbd {
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+    }
+
+    #flow :not(pre) > code {
+      padding: 0.12em 0.32em;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: var(--code);
+      font-size: 0.88em;
+    }
+
+    #flow pre {
+      max-width: 100%;
+      margin: 0.8em 0 1em;
+      padding: 0.85em 0.95em;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: var(--code);
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-size: 0.78em;
+      line-height: 1.55;
+      break-inside: avoid-column;
+    }
+
+    #flow .math-block {
+      display: block;
+      margin: 1em 0;
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    #flow .math-inline {
+      display: inline-block;
+      max-width: 100%;
+      vertical-align: middle;
+    }
+
+    #flow .math-block math { margin: 0 auto; }
+    #flow .math-source { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+    #flow menclose.comfortable-math-box,
+    #flow menclose[notation~="box"] {
+      display: inline-block !important;
+      padding: 0.12em 0.3em !important;
+      border: 0.075em solid currentColor !important;
+      box-sizing: border-box !important;
+    }
+
+    #flow table {
+      width: 100%;
+      margin: 0.8em 0 1em;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      font-size: 0.82em;
+      break-inside: avoid-column;
+    }
+
+    #flow th,
+    #flow td {
+      padding: 0.5em 0.58em;
+      border: 1px solid var(--line);
+      text-align: left;
+      overflow-wrap: anywhere;
+    }
+
+    #flow th { background: var(--accent-soft); }
+    #flow tr:nth-child(even) td { background: color-mix(in srgb, var(--paper) 86%, var(--accent-soft)); }
+
+    #flow hr {
+      width: 42%;
+      margin: 1.3em auto;
+      border: 0;
+      border-top: 2px solid var(--line);
+    }
+
+    #flow img,
+    #flow svg,
+    #flow video {
+      display: block;
+      max-width: 100%;
+      max-height: 72%;
+      height: auto;
+      margin: 0.8em auto 1em;
+      object-fit: contain;
+      border-radius: 7px;
+      break-inside: avoid-column;
+    }
+
+    #flow input[type="checkbox"] { accent-color: var(--accent); }
+    #flow .task-list-item { list-style: none; margin-left: -1.2em; }
+    #flow .task-list-item-checkbox { margin-right: 0.5em; }
+    #flow .footnotes { font-size: 0.82em; color: var(--muted); }
+
+    .nav-button {
+      position: absolute;
+      z-index: 6;
+      top: 50%;
+      width: 42px;
+      height: 74px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--surface);
+      color: var(--muted);
+      box-shadow: 0 7px 24px rgba(0, 0, 0, 0.09);
+      opacity: 0.34;
+      cursor: pointer;
+      transform: translateY(-50%);
+      transition: opacity 140ms ease, color 140ms ease, background-color 140ms ease;
+    }
+
+    .nav-button:hover { opacity: 0.96; color: var(--accent); background: var(--paper); }
+    #prevPage { left: max(5px, calc(var(--reader-pad-x) - 21px)); }
+    #nextPage { right: max(5px, calc(var(--reader-pad-x) - 21px)); }
+    .nav-button:disabled { opacity: 0.08; cursor: default; }
+
+    #statusbar {
+      position: absolute;
+      z-index: 20;
+      inset: auto 0 0;
+      height: var(--status-height);
+      display: grid;
+      grid-template-columns: minmax(80px, 1fr) minmax(180px, 5fr) minmax(80px, 1fr);
+      align-items: center;
+      gap: 12px;
+      padding: 0 clamp(12px, 2.5vw, 38px);
+      border-top: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      font-size: 12px;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    #pageLabel { text-align: right; font-variant-numeric: tabular-nums; }
+
+    #progressTrack {
+      position: relative;
+      height: 7px;
+      border-radius: 99px;
+      background: var(--line);
+      cursor: pointer;
+    }
+
+    #progressFill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 0;
+      border-radius: inherit;
+      background: var(--accent);
+      transition: width 180ms ease;
+    }
+
+    #tocBackdrop {
+      position: absolute;
+      z-index: 38;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.27);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease;
+    }
+
+    #tocPanel {
+      position: absolute;
+      z-index: 40;
+      inset: 0 auto 0 0;
+      width: min(420px, 88vw);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--line);
+      background: var(--surface);
+      backdrop-filter: blur(18px);
+      box-shadow: 18px 0 54px rgba(0, 0, 0, 0.18);
+      transform: translateX(-103%);
+      transition: transform 210ms ease;
+    }
+
+    body.toc-open #tocPanel { transform: translateX(0); }
+    body.toc-open #tocBackdrop { opacity: 1; pointer-events: auto; }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 58px;
+      padding: 10px 14px 10px 20px;
+      border-bottom: 1px solid var(--line);
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      font-weight: 700;
+    }
+
+    #tocList {
+      flex: 1;
+      overflow: auto;
+      padding: 12px 12px 28px;
+    }
+
+    .toc-link {
+      display: block;
+      width: 100%;
+      margin: 1px 0;
+      padding: 8px 10px;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--ink);
+      text-align: left;
+      line-height: 1.4;
+      cursor: pointer;
+    }
+
+    .toc-link:hover { background: var(--accent-soft); }
+    .toc-link[data-level="2"] { padding-left: 24px; }
+    .toc-link[data-level="3"] { padding-left: 39px; font-size: 0.94em; }
+    .toc-link[data-level="4"],
+    .toc-link[data-level="5"],
+    .toc-link[data-level="6"] { padding-left: 54px; font-size: 0.88em; color: var(--muted); }
+
+    #hint {
+      position: absolute;
+      z-index: 50;
+      left: 50%;
+      bottom: calc(var(--status-height) + 24px);
+      max-width: min(600px, 90vw);
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      color: var(--muted);
+      font-family: "Microsoft YaHei UI", "Segoe UI", sans-serif;
+      font-size: 13px;
+      text-align: center;
+      transform: translate(-50%, 14px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    #hint.show { opacity: 1; transform: translate(-50%, 0); }
+
+    body.chrome-hidden #toolbar {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-102%);
+    }
+
+    body.chrome-hidden #statusbar {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(102%);
+    }
+
+    body.chrome-hidden #readerShell { inset: 0; padding: 8px; }
+    body.chrome-hidden #topReveal:hover + #toolbar,
+    body.chrome-hidden #toolbar:hover { opacity: 1; pointer-events: auto; transform: translateY(0); }
+
+    @media (max-width: 760px) {
+      :root {
+        --column-gap: 24px;
+        --reader-pad-x: 8px;
+        --reader-pad-y: 8px;
+      }
+      .range-wrap { display: none; }
+      .toolbar-title { flex-basis: 120px; }
+      .nav-button { width: 34px; height: 58px; }
+      #statusbar { grid-template-columns: 62px minmax(100px, 1fr) 76px; gap: 7px; padding-inline: 9px; }
+      #layoutLabel { overflow: hidden; white-space: nowrap; }
+    }
+
+    @media print {
+      html, body { overflow: visible; background: white; }
+      #toolbar, #statusbar, .nav-button, #tocPanel, #tocBackdrop, #hint { display: none !important; }
+      #readerShell, #viewport, #track, #flow { position: static; width: auto !important; height: auto !important; overflow: visible; box-shadow: none; border: 0; }
+      #flow { column-width: auto !important; column-count: 1 !important; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div id="topReveal" aria-hidden="true"></div>
+    <header id="toolbar" aria-label="阅读设置">
+      <button class="tool-button" id="tocButton" type="button" title="目录（T）" aria-label="打开目录">☰</button>
+      <div class="toolbar-title" id="documentTitle">@@TITLE_HTML@@</div>
+
+      <div class="tool-group">
+        <label for="columnSelect" class="range-wrap">每屏</label>
+        <select class="tool-select" id="columnSelect" title="每屏栏数">
+          <option value="auto">自动栏数</option>
+          <option value="1">1 栏</option>
+          <option value="2">2 栏</option>
+          <option value="3">3 栏</option>
+          <option value="4">4 栏</option>
+        </select>
+      </div>
+
+      <div class="tool-group" aria-label="字号">
+        <button class="tool-button" id="fontDown" type="button" title="减小字号">A−</button>
+        <button class="tool-button" id="fontUp" type="button" title="增大字号">A＋</button>
+      </div>
+
+      <div class="tool-group range-wrap">
+        <label for="lineRange">行距</label>
+        <input id="lineRange" type="range" min="1.35" max="2.10" step="0.05" value="1.72">
+      </div>
+
+      <div class="tool-group">
+        <button class="tool-button" id="themeButton" type="button" title="切换主题">◐ 主题</button>
+        <button class="tool-button" id="focusButton" type="button" title="隐藏工具栏（H）">专注</button>
+        <button class="tool-button" id="fullscreenButton" type="button" title="全屏（F）">全屏</button>
+        <button class="tool-button" id="helpButton" type="button" title="快捷键（?）">?</button>
+      </div>
+    </header>
+
+    <main id="readerShell">
+      <div id="viewport" tabindex="0" aria-label="分页阅读区域">
+        <div id="track">
+          <article id="flow"></article>
+        </div>
+      </div>
+      <button class="nav-button" id="prevPage" type="button" aria-label="向前滑动" title="向前滑动">‹</button>
+      <button class="nav-button" id="nextPage" type="button" aria-label="向后滑动" title="向后滑动">›</button>
+    </main>
+
+    <footer id="statusbar">
+      <div id="layoutLabel">正在排版…</div>
+      <div id="progressTrack" role="slider" aria-label="阅读进度" aria-valuemin="1" aria-valuemax="1" aria-valuenow="1" tabindex="0">
+        <div id="progressFill"></div>
+      </div>
+      <div id="pageLabel">1 / 1</div>
+    </footer>
+
+    <div id="tocBackdrop"></div>
+    <aside id="tocPanel" aria-label="目录" aria-hidden="true">
+      <div class="panel-head">
+        <span>目录</span>
+        <button class="tool-button" id="tocClose" type="button" aria-label="关闭目录">×</button>
+      </div>
+      <nav id="tocList"></nav>
+    </aside>
+
+    <div id="hint" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    "use strict";
+
+    const CONTENT_B64 = "@@CONTENT_B64@@";
+    const CONFIG = @@CONFIG_JSON@@;
+    const $ = (selector) => document.querySelector(selector);
+    const flow = $("#flow");
+    const track = $("#track");
+    const viewport = $("#viewport");
+    const root = document.documentElement;
+    const storageKey = `comfortable-reader:${CONFIG.documentKey}`;
+    const themeOrder = ["auto", "paper", "sepia", "dark"];
+
+    function decodeUtf8Base64(value) {
+      const binary = atob(value);
+      const bytes = new Uint8Array(binary.length);
+      for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+      return new TextDecoder("utf-8").decode(bytes);
+    }
+
+    function readStoredState() {
+      try { return JSON.parse(localStorage.getItem(storageKey) || "{}"); }
+      catch (_) { return {}; }
+    }
+
+    const stored = readStoredState();
+    const state = {
+      columns: stored.columns || CONFIG.columns || "auto",
+      fontSize: Number(stored.fontSize || 18),
+      lineHeight: Number(stored.lineHeight || 1.72),
+      theme: stored.theme || CONFIG.theme || "auto",
+      page: Number(stored.page || 0),
+      totalPages: 1,
+      effectiveColumns: 1,
+      columnWidth: 0,
+      columnGap: 0,
+      pageStep: 1,
+      chromeHidden: Boolean(stored.chromeHidden),
+      seenHint: Boolean(stored.seenHint),
+      ready: false
+    };
+
+    let layoutTimer = null;
+    let wheelLockedUntil = 0;
+    let touchStartX = null;
+    let hintTimer = null;
+
+    flow.innerHTML = decodeUtf8Base64(CONTENT_B64);
+
+    function saveState() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({
+          columns: state.columns,
+          fontSize: state.fontSize,
+          lineHeight: state.lineHeight,
+          theme: state.theme,
+          page: state.page,
+          chromeHidden: state.chromeHidden,
+          seenHint: state.seenHint
+        }));
+      } catch (_) { /* Local files may block storage; reading still works. */ }
+    }
+
+    function showHint(message, duration = 2600) {
+      const hint = $("#hint");
+      hint.textContent = message;
+      hint.classList.add("show");
+      clearTimeout(hintTimer);
+      hintTimer = setTimeout(() => hint.classList.remove("show"), duration);
+    }
+
+    function resolvedTheme() {
+      if (state.theme !== "auto") return state.theme;
+      return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "paper";
+    }
+
+    function applyTheme() {
+      root.dataset.theme = resolvedTheme();
+      $("#themeButton").title = `主题：${state.theme === "auto" ? "跟随系统" : state.theme}`;
+    }
+
+    function getEffectiveColumns() {
+      if (state.columns !== "auto") return Number(state.columns);
+      const width = viewport.clientWidth;
+      if (width < 720) return 1;
+      if (width < 1220) return 2;
+      if (width < 1780) return 3;
+      return 4;
+    }
+
+    function updateControls() {
+      $("#columnSelect").value = state.columns;
+      $("#lineRange").value = String(state.lineHeight);
+      document.body.classList.toggle("chrome-hidden", state.chromeHidden);
+      $("#layoutLabel").textContent = `${state.effectiveColumns} 栏 · ${state.fontSize}px`;
+      $("#pageLabel").textContent = `${state.page + 1} / ${state.totalPages}`;
+      $("#prevPage").disabled = state.page <= 0;
+      $("#nextPage").disabled = state.page >= state.totalPages - 1;
+      const progress = state.totalPages <= 1 ? 1 : state.page / (state.totalPages - 1);
+      $("#progressFill").style.width = `${Math.max(0, Math.min(1, progress)) * 100}%`;
+      const progressTrack = $("#progressTrack");
+      progressTrack.setAttribute("aria-valuemax", String(state.totalPages));
+      progressTrack.setAttribute("aria-valuenow", String(state.page + 1));
+    }
+
+    function goToPage(page, behavior = "smooth") {
+      const next = Math.max(0, Math.min(state.totalPages - 1, Math.round(page)));
+      state.page = next;
+      viewport.scrollTo({ left: next * state.pageStep, top: 0, behavior });
+      updateControls();
+      saveState();
+    }
+
+    function measureLayout(preserveProgress = true) {
+      const oldTotal = Math.max(1, state.totalPages);
+      const oldProgress = oldTotal <= 1 ? 0 : state.page / (oldTotal - 1);
+      const width = Math.max(1, viewport.clientWidth);
+      const height = Math.max(1, viewport.clientHeight);
+      const computed = getComputedStyle(root);
+      const gap = parseFloat(computed.getPropertyValue("--column-gap")) || 36;
+      const columns = getEffectiveColumns();
+
+      root.style.setProperty("--font-size", `${state.fontSize}px`);
+      root.style.setProperty("--line-height", String(state.lineHeight));
+      track.style.width = `${width}px`;
+      flow.style.width = `${width}px`;
+      flow.style.height = `${height}px`;
+      const flowStyle = getComputedStyle(flow);
+      const paddingLeft = parseFloat(flowStyle.paddingLeft) || 0;
+      const paddingRight = parseFloat(flowStyle.paddingRight) || 0;
+      const contentBoxWidth = Math.max(1, width - paddingLeft - paddingRight);
+      const columnWidth = Math.max(180, (contentBoxWidth - gap * (columns - 1)) / columns);
+      flow.style.columnCount = "auto";
+      flow.style.columnWidth = `${columnWidth}px`;
+      flow.style.columnGap = `${gap}px`;
+
+      requestAnimationFrame(() => {
+        const contentWidth = Math.max(width, flow.scrollWidth);
+        const pageStep = columns * (columnWidth + gap);
+        const flowedContentWidth = Math.max(1, contentWidth - paddingLeft - paddingRight);
+        const totalColumns = Math.max(1, Math.ceil((flowedContentWidth + gap - 1) / (columnWidth + gap)));
+        const totalPages = Math.max(1, Math.ceil(totalColumns / columns));
+        const trackWidth = (totalPages - 1) * pageStep + width;
+
+        track.style.width = `${trackWidth}px`;
+        state.effectiveColumns = columns;
+        state.columnWidth = columnWidth;
+        state.columnGap = gap;
+        state.pageStep = pageStep;
+        state.totalPages = totalPages;
+        state.page = preserveProgress && state.ready
+          ? Math.round(oldProgress * Math.max(0, totalPages - 1))
+          : Math.min(state.page, totalPages - 1);
+        state.ready = true;
+        goToPage(state.page, "instant");
+        window.__comfortableReaderState = state;
+      });
+    }
+
+    function scheduleLayout(preserveProgress = true) {
+      clearTimeout(layoutTimer);
+      layoutTimer = setTimeout(() => measureLayout(preserveProgress), 90);
+    }
+
+    function slugify(value, fallback) {
+      const slug = value.trim().toLowerCase()
+        .replace(/[^\p{L}\p{N}\s_-]/gu, "")
+        .replace(/[\s_]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      return slug || fallback;
+    }
+
+    function buildToc() {
+      const headings = [...flow.querySelectorAll("h1, h2, h3, h4, h5, h6")];
+      const toc = $("#tocList");
+      const used = new Set();
+      toc.replaceChildren();
+
+      if (!headings.length) {
+        const empty = document.createElement("p");
+        empty.textContent = "这份文本没有可识别的 Markdown 标题。";
+        empty.style.color = "var(--muted)";
+        empty.style.padding = "8px 10px";
+        toc.appendChild(empty);
+        return;
+      }
+
+      headings.forEach((heading, index) => {
+        let id = heading.id || slugify(heading.textContent, `section-${index + 1}`);
+        const base = id;
+        let suffix = 2;
+        while (used.has(id) || (document.getElementById(id) && document.getElementById(id) !== heading)) {
+          id = `${base}-${suffix}`;
+          suffix += 1;
+        }
+        used.add(id);
+        heading.id = id;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "toc-link";
+        button.dataset.level = heading.tagName.slice(1);
+        button.textContent = heading.textContent.trim() || `第 ${index + 1} 节`;
+        button.addEventListener("click", () => {
+          const viewportBox = viewport.getBoundingClientRect();
+          const headingBox = heading.getBoundingClientRect();
+          const absoluteLeft = viewport.scrollLeft + headingBox.left - viewportBox.left;
+          goToPage(Math.floor(Math.max(0, absoluteLeft) / state.pageStep), "smooth");
+          toggleToc(false);
+        });
+        toc.appendChild(button);
+      });
+    }
+
+    function toggleToc(open = !document.body.classList.contains("toc-open")) {
+      document.body.classList.toggle("toc-open", open);
+      $("#tocPanel").setAttribute("aria-hidden", String(!open));
+      if (open) $("#tocClose").focus();
+      else viewport.focus({ preventScroll: true });
+    }
+
+    function toggleChrome() {
+      state.chromeHidden = !state.chromeHidden;
+      document.body.classList.toggle("chrome-hidden", state.chromeHidden);
+      saveState();
+      scheduleLayout(true);
+    }
+
+    async function toggleFullscreen() {
+      try {
+        if (!document.fullscreenElement) await document.documentElement.requestFullscreen();
+        else await document.exitFullscreen();
+      } catch (_) {
+        showHint("浏览器阻止了网页全屏；可按 F11 进入浏览器全屏。", 3600);
+      }
+    }
+
+    function cycleTheme() {
+      const index = themeOrder.indexOf(state.theme);
+      state.theme = themeOrder[(index + 1) % themeOrder.length];
+      applyTheme();
+      saveState();
+      showHint(`主题：${state.theme === "auto" ? "跟随系统" : state.theme}`);
+    }
+
+    function adjustFont(delta) {
+      state.fontSize = Math.max(13, Math.min(30, state.fontSize + delta));
+      scheduleLayout(true);
+      showHint(`字号：${state.fontSize}px`, 1300);
+      saveState();
+    }
+
+    function showHelp() {
+      showHint("←/→ 或 PageUp/PageDown 翻屏 · 空格下一屏 · T 目录 · H 专注 · F 网页全屏 · Ctrl+[ / ] 改栏数", 6200);
+    }
+
+    $("#prevPage").addEventListener("click", () => goToPage(state.page - 1));
+    $("#nextPage").addEventListener("click", () => goToPage(state.page + 1));
+    $("#tocButton").addEventListener("click", () => toggleToc(true));
+    $("#tocClose").addEventListener("click", () => toggleToc(false));
+    $("#tocBackdrop").addEventListener("click", () => toggleToc(false));
+    $("#fontDown").addEventListener("click", () => adjustFont(-1));
+    $("#fontUp").addEventListener("click", () => adjustFont(1));
+    $("#themeButton").addEventListener("click", cycleTheme);
+    $("#focusButton").addEventListener("click", toggleChrome);
+    $("#fullscreenButton").addEventListener("click", toggleFullscreen);
+    $("#helpButton").addEventListener("click", showHelp);
+
+    $("#columnSelect").addEventListener("change", (event) => {
+      state.columns = event.target.value;
+      state.page = 0;
+      saveState();
+      scheduleLayout(false);
+    });
+
+    $("#lineRange").addEventListener("input", (event) => {
+      state.lineHeight = Number(event.target.value);
+      scheduleLayout(true);
+      saveState();
+    });
+
+    $("#progressTrack").addEventListener("click", (event) => {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const ratio = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
+      goToPage(Math.round(ratio * Math.max(0, state.totalPages - 1)));
+    });
+
+    $("#progressTrack").addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft" || event.key === "ArrowDown") { event.preventDefault(); goToPage(state.page - 1); }
+      if (event.key === "ArrowRight" || event.key === "ArrowUp") { event.preventDefault(); goToPage(state.page + 1); }
+      if (event.key === "Home") { event.preventDefault(); goToPage(0); }
+      if (event.key === "End") { event.preventDefault(); goToPage(state.totalPages - 1); }
+    });
+
+    viewport.addEventListener("wheel", (event) => {
+      if (event.ctrlKey) return;
+      const magnitude = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      if (Math.abs(magnitude) < 18) return;
+      event.preventDefault();
+      const now = performance.now();
+      if (now < wheelLockedUntil) return;
+      wheelLockedUntil = now + 420;
+      goToPage(state.page + (magnitude > 0 ? 1 : -1));
+    }, { passive: false });
+
+    viewport.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0]?.clientX ?? null;
+    }, { passive: true });
+
+    viewport.addEventListener("touchend", (event) => {
+      if (touchStartX === null) return;
+      const endX = event.changedTouches[0]?.clientX ?? touchStartX;
+      const delta = endX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(delta) > 48) goToPage(state.page + (delta < 0 ? 1 : -1));
+    }, { passive: true });
+
+    document.addEventListener("keydown", (event) => {
+      const activeTag = document.activeElement?.tagName;
+      if (["INPUT", "SELECT", "TEXTAREA"].includes(activeTag)) return;
+      const selection = getSelection();
+      const hasSelection = selection && !selection.isCollapsed;
+
+      if (event.ctrlKey && (event.key === "]" || event.key === "[")) {
+        event.preventDefault();
+        const current = state.columns === "auto" ? state.effectiveColumns : Number(state.columns);
+        const next = Math.max(1, Math.min(4, current + (event.key === "]" ? 1 : -1)));
+        state.columns = String(next);
+        state.page = 0;
+        saveState();
+        scheduleLayout(false);
+        return;
+      }
+
+      if (hasSelection) return;
+      if (["ArrowRight", "PageDown"].includes(event.key) || (event.key === " " && !event.shiftKey)) {
+        event.preventDefault(); goToPage(state.page + 1); return;
+      }
+      if (["ArrowLeft", "PageUp"].includes(event.key) || (event.key === " " && event.shiftKey)) {
+        event.preventDefault(); goToPage(state.page - 1); return;
+      }
+      if (event.key === "Home") { event.preventDefault(); goToPage(0); return; }
+      if (event.key === "End") { event.preventDefault(); goToPage(state.totalPages - 1); return; }
+      if (event.key.toLowerCase() === "t") { event.preventDefault(); toggleToc(); return; }
+      if (event.key.toLowerCase() === "h") { event.preventDefault(); toggleChrome(); return; }
+      if (event.key.toLowerCase() === "f") { event.preventDefault(); toggleFullscreen(); return; }
+      if (event.key === "?" || (event.shiftKey && event.key === "/")) { event.preventDefault(); showHelp(); }
+      if (event.key === "Escape") toggleToc(false);
+    });
+
+    flow.addEventListener("click", (event) => {
+      const link = event.target.closest("a");
+      if (!link) return;
+      const href = link.getAttribute("href") || "";
+      if (href.startsWith("#")) {
+        const target = document.getElementById(decodeURIComponent(href.slice(1)));
+        if (target) {
+          event.preventDefault();
+          const viewportBox = viewport.getBoundingClientRect();
+          const targetBox = target.getBoundingClientRect();
+          const absoluteLeft = viewport.scrollLeft + targetBox.left - viewportBox.left;
+          goToPage(Math.floor(Math.max(0, absoluteLeft) / state.pageStep));
+        }
+      } else if (/^https?:/i.test(href)) {
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      }
+    });
+
+    matchMedia("(prefers-color-scheme: dark)").addEventListener?.("change", () => {
+      if (state.theme === "auto") applyTheme();
+    });
+
+    new ResizeObserver(() => scheduleLayout(true)).observe(viewport);
+    document.addEventListener("fullscreenchange", () => scheduleLayout(true));
+    flow.querySelectorAll("img").forEach((image) => {
+      if (!image.complete) image.addEventListener("load", () => scheduleLayout(true), { once: true });
+    });
+
+    applyTheme();
+    buildToc();
+    updateControls();
+    measureLayout(false);
+    setTimeout(() => {
+      if (!state.seenHint) {
+        showHelp();
+        state.seenHint = true;
+        saveState();
+      }
+    }, 500);
+  </script>
+</body>
+</html>

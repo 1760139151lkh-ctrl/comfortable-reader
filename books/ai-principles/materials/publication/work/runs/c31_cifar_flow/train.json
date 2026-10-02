@@ -1,0 +1,392 @@
+{
+  "scope": "official cifar real pixels and documented existing split, no class labels or official test; linear independent noise/data pair and approximate numerical ODE",
+  "source_identity": {
+    "manifest_sha256": "c877180a2bc8cd17106f12cc40b3f43540bc203aced12cfd64cd9613197e2df6",
+    "official_archive_sha256": "c4a38c50a1bc5f3a1c5537f2155ab9d68f9f25eb1ed8d9ddda3db29a59bca1dd",
+    "train_members": {
+      "data_batch_1.bin": "cee916563c9f80d84e3cc88e17fdc0941787f1244f00a67874d45b261883ada5",
+      "data_batch_2.bin": "a591ca11fa1708a91ee40f54b3da4784ccd871ecf2137de63f51ada8b3fa57ed",
+      "data_batch_3.bin": "bbe8596564c0f86427f876058170b84dac6670ddf06d79402899d93ceea26f67",
+      "data_batch_4.bin": "014e562d6e23c72197cc727519169a60359f5eccd8945ad5a09d710285ff4e48",
+      "data_batch_5.bin": "755304fc0b379caeae8c14f0dac912fbc7d6cd469eb67a1029a08a39453a9add"
+    },
+    "random_unstratified_split_sha256": "8b597c99f13b0cbdc99e7bfc8c9051b0cc5073ce4f10a4ff958c9ad320b8eb68",
+    "train_rows": 45000,
+    "validation_rows": 5000,
+    "dataset": "official CIFAR-10 RGB, unstratified 45k/5k C29 split",
+    "labels_loaded": false,
+    "pixel_transform": "official uint8/127.5 -1"
+  },
+  "dataset": "cifar",
+  "channels": 3,
+  "side": 32,
+  "target": "independent z~N(0,I), real x1, t~U[0,1], x_t=(1-t)z+t*x1, velocity target=x1-z",
+  "model": "continuous Fourier time-conditioned small U-Net",
+  "epochs_planned": 15,
+  "batch_size": 128,
+  "optimizer": "AdamW lr0.0003 weight_decay1e-4 gradient_clip1",
+  "initial_validation": {
+    "velocity_mse_per_coordinate": 1.4581900835037231,
+    "early_middle_late_mse": [
+      1.478950256029291,
+      1.4550624254014757,
+      1.4413540288593694
+    ],
+    "early_middle_late_counts": [
+      671,
+      675,
+      702
+    ],
+    "validation_images": 2048
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_online_velocity_mse": 0.4172713508552975,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2966628987342119,
+        "early_middle_late_mse": [
+          0.2524043785299878,
+          0.21548686345418294,
+          0.4170208534284195
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 2,
+      "train_online_velocity_mse": 0.2740015692445967,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2563907001167536,
+        "early_middle_late_mse": [
+          0.21505200063418348,
+          0.18070542724044233,
+          0.3686782111469497
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 3,
+      "train_online_velocity_mse": 0.24541519683202107,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.23653835617005825,
+        "early_middle_late_mse": [
+          0.20409707198732835,
+          0.16476866686785663,
+          0.3365563707813578
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 4,
+      "train_online_velocity_mse": 0.2308224256489012,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.22780555486679077,
+        "early_middle_late_mse": [
+          0.20143229133503626,
+          0.15885513446949145,
+          0.31931267029199845
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 5,
+      "train_online_velocity_mse": 0.22343185178173913,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.22332129534333944,
+        "early_middle_late_mse": [
+          0.19844347531678247,
+          0.1556164190504286,
+          0.31220137223898514
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 6,
+      "train_online_velocity_mse": 0.21802996864848667,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.21706678811460733,
+        "early_middle_late_mse": [
+          0.19357826386407662,
+          0.1523411093817817,
+          0.3017543061846002
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 7,
+      "train_online_velocity_mse": 0.21363835966322156,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2134195463731885,
+        "early_middle_late_mse": [
+          0.19218917184366377,
+          0.14926449528446903,
+          0.2953999551952395
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 8,
+      "train_online_velocity_mse": 0.21194026577737596,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.21359506528824568,
+        "early_middle_late_mse": [
+          0.2007226240439493,
+          0.14849488223040547,
+          0.2884953905034948
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 9,
+      "train_online_velocity_mse": 0.2074045042541292,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2177386824041605,
+        "early_middle_late_mse": [
+          0.20383489043097916,
+          0.15637172628332066,
+          0.2900351703676403
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 10,
+      "train_online_velocity_mse": 0.20688022317356533,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.20819387212395668,
+        "early_middle_late_mse": [
+          0.1902370985858309,
+          0.1465414160269278,
+          0.28463887760781836
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 11,
+      "train_online_velocity_mse": 0.20496025908258225,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2077451990917325,
+        "early_middle_late_mse": [
+          0.1930194718294101,
+          0.14624685923258463,
+          0.28095367355564044
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 12,
+      "train_online_velocity_mse": 0.2034182523621453,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2052745157852769,
+        "early_middle_late_mse": [
+          0.18940603466574019,
+          0.14425587053652164,
+          0.27911402900674065
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 13,
+      "train_online_velocity_mse": 0.20224250167475807,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.2036900483071804,
+        "early_middle_late_mse": [
+          0.1893145935013113,
+          0.1438642904493544,
+          0.27495545743197797
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 14,
+      "train_online_velocity_mse": 0.2015497503095203,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.20384663250297308,
+        "early_middle_late_mse": [
+          0.18916566254662687,
+          0.14360144933064778,
+          0.2758073602986132
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    },
+    {
+      "epoch": 15,
+      "train_online_velocity_mse": 0.20100073715315925,
+      "validation": {
+        "velocity_mse_per_coordinate": 0.20152136404067278,
+        "early_middle_late_mse": [
+          0.1877087139692463,
+          0.14272148414894387,
+          0.2712623984725387
+        ],
+        "early_middle_late_counts": [
+          671,
+          675,
+          702
+        ],
+        "validation_images": 2048
+      }
+    }
+  ],
+  "selection": "minimum fixed-pair/time velocity MSE on first2048 validation images; no image quality or official test used",
+  "selected_epoch": 15,
+  "checkpoint": "work/runs/c31_cifar_flow/best.pt",
+  "checkpoint_sha256": "d293c834835732e9dd07085b1662ba9761ddc60ff3350454cd974edb6d72dcac",
+  "samplers": [
+    {
+      "name": "euler_4",
+      "method": "euler",
+      "steps": 4,
+      "network_evaluations": 4,
+      "path": "work/runs/c31_cifar_flow/samples_euler_4.npy",
+      "sha256": "dcc2a74922bf6ee60d790568172f7bcdb369a088db026e28b73d27b802c4514f",
+      "raw_before_display_clip_min_max": [
+        -0.7785627841949463,
+        0.9134721755981445
+      ]
+    },
+    {
+      "name": "euler_16",
+      "method": "euler",
+      "steps": 16,
+      "network_evaluations": 16,
+      "path": "work/runs/c31_cifar_flow/samples_euler_16.npy",
+      "sha256": "7910563c3c1cce4664223135c8a256080a6ee2f031ff5b7e7bef3fb233ff8749",
+      "raw_before_display_clip_min_max": [
+        -1.0381184816360474,
+        1.1018431186676025
+      ]
+    },
+    {
+      "name": "euler_64",
+      "method": "euler",
+      "steps": 64,
+      "network_evaluations": 64,
+      "path": "work/runs/c31_cifar_flow/samples_euler_64.npy",
+      "sha256": "6365a10231b6b566db6db4d9ef2e483153c690bd60094d068e91e3f69ae5d148",
+      "raw_before_display_clip_min_max": [
+        -1.0964686870574951,
+        1.1340947151184082
+      ]
+    },
+    {
+      "name": "heun_16",
+      "method": "heun",
+      "steps": 16,
+      "network_evaluations": 32,
+      "path": "work/runs/c31_cifar_flow/samples_heun_16.npy",
+      "sha256": "f2cfb0b9a89bc983b084c35a152845a026395c9bbd803cd3f0b2bb11108f8655",
+      "raw_before_display_clip_min_max": [
+        -1.1459465026855469,
+        1.1912840604782104
+      ]
+    },
+    {
+      "name": "heun_64",
+      "method": "heun",
+      "steps": 64,
+      "network_evaluations": 128,
+      "path": "work/runs/c31_cifar_flow/samples_heun_64.npy",
+      "sha256": "5f95f417fd2677ce6364954d84c8e32c74dce283c46a42c36c56ae8a12026c30",
+      "raw_before_display_clip_min_max": [
+        -1.1180208921432495,
+        1.1619151830673218
+      ]
+    }
+  ],
+  "fixed_noise_seed": 20269924,
+  "raw_output_rmse_vs_heun64": {
+    "euler_4": 0.2576809525489807,
+    "euler_16": 0.08569213002920151,
+    "euler_64": 0.02397880144417286,
+    "heun_16": 0.01979251764714718
+  },
+  "real_validation_16_path": "work/runs/c31_cifar_flow/real_validation_16.npy",
+  "real_validation_16_sha256": "f5f2070df6d7eb85813bb8350aadcc0da00a279923e6eca17ffbee8cc3bd3cc0",
+  "peak_gpu_allocated_bytes": 1273799168,
+  "official_test_opened": false,
+  "boundary": "independent straight pairs are training targets, learned vector field only sees current state/time; not the paper's full OT/positive-endpoint-variance or reflow setup"
+}

@@ -1,0 +1,63 @@
+{
+  "source": "ITA_Foggia-6_1_T-1.xml fixed route plus author kinematic bicycle",
+  "same_visible_position_different_heading": [
+    {
+      "heading_shift_rad": -0.15,
+      "same_rear_xy": [
+        -70.2811918024635,
+        -863.9343773677286
+      ],
+      "same_speed_m_s": 9.1886594,
+      "target_xy": [
+        -78.07357309744344,
+        -866.3748310772148
+      ],
+      "steer_command_rad": 0.19153176696806218,
+      "acceleration_m_s2": -4.0,
+      "after_one_tick_rear_xy": [
+        -71.19968833670292,
+        -863.9604298586314
+      ],
+      "route_projection_m": 19.93657109902103
+    },
+    {
+      "heading_shift_rad": 0.0,
+      "same_rear_xy": [
+        -70.2811918024635,
+        -863.9343773677286
+      ],
+      "same_speed_m_s": 9.1886594,
+      "target_xy": [
+        -78.07357309744344,
+        -866.3748310772148
+      ],
+      "steer_command_rad": 0.09315761766350081,
+      "acceleration_m_s2": -4.0,
+      "after_one_tick_rear_xy": [
+        -71.18548137511713,
+        -864.0973957240018
+      ],
+      "route_projection_m": 19.93657109902103
+    },
+    {
+      "heading_shift_rad": 0.15,
+      "same_rear_xy": [
+        -70.2811918024635,
+        -863.9343773677286
+      ],
+      "same_speed_m_s": 9.1886594,
+      "target_xy": [
+        -78.07357309744344,
+        -866.3748310772148
+      ],
+      "steer_command_rad": -0.00915058418983785,
+      "acceleration_m_s2": -4.0,
+      "after_one_tick_rear_xy": [
+        -71.15474636145433,
+        -864.2193634167879
+      ],
+      "route_projection_m": 19.93657109902103
+    }
+  ],
+  "claim_boundary": "same position and speed do not determine a unique heading or steering action; this is a deterministic mechanism probe, not learned state estimation"
+}

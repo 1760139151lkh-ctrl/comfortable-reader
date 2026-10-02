@@ -1,0 +1,676 @@
+{
+  "mode": "true",
+  "seed": 20260925,
+  "epochs": 30,
+  "batch_size": 128,
+  "training_images": 4000,
+  "validation_images": 500,
+  "vocab_size": 4867,
+  "parameters": 1174849,
+  "device": "cuda",
+  "elapsed_seconds": 34.80744433403015,
+  "selection": "highest validation mean recall@1, ties earlier epoch; test images never loaded here",
+  "image_text_source": "COCO2017 official validation repartitioned by image ID for author-internal lab",
+  "history": [
+    {
+      "epoch": 1,
+      "train_pair_loss": 4.826733767986298,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.012000000104308128,
+          "recall_at_10": 0.029999999329447746,
+          "median_rank": 236.0,
+          "mean_rank": 240.28399658203125
+        },
+        "text_to_image": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.01600000075995922,
+          "recall_at_10": 0.017999999225139618,
+          "median_rank": 235.0,
+          "mean_rank": 239.38800048828125
+        },
+        "mean_recall_at_1": 0.0020000000949949026,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 2,
+      "train_pair_loss": 4.70124825835228,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.01600000075995922,
+          "recall_at_10": 0.03799999877810478,
+          "median_rank": 201.0,
+          "mean_rank": 210.8520050048828
+        },
+        "text_to_image": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.017999999225139618,
+          "recall_at_10": 0.03400000184774399,
+          "median_rank": 173.0,
+          "mean_rank": 200.83200073242188
+        },
+        "mean_recall_at_1": 0.003000000142492354,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 3,
+      "train_pair_loss": 4.612569235265255,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.029999999329447746,
+          "recall_at_10": 0.057999998331069946,
+          "median_rank": 148.0,
+          "mean_rank": 170.42999267578125
+        },
+        "text_to_image": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.019999999552965164,
+          "recall_at_10": 0.041999999433755875,
+          "median_rank": 140.0,
+          "mean_rank": 171.85400390625
+        },
+        "mean_recall_at_1": 0.006000000284984708,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 4,
+      "train_pair_loss": 4.514235511422157,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.006000000052154064,
+          "recall_at_5": 0.026000000536441803,
+          "recall_at_10": 0.04800000041723251,
+          "median_rank": 170.0,
+          "mean_rank": 189.27000427246094
+        },
+        "text_to_image": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.024000000208616257,
+          "recall_at_10": 0.04800000041723251,
+          "median_rank": 137.0,
+          "mean_rank": 166.67799377441406
+        },
+        "mean_recall_at_1": 0.005000000121071935,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 5,
+      "train_pair_loss": 4.45740082859993,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.02800000086426735,
+          "recall_at_10": 0.057999998331069946,
+          "median_rank": 147.0,
+          "mean_rank": 176.843994140625
+        },
+        "text_to_image": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.02800000086426735,
+          "recall_at_10": 0.07199999690055847,
+          "median_rank": 129.0,
+          "mean_rank": 155.11399841308594
+        },
+        "mean_recall_at_1": 0.0050000002374872565,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 6,
+      "train_pair_loss": 4.329119488596916,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.0,
+          "recall_at_5": 0.035999998450279236,
+          "recall_at_10": 0.05999999865889549,
+          "median_rank": 136.0,
+          "mean_rank": 166.47799682617188
+        },
+        "text_to_image": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.03799999877810478,
+          "recall_at_10": 0.07000000029802322,
+          "median_rank": 117.0,
+          "mean_rank": 146.61599731445312
+        },
+        "mean_recall_at_1": 0.007000000216066837,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 7,
+      "train_pair_loss": 4.248026952147484,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.014000000432133675,
+          "recall_at_10": 0.041999999433755875,
+          "median_rank": 128.0,
+          "mean_rank": 165.4739990234375
+        },
+        "text_to_image": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.041999999433755875,
+          "recall_at_10": 0.0820000022649765,
+          "median_rank": 119.0,
+          "mean_rank": 150.71600341796875
+        },
+        "mean_recall_at_1": 0.008000000263564289,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 8,
+      "train_pair_loss": 4.1286574974656105,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.035999998450279236,
+          "recall_at_10": 0.07400000095367432,
+          "median_rank": 101.0,
+          "mean_rank": 139.1060028076172
+        },
+        "text_to_image": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.057999998331069946,
+          "recall_at_10": 0.10000000149011612,
+          "median_rank": 87.0,
+          "mean_rank": 130.99400329589844
+        },
+        "mean_recall_at_1": 0.004000000189989805,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 9,
+      "train_pair_loss": 4.072923399507999,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.009999999776482582,
+          "recall_at_5": 0.04399999976158142,
+          "recall_at_10": 0.07400000095367432,
+          "median_rank": 101.0,
+          "mean_rank": 139.7220001220703
+        },
+        "text_to_image": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.10999999940395355,
+          "median_rank": 80.0,
+          "mean_rank": 122.19999694824219
+        },
+        "mean_recall_at_1": 0.009000000078231096,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 10,
+      "train_pair_loss": 3.99146019667387,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.04399999976158142,
+          "recall_at_10": 0.08399999886751175,
+          "median_rank": 93.0,
+          "mean_rank": 136.84800720214844
+        },
+        "text_to_image": {
+          "recall_at_1": 0.026000000536441803,
+          "recall_at_5": 0.07599999755620956,
+          "recall_at_10": 0.12800000607967377,
+          "median_rank": 77.0,
+          "mean_rank": 117.6500015258789
+        },
+        "mean_recall_at_1": 0.017000000458210707,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 11,
+      "train_pair_loss": 3.8707704097032547,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.05000000074505806,
+          "recall_at_10": 0.1080000028014183,
+          "median_rank": 86.0,
+          "mean_rank": 122.40799713134766
+        },
+        "text_to_image": {
+          "recall_at_1": 0.019999999552965164,
+          "recall_at_5": 0.07199999690055847,
+          "recall_at_10": 0.12399999797344208,
+          "median_rank": 77.0,
+          "mean_rank": 114.0260009765625
+        },
+        "mean_recall_at_1": 0.01699999999254942,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 12,
+      "train_pair_loss": 3.7659449726343155,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.0020000000949949026,
+          "recall_at_5": 0.026000000536441803,
+          "recall_at_10": 0.05000000074505806,
+          "median_rank": 127.0,
+          "mean_rank": 158.0679931640625
+        },
+        "text_to_image": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.057999998331069946,
+          "recall_at_10": 0.10999999940395355,
+          "median_rank": 84.0,
+          "mean_rank": 124.91200256347656
+        },
+        "mean_recall_at_1": 0.0070000000996515155,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 13,
+      "train_pair_loss": 3.634629637002945,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.0560000017285347,
+          "recall_at_10": 0.1080000028014183,
+          "median_rank": 108.0,
+          "mean_rank": 141.06399536132812
+        },
+        "text_to_image": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.052000001072883606,
+          "recall_at_10": 0.10400000214576721,
+          "median_rank": 75.0,
+          "mean_rank": 112.33399963378906
+        },
+        "mean_recall_at_1": 0.012000000104308128,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 14,
+      "train_pair_loss": 3.5836005061864853,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.006000000052154064,
+          "recall_at_5": 0.03200000151991844,
+          "recall_at_10": 0.06199999898672104,
+          "median_rank": 130.0,
+          "mean_rank": 160.35800170898438
+        },
+        "text_to_image": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.0560000017285347,
+          "recall_at_10": 0.09799999743700027,
+          "median_rank": 80.0,
+          "mean_rank": 117.36000061035156
+        },
+        "mean_recall_at_1": 0.009000000078231096,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 15,
+      "train_pair_loss": 3.46226155012846,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.06800000369548798,
+          "recall_at_10": 0.12200000137090683,
+          "median_rank": 78.0,
+          "mean_rank": 113.51000213623047
+        },
+        "text_to_image": {
+          "recall_at_1": 0.02199999988079071,
+          "recall_at_5": 0.07599999755620956,
+          "recall_at_10": 0.14000000059604645,
+          "median_rank": 69.0,
+          "mean_rank": 107.18000030517578
+        },
+        "mean_recall_at_1": 0.01500000013038516,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 16,
+      "train_pair_loss": 3.3501152619719505,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.02199999988079071,
+          "recall_at_5": 0.06400000303983688,
+          "recall_at_10": 0.12999999523162842,
+          "median_rank": 70.0,
+          "mean_rank": 110.26399993896484
+        },
+        "text_to_image": {
+          "recall_at_1": 0.009999999776482582,
+          "recall_at_5": 0.07599999755620956,
+          "recall_at_10": 0.1420000046491623,
+          "median_rank": 61.0,
+          "mean_rank": 101.58999633789062
+        },
+        "mean_recall_at_1": 0.015999999828636646,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 17,
+      "train_pair_loss": 3.2290707156062126,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.10400000214576721,
+          "median_rank": 83.0,
+          "mean_rank": 119.03399658203125
+        },
+        "text_to_image": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.06800000369548798,
+          "recall_at_10": 0.13600000739097595,
+          "median_rank": 67.0,
+          "mean_rank": 105.01200103759766
+        },
+        "mean_recall_at_1": 0.013000000268220901,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 18,
+      "train_pair_loss": 3.060121662914753,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.009999999776482582,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.11599999666213989,
+          "median_rank": 90.0,
+          "mean_rank": 124.20600128173828
+        },
+        "text_to_image": {
+          "recall_at_1": 0.01600000075995922,
+          "recall_at_5": 0.09399999678134918,
+          "recall_at_10": 0.12999999523162842,
+          "median_rank": 63.0,
+          "mean_rank": 105.40599822998047
+        },
+        "mean_recall_at_1": 0.013000000268220901,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 19,
+      "train_pair_loss": 2.961804799735546,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.012000000104308128,
+          "recall_at_5": 0.041999999433755875,
+          "recall_at_10": 0.07999999821186066,
+          "median_rank": 94.0,
+          "mean_rank": 129.22999572753906
+        },
+        "text_to_image": {
+          "recall_at_1": 0.009999999776482582,
+          "recall_at_5": 0.06800000369548798,
+          "recall_at_10": 0.13600000739097595,
+          "median_rank": 65.0,
+          "mean_rank": 103.22000122070312
+        },
+        "mean_recall_at_1": 0.010999999940395355,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 20,
+      "train_pair_loss": 2.8789274767041206,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.12399999797344208,
+          "median_rank": 78.0,
+          "mean_rank": 117.36399841308594
+        },
+        "text_to_image": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.07599999755620956,
+          "recall_at_10": 0.1420000046491623,
+          "median_rank": 64.0,
+          "mean_rank": 107.3280029296875
+        },
+        "mean_recall_at_1": 0.011000000406056643,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 21,
+      "train_pair_loss": 2.7277725264430046,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.03799999877810478,
+          "recall_at_10": 0.07800000160932541,
+          "median_rank": 111.0,
+          "mean_rank": 144.75799560546875
+        },
+        "text_to_image": {
+          "recall_at_1": 0.01600000075995922,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.11999999731779099,
+          "median_rank": 73.0,
+          "mean_rank": 117.05599975585938
+        },
+        "mean_recall_at_1": 0.012000000569969416,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 22,
+      "train_pair_loss": 2.564578041434288,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.024000000208616257,
+          "recall_at_5": 0.07000000029802322,
+          "recall_at_10": 0.13199999928474426,
+          "median_rank": 64.0,
+          "mean_rank": 102.14199829101562
+        },
+        "text_to_image": {
+          "recall_at_1": 0.019999999552965164,
+          "recall_at_5": 0.08399999886751175,
+          "recall_at_10": 0.17399999499320984,
+          "median_rank": 60.0,
+          "mean_rank": 97.19599914550781
+        },
+        "mean_recall_at_1": 0.02199999988079071,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 23,
+      "train_pair_loss": 2.407302238047123,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.05400000140070915,
+          "recall_at_10": 0.10199999809265137,
+          "median_rank": 88.0,
+          "mean_rank": 126.8219985961914
+        },
+        "text_to_image": {
+          "recall_at_1": 0.017999999225139618,
+          "recall_at_5": 0.08399999886751175,
+          "recall_at_10": 0.13199999928474426,
+          "median_rank": 65.0,
+          "mean_rank": 101.65799713134766
+        },
+        "mean_recall_at_1": 0.015999999828636646,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 24,
+      "train_pair_loss": 2.329241544008255,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.024000000208616257,
+          "recall_at_5": 0.07000000029802322,
+          "recall_at_10": 0.10599999874830246,
+          "median_rank": 69.0,
+          "mean_rank": 114.10600280761719
+        },
+        "text_to_image": {
+          "recall_at_1": 0.02199999988079071,
+          "recall_at_5": 0.08799999952316284,
+          "recall_at_10": 0.15000000596046448,
+          "median_rank": 62.0,
+          "mean_rank": 100.98999786376953
+        },
+        "mean_recall_at_1": 0.023000000044703484,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 25,
+      "train_pair_loss": 2.2485217079520226,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.05999999865889549,
+          "recall_at_10": 0.11999999731779099,
+          "median_rank": 74.0,
+          "mean_rank": 117.5999984741211
+        },
+        "text_to_image": {
+          "recall_at_1": 0.01600000075995922,
+          "recall_at_5": 0.08399999886751175,
+          "recall_at_10": 0.14800000190734863,
+          "median_rank": 66.0,
+          "mean_rank": 103.99600219726562
+        },
+        "mean_recall_at_1": 0.015000000596046448,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 26,
+      "train_pair_loss": 2.130517650395632,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.05000000074505806,
+          "recall_at_10": 0.09600000083446503,
+          "median_rank": 87.0,
+          "mean_rank": 124.24600219726562
+        },
+        "text_to_image": {
+          "recall_at_1": 0.019999999552965164,
+          "recall_at_5": 0.07999999821186066,
+          "recall_at_10": 0.15800000727176666,
+          "median_rank": 63.0,
+          "mean_rank": 105.05599975585938
+        },
+        "mean_recall_at_1": 0.01699999999254942,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 27,
+      "train_pair_loss": 2.0085872672498226,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.07199999690055847,
+          "recall_at_10": 0.14399999380111694,
+          "median_rank": 72.0,
+          "mean_rank": 118.68199920654297
+        },
+        "text_to_image": {
+          "recall_at_1": 0.019999999552965164,
+          "recall_at_5": 0.07999999821186066,
+          "recall_at_10": 0.1459999978542328,
+          "median_rank": 61.0,
+          "mean_rank": 102.03800201416016
+        },
+        "mean_recall_at_1": 0.01699999999254942,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 28,
+      "train_pair_loss": 1.8524662144482136,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.00800000037997961,
+          "recall_at_5": 0.03400000184774399,
+          "recall_at_10": 0.06800000369548798,
+          "median_rank": 111.0,
+          "mean_rank": 143.8459930419922
+        },
+        "text_to_image": {
+          "recall_at_1": 0.004000000189989805,
+          "recall_at_5": 0.07400000095367432,
+          "recall_at_10": 0.1379999965429306,
+          "median_rank": 70.0,
+          "mean_rank": 108.7979965209961
+        },
+        "mean_recall_at_1": 0.006000000284984708,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 29,
+      "train_pair_loss": 1.7968101501464844,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.026000000536441803,
+          "recall_at_5": 0.07400000095367432,
+          "recall_at_10": 0.1120000034570694,
+          "median_rank": 83.0,
+          "mean_rank": 128.39199829101562
+        },
+        "text_to_image": {
+          "recall_at_1": 0.02199999988079071,
+          "recall_at_5": 0.09399999678134918,
+          "recall_at_10": 0.1420000046491623,
+          "median_rank": 66.0,
+          "mean_rank": 106.90799713134766
+        },
+        "mean_recall_at_1": 0.024000000208616257,
+        "candidate_images": 500
+      }
+    },
+    {
+      "epoch": 30,
+      "train_pair_loss": 1.7253036871552467,
+      "validation": {
+        "image_to_text": {
+          "recall_at_1": 0.009999999776482582,
+          "recall_at_5": 0.06599999964237213,
+          "recall_at_10": 0.13199999928474426,
+          "median_rank": 68.0,
+          "mean_rank": 115.66200256347656
+        },
+        "text_to_image": {
+          "recall_at_1": 0.014000000432133675,
+          "recall_at_5": 0.08399999886751175,
+          "recall_at_10": 0.14800000190734863,
+          "median_rank": 59.0,
+          "mean_rank": 103.02200317382812
+        },
+        "mean_recall_at_1": 0.012000000104308128,
+        "candidate_images": 500
+      }
+    }
+  ]
+}

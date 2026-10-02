@@ -1,0 +1,23 @@
+{
+  "scope": "one current C19 checkpoint and one real Dolly training row; no optimizer step or checkpoint modification",
+  "base": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+    "c19_selected_epoch": 4,
+    "c19_validation_nll": 5.816161129656105
+  },
+  "sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+  "device": "cuda",
+  "source_row": 3,
+  "category": "open_qa",
+  "prompt_tokens": 43,
+  "response_tokens": 9,
+  "visible_input_positions": 53,
+  "scored_response_plus_eos_targets": 10,
+  "first_scored_input_position": 43,
+  "first_scored_target_id": 54,
+  "first_scored_target_matches_response": true,
+  "response_only_nll_before_step": 6.986241817474365,
+  "gradient_global_norm": 13.316651689279507,
+  "optimizer_step_executed": false
+}

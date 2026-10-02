@@ -1,0 +1,74 @@
+{
+  "task": "architecture and visibility probe; no claim of translation quality",
+  "device": "cuda",
+  "torch": "2.11.0+cu128",
+  "source_manifest_sha256": "a593dfbb42532113302c012613df5a3ee22902d30d146ef2541497f1c7661b02",
+  "text_manifest_sha256": "ecea402a01a6c2f9a68057011daf0691d2f5421478ba86718e36b62e47df6eda",
+  "translation_shapes": {
+    "source": [
+      2,
+      6
+    ],
+    "target_input": [
+      2,
+      7
+    ],
+    "logits": [
+      2,
+      7,
+      8004
+    ],
+    "encoder_weights": [
+      2,
+      4,
+      6,
+      6
+    ],
+    "decoder_self_weights": [
+      2,
+      4,
+      7,
+      7
+    ],
+    "cross_weights": [
+      2,
+      4,
+      7,
+      6
+    ]
+  },
+  "decoder_future_change_earlier_logits_max_abs": 0.0,
+  "source_change_logits_max_abs": 0.5631259679794312,
+  "decoder_masked_weight_max_abs": 0.0,
+  "cross_padding_weight_max_abs": 0.0,
+  "decoder_weight_row_sum_max_error": 1.1920928955078125e-07,
+  "no_position_permutation_equivariance_max_error": 5.960464477539063e-08,
+  "position_signal_breaks_permutation_equivariance_max_abs": 0.09786522388458252,
+  "dot_score_variance_unscaled": 65.00702667236328,
+  "dot_score_variance_scaled": 1.0157347917556763,
+  "real_text_next_word_loss_before_step": 9.37332534790039,
+  "real_text_query_projection_gradient_norm": 1.2825976610183716,
+  "real_text_query_projection_parameter_max_change_after_step": 0.00010000169277191162,
+  "real_text_future_change_earlier_logits_max_abs": 0.0,
+  "real_text_first_19_ids": [
+    1,
+    1,
+    12,
+    3933,
+    4430,
+    853,
+    12,
+    3,
+    0,
+    129,
+    3933,
+    92,
+    45,
+    0,
+    4430,
+    25,
+    754,
+    45,
+    0
+  ]
+}

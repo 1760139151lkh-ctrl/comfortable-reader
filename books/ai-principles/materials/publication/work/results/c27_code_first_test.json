@@ -1,0 +1,890 @@
+{
+  "scope": "test opened once after validation-selected checkpoint; generated text interpreted only via restricted AST, no exec/eval; paraphrase and z variable fixed beforehand",
+  "task_manifest_sha256": "ccc917c77bb91c49047d51bc77e6e7f6aab80da297cc4f7947b613cae2b0b908",
+  "selected_checkpoint_sha256": "3fac03d6cf2d29102289b5fdafce64360e75015daccfed373c45a7ca4b1dedbd",
+  "selected_step": 1300,
+  "results": {
+    "start_c25_full_mix": {
+      "test_same_template_nll": {
+        "nll": 7.12341455078125,
+        "scored_response_and_eos_tokens": 250
+      },
+      "test_same_template_free": {
+        "records": 45,
+        "eos": 1,
+        "parseable": 0,
+        "allowed_ast": 0,
+        "passes_finite_tests": 0,
+        "symbolically_equivalent": 0,
+        "exact_canonical_text_and_eos": 0,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 16,
+            "expected": "n + 16",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 19,
+            "expected": "n + 19",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 23,
+            "expected": "n + 23",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 25,
+            "expected": "n + 25",
+            "generated": "The following are the most popular, the most popular, and the most popular",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              290,
+              263,
+              724,
+              1802
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 28,
+            "expected": "n + 28",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          }
+        ]
+      },
+      "test_paraphrase_free": {
+        "records": 45,
+        "eos": 11,
+        "parseable": 0,
+        "allowed_ast": 0,
+        "passes_finite_tests": 0,
+        "symbolically_equivalent": 0,
+        "exact_canonical_text_and_eos": 0,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 16,
+            "expected": "n + 16",
+            "generated": "2. The most popular of the world",
+            "eos": true,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              20,
+              16,
+              326,
+              724,
+              1802,
+              283,
+              263,
+              1341,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 19,
+            "expected": "n + 19",
+            "generated": "3. The most popular of the world",
+            "eos": true,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              21,
+              16,
+              326,
+              724,
+              1802,
+              283,
+              263,
+              1341,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 23,
+            "expected": "n + 23",
+            "generated": "2. The most popular of the world",
+            "eos": true,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              20,
+              16,
+              326,
+              724,
+              1802,
+              283,
+              263,
+              1341,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 25,
+            "expected": "n + 25",
+            "generated": "3. The most popular of the world",
+            "eos": true,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              21,
+              16,
+              326,
+              724,
+              1802,
+              283,
+              263,
+              1341,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 28,
+            "expected": "n + 28",
+            "generated": "2. The most popular, the world, the world, the world, the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              20,
+              16,
+              326,
+              724,
+              1802,
+              14,
+              263,
+              1341,
+              14,
+              263,
+              1341,
+              14,
+              263,
+              1341,
+              14,
+              263
+            ]
+          }
+        ]
+      },
+      "new_variable_z_free": {
+        "records": 12,
+        "eos": 0,
+        "parseable": 0,
+        "allowed_ast": 0,
+        "passes_finite_tests": 0,
+        "symbolically_equivalent": 0,
+        "exact_canonical_text_and_eos": 0,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 4,
+            "expected": "z + 4",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 11,
+            "expected": "z + 11",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 19,
+            "expected": "z + 19",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 27,
+            "expected": "z + 27",
+            "generated": "The following are the most popular, the most popular, the most of the",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              283,
+              263
+            ]
+          },
+          {
+            "family": "multiply",
+            "variable": "z",
+            "constant": 4,
+            "expected": "z * 4",
+            "generated": "The following are the most popular, the most popular, and the most of",
+            "eos": false,
+            "checks": {
+              "parseable": false,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              54,
+              260,
+              1214,
+              455,
+              263,
+              724,
+              1802,
+              14,
+              263,
+              724,
+              1802,
+              14,
+              290,
+              263,
+              724,
+              283
+            ]
+          }
+        ]
+      }
+    },
+    "selected_code_expression_sft": {
+      "test_same_template_nll": {
+        "nll": 4.339217412052676e-08,
+        "scored_response_and_eos_tokens": 250
+      },
+      "test_same_template_free": {
+        "records": 45,
+        "eos": 45,
+        "parseable": 45,
+        "allowed_ast": 45,
+        "passes_finite_tests": 45,
+        "symbolically_equivalent": 45,
+        "exact_canonical_text_and_eos": 45,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 16,
+            "expected": "n + 16",
+            "generated": "n + 16",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": true,
+              "symbolically_equivalent": true,
+              "polynomial": {
+                "1": 1,
+                "0": 16
+              }
+            },
+            "token_ids": [
+              80,
+              3629,
+              930,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 19,
+            "expected": "n + 19",
+            "generated": "n + 19",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": true,
+              "symbolically_equivalent": true,
+              "polynomial": {
+                "1": 1,
+                "0": 19
+              }
+            },
+            "token_ids": [
+              80,
+              3629,
+              388,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 23,
+            "expected": "n + 23",
+            "generated": "n + 23",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": true,
+              "symbolically_equivalent": true,
+              "polynomial": {
+                "1": 1,
+                "0": 23
+              }
+            },
+            "token_ids": [
+              80,
+              3629,
+              1690,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 25,
+            "expected": "n + 25",
+            "generated": "n + 25",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": true,
+              "symbolically_equivalent": true,
+              "polynomial": {
+                "1": 1,
+                "0": 25
+              }
+            },
+            "token_ids": [
+              80,
+              3629,
+              1346,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 28,
+            "expected": "n + 28",
+            "generated": "n + 28",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": true,
+              "symbolically_equivalent": true,
+              "polynomial": {
+                "1": 1,
+                "0": 28
+              }
+            },
+            "token_ids": [
+              80,
+              3629,
+              1815,
+              2
+            ]
+          }
+        ]
+      },
+      "test_paraphrase_free": {
+        "records": 45,
+        "eos": 45,
+        "parseable": 45,
+        "allowed_ast": 45,
+        "passes_finite_tests": 15,
+        "symbolically_equivalent": 15,
+        "exact_canonical_text_and_eos": 15,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 16,
+            "expected": "n + 16",
+            "generated": "n * 16",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false,
+              "polynomial": {
+                "1": 16
+              }
+            },
+            "token_ids": [
+              80,
+              223,
+              12,
+              930,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 19,
+            "expected": "n + 19",
+            "generated": "n * 19",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false,
+              "polynomial": {
+                "1": 19
+              }
+            },
+            "token_ids": [
+              80,
+              223,
+              12,
+              388,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 23,
+            "expected": "n + 23",
+            "generated": "n * 23",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false,
+              "polynomial": {
+                "1": 23
+              }
+            },
+            "token_ids": [
+              80,
+              223,
+              12,
+              1690,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 25,
+            "expected": "n + 25",
+            "generated": "n * 25",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false,
+              "polynomial": {
+                "1": 25
+              }
+            },
+            "token_ids": [
+              80,
+              223,
+              12,
+              1346,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "n",
+            "constant": 28,
+            "expected": "n + 28",
+            "generated": "n * 28",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": true,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false,
+              "polynomial": {
+                "1": 28
+              }
+            },
+            "token_ids": [
+              80,
+              223,
+              12,
+              1815,
+              2
+            ]
+          }
+        ]
+      },
+      "new_variable_z_free": {
+        "records": 12,
+        "eos": 12,
+        "parseable": 12,
+        "allowed_ast": 0,
+        "passes_finite_tests": 0,
+        "symbolically_equivalent": 0,
+        "exact_canonical_text_and_eos": 0,
+        "max_new_tokens": 16,
+        "examples": [
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 4,
+            "expected": "z + 4",
+            "generated": "value + 4",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              2368,
+              532,
+              3629,
+              558,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 11,
+            "expected": "z + 11",
+            "generated": "value + 11",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              2368,
+              532,
+              3629,
+              985,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 19,
+            "expected": "z + 19",
+            "generated": "value + 19",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              2368,
+              532,
+              3629,
+              388,
+              2
+            ]
+          },
+          {
+            "family": "add",
+            "variable": "z",
+            "constant": 27,
+            "expected": "z + 27",
+            "generated": "value + 27",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              2368,
+              532,
+              3629,
+              1939,
+              2
+            ]
+          },
+          {
+            "family": "multiply",
+            "variable": "z",
+            "constant": 4,
+            "expected": "z * 4",
+            "generated": "value * 4",
+            "eos": true,
+            "checks": {
+              "parseable": true,
+              "allowed_ast": false,
+              "passes_finite_tests": false,
+              "symbolically_equivalent": false
+            },
+            "token_ids": [
+              2368,
+              532,
+              223,
+              12,
+              558,
+              2
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "identity": "post-run exploratory input audit after seeing six-channel HAR posture errors; does not revise four-arm comparison",
+  "source_outer_sha256": "c00b803081a5c797cd5e4b83700a9810b38d53d9d84e01917e090e1fdbc81031",
+  "training_subject_ids": [
+    1,
+    5,
+    7,
+    8,
+    14,
+    15,
+    16,
+    17,
+    19,
+    21,
+    22,
+    23,
+    25,
+    26,
+    27,
+    28,
+    30
+  ],
+  "validation_subject_ids": [
+    3,
+    6,
+    11,
+    29
+  ],
+  "official_test_subject_ids": [
+    2,
+    4,
+    9,
+    10,
+    12,
+    13,
+    18,
+    20,
+    24
+  ],
+  "classes_zero_based": {
+    "3": "SITTING",
+    "4": "STANDING"
+  },
+  "feature": "mean of each of three axes across the official 128-step preprocessed window",
+  "classifier": "StandardScaler from training subjects + LogisticRegression C=1, lbfgs",
+  "conditions": {
+    "body_acc_mean": {
+      "train": {
+        "correct": 1184,
+        "total": 2210,
+        "accuracy": 0.5357466063348416,
+        "confusion_true_sitting_standing": [
+          [
+            146,
+            920
+          ],
+          [
+            106,
+            1038
+          ]
+        ]
+      },
+      "validation": {
+        "correct": 255,
+        "total": 450,
+        "accuracy": 0.5666666666666667,
+        "confusion_true_sitting_standing": [
+          [
+            39,
+            181
+          ],
+          [
+            14,
+            216
+          ]
+        ]
+      },
+      "official_test_exploratory": {
+        "correct": 557,
+        "total": 1023,
+        "accuracy": 0.544477028347996,
+        "confusion_true_sitting_standing": [
+          [
+            84,
+            407
+          ],
+          [
+            59,
+            473
+          ]
+        ]
+      },
+      "train_class_mean_sitting": [
+        -0.0007979391375556588,
+        0.002670354675501585,
+        0.000672451569698751
+      ],
+      "train_class_mean_standing": [
+        0.00036388597800396383,
+        0.0005918517126701772,
+        0.00034562128712423146
+      ]
+    },
+    "total_acc_mean": {
+      "train": {
+        "correct": 1884,
+        "total": 2210,
+        "accuracy": 0.8524886877828054,
+        "confusion_true_sitting_standing": [
+          [
+            873,
+            193
+          ],
+          [
+            133,
+            1011
+          ]
+        ]
+      },
+      "validation": {
+        "correct": 405,
+        "total": 450,
+        "accuracy": 0.9,
+        "confusion_true_sitting_standing": [
+          [
+            206,
+            14
+          ],
+          [
+            31,
+            199
+          ]
+        ]
+      },
+      "official_test_exploratory": {
+        "correct": 827,
+        "total": 1023,
+        "accuracy": 0.8084066471163245,
+        "confusion_true_sitting_standing": [
+          [
+            373,
+            118
+          ],
+          [
+            78,
+            454
+          ]
+        ]
+      },
+      "train_class_mean_sitting": [
+        0.9466305375099182,
+        0.13958244025707245,
+        0.15211744606494904
+      ],
+      "train_class_mean_standing": [
+        0.9997217059135437,
+        -0.16191136837005615,
+        -0.04638925567269325
+      ]
+    }
+  }
+}

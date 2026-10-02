@@ -1,0 +1,163 @@
+{
+  "purpose": "classroom word-internal byte BPE only; main word LM still uses top-10k word vocabulary",
+  "source_training_file_sha256": "e83889baabc497075506f91975be5fac0d45c5290b6b20582c8cd1e853d0c9f7",
+  "vocab_sha256": "f715a5167532a6c35d66ab9f0cc9ea3c6b7db794f5d20d70d2242d3c4cc4923e",
+  "input_field_rule": "Python split on supplied WikiText spacing; training merge counts only alphabetic fields, no cross-word merges",
+  "training_alpha_word_types_total": 72485,
+  "training_alpha_token_occurrences": 1663437,
+  "types_used_to_learn_merges": 30000,
+  "learned_merges": 256,
+  "base_utf8_byte_symbols": 256,
+  "possible_symbols_after_merges": 512,
+  "merge_file": "data/wikitext2_raw/word_internal_byte_merges.json",
+  "merge_file_sha256": "e326d9602f160ea57eeefff8dc2281c2d2a6120186315522db3167bb29aad112",
+  "first_ten_merges": [
+    {
+      "rank": 0,
+      "pair": [
+        116,
+        104
+      ],
+      "new_id": 256,
+      "weighted_count": 195202,
+      "bytes_hex": "7468"
+    },
+    {
+      "rank": 1,
+      "pair": [
+        105,
+        110
+      ],
+      "new_id": 257,
+      "weighted_count": 152157,
+      "bytes_hex": "696e"
+    },
+    {
+      "rank": 2,
+      "pair": [
+        256,
+        101
+      ],
+      "new_id": 258,
+      "weighted_count": 137129,
+      "bytes_hex": "746865"
+    },
+    {
+      "rank": 3,
+      "pair": [
+        97,
+        110
+      ],
+      "new_id": 259,
+      "weighted_count": 125976,
+      "bytes_hex": "616e"
+    },
+    {
+      "rank": 4,
+      "pair": [
+        101,
+        114
+      ],
+      "new_id": 260,
+      "weighted_count": 119690,
+      "bytes_hex": "6572"
+    },
+    {
+      "rank": 5,
+      "pair": [
+        111,
+        110
+      ],
+      "new_id": 261,
+      "weighted_count": 106015,
+      "bytes_hex": "6f6e"
+    },
+    {
+      "rank": 6,
+      "pair": [
+        101,
+        100
+      ],
+      "new_id": 262,
+      "weighted_count": 91128,
+      "bytes_hex": "6564"
+    },
+    {
+      "rank": 7,
+      "pair": [
+        114,
+        101
+      ],
+      "new_id": 263,
+      "weighted_count": 81655,
+      "bytes_hex": "7265"
+    },
+    {
+      "rank": 8,
+      "pair": [
+        97,
+        116
+      ],
+      "new_id": 264,
+      "weighted_count": 77691,
+      "bytes_hex": "6174"
+    },
+    {
+      "rank": 9,
+      "pair": [
+        111,
+        114
+      ],
+      "new_id": 265,
+      "weighted_count": 71634,
+      "bytes_hex": "6f72"
+    }
+  ],
+  "validation_word_unseen_by_top10k": {
+    "original_field": "Homarus",
+    "word_level_mapping": "<unk>",
+    "utf8_byte_count": 7,
+    "bpe_piece_ids": [
+      72,
+      290,
+      269,
+      321
+    ],
+    "bpe_piece_hex": [
+      "48",
+      "6f6d",
+      "6172",
+      "7573"
+    ],
+    "decoded": "Homarus"
+  },
+  "source_line_row": 3,
+  "source_line_first_18_fields": [
+    "Senjō",
+    "no",
+    "Valkyria",
+    "3",
+    ":",
+    "Unrecorded",
+    "Chronicles",
+    "(",
+    "Japanese",
+    ":",
+    "戦場のヴァルキュリア3",
+    ",",
+    "lit",
+    ".",
+    "Valkyria",
+    "of",
+    "the",
+    "Battlefield"
+  ],
+  "source_line_first_18_field_counts": {
+    "space_separated_fields": 18,
+    "unicode_codepoints_inside_fields": 87,
+    "utf8_bytes_inside_fields": 108,
+    "learned_bpe_pieces_inside_fields": 83
+  },
+  "time_seconds": 11.85822619998362,
+  "scope_note": "Can reconstruct individual original fields, not exact original inter-field spaces or article markup; does not claim GPT byte-level BPE identity or compare word/char/BPE perplexities."
+}

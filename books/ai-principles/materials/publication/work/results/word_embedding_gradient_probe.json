@@ -1,0 +1,41 @@
+{
+  "context_ids": [
+    1,
+    1
+  ],
+  "target_id": 2,
+  "meaning": "同一编号1在两个输入位置被查两次，只更新一次共享的矩阵行；编号2虽是目标，并未作为上下文嵌入行被查。",
+  "probabilities": [
+    0.24448763325639208,
+    0.24403426556136673,
+    0.2588361194247388,
+    0.2526419817575024
+  ],
+  "loss_before": 1.351560161083099,
+  "output_score_gradient": [
+    0.24448763325639208,
+    0.24403426556136673,
+    -0.7411638805752612,
+    0.2526419817575024
+  ],
+  "first_use_embedding_gradient": [
+    -0.14967772154248396,
+    0.22245107553250099
+  ],
+  "second_use_embedding_gradient": [
+    -0.11484017463339415,
+    -0.2614196360040407
+  ],
+  "shared_embedding_row_gradient": [
+    -0.2645178961758781,
+    -0.03896856047153974
+  ],
+  "torch_shared_embedding_row_gradient": [
+    -0.2645178961758782,
+    -0.03896856047153971
+  ],
+  "largest_manual_autograd_difference": 5.551115123125783e-17,
+  "absent_input_row_gradient_norm": 0.0,
+  "loss_after_only_embedding_row_sgd_step": 1.3444470579029522,
+  "learning_rate": 0.1
+}

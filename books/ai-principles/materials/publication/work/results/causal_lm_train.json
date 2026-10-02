@@ -1,0 +1,52 @@
+{
+  "scope": "full C18 train and validation blocks, from random weights; no test opened",
+  "c18_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "config": {
+    "vocab": 8192,
+    "context": 128,
+    "width": 192,
+    "heads": 4,
+    "inner": 768,
+    "layers": 4,
+    "batch_size": 64,
+    "epochs": 4,
+    "warmup_steps": 100,
+    "peak_lr": 0.0003,
+    "final_lr": 1e-05,
+    "beta1": 0.9,
+    "beta2": 0.95,
+    "eps": 1e-08,
+    "weight_decay": 0.01,
+    "clip_norm": 1.0,
+    "seed": 20260924,
+    "diagnostic_train_blocks": 1024,
+    "checkpoint_interval_steps": 100
+  },
+  "parameters": 4930304,
+  "completed_epochs": 4,
+  "planned_epochs": 4,
+  "global_steps": 1336,
+  "best_epoch": 4,
+  "best_validation_nll": 5.816161129656105,
+  "best_validation_perplexity": 335.6809413984825,
+  "validation_unigram_baseline": {
+    "nll": 7.186877239801432,
+    "perplexity": 1321.96856240712,
+    "targets": 284331,
+    "rule": "training target counts +1 Laplace smoothing; no context"
+  },
+  "latest_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "best_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+  "test_opened": false,
+  "elapsed_seconds_this_invocation": 31.844408500008285,
+  "peak_gpu_allocated_bytes_this_invocation": 1364632064,
+  "environment": {
+    "python": "3.13.14",
+    "torch": "2.11.0+cu128",
+    "numpy": "2.4.6",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 5090 Laptop GPU",
+    "gpu_total_bytes": 25650855936,
+    "bf16_supported": true
+  }
+}

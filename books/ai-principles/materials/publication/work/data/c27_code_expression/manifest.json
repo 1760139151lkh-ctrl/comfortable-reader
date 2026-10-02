@@ -1,0 +1,40 @@
+{
+  "task": "short Python arithmetic expression in one variable; add, multiply, double then add",
+  "source": "author-generated exact specification, canonical demonstration expressions",
+  "checkpoint_start": "C19 random WikiText pretraining then C25 Dolly full-mix SFT",
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "context_limit": 128,
+  "max_sequence_length": 52,
+  "splits": {
+    "train": {
+      "records": 189,
+      "sha256": "e722ae61b5d880eb2e29218ceddd463618c3d7673375aeffafc1b3331d8d12c7"
+    },
+    "validation": {
+      "records": 36,
+      "sha256": "ba08da720ac852c2b59539c3aecb0a2751c00c6870090c7d7e11b6752541914d"
+    },
+    "test": {
+      "records": 45,
+      "sha256": "9d02727f0042f6bb4376ccffb534b99ca20459e686799339ae3a057e9dcb4b2a"
+    }
+  },
+  "split_rule": "within each family and variable, SHA-order constants 21/4/5",
+  "validation_inputs": [
+    -5,
+    -2,
+    0,
+    1,
+    4,
+    9
+  ],
+  "heldout_test_inputs": [
+    -11,
+    -3,
+    2,
+    5,
+    13
+  ],
+  "evaluation": "free greedy code text; AST whitelist Add/Mult/Name/Int, finite tests, polynomial coefficients",
+  "test_policy": "train/probe read only train and validation; evaluate opens test after validation-selected checkpoint"
+}

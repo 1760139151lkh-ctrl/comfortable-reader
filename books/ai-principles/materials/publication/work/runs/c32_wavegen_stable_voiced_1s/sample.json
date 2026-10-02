@@ -1,0 +1,21 @@
+{
+  "identity": "frozen next-sample GRU conditioned on 128 samples from a validation-chapter voice; no text-to-speech",
+  "train_report_sha256": "db211f3be8167b3534b5a52aa322a9675a4ebcaadba974bd3501799f65aca0a3",
+  "checkpoint_sha256": "03b7bcab7e68167c78e6beaff9e3dd56ed8c433b0646a72e0ed7f7ecd7be6acc",
+  "source_archive_sha256": "76f87d090650617fca0cac8f88b9416e0ebf80350acb97b343a85fa903728ab3",
+  "prefix_clip_id": "1272-135031-0000",
+  "prefix_original_split": "train",
+  "prefix_wavegen_partition": "validation",
+  "prefix_begin_seconds": 6.504,
+  "prefix_samples": 128,
+  "generated_samples": 8000,
+  "generated_sample_rate": 8000,
+  "temperature": 0.9,
+  "top_k": 64,
+  "generated_wall_seconds": 1.7171009000157937,
+  "generated_rms_after_prefix": 0.04893319768390449,
+  "real_reference_rms_after_prefix": 0.06879976391792297,
+  "generated_distinct_codes": 212,
+  "figure_sha256": "827aaa1c34b297c4391577bb40ea441f15b8f26239a1785e9326f8bb0ac9b13f",
+  "limitation": "sample-level likelihood and a visible/audible output do not certify intelligible words, speaker identity, or text-controlled synthesis"
+}

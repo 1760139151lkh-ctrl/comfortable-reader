@@ -1,0 +1,26 @@
+{
+  "scope": "four actual separate Python processes on author-synthetic user statements and copied C39 artifact; not a human memory study",
+  "phase_receipts": [
+    "phase1_receipt.json",
+    "phase2_receipt.json",
+    "phase3_receipt.json",
+    "phase4_receipt.json"
+  ],
+  "results": {
+    "session2_recovered_old_theme": true,
+    "fresh_process_recovered_unpredictable_marker": true,
+    "correction_changed_theme": true,
+    "later_room_expired": true,
+    "copied_c39_source_drift_held": true,
+    "user_deleted_active_theme": true,
+    "original_c39_note_unchanged": true
+  },
+  "final_status": {
+    "theme": "deleted",
+    "room": "expired_hold",
+    "c39_fact": "source_changed_hold"
+  },
+  "active_db_sha256": "87502022aa7734dfc810b85f6d3451d34a1e2f914e35ea82e9da0fc4a34c15ac",
+  "original_c39_note_sha256": "e18ebeed0a9d7a3855c5b6511011c355bc045d11402751144c0c3a5f8b6cd056",
+  "limitations": "source changes/expiry stop current use; synthetic correction/deletion affects this active DB and two own source files only. Prior phase receipts intentionally remain and may contain old fictional values; no parameter unlearning or global erase."
+}

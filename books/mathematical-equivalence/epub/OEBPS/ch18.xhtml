@@ -1,0 +1,99 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十六章　翻译、编码与归约</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第十六章-翻译编码与归约">第十六章　翻译、编码与归约</h2>
+<h3 id="161-五种箭头不能混叫等价">16.1 五种箭头，不能混叫“等价”</h3>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>一般形状</th>
+<th>需要报告的内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>句子逻辑蕴涵</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>⊧</mo><mi>A</mi><mo>→</mo><mi>B</mi></mrow></math></span></td>
+<td>语言、语义、背景</td>
+</tr>
+<tr>
+<td>可证明蕴涵</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>S</mi><mo>+</mo><mi>A</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mi>B</mi></mrow></math></span></td>
+<td>理论与演算</td>
+</tr>
+<tr>
+<td>定义翻译</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>τ</mi><mi>:</mi><msub><mi>L</mi><mn>1</mn></msub><mo>→</mo><msub><mi>L</mi><mn>2</mn></msub></mrow></math></span></td>
+<td>符号怎样递归翻译</td>
+</tr>
+<tr>
+<td>实例归约</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>I</mi><mo>↦</mo><mi>f</mi><mo stretchy="false">(</mo><mi>I</mi><mo stretchy="false">)</mo></mrow></math></span></td>
+<td>输入、解/witness、保留的性质</td>
+</tr>
+<tr>
+<td>类比/共同主题</td>
+<td>非形式箭头</td>
+<td>只能说明启发，不能当证明</td>
+</tr>
+</tbody>
+</table>
+<p>双向归约也不是自动的逻辑等价；还必须说明两个方向是否保持可行性、最优值、复杂度或证据。</p>
+<h3 id="162-一张负责任的组合数学关系网">16.2 一张负责任的组合数学关系网</h3>
+<p>对 Hall、König、Menger、最大流最小割、Birkhoff–von Neumann 和 Dilworth，应先固定版本：</p>
+<table>
+<thead>
+<tr>
+<th>结果</th>
+<th>一个准确版本</th>
+<th>关系类型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hall</td>
+<td>有限二分图中覆盖左侧匹配的邻域条件</td>
+<td>匹配存在的充要条件</td>
+</tr>
+<tr>
+<td>König–Egerváry</td>
+<td>有限二分图中最大匹配数 = 最小顶点覆盖数</td>
+<td>min–max 对偶</td>
+</tr>
+<tr>
+<td>Menger</td>
+<td>有限图中不交路径与最小分离集的 min–max</td>
+<td>路径–割对偶；有边/点版本</td>
+</tr>
+<tr>
+<td>最大流最小割</td>
+<td>有向容量网络中最大流值 = 最小割容量</td>
+<td>流–割对偶</td>
+</tr>
+<tr>
+<td>Birkhoff–von Neumann</td>
+<td>有限阶双随机矩阵是置换矩阵凸组合</td>
+<td>矩阵分解</td>
+</tr>
+<tr>
+<td>Dilworth</td>
+<td>有限偏序集的最小链分解数 = 最大反链大小</td>
+<td>偏序 min–max</td>
+</tr>
+</tbody>
+</table>
+<p>“König 定理”本身有多个不同结果；此处特指 König–Egerváry 定理。每项的有限性、图类别和对象类型都不可省略。</p>
+<p>它们之间有很多有价值的证明路线。例如：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Hall</mtext><munderover><mstyle scriptlevel="0"><mo>←</mo></mstyle><mpadded height="-.2em" lspace="0.556em" voffset="-.2em" width="+0.833em"><mrow><mtext>割分析</mtext></mrow><mspace depth=".25em"/></mpadded><mpadded height="-.2em" lspace="0.556em" voffset="-.2em" width="+0.833em"><mrow><mtext>二分图网络化</mtext></mrow><mspace depth=".25em"/></mpadded></munderover><mtext>最大流最小割</mtext><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Birkhoff--von Neumann</mtext><mover><mstyle scriptlevel="0"><mo>←</mo></mstyle><mpadded height="-.2em" lspace="0.556em" voffset="-.2em" width="+0.833em"><mrow><mtext>支撑二分图 + Hall</mtext></mrow><mspace depth=".25em"/></mpadded></mover><mtext>完美匹配</mtext><mo>,</mo></mrow></math></div>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mtext>Dilworth（有限版）</mtext><mover><mstyle scriptlevel="0"><mo>←</mo></mstyle><mpadded height="-.2em" lspace="0.556em" voffset="-.2em" width="+0.833em"><mrow><mtext>偏序的二分图构造</mtext></mrow><mspace depth=".25em"/></mpadded></mover><mtext>二分图匹配</mtext><mo>.</mo></mrow></math></div>
+<p>这些箭头表示“用右边的方法可证明或处理左边的某个版本”，并不声称六个定理两两同一或在同一弱理论上都可证明等价。</p>
+<h3 id="163-如何审计一根箭头">16.3 如何审计一根箭头</h3>
+<p>每根关系箭头都填写五项：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mo stretchy="false">(</mo><mtext>对象/实例</mtext><mo>,</mo><mi>\
+</mi><mtext>版本与假设</mtext><mo>,</mo><mi>\
+</mi><mtext>箭头类型</mtext><mo>,</mo><mi>\
+</mi><mtext>方向</mtext><mo>,</mo><mi>\
+</mi><mtext>保留性质</mtext><mo stretchy="false">)</mo><mo>.</mo></mrow></menclose></mrow></math></div>
+<p>这比写一张“所有定理互相等价”的漂亮图严格得多，也更能让读者真正复用证明。</p>
+<h1 id="第八编-诊断练习与答案">第八编　诊断、练习与答案</h1>
+</body></html>

@@ -1,0 +1,167 @@
+{"action": "call title(656)", "answer": "not found", "article_id": 656, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 656?"}
+{"action": "coral", "answer": "coral", "kind": "direct", "observation": null, "question": "Say exactly coral.", "template_id": 2, "word": "coral"}
+{"a": 91, "action": "call mul(91,26)", "answer": "2366", "b": 26, "kind": "multiply", "observation": "2366", "question": "Multiply 91 by 26."}
+{"a": 99, "action": "call mul(99,96)", "answer": "9504", "b": 96, "kind": "multiply", "observation": "9504", "question": "Multiply 99 by 96."}
+{"action": "call title(644)", "answer": "not found", "article_id": 644, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 644?"}
+{"action": "call title(643)", "answer": "not found", "article_id": 643, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 643?"}
+{"action": "call title(29)", "answer": "Forward Intelligence Team", "article_id": 29, "kind": "title", "observation": "Forward Intelligence Team", "question": "What is the title of WikiText article 29?"}
+{"a": 22, "action": "call mul(22,26)", "answer": "572", "b": 26, "kind": "multiply", "observation": "572", "question": "Multiply 22 by 26."}
+{"action": "call title(93)", "answer": "World War Z", "article_id": 93, "kind": "title", "observation": "World War Z", "question": "What is the title of WikiText article 93?"}
+{"a": 19, "action": "call mul(19,47)", "answer": "893", "b": 47, "kind": "multiply", "observation": "893", "question": "Multiply 19 by 47."}
+{"a": 96, "action": "call mul(96,67)", "answer": "6432", "b": 67, "kind": "multiply", "observation": "6432", "question": "Multiply 96 by 67."}
+{"a": 35, "action": "call mul(35,87)", "answer": "3045", "b": 87, "kind": "multiply", "observation": "3045", "question": "Multiply 35 by 87."}
+{"a": 77, "action": "call mul(77,62)", "answer": "4774", "b": 62, "kind": "multiply", "observation": "4774", "question": "Multiply 77 by 62."}
+{"action": "call title(520)", "answer": "Cell nucleus", "article_id": 520, "kind": "title", "observation": "Cell nucleus", "question": "What is the title of WikiText article 520?"}
+{"a": 48, "action": "call mul(48,35)", "answer": "1680", "b": 35, "kind": "multiply", "observation": "1680", "question": "Multiply 48 by 35."}
+{"action": "call title(386)", "answer": "Invisible rail", "article_id": 386, "kind": "title", "observation": "Invisible rail", "question": "What is the title of WikiText article 386?"}
+{"action": "call title(574)", "answer": "Development of Fez", "article_id": 574, "kind": "title", "observation": "Development of Fez", "question": "What is the title of WikiText article 574?"}
+{"action": "call title(422)", "answer": "Blackburn Firecrest", "article_id": 422, "kind": "title", "observation": "Blackburn Firecrest", "question": "What is the title of WikiText article 422?"}
+{"action": "call title(664)", "answer": "not found", "article_id": 664, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 664?"}
+{"a": 55, "action": "call mul(55,48)", "answer": "2640", "b": 48, "kind": "multiply", "observation": "2640", "question": "Multiply 55 by 48."}
+{"action": "call title(0)", "answer": "Valkyria Chronicles III", "article_id": 0, "kind": "title", "observation": "Valkyria Chronicles III", "question": "What is the title of WikiText article 0?"}
+{"a": 51, "action": "call mul(51,18)", "answer": "918", "b": 18, "kind": "multiply", "observation": "918", "question": "Multiply 51 by 18."}
+{"a": 55, "action": "call mul(55,51)", "answer": "2805", "b": 51, "kind": "multiply", "observation": "2805", "question": "Multiply 55 by 51."}
+{"action": "call title(351)", "answer": "Blackwyche", "article_id": 351, "kind": "title", "observation": "Blackwyche", "question": "What is the title of WikiText article 351?"}
+{"action": "call title(423)", "answer": "Magadheera", "article_id": 423, "kind": "title", "observation": "Magadheera", "question": "What is the title of WikiText article 423?"}
+{"action": "call title(628)", "answer": "not found", "article_id": 628, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 628?"}
+{"a": 33, "action": "call mul(33,98)", "answer": "3234", "b": 98, "kind": "multiply", "observation": "3234", "question": "Multiply 33 by 98."}
+{"action": "blue", "answer": "blue", "kind": "direct", "observation": null, "question": "Repeat the word blue.", "template_id": 0, "word": "blue"}
+{"a": 63, "action": "call mul(63,20)", "answer": "1260", "b": 20, "kind": "multiply", "observation": "1260", "question": "Multiply 63 by 20."}
+{"a": 40, "action": "call mul(40,32)", "answer": "1280", "b": 32, "kind": "multiply", "observation": "1280", "question": "Multiply 40 by 32."}
+{"a": 83, "action": "call mul(83,90)", "answer": "7470", "b": 90, "kind": "multiply", "observation": "7470", "question": "Multiply 83 by 90."}
+{"action": "call title(241)", "answer": "Giacomo Meyerbeer", "article_id": 241, "kind": "title", "observation": "Giacomo Meyerbeer", "question": "What is the title of WikiText article 241?"}
+{"a": 29, "action": "call mul(29,95)", "answer": "2755", "b": 95, "kind": "multiply", "observation": "2755", "question": "Multiply 29 by 95."}
+{"a": 59, "action": "call mul(59,65)", "answer": "3835", "b": 65, "kind": "multiply", "observation": "3835", "question": "Multiply 59 by 65."}
+{"action": "ember", "answer": "ember", "kind": "direct", "observation": null, "question": "Say exactly ember.", "template_id": 2, "word": "ember"}
+{"action": "call title(457)", "answer": "Old Pine Church", "article_id": 457, "kind": "title", "observation": "Old Pine Church", "question": "What is the title of WikiText article 457?"}
+{"action": "meadow", "answer": "meadow", "kind": "direct", "observation": null, "question": "Repeat the word meadow.", "template_id": 0, "word": "meadow"}
+{"a": 80, "action": "call mul(80,20)", "answer": "1600", "b": 20, "kind": "multiply", "observation": "1600", "question": "Multiply 80 by 20."}
+{"action": "call title(652)", "answer": "not found", "article_id": 652, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 652?"}
+{"action": "blue", "answer": "blue", "kind": "direct", "observation": null, "question": "Copy the word blue.", "template_id": 1, "word": "blue"}
+{"action": "call title(6)", "answer": "Gregorian Tower", "article_id": 6, "kind": "title", "observation": "Gregorian Tower", "question": "What is the title of WikiText article 6?"}
+{"a": 75, "action": "call mul(75,51)", "answer": "3825", "b": 51, "kind": "multiply", "observation": "3825", "question": "Multiply 75 by 51."}
+{"action": "red", "answer": "red", "kind": "direct", "observation": null, "question": "Copy the word red.", "template_id": 1, "word": "red"}
+{"action": "call title(668)", "answer": "not found", "article_id": 668, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 668?"}
+{"a": 42, "action": "call mul(42,67)", "answer": "2814", "b": 67, "kind": "multiply", "observation": "2814", "question": "Multiply 42 by 67."}
+{"a": 10, "action": "call mul(10,98)", "answer": "980", "b": 98, "kind": "multiply", "observation": "980", "question": "Multiply 10 by 98."}
+{"a": 33, "action": "call mul(33,29)", "answer": "957", "b": 29, "kind": "multiply", "observation": "957", "question": "Multiply 33 by 29."}
+{"a": 93, "action": "call mul(93,33)", "answer": "3069", "b": 33, "kind": "multiply", "observation": "3069", "question": "Multiply 93 by 33."}
+{"a": 10, "action": "call mul(10,76)", "answer": "760", "b": 76, "kind": "multiply", "observation": "760", "question": "Multiply 10 by 76."}
+{"a": 53, "action": "call mul(53,95)", "answer": "5035", "b": 95, "kind": "multiply", "observation": "5035", "question": "Multiply 53 by 95."}
+{"a": 33, "action": "call mul(33,73)", "answer": "2409", "b": 73, "kind": "multiply", "observation": "2409", "question": "Multiply 33 by 73."}
+{"a": 15, "action": "call mul(15,82)", "answer": "1230", "b": 82, "kind": "multiply", "observation": "1230", "question": "Multiply 15 by 82."}
+{"a": 38, "action": "call mul(38,54)", "answer": "2052", "b": 54, "kind": "multiply", "observation": "2052", "question": "Multiply 38 by 54."}
+{"action": "call title(697)", "answer": "not found", "article_id": 697, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 697?"}
+{"a": 37, "action": "call mul(37,94)", "answer": "3478", "b": 94, "kind": "multiply", "observation": "3478", "question": "Multiply 37 by 94."}
+{"a": 86, "action": "call mul(86,72)", "answer": "6192", "b": 72, "kind": "multiply", "observation": "6192", "question": "Multiply 86 by 72."}
+{"a": 37, "action": "call mul(37,91)", "answer": "3367", "b": 91, "kind": "multiply", "observation": "3367", "question": "Multiply 37 by 91."}
+{"a": 67, "action": "call mul(67,56)", "answer": "3752", "b": 56, "kind": "multiply", "observation": "3752", "question": "Multiply 67 by 56."}
+{"action": "call title(518)", "answer": "Noisy miner", "article_id": 518, "kind": "title", "observation": "Noisy miner", "question": "What is the title of WikiText article 518?"}
+{"action": "cloud", "answer": "cloud", "kind": "direct", "observation": null, "question": "Copy the word cloud.", "template_id": 1, "word": "cloud"}
+{"a": 68, "action": "call mul(68,76)", "answer": "5168", "b": 76, "kind": "multiply", "observation": "5168", "question": "Multiply 68 by 76."}
+{"action": "call title(305)", "answer": "Arikamedu", "article_id": 305, "kind": "title", "observation": "Arikamedu", "question": "What is the title of WikiText article 305?"}
+{"a": 46, "action": "call mul(46,96)", "answer": "4416", "b": 96, "kind": "multiply", "observation": "4416", "question": "Multiply 46 by 96."}
+{"a": 80, "action": "call mul(80,48)", "answer": "3840", "b": 48, "kind": "multiply", "observation": "3840", "question": "Multiply 80 by 48."}
+{"a": 98, "action": "call mul(98,49)", "answer": "4802", "b": 49, "kind": "multiply", "observation": "4802", "question": "Multiply 98 by 49."}
+{"a": 66, "action": "call mul(66,90)", "answer": "5940", "b": 90, "kind": "multiply", "observation": "5940", "question": "Multiply 66 by 90."}
+{"a": 37, "action": "call mul(37,48)", "answer": "1776", "b": 48, "kind": "multiply", "observation": "1776", "question": "Multiply 37 by 48."}
+{"action": "call title(611)", "answer": "not found", "article_id": 611, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 611?"}
+{"action": "call title(267)", "answer": "Etymology of Wicca", "article_id": 267, "kind": "title", "observation": "Etymology of Wicca", "question": "What is the title of WikiText article 267?"}
+{"a": 27, "action": "call mul(27,39)", "answer": "1053", "b": 39, "kind": "multiply", "observation": "1053", "question": "Multiply 27 by 39."}
+{"a": 43, "action": "call mul(43,58)", "answer": "2494", "b": 58, "kind": "multiply", "observation": "2494", "question": "Multiply 43 by 58."}
+{"a": 41, "action": "call mul(41,18)", "answer": "738", "b": 18, "kind": "multiply", "observation": "738", "question": "Multiply 41 by 18."}
+{"a": 26, "action": "call mul(26,45)", "answer": "1170", "b": 45, "kind": "multiply", "observation": "1170", "question": "Multiply 26 by 45."}
+{"action": "call title(590)", "answer": "Canning Dam", "article_id": 590, "kind": "title", "observation": "Canning Dam", "question": "What is the title of WikiText article 590?"}
+{"a": 77, "action": "call mul(77,57)", "answer": "4389", "b": 57, "kind": "multiply", "observation": "4389", "question": "Multiply 77 by 57."}
+{"a": 40, "action": "call mul(40,17)", "answer": "680", "b": 17, "kind": "multiply", "observation": "680", "question": "Multiply 40 by 17."}
+{"a": 45, "action": "call mul(45,19)", "answer": "855", "b": 19, "kind": "multiply", "observation": "855", "question": "Multiply 45 by 19."}
+{"a": 68, "action": "call mul(68,26)", "answer": "1768", "b": 26, "kind": "multiply", "observation": "1768", "question": "Multiply 68 by 26."}
+{"action": "call title(50)", "answer": "Mortimer Wheeler", "article_id": 50, "kind": "title", "observation": "Mortimer Wheeler", "question": "What is the title of WikiText article 50?"}
+{"a": 67, "action": "call mul(67,87)", "answer": "5829", "b": 87, "kind": "multiply", "observation": "5829", "question": "Multiply 67 by 87."}
+{"action": "call title(413)", "answer": "The Goat Puzzle", "article_id": 413, "kind": "title", "observation": "The Goat Puzzle", "question": "What is the title of WikiText article 413?"}
+{"a": 59, "action": "call mul(59,31)", "answer": "1829", "b": 31, "kind": "multiply", "observation": "1829", "question": "Multiply 59 by 31."}
+{"a": 68, "action": "call mul(68,77)", "answer": "5236", "b": 77, "kind": "multiply", "observation": "5236", "question": "Multiply 68 by 77."}
+{"action": "call title(639)", "answer": "not found", "article_id": 639, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 639?"}
+{"a": 82, "action": "call mul(82,76)", "answer": "6232", "b": 76, "kind": "multiply", "observation": "6232", "question": "Multiply 82 by 76."}
+{"action": "call title(55)", "answer": "Joe Nathan", "article_id": 55, "kind": "title", "observation": "Joe Nathan", "question": "What is the title of WikiText article 55?"}
+{"a": 37, "action": "call mul(37,51)", "answer": "1887", "b": 51, "kind": "multiply", "observation": "1887", "question": "Multiply 37 by 51."}
+{"action": "call title(307)", "answer": "Typhoon Imbudo", "article_id": 307, "kind": "title", "observation": "Typhoon Imbudo", "question": "What is the title of WikiText article 307?"}
+{"a": 11, "action": "call mul(11,74)", "answer": "814", "b": 74, "kind": "multiply", "observation": "814", "question": "Multiply 11 by 74."}
+{"a": 32, "action": "call mul(32,84)", "answer": "2688", "b": 84, "kind": "multiply", "observation": "2688", "question": "Multiply 32 by 84."}
+{"action": "call title(478)", "answer": "Erving Goffman", "article_id": 478, "kind": "title", "observation": "Erving Goffman", "question": "What is the title of WikiText article 478?"}
+{"action": "call title(39)", "answer": "Wrapped in Red", "article_id": 39, "kind": "title", "observation": "Wrapped in Red", "question": "What is the title of WikiText article 39?"}
+{"a": 54, "action": "call mul(54,80)", "answer": "4320", "b": 80, "kind": "multiply", "observation": "4320", "question": "Multiply 54 by 80."}
+{"action": "call title(109)", "answer": "Fastra II", "article_id": 109, "kind": "title", "observation": "Fastra II", "question": "What is the title of WikiText article 109?"}
+{"a": 77, "action": "call mul(77,10)", "answer": "770", "b": 10, "kind": "multiply", "observation": "770", "question": "Multiply 77 by 10."}
+{"a": 65, "action": "call mul(65,18)", "answer": "1170", "b": 18, "kind": "multiply", "observation": "1170", "question": "Multiply 65 by 18."}
+{"action": "call title(593)", "answer": "Star", "article_id": 593, "kind": "title", "observation": "Star", "question": "What is the title of WikiText article 593?"}
+{"action": "call title(316)", "answer": "Lisa the Simpson", "article_id": 316, "kind": "title", "observation": "Lisa the Simpson", "question": "What is the title of WikiText article 316?"}
+{"action": "amber", "answer": "amber", "kind": "direct", "observation": null, "question": "Return amber.", "template_id": 3, "word": "amber"}
+{"action": "call title(662)", "answer": "not found", "article_id": 662, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 662?"}
+{"action": "call title(216)", "answer": "The Tramp Dentists", "article_id": 216, "kind": "title", "observation": "The Tramp Dentists", "question": "What is the title of WikiText article 216?"}
+{"a": 18, "action": "call mul(18,12)", "answer": "216", "b": 12, "kind": "multiply", "observation": "216", "question": "Multiply 18 by 12."}
+{"a": 48, "action": "call mul(48,50)", "answer": "2400", "b": 50, "kind": "multiply", "observation": "2400", "question": "Multiply 48 by 50."}
+{"a": 15, "action": "call mul(15,66)", "answer": "990", "b": 66, "kind": "multiply", "observation": "990", "question": "Multiply 15 by 66."}
+{"a": 97, "action": "call mul(97,35)", "answer": "3395", "b": 35, "kind": "multiply", "observation": "3395", "question": "Multiply 97 by 35."}
+{"action": "call title(368)", "answer": "Alice in Chains", "article_id": 368, "kind": "title", "observation": "Alice in Chains", "question": "What is the title of WikiText article 368?"}
+{"action": "call title(671)", "answer": "not found", "article_id": 671, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 671?"}
+{"a": 75, "action": "call mul(75,13)", "answer": "975", "b": 13, "kind": "multiply", "observation": "975", "question": "Multiply 75 by 13."}
+{"a": 28, "action": "call mul(28,51)", "answer": "1428", "b": 51, "kind": "multiply", "observation": "1428", "question": "Multiply 28 by 51."}
+{"action": "call title(552)", "answer": "Corythosaurus", "article_id": 552, "kind": "title", "observation": "Corythosaurus", "question": "What is the title of WikiText article 552?"}
+{"a": 49, "action": "call mul(49,30)", "answer": "1470", "b": 30, "kind": "multiply", "observation": "1470", "question": "Multiply 49 by 30."}
+{"a": 46, "action": "call mul(46,70)", "answer": "3220", "b": 70, "kind": "multiply", "observation": "3220", "question": "Multiply 46 by 70."}
+{"a": 48, "action": "call mul(48,72)", "answer": "3456", "b": 72, "kind": "multiply", "observation": "3456", "question": "Multiply 48 by 72."}
+{"action": "call title(86)", "answer": "Romanian Land Forces", "article_id": 86, "kind": "title", "observation": "Romanian Land Forces", "question": "What is the title of WikiText article 86?"}
+{"action": "call title(500)", "answer": "Mole cricket", "article_id": 500, "kind": "title", "observation": "Mole cricket", "question": "What is the title of WikiText article 500?"}
+{"action": "swan", "answer": "swan", "kind": "direct", "observation": null, "question": "Return swan.", "template_id": 3, "word": "swan"}
+{"a": 97, "action": "call mul(97,17)", "answer": "1649", "b": 17, "kind": "multiply", "observation": "1649", "question": "Multiply 97 by 17."}
+{"action": "call title(345)", "answer": "Norsk Spisevognselskap", "article_id": 345, "kind": "title", "observation": "Norsk Spisevognselskap", "question": "What is the title of WikiText article 345?"}
+{"a": 93, "action": "call mul(93,62)", "answer": "5766", "b": 62, "kind": "multiply", "observation": "5766", "question": "Multiply 93 by 62."}
+{"action": "call title(513)", "answer": "Bodyline", "article_id": 513, "kind": "title", "observation": "Bodyline", "question": "What is the title of WikiText article 513?"}
+{"a": 77, "action": "call mul(77,79)", "answer": "6083", "b": 79, "kind": "multiply", "observation": "6083", "question": "Multiply 77 by 79."}
+{"a": 93, "action": "call mul(93,42)", "answer": "3906", "b": 42, "kind": "multiply", "observation": "3906", "question": "Multiply 93 by 42."}
+{"a": 82, "action": "call mul(82,65)", "answer": "5330", "b": 65, "kind": "multiply", "observation": "5330", "question": "Multiply 82 by 65."}
+{"a": 28, "action": "call mul(28,14)", "answer": "392", "b": 14, "kind": "multiply", "observation": "392", "question": "Multiply 28 by 14."}
+{"action": "call title(451)", "answer": "Spanish Hill", "article_id": 451, "kind": "title", "observation": "Spanish Hill", "question": "What is the title of WikiText article 451?"}
+{"action": "call title(648)", "answer": "not found", "article_id": 648, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 648?"}
+{"a": 15, "action": "call mul(15,15)", "answer": "225", "b": 15, "kind": "multiply", "observation": "225", "question": "Multiply 15 by 15."}
+{"a": 58, "action": "call mul(58,82)", "answer": "4756", "b": 82, "kind": "multiply", "observation": "4756", "question": "Multiply 58 by 82."}
+{"action": "call title(296)", "answer": "Humpty Dumpty", "article_id": 296, "kind": "title", "observation": "Humpty Dumpty", "question": "What is the title of WikiText article 296?"}
+{"a": 66, "action": "call mul(66,61)", "answer": "4026", "b": 61, "kind": "multiply", "observation": "4026", "question": "Multiply 66 by 61."}
+{"action": "call title(94)", "answer": "Sentence spacing", "article_id": 94, "kind": "title", "observation": "Sentence spacing", "question": "What is the title of WikiText article 94?"}
+{"a": 54, "action": "call mul(54,49)", "answer": "2646", "b": 49, "kind": "multiply", "observation": "2646", "question": "Multiply 54 by 49."}
+{"action": "silver", "answer": "silver", "kind": "direct", "observation": null, "question": "Return silver.", "template_id": 3, "word": "silver"}
+{"a": 32, "action": "call mul(32,62)", "answer": "1984", "b": 62, "kind": "multiply", "observation": "1984", "question": "Multiply 32 by 62."}
+{"action": "call title(138)", "answer": "Leslie Andrew", "article_id": 138, "kind": "title", "observation": "Leslie Andrew", "question": "What is the title of WikiText article 138?"}
+{"a": 54, "action": "call mul(54,83)", "answer": "4482", "b": 83, "kind": "multiply", "observation": "4482", "question": "Multiply 54 by 83."}
+{"a": 12, "action": "call mul(12,93)", "answer": "1116", "b": 93, "kind": "multiply", "observation": "1116", "question": "Multiply 12 by 93."}
+{"a": 55, "action": "call mul(55,74)", "answer": "4070", "b": 74, "kind": "multiply", "observation": "4070", "question": "Multiply 55 by 74."}
+{"action": "call title(152)", "answer": "Protein", "article_id": 152, "kind": "title", "observation": "Protein", "question": "What is the title of WikiText article 152?"}
+{"action": "call title(380)", "answer": "Fernando Torres", "article_id": 380, "kind": "title", "observation": "Fernando Torres", "question": "What is the title of WikiText article 380?"}
+{"a": 92, "action": "call mul(92,29)", "answer": "2668", "b": 29, "kind": "multiply", "observation": "2668", "question": "Multiply 92 by 29."}
+{"a": 20, "action": "call mul(20,83)", "answer": "1660", "b": 83, "kind": "multiply", "observation": "1660", "question": "Multiply 20 by 83."}
+{"a": 36, "action": "call mul(36,72)", "answer": "2592", "b": 72, "kind": "multiply", "observation": "2592", "question": "Multiply 36 by 72."}
+{"a": 98, "action": "call mul(98,20)", "answer": "1960", "b": 20, "kind": "multiply", "observation": "1960", "question": "Multiply 98 by 20."}
+{"a": 82, "action": "call mul(82,38)", "answer": "3116", "b": 38, "kind": "multiply", "observation": "3116", "question": "Multiply 82 by 38."}
+{"a": 59, "action": "call mul(59,95)", "answer": "5605", "b": 95, "kind": "multiply", "observation": "5605", "question": "Multiply 59 by 95."}
+{"action": "call title(184)", "answer": "The Amps", "article_id": 184, "kind": "title", "observation": "The Amps", "question": "What is the title of WikiText article 184?"}
+{"a": 58, "action": "call mul(58,78)", "answer": "4524", "b": 78, "kind": "multiply", "observation": "4524", "question": "Multiply 58 by 78."}
+{"a": 21, "action": "call mul(21,13)", "answer": "273", "b": 13, "kind": "multiply", "observation": "273", "question": "Multiply 21 by 13."}
+{"a": 71, "action": "call mul(71,86)", "answer": "6106", "b": 86, "kind": "multiply", "observation": "6106", "question": "Multiply 71 by 86."}
+{"a": 71, "action": "call mul(71,92)", "answer": "6532", "b": 92, "kind": "multiply", "observation": "6532", "question": "Multiply 71 by 92."}
+{"action": "red", "answer": "red", "kind": "direct", "observation": null, "question": "Return red.", "template_id": 3, "word": "red"}
+{"a": 84, "action": "call mul(84,31)", "answer": "2604", "b": 31, "kind": "multiply", "observation": "2604", "question": "Multiply 84 by 31."}
+{"action": "call title(698)", "answer": "not found", "article_id": 698, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 698?"}
+{"a": 16, "action": "call mul(16,42)", "answer": "672", "b": 42, "kind": "multiply", "observation": "672", "question": "Multiply 16 by 42."}
+{"action": "call title(559)", "answer": "Cambodian Campaign", "article_id": 559, "kind": "title", "observation": "Cambodian Campaign", "question": "What is the title of WikiText article 559?"}
+{"a": 27, "action": "call mul(27,16)", "answer": "432", "b": 16, "kind": "multiply", "observation": "432", "question": "Multiply 27 by 16."}
+{"a": 80, "action": "call mul(80,74)", "answer": "5920", "b": 74, "kind": "multiply", "observation": "5920", "question": "Multiply 80 by 74."}
+{"a": 70, "action": "call mul(70,63)", "answer": "4410", "b": 63, "kind": "multiply", "observation": "4410", "question": "Multiply 70 by 63."}
+{"a": 44, "action": "call mul(44,54)", "answer": "2376", "b": 54, "kind": "multiply", "observation": "2376", "question": "Multiply 44 by 54."}
+{"action": "raven", "answer": "raven", "kind": "direct", "observation": null, "question": "Repeat the word raven.", "template_id": 0, "word": "raven"}
+{"a": 75, "action": "call mul(75,85)", "answer": "6375", "b": 85, "kind": "multiply", "observation": "6375", "question": "Multiply 75 by 85."}
+{"a": 38, "action": "call mul(38,66)", "answer": "2508", "b": 66, "kind": "multiply", "observation": "2508", "question": "Multiply 38 by 66."}
+{"a": 67, "action": "call mul(67,48)", "answer": "3216", "b": 48, "kind": "multiply", "observation": "3216", "question": "Multiply 67 by 48."}
+{"a": 48, "action": "call mul(48,43)", "answer": "2064", "b": 43, "kind": "multiply", "observation": "2064", "question": "Multiply 48 by 43."}
+{"action": "call title(609)", "answer": "not found", "article_id": 609, "kind": "missing", "observation": "NOT_FOUND", "question": "What is the title of WikiText article 609?"}
+{"a": 24, "action": "call mul(24,26)", "answer": "624", "b": 26, "kind": "multiply", "observation": "624", "question": "Multiply 24 by 26."}

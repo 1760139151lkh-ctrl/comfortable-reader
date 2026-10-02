@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>8. 一个最简单的例子</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="8-一个最简单的例子">8. 一个最简单的例子</h2>
+<p>假设要最小化：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>10</mn><mi>sin</mi><mi>x</mi><mi>;</mi><mo>−</mo><mn>10</mn><mo>≤</mo><mi>x</mi><mo>≤</mo><mn>10</mn><mo>.</mo></mrow></math></div>
+<p>这个函数存在多个局部最低点。一种朴素的群体搜索是：</p>
+<ol>
+<li>随机选取 100 个点；</li>
+<li>计算它们的函数值；</li>
+<li>保留表现最好的 20 个；</li>
+<li>从这 20 个点中抽取“父点”，在附近加入随机扰动；</li>
+<li>截断越界点，形成新的 100 个点；</li>
+<li>重复并始终保存历史最好点。</li>
+</ol>
+<p>扰动可以写成：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msubsup><mi>x</mi><mi>i</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msubsup><mo>=</mo><msub><mi>Π</mi><mrow><mo stretchy="false">[</mo><mo>−</mo><mn>10</mn><mo>,</mo><mn>10</mn><mo stretchy="false">]</mo></mrow></msub><mspace width="negativethinmathspace"/><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><msubsup><mi>x</mi><mrow><mtext>good</mtext></mrow><mi>t</mi></msubsup><mo>+</mo><msub><mi>σ</mi><mi>t</mi></msub><mi>ε</mi><mo fence="true" form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mi>ε</mi><mi>~</mi><mi>N</mi><mo stretchy="false">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>开始时让 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>σ</mi><mi>t</mi></msub></mrow></math></span> 较大，广泛探索；后来让它逐渐减小，精细搜索。这已经是一个非常朴素的智能优化算法了。它没有狼、鲸鱼或蚂蚁，但核心思想完全一致。</p>
+<p>要检验它是否真的有效，不能只展示最好的一次。应给不同算法相同的目标评价预算，独立运行多次，至少报告最好值、均值、标准差和运行时间；若已知理论最优值 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msup><mi>f</mi><mo>*</mo></msup></mrow></math></span>，还可报告</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>gap</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><msub><mi>x</mi><mrow><mrow><mi mathvariant="normal">b</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi></mrow></mrow></msub><mo stretchy="false">)</mo><mo>−</mo><msup><mi>f</mi><mo>*</mo></msup><mo>.</mo></mrow></math></div>
+<p>这样才能区分“偶然撞到一次好解”和“稳定地找到好解”。</p>
+<hr/>
+</body></html>

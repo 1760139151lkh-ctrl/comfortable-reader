@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "books": [
+    "measurement-lab",
+    "cooling-lab",
+    "observation-notes"
+  ],
+  "scope": "authoring_examples_only",
+  "releaseApproved": false
+}

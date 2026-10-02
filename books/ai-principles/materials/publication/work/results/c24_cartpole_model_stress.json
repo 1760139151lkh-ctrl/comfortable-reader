@@ -1,0 +1,429 @@
+{
+  "scope": "post-hoc diagnostic outside the random-trajectory training distribution: 16 predeclared near-angle-boundary state/action cases; no refit or model selection; internal Gymnasium state mutation used only here",
+  "gymnasium_version": "1.3.0",
+  "source_model_report": "work\\runs\\c24_world_model_trial.json",
+  "source_model_report_sha256": "9ed791b30e003452c18c8d863dbc33415da513b0d02bf749ec9a53216245905d",
+  "case_count": 16,
+  "mean_absolute_angle_error": 6.343860759622233e-09,
+  "max_absolute_angle_error": 6.756125076057273e-09,
+  "mean_absolute_angular_velocity_error": 0.004031170757144875,
+  "terminal_classification_disagreements": 0,
+  "cases": [
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        -0.18,
+        -1.5
+      ],
+      "action": 0,
+      "true_next": [
+        -0.019999999552965164,
+        -1.1925373077392578,
+        -0.20999999344348907,
+        -1.268494725227356
+      ],
+      "predicted_next": [
+        -0.019999999950133844,
+        -1.192739216032602,
+        -0.21000000014791384,
+        -1.264003421842575
+      ],
+      "absolute_pole_angle_error": 6.704424765358041e-09,
+      "absolute_angular_velocity_error": 0.004491303384780876,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        -0.18,
+        -1.5
+      ],
+      "action": 1,
+      "true_next": [
+        -0.019999999552965164,
+        -0.8032065033912659,
+        -0.20999999344348907,
+        -1.8430557250976562
+      ],
+      "predicted_next": [
+        -0.019999999967679538,
+        -0.8027272336171661,
+        -0.21000000019961415,
+        -1.8466267632271651
+      ],
+      "absolute_pole_angle_error": 6.756125076057273e-09,
+      "absolute_angular_velocity_error": 0.0035710381295088744,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        -0.18,
+        1.5
+      ],
+      "action": 0,
+      "true_next": [
+        -0.019999999552965164,
+        -1.1925373077392578,
+        -0.15000000596046448,
+        1.731505274772644
+      ],
+      "predicted_next": [
+        -0.020000000073758635,
+        -1.1924061739853693,
+        -0.14999999997716773,
+        1.7346575727492872
+      ],
+      "absolute_pole_angle_error": 5.983296746947531e-09,
+      "absolute_angular_velocity_error": 0.0031522979766431813,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        -0.18,
+        1.5
+      ],
+      "action": 1,
+      "true_next": [
+        -0.019999999552965164,
+        -0.8032065033912659,
+        -0.15000000596046448,
+        1.1569442749023438
+      ],
+      "predicted_next": [
+        -0.02000000009130433,
+        -0.8023941915699335,
+        -0.15000000002886804,
+        1.1520342313646972
+      ],
+      "absolute_pole_angle_error": 5.931596436248299e-09,
+      "absolute_angular_velocity_error": 0.004910043537646569,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        0.18,
+        -1.5
+      ],
+      "action": 0,
+      "true_next": [
+        -0.019999999552965164,
+        -1.1967934370040894,
+        0.15000000596046448,
+        -1.1569442749023438
+      ],
+      "predicted_next": [
+        -0.019999999865117635,
+        -1.1976299523580884,
+        0.14999999981455875,
+        -1.151238540389883
+      ],
+      "absolute_pole_angle_error": 6.145905728782708e-09,
+      "absolute_angular_velocity_error": 0.005705734512460703,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        0.18,
+        -1.5
+      ],
+      "action": 1,
+      "true_next": [
+        -0.019999999552965164,
+        -0.8074626922607422,
+        0.15000000596046448,
+        -1.731505274772644
+      ],
+      "predicted_next": [
+        -0.01999999988266333,
+        -0.8076179699426526,
+        0.14999999976285847,
+        -1.733861881774473
+      ],
+      "absolute_pole_angle_error": 6.197606011726364e-09,
+      "absolute_angular_velocity_error": 0.0023566070018290475,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        0.18,
+        1.5
+      ],
+      "action": 0,
+      "true_next": [
+        -0.019999999552965164,
+        -1.1967934370040894,
+        0.20999999344348907,
+        1.8430557250976562
+      ],
+      "predicted_next": [
+        -0.019999999988742426,
+        -1.1972969103108557,
+        0.20999999998530489,
+        1.8474224542019793
+      ],
+      "absolute_pole_angle_error": 6.54181581127844e-09,
+      "absolute_angular_velocity_error": 0.004366729104323008,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        -1.0,
+        0.18,
+        1.5
+      ],
+      "action": 1,
+      "true_next": [
+        -0.019999999552965164,
+        -0.8074626922607422,
+        0.20999999344348907,
+        1.268494725227356
+      ],
+      "predicted_next": [
+        -0.02000000000628812,
+        -0.80728492789542,
+        0.20999999993360458,
+        1.2647991128173892
+      ],
+      "absolute_pole_angle_error": 6.490115500579208e-09,
+      "absolute_angular_velocity_error": 0.003695612409966742,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        -0.18,
+        -1.5
+      ],
+      "action": 0,
+      "true_next": [
+        0.019999999552965164,
+        0.8074626922607422,
+        -0.20999999344348907,
+        -1.268494725227356
+      ],
+      "predicted_next": [
+        0.020000000008189793,
+        0.807284548397831,
+        -0.20999999993395338,
+        -1.264805009016512
+      ],
+      "absolute_pole_angle_error": 6.490464304897969e-09,
+      "absolute_angular_velocity_error": 0.0036897162108440185,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        -0.18,
+        -1.5
+      ],
+      "action": 1,
+      "true_next": [
+        0.019999999552965164,
+        1.1967934370040894,
+        -0.20999999344348907,
+        -1.8430557250976562
+      ],
+      "predicted_next": [
+        0.0199999999906441,
+        1.1972965308132668,
+        -0.2099999999856537,
+        -1.847428350401102
+      ],
+      "absolute_pole_angle_error": 6.542164615597201e-09,
+      "absolute_angular_velocity_error": 0.004372625303445732,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        -0.18,
+        1.5
+      ],
+      "action": 0,
+      "true_next": [
+        0.019999999552965164,
+        0.8074626922607422,
+        -0.15000000596046448,
+        1.731505274772644
+      ],
+      "predicted_next": [
+        0.019999999884565002,
+        0.8076175904450635,
+        -0.14999999976320727,
+        1.7338559855753504
+      ],
+      "absolute_pole_angle_error": 6.197257207407603e-09,
+      "absolute_angular_velocity_error": 0.002350710802706324,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        -0.18,
+        1.5
+      ],
+      "action": 1,
+      "true_next": [
+        0.019999999552965164,
+        1.1967934370040894,
+        -0.15000000596046448,
+        1.1569442749023438
+      ],
+      "predicted_next": [
+        0.019999999867019308,
+        1.1976295728604993,
+        -0.14999999981490755,
+        1.1512326441907603
+      ],
+      "absolute_pole_angle_error": 6.145556924463946e-09,
+      "absolute_angular_velocity_error": 0.005711630711583426,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        0.18,
+        -1.5
+      ],
+      "action": 0,
+      "true_next": [
+        0.019999999552965164,
+        0.8032065033912659,
+        0.15000000596046448,
+        -1.1569442749023438
+      ],
+      "predicted_next": [
+        0.020000000093206002,
+        0.8023938120723446,
+        0.15000000002851924,
+        -1.15204012756382
+      ],
+      "absolute_pole_angle_error": 5.93194524056706e-09,
+      "absolute_angular_velocity_error": 0.0049041473385238454,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        0.18,
+        -1.5
+      ],
+      "action": 1,
+      "true_next": [
+        0.019999999552965164,
+        1.1925373077392578,
+        0.15000000596046448,
+        -1.731505274772644
+      ],
+      "predicted_next": [
+        0.02000000007566031,
+        1.1924057944877804,
+        0.14999999997681893,
+        -1.73466346894841
+      ],
+      "absolute_pole_angle_error": 5.983645551266292e-09,
+      "absolute_angular_velocity_error": 0.003158194175765905,
+      "true_terminated": false,
+      "predicted_threshold_crossed": false,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        0.18,
+        1.5
+      ],
+      "action": 0,
+      "true_next": [
+        0.019999999552965164,
+        0.8032065033912659,
+        0.20999999344348907,
+        1.8430557250976562
+      ],
+      "predicted_next": [
+        0.01999999996958121,
+        0.8027268541195771,
+        0.21000000019926535,
+        1.8466208670280424
+      ],
+      "absolute_pole_angle_error": 6.755776271738512e-09,
+      "absolute_angular_velocity_error": 0.003565141930386151,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    },
+    {
+      "state_before": [
+        0.0,
+        1.0,
+        0.18,
+        1.5
+      ],
+      "action": 1,
+      "true_next": [
+        0.019999999552965164,
+        1.1925373077392578,
+        0.20999999344348907,
+        1.268494725227356
+      ],
+      "predicted_next": [
+        0.019999999952035517,
+        1.192738836535013,
+        0.21000000014756504,
+        1.2639975256434524
+      ],
+      "absolute_pole_angle_error": 6.70407596103928e-09,
+      "absolute_angular_velocity_error": 0.004497199583903599,
+      "true_terminated": true,
+      "predicted_threshold_crossed": true,
+      "truncated": false
+    }
+  ]
+}

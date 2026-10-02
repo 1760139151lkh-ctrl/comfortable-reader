@@ -1,0 +1,11 @@
+{
+  "identity": "Author-generated degree-preserving undirected edge rewire, not a real citation graph",
+  "original_edges": 5278,
+  "rewired_edges": 5278,
+  "swaps_requested": 52780,
+  "seed": 20260925,
+  "per_node_undirected_degree_preserved": true,
+  "edge_overlap_count": 42,
+  "original_sha256": "3af2a69256fba4df28597bb0a2711da3b473575fb04698fa6a03894e40a50667",
+  "rewired_sha256": "90c996fa74201e2684c47bfda02eb4ef1afbc0562a09741f964780644fb9d226"
+}

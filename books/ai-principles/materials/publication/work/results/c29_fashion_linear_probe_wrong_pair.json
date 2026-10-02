@@ -1,0 +1,150 @@
+{
+  "scope": "frozen random/contrast/masked and optional wrong-pair Fashion encoders; only linear head sees 500 labels per class after SSL. Official Fashion test was already seen by C13 and is reused, not fresh author blind.",
+  "source_identity": {
+    "c13_manifest_sha256": "0e99922a3f8f8e173e6c8cd9b35c71f8b7456f866353e865bb8f0df4d6421060",
+    "c13_split_sha256": "ac870595933df8a373507f0728aa2d275645e05ac53a052556995c49fe43ea9b",
+    "train_image_sha256": "3aede38d61863908ad78613f6a32ed271626dd12800ba2636569512369268a84",
+    "official_test_image_sha256": "346e55b948d973a97e58d2351dde16a484bd415d4595297633bb08f03db6a073"
+  },
+  "ssl_checkpoints": {
+    "contrast": "58fc9f8d09d012473056e23e39409e1d75e18434a9bdf7c3d5e24dce1bf049bd",
+    "masked_reconstruction": "e4cd72a9eb931a740e2b56a6b3bf897673bb5916204bfe254757ab7fe5ebeb5a",
+    "contrast_wrong_pair": "d6f16143b588605ba32566e17dc170901d11147cc1d1816ca888afd07037801a"
+  },
+  "official_label_sha256": {
+    "train-labels-idx1-ubyte.gz": "a04f17134ac03560a47e3764e11b92fc97de4d1bfaf8ba1a3aa29af54cc90845",
+    "t10k-labels-idx1-ubyte.gz": "67da17c76eaffca5446c3361aaab5c3cd6d1c2608764d35dfb1850b086bf8dd5"
+  },
+  "label_budget": "500 from each of 10 C13 training classes, selected after freezing; C13 validation chooses logistic C",
+  "results": {
+    "random_same_architecture": {
+      "labeled_train_count": 5000,
+      "validation_count": 10000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.7899,
+          "max_solver_iterations": 67
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.7995,
+          "max_solver_iterations": 122
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.7963,
+          "max_solver_iterations": 210
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.7879,
+          "max_solver_iterations": 275
+        }
+      ],
+      "selected_C": 0.1,
+      "validation_accuracy": 0.7995,
+      "feature_coordinate_std_mean_validation_raw": 0.011608239263296127,
+      "probe_feature_standardization": "mean/std fitted on frozen features of 500 labeled-train images per class, no validation/test fit",
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.7976
+    },
+    "contrast": {
+      "labeled_train_count": 5000,
+      "validation_count": 10000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.7878,
+          "max_solver_iterations": 60
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.8169,
+          "max_solver_iterations": 104
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.8273,
+          "max_solver_iterations": 212
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.8236,
+          "max_solver_iterations": 356
+        }
+      ],
+      "selected_C": 1.0,
+      "validation_accuracy": 0.8273,
+      "feature_coordinate_std_mean_validation_raw": 2.58335542678833,
+      "probe_feature_standardization": "mean/std fitted on frozen features of 500 labeled-train images per class, no validation/test fit",
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.8208
+    },
+    "masked_reconstruction": {
+      "labeled_train_count": 5000,
+      "validation_count": 10000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.4597,
+          "max_solver_iterations": 13
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.4877,
+          "max_solver_iterations": 30
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.5048,
+          "max_solver_iterations": 56
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.5104,
+          "max_solver_iterations": 82
+        }
+      ],
+      "selected_C": 10.0,
+      "validation_accuracy": 0.5104,
+      "feature_coordinate_std_mean_validation_raw": 0.03821554034948349,
+      "probe_feature_standardization": "mean/std fitted on frozen features of 500 labeled-train images per class, no validation/test fit",
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.5001
+    },
+    "contrast_wrong_pair": {
+      "labeled_train_count": 5000,
+      "validation_count": 10000,
+      "C_candidates": [
+        {
+          "C": 0.01,
+          "validation_accuracy": 0.7617,
+          "max_solver_iterations": 81
+        },
+        {
+          "C": 0.1,
+          "validation_accuracy": 0.8026,
+          "max_solver_iterations": 147
+        },
+        {
+          "C": 1.0,
+          "validation_accuracy": 0.8137,
+          "max_solver_iterations": 249
+        },
+        {
+          "C": 10.0,
+          "validation_accuracy": 0.8116,
+          "max_solver_iterations": 466
+        }
+      ],
+      "selected_C": 1.0,
+      "validation_accuracy": 0.8137,
+      "feature_coordinate_std_mean_validation_raw": 0.5522005558013916,
+      "probe_feature_standardization": "mean/std fitted on frozen features of 500 labeled-train images per class, no validation/test fit",
+      "official_test_count": 10000,
+      "official_test_accuracy": 0.8126
+    }
+  },
+  "labels_loaded_only_in_probe": true
+}

@@ -1,0 +1,23 @@
+{
+  "scope": "mathematical code check, not learned image capability",
+  "equal_512_view_loss": 6.236369590203707,
+  "log_511": 6.236369590203704,
+  "three_candidate_similarity": [
+    0.4,
+    -0.1,
+    0.2
+  ],
+  "positive_candidate_index": 1,
+  "temperature": 0.2,
+  "autograd_gradient": [
+    3.4483604306225177,
+    -4.716941338797643,
+    1.268580908175126
+  ],
+  "analytic_gradient": [
+    3.4483604306225177,
+    -4.716941338797643,
+    1.268580908175126
+  ],
+  "max_absolute_gradient_difference": 0.0
+}

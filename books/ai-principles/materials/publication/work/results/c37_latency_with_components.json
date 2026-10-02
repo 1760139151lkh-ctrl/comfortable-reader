@@ -1,0 +1,203 @@
+{
+  "identity": "same frozen C19 four-layer model; FP32 inference, no autocast, no optimizer",
+  "device": "cuda",
+  "selected_epoch": 4,
+  "measurement": "torch.inference_mode; GPU synchronize before and after every timed operation; median over seven repeats after three warmups except component probe 21 repeats; times may drift across sessions",
+  "single_request": {
+    "16": {
+      "prompt_tokens": 16,
+      "arms": {
+        "full": {
+          "repeats": 7,
+          "median_ms": 43.74550003558397,
+          "min_ms": 42.85980004351586,
+          "max_ms": 44.65359996538609,
+          "each_ms": [
+            44.65359996538609,
+            42.85980004351586,
+            43.74550003558397,
+            43.7606000341475,
+            43.749900069087744,
+            43.48330001812428,
+            43.690600083209574
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 0,
+          "output_tokens_per_second_median": 365.75190561280806
+        },
+        "cached": {
+          "repeats": 7,
+          "median_ms": 30.686000012792647,
+          "min_ms": 30.599699937738478,
+          "max_ms": 43.03019994404167,
+          "each_ms": [
+            30.657000024802983,
+            30.754700070247054,
+            30.60870000626892,
+            43.03019994404167,
+            30.686000012792647,
+            30.599699937738478,
+            31.087999930605292
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 0,
+          "output_tokens_per_second_median": 521.410414955673
+        }
+      },
+      "median_full_over_cached_speed_ratio": 1.4255849578748279
+    },
+    "64": {
+      "prompt_tokens": 64,
+      "arms": {
+        "full": {
+          "repeats": 7,
+          "median_ms": 43.73799997847527,
+          "min_ms": 43.23289997410029,
+          "max_ms": 43.9283000305295,
+          "each_ms": [
+            43.73799997847527,
+            43.9283000305295,
+            43.23289997410029,
+            43.832700001075864,
+            43.885699938982725,
+            43.66259998641908,
+            43.67610008921474
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 0,
+          "output_tokens_per_second_median": 365.8146236195999
+        },
+        "cached": {
+          "repeats": 7,
+          "median_ms": 31.099699903279543,
+          "min_ms": 30.876899953000247,
+          "max_ms": 31.35970002040267,
+          "each_ms": [
+            31.35970002040267,
+            31.099699903279543,
+            31.184299965389073,
+            30.997199937701225,
+            30.876899953000247,
+            31.32099995855242,
+            30.97030008211732
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 0,
+          "output_tokens_per_second_median": 514.4744177519461
+        }
+      },
+      "median_full_over_cached_speed_ratio": 1.4063801295350438
+    },
+    "120": {
+      "prompt_tokens": 120,
+      "arms": {
+        "full": {
+          "repeats": 7,
+          "median_ms": 50.54369999561459,
+          "min_ms": 43.66010008379817,
+          "max_ms": 59.23170002643019,
+          "each_ms": [
+            54.13379997480661,
+            43.71330002322793,
+            53.351599955931306,
+            59.23170002643019,
+            50.54369999561459,
+            43.66010008379817,
+            43.77089999616146
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 0,
+          "output_tokens_per_second_median": 316.55775104292394
+        },
+        "cached": {
+          "repeats": 7,
+          "median_ms": 33.144399989396334,
+          "min_ms": 32.904200023040175,
+          "max_ms": 33.37720001582056,
+          "each_ms": [
+            33.18180004134774,
+            32.96419989783317,
+            33.18080003373325,
+            32.904200023040175,
+            33.144399989396334,
+            33.04000000935048,
+            33.37720001582056
+          ],
+          "fixed_steps": 16,
+          "eos_id_occurrences_not_early_stopped_for_timing": 0,
+          "cache_rebuilds": 7,
+          "output_tokens_per_second_median": 482.73614864407784
+        }
+      },
+      "median_full_over_cached_speed_ratio": 1.5249544421315424
+    }
+  },
+  "prefill_and_one_decode": {
+    "16": {
+      "full_prompt_ms": 2.4198999162763357,
+      "cached_prompt_prefill_ms": 1.8541000317782164,
+      "next_full_prefix_ms": 2.5354999816045165,
+      "next_one_token_cached_ms": 1.7309000249952078,
+      "cached_KV_bytes_for_this_prompt": 98304
+    },
+    "64": {
+      "full_prompt_ms": 2.534399973228574,
+      "cached_prompt_prefill_ms": 1.9588000141084194,
+      "next_full_prefix_ms": 2.062799991108477,
+      "next_one_token_cached_ms": 1.2975999852642417,
+      "cached_KV_bytes_for_this_prompt": 393216
+    },
+    "120": {
+      "full_prompt_ms": 2.5479000760242343,
+      "cached_prompt_prefill_ms": 1.9753000233322382,
+      "next_full_prefix_ms": 2.548599964939058,
+      "next_one_token_cached_ms": 1.697800005786121,
+      "cached_KV_bytes_for_this_prompt": 737280
+    }
+  },
+  "eight_simultaneous_requests": {
+    "prompt_tokens_each": 16,
+    "new_steps_each": 16,
+    "serial_cached": {
+      "repeats": 7,
+      "median_ms": 256.9977999664843,
+      "min_ms": 250.71479997131974,
+      "max_ms": 294.15510001126677,
+      "each_ms": [
+        257.403300027363,
+        256.9977999664843,
+        250.71479997131974,
+        259.95109998621047,
+        294.15510001126677,
+        251.3845000648871,
+        251.5590999973938
+      ]
+    },
+    "one_equal_length_batch_cached": {
+      "repeats": 7,
+      "median_ms": 29.43380002398044,
+      "min_ms": 23.068199981935322,
+      "max_ms": 37.94970002491027,
+      "each_ms": [
+        30.03390005324036,
+        37.94970002491027,
+        32.668699976056814,
+        29.43380002398044,
+        27.610299992375076,
+        24.68690008390695,
+        23.068199981935322
+      ]
+    },
+    "serial_total_new_tokens_per_second": 498.05873831096136,
+    "batched_total_new_tokens_per_second": 4348.7419190085975,
+    "estimated_serial_p50_completion_ms_given_same_arrival": 144.56126248114742,
+    "estimated_serial_max_completion_ms_given_same_arrival": 256.9977999664843,
+    "batch_all_complete_ms_given_same_arrival": 29.43380002398044,
+    "warning": "fixed-step microbenchmark ignores early EOS and assumes 8 simultaneous arrivals/equal prompt and generation lengths; service scheduling/real traffic differ"
+  }
+}

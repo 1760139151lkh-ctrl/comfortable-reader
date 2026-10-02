@@ -1,0 +1,182 @@
+{
+  "data_manifest": "data/wikitext2_raw/manifest.json",
+  "data_manifest_sha256": "ecea402a01a6c2f9a68057011daf0691d2f5421478ba86718e36b62e47df6eda",
+  "vocab_sha256": "f715a5167532a6c35d66ab9f0cc9ea3c6b7db794f5d20d70d2242d3c4cc4923e",
+  "same_mapped_target_definition": "two preceding mapped words, BOS/BOS at each article start, EOS at article end; PARA inside",
+  "vocab_size": 10004,
+  "training_targets": 2063579,
+  "validation_targets": 215046,
+  "test_targets": 242531,
+  "architecture": {
+    "context_words": 2,
+    "embedding_dim": 64,
+    "hidden_dim": 128,
+    "nonlinearity": "tanh",
+    "output": "full-vocabulary logits/softmax",
+    "trainable_parameters": 1947284
+  },
+  "seed": 20260924,
+  "batch_size": 512,
+  "epochs": 5,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "selection": "lowest validation NLL; earlier epoch on tie",
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "torch_version": "2.11.0+cu128",
+  "python_version": "3.13.14",
+  "history": [
+    {
+      "epoch": 1,
+      "online_train_loss": 5.537778787236974,
+      "online_train_accuracy": 0.16988930397140115,
+      "validation": {
+        "targets": 215046,
+        "mean_nll_nats": 5.117332532166089,
+        "perplexity_on_mapped_vocabulary": 166.88960270393758,
+        "top1_accuracy_on_mapped_vocabulary": 0.20372385443114496,
+        "unknown_target_fraction": 0.1175422932767873,
+        "unknown_target_mean_nll": 2.204118076304391,
+        "known_target_mean_nll": 5.505369170993342
+      }
+    },
+    {
+      "epoch": 2,
+      "online_train_loss": 5.014202756778457,
+      "online_train_accuracy": 0.20587726469400977,
+      "validation": {
+        "targets": 215046,
+        "mean_nll_nats": 4.987608737689583,
+        "perplexity_on_mapped_vocabulary": 146.58547973068988,
+        "top1_accuracy_on_mapped_vocabulary": 0.21610725147177814,
+        "unknown_target_fraction": 0.1175422932767873,
+        "unknown_target_mean_nll": 2.1919025798884686,
+        "known_target_mean_nll": 5.359993423859849
+      }
+    },
+    {
+      "epoch": 3,
+      "online_train_loss": 4.842541983323938,
+      "online_train_accuracy": 0.21792041884512298,
+      "validation": {
+        "targets": 215046,
+        "mean_nll_nats": 4.938412186295061,
+        "perplexity_on_mapped_vocabulary": 139.54849654004033,
+        "top1_accuracy_on_mapped_vocabulary": 0.2214223933483999,
+        "unknown_target_fraction": 0.1175422932767873,
+        "unknown_target_mean_nll": 2.124916834257192,
+        "known_target_mean_nll": 5.313166342113346
+      }
+    },
+    {
+      "epoch": 4,
+      "online_train_loss": 4.736259236958295,
+      "online_train_accuracy": 0.2245210869077462,
+      "validation": {
+        "targets": 215046,
+        "mean_nll_nats": 4.914176866396502,
+        "perplexity_on_mapped_vocabulary": 136.20714696667312,
+        "top1_accuracy_on_mapped_vocabulary": 0.2219664629893139,
+        "unknown_target_fraction": 0.1175422932767873,
+        "unknown_target_mean_nll": 2.0651649299733563,
+        "known_target_mean_nll": 5.293661785445853
+      }
+    },
+    {
+      "epoch": 5,
+      "online_train_loss": 4.659272779103783,
+      "online_train_accuracy": 0.22874142448629298,
+      "validation": {
+        "targets": 215046,
+        "mean_nll_nats": 4.90980928949518,
+        "perplexity_on_mapped_vocabulary": 135.6135490137495,
+        "top1_accuracy_on_mapped_vocabulary": 0.22474726337620787,
+        "unknown_target_fraction": 0.1175422932767873,
+        "unknown_target_mean_nll": 2.1335237052341887,
+        "known_target_mean_nll": 5.279607118463513
+      }
+    }
+  ],
+  "chosen_epoch": 5,
+  "chosen_validation_nll": 4.90980928949518,
+  "test": {
+    "targets": 242531,
+    "mean_nll_nats": 4.8258273153096924,
+    "perplexity_on_mapped_vocabulary": 124.68958332427253,
+    "top1_accuracy_on_mapped_vocabulary": 0.2257154755474558,
+    "unknown_target_fraction": 0.1256746560233537,
+    "unknown_target_mean_nll": 2.140343289613098,
+    "known_target_mean_nll": 5.211836090995282
+  },
+  "first_batch_gradient_trace": {
+    "source_context_ids": [
+      2254,
+      6
+    ],
+    "source_context_tokens": [
+      "concrete",
+      "."
+    ],
+    "source_target_id": 15,
+    "source_target_token": "The",
+    "first_context_embedding_grad_norm": 0.00036132262903265655,
+    "absent_from_batch_embedding_grad_norm": 0.0,
+    "absent_from_batch_token": "<bos>",
+    "first_batch_loss": 9.245302200317383
+  },
+  "the_game_top_next_words": [
+    {
+      "token": "'s",
+      "probability": 0.16702714562416077
+    },
+    {
+      "token": ",",
+      "probability": 0.143019437789917
+    },
+    {
+      "token": ".",
+      "probability": 0.09944156557321548
+    },
+    {
+      "token": "was",
+      "probability": 0.07086183875799179
+    },
+    {
+      "token": "and",
+      "probability": 0.04102979972958565
+    },
+    {
+      "token": "of",
+      "probability": 0.027903426438570023
+    },
+    {
+      "token": "in",
+      "probability": 0.025547964498400688
+    },
+    {
+      "token": "with",
+      "probability": 0.02500126324594021
+    },
+    {
+      "token": "for",
+      "probability": 0.018019741401076317
+    },
+    {
+      "token": "<unk>",
+      "probability": 0.01704268902540207
+    },
+    {
+      "token": "to",
+      "probability": 0.015989884734153748
+    },
+    {
+      "token": "against",
+      "probability": 0.014996744692325592
+    }
+  ],
+  "checkpoint": "results/word_neural_lm_best.pt",
+  "checkpoint_sha256": "9895572e4b574d2fa0af68201ad58d4637f8b35969936c63efc2b3dac3913bbe",
+  "training_seconds_excluding_data_loading": 23.629886199953035,
+  "cuda_peak_allocated_mib": 217.55712890625,
+  "note": "one randomly initialized feedforward word LM, not 2003 paper replication or future random Transformer; unknown raw word targets map to UNK"
+}

@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第一章　有限元究竟在解决什么问题</title><link rel="stylesheet" href="style.css"/></head><body><h1 id="第一章-有限元究竟在解决什么问题">第一章　有限元究竟在解决什么问题</h1>
+<h2 id="11-从一个简单方程开始">1.1 从一个简单方程开始</h2>
+<p>考虑一根长度为 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mn>1</mn></mrow></math></span> 的细杆。两端固定，杆受到分布载荷 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span>，位移 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>u</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow></math></span> 满足</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>−</mo><msup><mi>u</mi><mi>″</mi></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>,</mo><mspace width="0.278em"/><mn>0</mn><mo>&lt;</mo><mi>x</mi><mo>&lt;</mo><mn>1</mn><mo>,</mo></mrow></math></div>
+<p>以及边界条件</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>u</mi><mo stretchy="false">(</mo><mn>0</mn><mo stretchy="false">)</mo><mo>=</mo><mi>u</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>如果 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span> 很简单，我们也许能写出精确公式。但现实问题通常同时具有以下特征：</p>
+<ul>
+<li>区域形状复杂；</li>
+<li>材料参数随位置变化；</li>
+<li>边界条件不统一；</li>
+<li>未知量依赖二维或三维空间；</li>
+<li>解析解根本不存在，或者即使存在也无法实际求出。</li>
+</ul>
+<p>于是目标不再是寻找一个漂亮的闭式公式，而是计算一个可以控制误差的近似解 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>u</mi><mi>h</mi></msub></mrow></math></span>。下标 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>h</mi></mrow></math></span> 表示这个近似与网格尺度有关。</p>
+<h2 id="12-最朴素的近似用折线代替曲线">1.2 最朴素的近似：用折线代替曲线</h2>
+<p>把区间分成许多小段：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mn>0</mn><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>&lt;</mo><msub><mi>x</mi><mn>1</mn></msub><mo>&lt;</mo><mo>⋯</mo><mo>&lt;</mo><msub><mi>x</mi><mi>n</mi></msub><mo>=</mo><mn>1</mn><mo>.</mo></mrow></math></div>
+<p>我们不再直接寻找整条未知曲线，而只记录节点上的数值，并在相邻节点之间用直线连接。原本需要确定无穷多个位置上的函数值，现在只需确定有限个系数。</p>
+<p>但麻烦马上出现：分段直线在每个小区间内部都有</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msup><msubsup><mi>u</mi><mi>h</mi><mi>′</mi></msubsup><mi>′</mi></msup><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>.</mo></mrow></math></div>
+<p>它显然无法逐点满足一般的方程 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>−</mo><msup><msubsup><mi>u</mi><mi>h</mi><mi>′</mi></msubsup><mi>′</mi></msup><mo>=</mo><mi>f</mi></mrow></math></span>。</p>
+<p>这说明一个关键事实：</p>
+<blockquote>
+<p>有限元不能先选分段直线，再把它硬塞回原来的强形式；必须先改变“满足方程”的方式。</p>
+</blockquote>
+<p>这就逼出了弱形式。</p>
+<hr/>
+</body></html>

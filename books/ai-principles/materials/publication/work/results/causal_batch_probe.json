@@ -1,0 +1,57 @@
+{
+  "experiment": "one real full block and one padded final block of the first training article",
+  "input_manifest_sha256": "3e5eaa53a9a7882ccadfba3652194d8d6f97c2b31b4a1395ba20af9f018dfef1",
+  "selected_block_indices": [
+    0,
+    39
+  ],
+  "article_index": 0,
+  "first_token_offsets": [
+    0,
+    4992
+  ],
+  "context_positions_each": 128,
+  "real_targets_each": [
+    128,
+    114
+  ],
+  "pad_slots_each": [
+    0,
+    14
+  ],
+  "first_inputs": [
+    1,
+    303,
+    7849,
+    3724,
+    6348,
+    658,
+    3052,
+    303
+  ],
+  "first_labels": [
+    303,
+    7849,
+    3724,
+    6348,
+    658,
+    3052,
+    303,
+    319
+  ],
+  "last_target_id": 2,
+  "forbidden_attention_weight_max": 0.0,
+  "random_initialization_mean_nll_per_real_target": 9.177063941955566,
+  "wrong_mean_if_pad_positions_counted": 8.675192832946777,
+  "valid_target_count": 242,
+  "input_and_label_masks_are_separate_roles": {
+    "real_readable_input_positions_after_masking_one_target": 242,
+    "loss_targets_after_masking_one_target": 241,
+    "correct_mean_over_remaining_targets": 9.179919242858887,
+    "wrong_mean_over_readable_inputs": 9.141985893249512,
+    "note": "首块第一项输入BOS仍可读，但其右邻目标暂不计损失；遮标签不等于删输入。"
+  },
+  "query_projection_gradient_norm": 0.34486913681030273,
+  "optimizer_step_executed": false,
+  "torch": "2.11.0+cu128"
+}

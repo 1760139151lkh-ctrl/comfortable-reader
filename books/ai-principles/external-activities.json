@@ -1,0 +1,90 @@
+[
+  {
+    "id": "lm-probe",
+    "title": "追踪一个真实 batch",
+    "chapter": "c19",
+    "reason": "活动需要未在公共版分发的 WikiText 原文本数组；源码与再现步骤保留，可在自己的合法资料上准备。",
+    "definition": {
+      "adapter_asset": "book-native-adapter",
+      "argv": [],
+      "editable": false,
+      "entry_asset": "asset-f49a9b6f03a9de87",
+      "input_assets": [
+        "asset-74a16ba3533ddeb9",
+        "asset-d76b8c386fc8395e",
+        "asset-8a7e9819cc82857c",
+        "asset-96b7d13cc3b01e33"
+      ],
+      "kind": "python-cli@1",
+      "monitor": {},
+      "parameters": {},
+      "requires": [
+        "numpy",
+        "tokenizers",
+        "torch"
+      ],
+      "requires_budget_approval": false,
+      "resume_files": [],
+      "schemaVersion": 1,
+      "timeout_seconds": 120
+    }
+  },
+  {
+    "id": "lm-train",
+    "title": "完整训练与检查点恢复",
+    "chapter": "c19",
+    "reason": "活动需要未在公共版分发的 WikiText 原文本数组；源码与再现步骤保留，可在自己的合法资料上准备。",
+    "definition": {
+      "adapter_asset": "book-native-adapter",
+      "argv": [],
+      "editable": false,
+      "entry_asset": "asset-f49a9b6f03a9de87",
+      "input_assets": [
+        "asset-74a16ba3533ddeb9",
+        "asset-d76b8c386fc8395e",
+        "asset-8a7e9819cc82857c",
+        "asset-96b7d13cc3b01e33",
+        "input-97e140aa5d483082"
+      ],
+      "kind": "python-cli@1",
+      "monitor": {
+        "checkpoint": "work/results/checkpoint-state.json"
+      },
+      "parameters": {
+        "budget_seconds": {
+          "forward": false,
+          "max": 900,
+          "min": 15,
+          "type": "integer"
+        },
+        "device": {
+          "choices": [
+            "cpu",
+            "cuda"
+          ],
+          "forward": false,
+          "type": "enum"
+        },
+        "resume_from": {
+          "default": "",
+          "forward": false,
+          "max_bytes": 120,
+          "type": "string"
+        }
+      },
+      "requires": [
+        "numpy",
+        "tokenizers",
+        "torch"
+      ],
+      "requires_budget_approval": true,
+      "resume_files": [
+        "work/results/causal_lm_latest.pt",
+        "work/results/causal_lm_best.pt",
+        "work/results/causal_lm_history.jsonl"
+      ],
+      "schemaVersion": 1,
+      "timeout_seconds": 900
+    }
+  }
+]

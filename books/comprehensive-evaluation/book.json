@@ -1,0 +1,196 @@
+{
+  "schemaVersion": 1,
+  "sourceFormat": "epub-source@1",
+  "id": "urn:uuid:58f42a14-b62e-5c5f-b242-b89b7957ac61",
+  "slug": "comprehensive-evaluation",
+  "title": "综合评价方法：从指标、权重到可信结论",
+  "author": "舒适阅读书库项目",
+  "authorship": "由项目维护者使用 ChatGPT / Codex 辅助编写和整理；原文所述来源和参考实验各自保留身份。",
+  "description": "从指标和权重，到 AHP、TOPSIS、PCA、DEA 与结果的敏感性核验。",
+  "revision": "1.0.0",
+  "revisionModified": "2026-09-28T00:00:00Z",
+  "language": "zh-CN",
+  "example": false,
+  "rights": {
+    "status": "approved",
+    "license": "CC-BY-4.0",
+    "attribution": "舒适阅读书库项目 / 1760139151lkh-ctrl",
+    "exceptions": "RIGHTS.md"
+  },
+  "epubSource": {
+    "root": "epub",
+    "files": [
+      "META-INF/container.xml",
+      "OEBPS/ch00.xhtml",
+      "OEBPS/ch01.xhtml",
+      "OEBPS/ch02.xhtml",
+      "OEBPS/ch03.xhtml",
+      "OEBPS/ch04.xhtml",
+      "OEBPS/ch05.xhtml",
+      "OEBPS/ch06.xhtml",
+      "OEBPS/ch07.xhtml",
+      "OEBPS/ch08.xhtml",
+      "OEBPS/ch09.xhtml",
+      "OEBPS/ch10.xhtml",
+      "OEBPS/ch11.xhtml",
+      "OEBPS/ch12.xhtml",
+      "OEBPS/ch13.xhtml",
+      "OEBPS/ch14.xhtml",
+      "OEBPS/ch15.xhtml",
+      "OEBPS/ch16.xhtml",
+      "OEBPS/ch17.xhtml",
+      "OEBPS/ch18.xhtml",
+      "OEBPS/ch19.xhtml",
+      "OEBPS/ch20.xhtml",
+      "OEBPS/ch21.xhtml",
+      "OEBPS/ch22.xhtml",
+      "OEBPS/content.opf",
+      "OEBPS/nav.xhtml",
+      "OEBPS/publication.xhtml",
+      "OEBPS/style.css"
+    ]
+  },
+  "chapters": [
+    {
+      "id": "c00",
+      "title": "导读",
+      "href": "ch00.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c01",
+      "title": "1. 综合评价到底在做什么？",
+      "href": "ch01.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c02",
+      "title": "2. 从问题到指标：模型在计算前已经开始了",
+      "href": "ch02.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c03",
+      "title": "3. 指标同向化与无量纲化",
+      "href": "ch03.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c04",
+      "title": "4. 权重到底表示什么？",
+      "href": "ch04.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c05",
+      "title": "5. 层次分析法：把偏好变成可检验的权重",
+      "href": "ch05.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c06",
+      "title": "6. 熵权法：让差异更大的指标获得更高权重",
+      "href": "ch06.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c07",
+      "title": "7. 组合赋权：把价值偏好和数据差异放在一起",
+      "href": "ch07.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c08",
+      "title": "8. TOPSIS：同时靠近最好、远离最差",
+      "href": "ch08.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c09",
+      "title": "9. 灰色关联分析：比较变化形态与参考序列的接近程度",
+      "href": "ch09.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c10",
+      "title": "10. 模糊综合评价：把边界不清的等级写成隶属度",
+      "href": "ch10.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c11",
+      "title": "11. 秩和比法：用名次获得稳健而粗粒度的评价",
+      "href": "ch11.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c12",
+      "title": "12. 协方差：高维指标为什么可以被压缩？",
+      "href": "ch12.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c13",
+      "title": "13. 从 SVD 到 PCA：方向、坐标与投影",
+      "href": "ch13.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c14",
+      "title": "14. 因子分析：用少数潜在因素解释指标为什么一起变化",
+      "href": "ch14.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c15",
+      "title": "15. 投影寻踪：当“最大方差”不是最有趣的方向",
+      "href": "ch15.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c16",
+      "title": "16. DEA：评价投入—产出效率，而不是普通总分",
+      "href": "ch16.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c17",
+      "title": "17. 怎样选择方法：先看问题需要什么输出",
+      "href": "ch17.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c18",
+      "title": "18. 一个完整算例：熵权—TOPSIS 怎样一步步得到排序",
+      "href": "ch18.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c19",
+      "title": "19. 从“算出排名”到“相信排名”：敏感性与稳健性",
+      "href": "ch19.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c20",
+      "title": "20. 一套可复核的综合评价工作流",
+      "href": "ch20.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c21",
+      "title": "21. 四类内容必须明确区分",
+      "href": "ch21.xhtml",
+      "essential": []
+    },
+    {
+      "id": "c22",
+      "title": "22. 最准确的理解",
+      "href": "ch22.xhtml",
+      "essential": []
+    }
+  ],
+  "resources": [],
+  "sources": [],
+  "activities": []
+}

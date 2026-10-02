@@ -1,0 +1,51 @@
+{
+  "scope": "只在最后一次行动、当前灯为绿且电量可能为1或2时比较两行动期望；不是多轮最优策略或从未知环境学习。",
+  "full_state_one_step_expectations": {
+    "energy_1_fast": -4.0,
+    "energy_2_fast": 2.5,
+    "energy_1_slow": 2.0,
+    "energy_2_slow": 2.0
+  },
+  "after_known_charge_probability_energy_2": 1,
+  "after_known_slow_from_energy_2_probability_energy_2": 0,
+  "fast_minus_slow_formula": "(13/2)*b - 6; b=P(S_t=2 | green and available history)",
+  "fast_and_slow_tie_belief": "12/13",
+  "examples": [
+    {
+      "probability_energy_2_given_green": "0",
+      "fast_expected_last_reward": -4.0,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "slow"
+    },
+    {
+      "probability_energy_2_given_green": "1/2",
+      "fast_expected_last_reward": -0.75,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "slow"
+    },
+    {
+      "probability_energy_2_given_green": "9/10",
+      "fast_expected_last_reward": 1.85,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "slow"
+    },
+    {
+      "probability_energy_2_given_green": "12/13",
+      "fast_expected_last_reward": 2.0,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "tie"
+    },
+    {
+      "probability_energy_2_given_green": "19/20",
+      "fast_expected_last_reward": 2.175,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "express"
+    },
+    {
+      "probability_energy_2_given_green": "1",
+      "fast_expected_last_reward": 2.5,
+      "slow_expected_last_reward": 2.0,
+      "better_one_step_action": "express"
+    }
+  ]
+}

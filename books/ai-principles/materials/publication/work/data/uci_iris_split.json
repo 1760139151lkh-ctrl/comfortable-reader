@@ -1,0 +1,933 @@
+{
+  "protocol": "work/verification/C08_iris_protocol.md",
+  "source": "work/data/uci_iris_SOURCE.md",
+  "archive_sha256": "d11fe30213d36434a0879aab7cb00ce3c812eb7ba2495874438abff7b7b762e9",
+  "iris_data_sha256": "6f608b71a7317216319b4d27b4d9bc84e6abd734eda7872b71a458569e2656c0",
+  "seed": 20260923,
+  "target_species": {
+    "Iris-versicolor": -1,
+    "Iris-virginica": 1
+  },
+  "feature_columns_zero_based": [
+    2,
+    3
+  ],
+  "feature_names": [
+    "petal_length_cm",
+    "petal_width_cm"
+  ],
+  "duplicate_all_four_groups_source_rows": [
+    [
+      102,
+      143
+    ]
+  ],
+  "splits": {
+    "train": [
+      {
+        "source_row": 55,
+        "petal_cm": [
+          4.6,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 57,
+        "petal_cm": [
+          4.7,
+          1.6
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 58,
+        "petal_cm": [
+          3.3,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 59,
+        "petal_cm": [
+          4.6,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 60,
+        "petal_cm": [
+          3.9,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 61,
+        "petal_cm": [
+          3.5,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 62,
+        "petal_cm": [
+          4.2,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 63,
+        "petal_cm": [
+          4.0,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 67,
+        "petal_cm": [
+          4.5,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 68,
+        "petal_cm": [
+          4.1,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 70,
+        "petal_cm": [
+          3.9,
+          1.1
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 71,
+        "petal_cm": [
+          4.8,
+          1.8
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 75,
+        "petal_cm": [
+          4.3,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 76,
+        "petal_cm": [
+          4.4,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 78,
+        "petal_cm": [
+          5.0,
+          1.7
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 79,
+        "petal_cm": [
+          4.5,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 80,
+        "petal_cm": [
+          3.5,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 81,
+        "petal_cm": [
+          3.8,
+          1.1
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 83,
+        "petal_cm": [
+          3.9,
+          1.2
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 85,
+        "petal_cm": [
+          4.5,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 86,
+        "petal_cm": [
+          4.5,
+          1.6
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 88,
+        "petal_cm": [
+          4.4,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 89,
+        "petal_cm": [
+          4.1,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 91,
+        "petal_cm": [
+          4.4,
+          1.2
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 92,
+        "petal_cm": [
+          4.6,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 95,
+        "petal_cm": [
+          4.2,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 96,
+        "petal_cm": [
+          4.2,
+          1.2
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 97,
+        "petal_cm": [
+          4.2,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 98,
+        "petal_cm": [
+          4.3,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 100,
+        "petal_cm": [
+          4.1,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 101,
+        "petal_cm": [
+          6.0,
+          2.5
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 105,
+        "petal_cm": [
+          5.8,
+          2.2
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 107,
+        "petal_cm": [
+          4.5,
+          1.7
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 108,
+        "petal_cm": [
+          6.3,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 109,
+        "petal_cm": [
+          5.8,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 110,
+        "petal_cm": [
+          6.1,
+          2.5
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 111,
+        "petal_cm": [
+          5.1,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 112,
+        "petal_cm": [
+          5.3,
+          1.9
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 113,
+        "petal_cm": [
+          5.5,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 115,
+        "petal_cm": [
+          5.1,
+          2.4
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 117,
+        "petal_cm": [
+          5.5,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 118,
+        "petal_cm": [
+          6.7,
+          2.2
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 120,
+        "petal_cm": [
+          5.0,
+          1.5
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 121,
+        "petal_cm": [
+          5.7,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 125,
+        "petal_cm": [
+          5.7,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 126,
+        "petal_cm": [
+          6.0,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 128,
+        "petal_cm": [
+          4.9,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 129,
+        "petal_cm": [
+          5.6,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 131,
+        "petal_cm": [
+          6.1,
+          1.9
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 133,
+        "petal_cm": [
+          5.6,
+          2.2
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 135,
+        "petal_cm": [
+          5.6,
+          1.4
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 137,
+        "petal_cm": [
+          5.6,
+          2.4
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 138,
+        "petal_cm": [
+          5.5,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 140,
+        "petal_cm": [
+          5.4,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 141,
+        "petal_cm": [
+          5.6,
+          2.4
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 145,
+        "petal_cm": [
+          5.7,
+          2.5
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 146,
+        "petal_cm": [
+          5.2,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 147,
+        "petal_cm": [
+          5.0,
+          1.9
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 148,
+        "petal_cm": [
+          5.2,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 150,
+        "petal_cm": [
+          5.1,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      }
+    ],
+    "validation": [
+      {
+        "source_row": 51,
+        "petal_cm": [
+          4.7,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 54,
+        "petal_cm": [
+          4.0,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 56,
+        "petal_cm": [
+          4.5,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 65,
+        "petal_cm": [
+          3.6,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 72,
+        "petal_cm": [
+          4.0,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 84,
+        "petal_cm": [
+          5.1,
+          1.6
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 87,
+        "petal_cm": [
+          4.7,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 90,
+        "petal_cm": [
+          4.0,
+          1.3
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 93,
+        "petal_cm": [
+          4.0,
+          1.2
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 94,
+        "petal_cm": [
+          3.3,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 103,
+        "petal_cm": [
+          5.9,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 104,
+        "petal_cm": [
+          5.6,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 106,
+        "petal_cm": [
+          6.6,
+          2.1
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 122,
+        "petal_cm": [
+          4.9,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 130,
+        "petal_cm": [
+          5.8,
+          1.6
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 134,
+        "petal_cm": [
+          5.1,
+          1.5
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 136,
+        "petal_cm": [
+          6.1,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 139,
+        "petal_cm": [
+          4.8,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 142,
+        "petal_cm": [
+          5.1,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 144,
+        "petal_cm": [
+          5.9,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      }
+    ],
+    "test": [
+      {
+        "source_row": 52,
+        "petal_cm": [
+          4.5,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 53,
+        "petal_cm": [
+          4.9,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 64,
+        "petal_cm": [
+          4.7,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 66,
+        "petal_cm": [
+          4.4,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 69,
+        "petal_cm": [
+          4.5,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 73,
+        "petal_cm": [
+          4.9,
+          1.5
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 74,
+        "petal_cm": [
+          4.7,
+          1.2
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 77,
+        "petal_cm": [
+          4.8,
+          1.4
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 82,
+        "petal_cm": [
+          3.7,
+          1.0
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 99,
+        "petal_cm": [
+          3.0,
+          1.1
+        ],
+        "label": -1,
+        "species": "Iris-versicolor"
+      },
+      {
+        "source_row": 102,
+        "petal_cm": [
+          5.1,
+          1.9
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 114,
+        "petal_cm": [
+          5.0,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 116,
+        "petal_cm": [
+          5.3,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 119,
+        "petal_cm": [
+          6.9,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 123,
+        "petal_cm": [
+          6.7,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 124,
+        "petal_cm": [
+          4.9,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 127,
+        "petal_cm": [
+          4.8,
+          1.8
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 132,
+        "petal_cm": [
+          6.4,
+          2.0
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 143,
+        "petal_cm": [
+          5.1,
+          1.9
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      },
+      {
+        "source_row": 149,
+        "petal_cm": [
+          5.4,
+          2.3
+        ],
+        "label": 1,
+        "species": "Iris-virginica"
+      }
+    ]
+  }
+}

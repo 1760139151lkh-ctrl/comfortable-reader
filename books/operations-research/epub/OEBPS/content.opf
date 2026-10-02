@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='utf-8'?>
+<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="book-id" xml:lang="zh-CN">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:identifier id="book-id">urn:uuid:c79fe35a-6b76-58ca-9140-d6e04bfb0a7d</dc:identifier>
+    <dc:title>运筹学分类检查：建模流程完整闭环</dc:title>
+    <dc:creator>舒适阅读书库项目</dc:creator>
+    <dc:language>zh-CN</dc:language>
+    <dc:source>chatgpt-conversation://6a58ec99-1338-83ea-a03a-fa9b622bb7f0</dc:source>
+    <meta property="dcterms:modified">2026-09-28T00:00:00Z</meta>
+  <dc:rights>原创文字 CC BY 4.0；第三方材料按随书许可。AI 辅助编写。</dc:rights></metadata>
+  <manifest>
+    <item id="item-0" href="ch00.xhtml" media-type="application/xhtml+xml"/><item id="item-2" href="ch02.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-3" href="ch03.xhtml" media-type="application/xhtml+xml"/><item id="item-4" href="ch04.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-5" href="ch05.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-6" href="ch06.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-7" href="ch07.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-8" href="ch08.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-9" href="ch09.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-10" href="ch10.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-11" href="ch11.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-12" href="ch12.xhtml" media-type="application/xhtml+xml" properties="mathml"/><item id="item-13" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/><item id="item-14" href="publication.xhtml" media-type="application/xhtml+xml"/><item id="item-15" href="style.css" media-type="text/css"/></manifest>
+  <spine><itemref idref="item-0"/><itemref idref="item-2"/><itemref idref="item-3"/><itemref idref="item-4"/><itemref idref="item-5"/><itemref idref="item-6"/><itemref idref="item-7"/><itemref idref="item-8"/><itemref idref="item-9"/><itemref idref="item-10"/><itemref idref="item-11"/><itemref idref="item-12"/><itemref idref="item-14"/></spine>
+</package>

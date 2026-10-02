@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第十二章　等价不是一个单一词</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第十二章-等价不是一个单一词">第十二章　等价不是一个单一词</h2>
+<h3 id="121-本书的五类关系">12.1 本书的五类关系</h3>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>形式</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>字面同一</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi></mrow></math></span> 与 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>ψ</mi></mrow></math></span> 是同一字符串</td>
+<td>纯语法关系</td>
+</tr>
+<tr>
+<td>逻辑等价</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>⊧</mo><mo stretchy="false">(</mo><mi>φ</mi><mo>↔</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></math></span></td>
+<td>对所有结构/赋值</td>
+</tr>
+<tr>
+<td>理论相对等价</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>⊧</mo><mo stretchy="false">(</mo><mi>φ</mi><mo>↔</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></math></span></td>
+<td>限定在 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 的模型中</td>
+</tr>
+<tr>
+<td>可证明等价</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><msub><mo>⊢</mo><mrow><mi mathvariant="sans-serif">C</mi></mrow></msub><mo stretchy="false">(</mo><mi>φ</mi><mo>↔</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></math></span></td>
+<td>限定在演算 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi mathvariant="sans-serif">C</mi></mrow></math></span> 中</td>
+</tr>
+<tr>
+<td>等可满足</td>
+<td><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow><mo stretchy="false">(</mo><mi>φ</mi><mo stretchy="false">)</mo><mo>⇔</mo><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">t</mi></mrow><mo stretchy="false">(</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></math></span></td>
+<td>极弱；不等于逻辑等价</td>
+</tr>
+</tbody>
+</table>
+<p>“定义等价”“模型等价”“范畴等价”“双可解释性”在模型论中均有更严格的技术含义。本书不把“两个定义在某结构中外延相同”或“模型能对应”笼统称为它们。</p>
+<p>同一语言的两个理论 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi><mo>,</mo><mi>U</mi></mrow></math></span> 若</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mi>L</mi></msub><mo stretchy="false">(</mo><mi>T</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mrow><mi mathvariant="normal">M</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mi>L</mi></msub><mo stretchy="false">(</mo><mi>U</mi><mo stretchy="false">)</mo><mo>,</mo></mrow></math></div>
+<p>可以说它们在标准 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi></mrow></math></span>-语义下具有相同模型类。跨语言时必须额外说明翻译、定义扩张、可解释性或其他准则。</p>
+<p>初等等价则是<strong>两个同语言结构</strong>之间的关系：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi mathvariant="script">M</mi><mo>≡</mo><mi mathvariant="script">N</mi><mi>⟺</mi><mo>∀</mo><mi>σ</mi><mo>∈</mo><mrow><mi mathvariant="normal">S</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">t</mi></mrow><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo><mspace width="0.167em"/><mo stretchy="false">(</mo><mi mathvariant="script">M</mi><mo>⊧</mo><mi>σ</mi><mi>⟺</mi><mi mathvariant="script">N</mi><mo>⊧</mo><mi>σ</mi><mo stretchy="false">)</mo><mo>.</mo></mrow></math></div>
+<p>它不是两个公式之间的等价。</p>
+<h3 id="122-等价关系的最小检验">12.2 等价关系的最小检验</h3>
+<p>当有人说“等价”时，至少要问：</p>
+<ol>
+<li>比较的是公式、句子、理论、结构、定义，还是问题实例？</li>
+<li>语言、论域、逻辑和背景理论固定了吗？</li>
+<li>箭头是对象语言联结词、语义蕴涵、可证明性，还是算法归约？</li>
+<li>是否有两方向，且两方向是否属于同一种关系？</li>
+<li>是否有可满足性/一致性，以避免真空或爆炸造成的平凡化？</li>
+</ol>
+<h1 id="第六编-应用从高中条件到矩阵刻画">第六编　应用：从高中条件到矩阵刻画</h1>
+</body></html>

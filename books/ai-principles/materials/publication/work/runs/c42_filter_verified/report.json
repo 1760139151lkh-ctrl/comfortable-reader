@@ -1,0 +1,52 @@
+{
+  "road_report_sha256": "ae7aed1d3053f45a867ae941bd95800ed2ea23cc366b3119264f5b3579cd7f56",
+  "road_trace_sha256": "7b42b26f8d277ab1a05763fb1d20affc427e2b1abf0c74d6b158fce0404b25c6",
+  "vehicle_branch": "closed_bias",
+  "samples": 121,
+  "dt_seconds": 0.1,
+  "author_measurement_noise_sigma_m": 0.4,
+  "random_seed": 20260925,
+  "model": {
+    "A": [
+      [
+        1.0,
+        0.1
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "C": [
+      [
+        1.0,
+        0.0
+      ]
+    ],
+    "Q": [
+      [
+        0.0025,
+        0.0
+      ],
+      [
+        0.0,
+        0.03
+      ]
+    ],
+    "R": 0.16000000000000003
+  },
+  "rmse_lateral_raw_m": 0.3694761243398923,
+  "rmse_lateral_filtered_m": 0.18601293825996185,
+  "rmse_rate_raw_m_s": 2.553596492952897,
+  "rmse_rate_filtered_m_s": 0.2543322540630264,
+  "first_gain": [
+    0.8669438669438668,
+    0.3326403326403326
+  ],
+  "last_gain": [
+    0.27392042501166414,
+    0.3689714356292544
+  ],
+  "figure": "lateral_filter.png",
+  "boundary": "synthetic noisy lateral position from this book's vehicle simulation, not real GPS/IMU; constant lateral rate is approximate on a curve; filtered estimate is not fed back into controller"
+}

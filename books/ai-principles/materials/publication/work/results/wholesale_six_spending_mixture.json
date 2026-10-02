@@ -1,0 +1,242 @@
+{
+  "protocol": "work/verification/C09_mixture_six_spending_protocol.md",
+  "source": "work/data/uci_wholesale_SOURCE.md",
+  "prior_chapter_result": "work/results/wholesale_unsupervised.json",
+  "prior_chapter_result_sha256": "6b13ae933d3241ab64c4bfb89d8435297ca1afaf12faf936cac0816c01df788c",
+  "supersedes_for_raw_missing_question": "work/verification/C09_mixture_protocol.md",
+  "python": "3.13.14",
+  "numpy": "2.4.6",
+  "matplotlib": "3.10.9",
+  "fitted_columns": [
+    "Fresh",
+    "Milk",
+    "Grocery",
+    "Frozen",
+    "Detergents_Paper",
+    "Delicassen"
+  ],
+  "excluded_columns": [
+    "Channel",
+    "Region"
+  ],
+  "fit_rows": 352,
+  "reused_archive_holdout_rows": 88,
+  "single_component": {
+    "mean_in_standardized_log_space": [
+      2.623217299945292e-15,
+      7.754213937616328e-15,
+      6.812732196563461e-16,
+      -2.268702902309304e-15,
+      -8.6925416359856e-16,
+      -1.664703728401016e-15
+    ],
+    "shared_variance": 1.0,
+    "fit_mean_log_density": -8.513631199228035,
+    "reused_holdout_mean_log_density": -8.667911897459797
+  },
+  "two_component": {
+    "initial_weights": [
+      0.5596590909090909,
+      0.4403409090909091
+    ],
+    "initial_centers_in_six_dimensions": [
+      [
+        0.1985244071129999,
+        -0.6183695354436716,
+        -0.6766837971967394,
+        0.2727018845373106,
+        -0.6739003224274354,
+        -0.19336783483496278
+      ],
+      [
+        -0.25231811742748383,
+        0.7859277321445546,
+        0.8600432777274708,
+        -0.3465952984119417,
+        0.85650557108519,
+        0.2457642804031423
+      ]
+    ],
+    "initial_variance": 0.693783016573986,
+    "weights": [
+      0.5706605125058598,
+      0.4293394874941399
+    ],
+    "centers_in_standardized_log_space": [
+      [
+        0.17106413075612456,
+        -0.5798140808812344,
+        -0.646513739777804,
+        0.23519953139566532,
+        -0.6428473144021535,
+        -0.19595461678250894
+      ],
+      [
+        -0.22737145632333491,
+        0.7706651966372488,
+        0.8593196592212312,
+        -0.31261761155668844,
+        0.8544463963491237,
+        0.2604548738194515
+      ]
+    ],
+    "shared_variance": 0.7141428297226634,
+    "iterations": 14,
+    "stop_reason": "gain_below_1e-8",
+    "mean_log_likelihood_trace": [
+      -8.027719409003367,
+      -8.024641353840225,
+      -8.024466885056238,
+      -8.024433986990495,
+      -8.024425629837117,
+      -8.02442302495407,
+      -8.024422012055648,
+      -8.024421542988678,
+      -8.024421302892492,
+      -8.024421174134615,
+      -8.024421103725144,
+      -8.024421064922324,
+      -8.024421043473254,
+      -8.024421031603127,
+      -8.024421025031252
+    ],
+    "fit_mean_log_density": -8.024421025031252,
+    "reused_holdout_mean_log_density": -8.288209611030949
+  },
+  "masked_grocery_example": {
+    "source_row": 152,
+    "observed_columns": [
+      "Fresh",
+      "Milk",
+      "Frozen",
+      "Detergents_Paper",
+      "Delicassen"
+    ],
+    "observed_raw_values": {
+      "Fresh": 1289.0,
+      "Milk": 3328.0,
+      "Frozen": 531.0,
+      "Detergents_Paper": 255.0,
+      "Delicassen": 1774.0
+    },
+    "masked_column": "Grocery",
+    "posterior_given_only_five_observed_columns": [
+      0.6716865341763233,
+      0.32831346582367704
+    ],
+    "model_expected_grocery_monetary_units": 8374.975684472767,
+    "model_expected_grocery_by_component": [
+      3562.788322969298,
+      18220.083446185126
+    ],
+    "actual_grocery_revealed_only_for_check": 2022.0,
+    "posterior_after_revealing_grocery_for_description_only": [
+      0.9301743793777292,
+      0.06982562062227081
+    ],
+    "scope": "One already-known archived holdout row, hidden Grocery before inference. Model has never fit this row, but this archive was examined in the prior chapter; result is exploratory."
+  },
+  "one_row_em_lower_bound_probe": {
+    "source_row": 153,
+    "proposed_q": [
+      0.5,
+      0.5
+    ],
+    "current_posterior": [
+      0.9976901399175748,
+      0.002309860082425338
+    ],
+    "observed_log_density": -6.134082295185594,
+    "proposed_lower_bound": -8.477375543918619,
+    "gap_to_bound": 2.3432932487330254,
+    "kl_q_to_current_posterior": 2.3432932487330254,
+    "tight_gap_with_posterior": 8.881784197001252e-16
+  },
+  "author_made_factor_table": {
+    "factors": {
+      "f1": [
+        1.0,
+        2.0
+      ],
+      "f12": [
+        [
+          4.0,
+          1.0
+        ],
+        [
+          1.0,
+          4.0
+        ]
+      ],
+      "f2": [
+        1.0,
+        1.0
+      ]
+    },
+    "normalizer": 15.0,
+    "exact_joint_rows_z1_columns_z2": [
+      [
+        0.26666666666666666,
+        0.06666666666666667
+      ],
+      [
+        0.13333333333333333,
+        0.5333333333333333
+      ]
+    ],
+    "exact_marginal_z1": [
+      0.3333333333333333,
+      0.6666666666666666
+    ],
+    "exact_marginal_z2": [
+      0.4,
+      0.6
+    ],
+    "mean_field_q1": [
+      0.23489711879369962,
+      0.7651028812063004
+    ],
+    "mean_field_q2": [
+      0.3240938153967751,
+      0.6759061846032248
+    ],
+    "mean_field_joint": [
+      [
+        0.07612870345555964,
+        0.15876841533813996
+      ],
+      [
+        0.2479651119412155,
+        0.5171377692650849
+      ]
+    ],
+    "kl_q_to_exact": 0.1802362823723159,
+    "kl_trace": [
+      0.1966858749857503,
+      0.18218926519619064,
+      0.1804324682379731,
+      0.18025479005745054,
+      0.1802379930009115,
+      0.18023643948437656,
+      0.18023629677439745,
+      0.18023628369174713,
+      0.18023628249317294,
+      0.18023628238338557,
+      0.18023628237332978,
+      0.18023628237240885,
+      0.1802362823723245,
+      0.1802362823723168,
+      0.18023628237231593,
+      0.18023628237231587,
+      0.18023628237231587,
+      0.18023628237231581,
+      0.18023628237231581,
+      0.1802362823723159
+    ],
+    "iterations": 20,
+    "scope": "Author-made four-state factor table. Exact sum is available; factorized q is used to display lost dependence, not to model customers."
+  },
+  "figure": "work/figures/wholesale_six_spending_responsibilities.png",
+  "factorization_figure": "work/figures/wholesale_mixture_factorization.png",
+  "scope": "Two-component shared-isotropic-variance Gaussian mixture on all six train-standardized log spending columns, 352 fit rows. The 88 archive holdout rows were already examined in prior work and only support exploratory checks. Components are not known customer types."
+}

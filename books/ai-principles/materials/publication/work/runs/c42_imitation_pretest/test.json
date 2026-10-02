@@ -1,0 +1,431 @@
+{
+  "training_report_sha256": "95566b2ff70a4e83055ae6515935b7f235d39ea942257b81b2594eb7b03726d9",
+  "selected_before_test": "dagger_one_round",
+  "test_episode_seeds": {
+    "same_distribution": 27182,
+    "wider": 16180
+  },
+  "tests_first_opened_together": true,
+  "results": {
+    "same_distribution_new_episodes": {
+      "teacher": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.15676753714648814,
+        "episodes_with_offroad": 0,
+        "total_offroad_time_steps": 0,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.20601108326879727,
+            "max_route_error_m": 0.45926773546076194,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.13306860296037112,
+            "max_route_error_m": 0.6396967672779895,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.05839141157075692,
+            "max_route_error_m": 0.13309871453283842,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.26976304239390075,
+            "max_route_error_m": 0.39063722454763367,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.12880524866886076,
+            "max_route_error_m": 0.6068071699609536,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.1052426095042589,
+            "max_route_error_m": 0.17754704119084888,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.13797625094080068,
+            "max_route_error_m": 0.24020853444447535,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.14170228988417838,
+            "max_route_error_m": 0.2400960789558222,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.22487898729101577,
+            "max_route_error_m": 0.4881792341235039,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.16183584498194079,
+            "max_route_error_m": 0.26206311124243103,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      },
+      "bc": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.2367686444205314,
+        "episodes_with_offroad": 0,
+        "total_offroad_time_steps": 0,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.23318896609890255,
+            "max_route_error_m": 0.45815117083637363,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.3825278337274221,
+            "max_route_error_m": 1.678740379603917,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.08401006637678851,
+            "max_route_error_m": 0.24485931843343103,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.31287236891110554,
+            "max_route_error_m": 0.5535815897696768,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.37197320400237804,
+            "max_route_error_m": 1.5991451816419087,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.15539213117327977,
+            "max_route_error_m": 0.2964356991649991,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.18939697615788897,
+            "max_route_error_m": 0.3529877653111141,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.18837826821247478,
+            "max_route_error_m": 0.34306926361852574,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.24813327497733018,
+            "max_route_error_m": 0.487354411212908,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.20181335456774338,
+            "max_route_error_m": 0.36559859209201057,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      },
+      "dagger_one_round": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.1562784538387075,
+        "episodes_with_offroad": 0,
+        "total_offroad_time_steps": 0,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.2040245130145477,
+            "max_route_error_m": 0.4600009593790698,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.1414509736743034,
+            "max_route_error_m": 0.6418002013798803,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.05938050547497595,
+            "max_route_error_m": 0.14636711279573267,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.27274975870308843,
+            "max_route_error_m": 0.40511001718390055,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.13683253793829442,
+            "max_route_error_m": 0.6086101736903582,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.09873939745873284,
+            "max_route_error_m": 0.18954794236685454,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.13206575996975095,
+            "max_route_error_m": 0.24071118420747833,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.13618353398700359,
+            "max_route_error_m": 0.2599072508581358,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.22379114453523355,
+            "max_route_error_m": 0.48954274090131916,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.15756641363114426,
+            "max_route_error_m": 0.2821203921335596,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      }
+    },
+    "wider_initial_and_bias": {
+      "teacher": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.3352906091325069,
+        "episodes_with_offroad": 1,
+        "total_offroad_time_steps": 4,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.3851507753727168,
+            "max_route_error_m": 0.5184446254141707,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.5578029536087271,
+            "max_route_error_m": 1.1237999321844099,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.16645376518170088,
+            "max_route_error_m": 0.4842152376438637,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.358233702635162,
+            "max_route_error_m": 0.47215721253153986,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.2259588393100843,
+            "max_route_error_m": 1.035652372596876,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.590248779699446,
+            "max_route_error_m": 0.686321864623462,
+            "offroad_steps": 4,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.12982163276025319,
+            "max_route_error_m": 0.3853259135050248,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.39863159666584064,
+            "max_route_error_m": 0.5442404944424021,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.39725697949003064,
+            "max_route_error_m": 0.6337872490029526,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.14334706660110774,
+            "max_route_error_m": 0.6458840325976949,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      },
+      "bc": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.6393288769354772,
+        "episodes_with_offroad": 6,
+        "total_offroad_time_steps": 130,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.464793707949318,
+            "max_route_error_m": 0.6926465262843713,
+            "offroad_steps": 6,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 1.9674299032235032,
+            "max_route_error_m": 6.3712352893467505,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.2629982969065844,
+            "max_route_error_m": 0.4842152376438637,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.4809944448865747,
+            "max_route_error_m": 0.8127001786709825,
+            "offroad_steps": 16,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.43851848829375256,
+            "max_route_error_m": 1.0655541452471693,
+            "offroad_steps": 5,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.8268555231001572,
+            "max_route_error_m": 1.1956151875822474,
+            "offroad_steps": 52,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.3587466355311648,
+            "max_route_error_m": 2.511047785086141,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.5698667662074861,
+            "max_route_error_m": 0.9582220055608858,
+            "offroad_steps": 24,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.6516664156608023,
+            "max_route_error_m": 1.1395644740715412,
+            "offroad_steps": 27,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.37141858759542845,
+            "max_route_error_m": 1.7017193909708985,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      },
+      "dagger_one_round": {
+        "episodes": 10,
+        "mean_episode_route_error_m": 0.34464434869532007,
+        "episodes_with_offroad": 1,
+        "total_offroad_time_steps": 8,
+        "episodes_entering_goal_lane": 0,
+        "rows": [
+          {
+            "mean_route_error_m": 0.3874873930096039,
+            "max_route_error_m": 0.5184446254141707,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.5890016688823893,
+            "max_route_error_m": 1.1237999321844099,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.15667780527434647,
+            "max_route_error_m": 0.4842152376438637,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.36639882278040037,
+            "max_route_error_m": 0.47797518000423117,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.2347459705194301,
+            "max_route_error_m": 1.0297564480705397,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.6053621072736459,
+            "max_route_error_m": 0.7292875430982483,
+            "offroad_steps": 8,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.1372320701902484,
+            "max_route_error_m": 0.3853259135050248,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.41293135070736514,
+            "max_route_error_m": 0.5572549660970697,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.4132186345482612,
+            "max_route_error_m": 0.6798399955093948,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          },
+          {
+            "mean_route_error_m": 0.14338766376750983,
+            "max_route_error_m": 0.6377841670890959,
+            "offroad_steps": 0,
+            "ever_goal_lane": false
+          }
+        ]
+      }
+    }
+  },
+  "figure": "imitation_test_paths.png",
+  "scope": "both branches reported after validation decision; not a second road, human steering or real vehicle safety study"
+}

@@ -1,0 +1,27 @@
+{
+  "source_sha256": "e107b7d233baedbc8c1b9c3f9aef9739592b93f6f202b9e4503b9cd3ca00d759",
+  "source_revision": "eec757bc2949be0be096283dba32e0f3330cecef",
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "source_filter": "exact two-message prompt: invariant generic developer text plus one user message; omit only that invariant developer text and use C25 Instruction/Response template",
+  "excluded_nontrivial_context_prompts": 275,
+  "eligible_prompts_with_two_complete_fit_responses": 69,
+  "pair_filter": "both full responses+prompt+EOS fit128; world non-tie votes >=8 and majority fraction >=0.60",
+  "split_rule": "SHA(prompt_id) bucket 0-69 train, 70-84 validation, 85-99 test",
+  "prompt_counts": {
+    "train": 43,
+    "validation": 8,
+    "test": 7
+  },
+  "pair_counts": {
+    "train": 106,
+    "validation": 14,
+    "test": 12
+  },
+  "files": {
+    "train": "7197e9c9d29fd189e85428e738785075a65be359f0653e8cd20d5fc5f6827d23",
+    "validation": "bd3e3e92d501deed27dad9071b58e4796b2a58e8461c3b1aad59b8103c7c4083",
+    "test": "6b167bebbaaf6e729e52f3d97c79f6409250a374fcc1379f63f66386b8f4e55a"
+  },
+  "identity": "model-generated CoVal responses, real human world-view vote majority; no annotator IDs/demographics/rationales copied",
+  "test_policy": "DPO training reads train/validation only; this subset is highly selected and cannot represent all CoVal or user aesthetics"
+}

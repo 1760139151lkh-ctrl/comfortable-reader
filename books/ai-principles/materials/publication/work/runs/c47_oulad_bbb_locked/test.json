@@ -1,0 +1,121 @@
+{
+  "scope": "First single-mode 2014J later-presentation scoring after all horizons and models fixed; course BBB, new anonymous student IDs and only eligible snapshot rows",
+  "training_report_sha256": "01179a45b99d7ea537792f94759e634e4cba30086a36ce00836ebb052b211576",
+  "manifest_sha256": "122f218065c3c9640198903367f35f7cb4bfa5018527e627d2bc4f568929d505",
+  "horizons": {
+    "7": {
+      "baseline": {
+        "n": 1901,
+        "positive": 1096,
+        "positive_rate": 0.5765386638611257,
+        "nll": 0.6843160612525901,
+        "brier": 0.2455917004130495,
+        "accuracy_threshold_0_5": 0.5765386638611257,
+        "roc_auc": 0.5
+      },
+      "total": {
+        "n": 1901,
+        "positive": 1096,
+        "positive_rate": 0.5765386638611257,
+        "nll": 0.6579754288098635,
+        "brier": 0.23276523386778686,
+        "accuracy_threshold_0_5": 0.6228300894266176,
+        "roc_auc": 0.6326557328739176
+      },
+      "weekly": {
+        "n": 1901,
+        "positive": 1096,
+        "positive_rate": 0.5765386638611257,
+        "nll": 0.6579754288098635,
+        "brier": 0.23276523386778686,
+        "accuracy_threshold_0_5": 0.6228300894266176,
+        "roc_auc": 0.6326557328739176
+      }
+    },
+    "21": {
+      "baseline": {
+        "n": 1733,
+        "positive": 1112,
+        "positive_rate": 0.641661858049625,
+        "nll": 0.6701618098376603,
+        "brier": 0.23854019881883773,
+        "accuracy_threshold_0_5": 0.641661858049625,
+        "roc_auc": 0.5
+      },
+      "total": {
+        "n": 1733,
+        "positive": 1112,
+        "positive_rate": 0.641661858049625,
+        "nll": 0.639858350511783,
+        "brier": 0.22403040658309567,
+        "accuracy_threshold_0_5": 0.6503173687247548,
+        "roc_auc": 0.6377861478932795
+      },
+      "weekly": {
+        "n": 1733,
+        "positive": 1112,
+        "positive_rate": 0.641661858049625,
+        "nll": 0.6479094078998235,
+        "brier": 0.22824205155255153,
+        "accuracy_threshold_0_5": 0.61800346220427,
+        "roc_auc": 0.6453750043443506
+      }
+    },
+    "42": {
+      "baseline": {
+        "n": 1707,
+        "positive": 1112,
+        "positive_rate": 0.651435266549502,
+        "nll": 0.6603227272791728,
+        "brier": 0.23367966976013008,
+        "accuracy_threshold_0_5": 0.651435266549502,
+        "roc_auc": 0.5
+      },
+      "total": {
+        "n": 1707,
+        "positive": 1112,
+        "positive_rate": 0.651435266549502,
+        "nll": 0.6175397113625201,
+        "brier": 0.21356925478660205,
+        "accuracy_threshold_0_5": 0.6701816051552432,
+        "roc_auc": 0.6662512846865365
+      },
+      "weekly": {
+        "n": 1707,
+        "positive": 1112,
+        "positive_rate": 0.651435266549502,
+        "nll": 0.6138865992160628,
+        "brier": 0.21265924833156186,
+        "accuracy_threshold_0_5": 0.6637375512595196,
+        "roc_auc": 0.6902038873103198
+      },
+      "no_click_first_42_days": {
+        "n": 50,
+        "positive": 9,
+        "positive_rate": 0.18,
+        "nll": 0.48860247165124393,
+        "brier": 0.15370172850462663,
+        "accuracy_threshold_0_5": 0.82,
+        "roc_auc": 0.5
+      },
+      "some_click_first_42_days": {
+        "n": 1657,
+        "positive": 1103,
+        "positive_rate": 0.6656608328304164,
+        "nll": 0.6176670496555565,
+        "brier": 0.21443829238186163,
+        "accuracy_threshold_0_5": 0.6590223295111648,
+        "roc_auc": 0.6733162919638269
+      }
+    }
+  },
+  "gru_day42": {
+    "n": 1707,
+    "positive": 1112,
+    "positive_rate": 0.651435266549502,
+    "nll": 0.6032688617706299,
+    "brier": 0.20778585970401764,
+    "accuracy_threshold_0_5": 0.6842413591095489,
+    "roc_auc": 0.6960635693126171
+  }
+}

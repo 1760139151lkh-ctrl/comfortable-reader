@@ -1,0 +1,642 @@
+{
+  "scope": "on-policy one-token restricted A/B REINFORCE, exact two-action reference KL; not PPO/GRPO or free generation",
+  "task_manifest_sha256": "851b8f58d03b13db3617c066ed698ce0551bed913bf60abfe4c01f0418d7da13",
+  "start_model_identity": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c25_sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+    "c25_full_mix_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced"
+  },
+  "device": "cuda",
+  "torch_version": "2.11.0+cu128",
+  "action_token_ids": [
+    35,
+    36
+  ],
+  "training": {
+    "steps": 200,
+    "batch_size": 16,
+    "learning_rate": 5e-05,
+    "balanced_prompt_batch": true,
+    "reference_kl_weight": 0.1,
+    "baseline": "mean reward of other 15 independently sampled actions",
+    "selection": "max validation mean exact P(correct) every 20 steps"
+  },
+  "first_update": {
+    "numbers": [
+      "34",
+      "11",
+      "06",
+      "60",
+      "11",
+      "14",
+      "37",
+      "77",
+      "06",
+      "53",
+      "46",
+      "64",
+      "46",
+      "37",
+      "95",
+      "61"
+    ],
+    "sampled_action": [
+      "A",
+      "A",
+      "B",
+      "B",
+      "A",
+      "B",
+      "B",
+      "A",
+      "B",
+      "B",
+      "A",
+      "A",
+      "B",
+      "B",
+      "A",
+      "B"
+    ],
+    "reward": [
+      1.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      1.0,
+      0.0,
+      0.0,
+      1.0,
+      1.0,
+      1.0,
+      0.0,
+      1.0,
+      0.0,
+      1.0
+    ],
+    "leave_one_out_baseline": [
+      0.40000003576278687,
+      0.46666669845581055,
+      0.46666669845581055,
+      0.46666669845581055,
+      0.46666669845581055,
+      0.46666669845581055,
+      0.40000003576278687,
+      0.46666669845581055,
+      0.46666669845581055,
+      0.40000003576278687,
+      0.40000003576278687,
+      0.40000003576278687,
+      0.46666669845581055,
+      0.40000003576278687,
+      0.46666669845581055,
+      0.40000003576278687
+    ],
+    "advantage": [
+      0.5999999642372131,
+      -0.46666669845581055,
+      -0.46666669845581055,
+      -0.46666669845581055,
+      -0.46666669845581055,
+      -0.46666669845581055,
+      0.5999999642372131,
+      -0.46666669845581055,
+      -0.46666669845581055,
+      0.5999999642372131,
+      0.5999999642372131,
+      0.5999999642372131,
+      -0.46666669845581055,
+      0.5999999642372131,
+      -0.46666669845581055,
+      0.5999999642372131
+    ],
+    "sampled_action_old_log_probability": [
+      -0.5825647711753845,
+      -0.606115460395813,
+      -0.8009493947029114,
+      -0.7970197796821594,
+      -0.606115460395813,
+      -0.8264762163162231,
+      -0.7562704682350159,
+      -0.6317466497421265,
+      -0.8009493947029114,
+      -0.7761995196342468,
+      -0.5711140632629395,
+      -0.5730211138725281,
+      -0.8321695327758789,
+      -0.7562704682350159,
+      -0.6114645004272461,
+      -0.7934364676475525
+    ],
+    "policy_gradient_loss": -0.009629826992750168,
+    "reference_kl_at_old_weights": 0.0,
+    "gradient_norm_before_clip": 0.8021084666252136,
+    "output_A_B_row_change_norm": 0.0009798010578379035
+  },
+  "history": [
+    {
+      "step": 0,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.5036113440990448,
+        "greedy_correct_restricted": 5,
+        "raw_full_vocab_action_mass_mean": 0.050967113301157954,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.545009195804596,
+            "raw_full_vocab_p_A_or_B": 0.05415518581867218,
+            "unrestricted_top_token": "2"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.5464721322059631,
+            "raw_full_vocab_p_A_or_B": 0.054852474480867386,
+            "unrestricted_top_token": "2"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.5461462736129761,
+            "raw_full_vocab_p_A_or_B": 0.05585408955812454,
+            "unrestricted_top_token": "2"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.5335594415664673,
+            "raw_full_vocab_p_A_or_B": 0.04429197311401367,
+            "unrestricted_top_token": "2"
+          }
+        ]
+      }
+    },
+    {
+      "step": 20,
+      "sampled_batch_reward": 0.5,
+      "reference_kl_in_batch_before_step": 0.021709375083446503,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.5774808257818222,
+        "greedy_correct_restricted": 8,
+        "raw_full_vocab_action_mass_mean": 0.05382837206125259,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.49976015090942383,
+            "raw_full_vocab_p_A_or_B": 0.05741935968399048,
+            "unrestricted_top_token": "T"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.5019035339355469,
+            "raw_full_vocab_p_A_or_B": 0.05880337208509445,
+            "unrestricted_top_token": "T"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.46028202772140503,
+            "raw_full_vocab_p_A_or_B": 0.05826416611671448,
+            "unrestricted_top_token": "T"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.298549085855484,
+            "raw_full_vocab_p_A_or_B": 0.04149413853883743,
+            "unrestricted_top_token": "-"
+          }
+        ]
+      }
+    },
+    {
+      "step": 40,
+      "sampled_batch_reward": 0.5625,
+      "reference_kl_in_batch_before_step": 0.3274571895599365,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.5452344682067632,
+        "greedy_correct_restricted": 5,
+        "raw_full_vocab_action_mass_mean": 0.013618153613060712,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.9751391410827637,
+            "raw_full_vocab_p_A_or_B": 0.016844959929585457,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.9729307293891907,
+            "raw_full_vocab_p_A_or_B": 0.018363382667303085,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.8182116746902466,
+            "raw_full_vocab_p_A_or_B": 0.012331023812294006,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.854287326335907,
+            "raw_full_vocab_p_A_or_B": 0.003949183505028486,
+            "unrestricted_top_token": "-"
+          }
+        ]
+      }
+    },
+    {
+      "step": 60,
+      "sampled_batch_reward": 0.6875,
+      "reference_kl_in_batch_before_step": 0.3580225706100464,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.7830760955810547,
+        "greedy_correct_restricted": 7,
+        "raw_full_vocab_action_mass_mean": 0.03479119474068284,
+        "full_vocab_greedy_first_token_A_or_B": 3,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.09197565913200378,
+            "raw_full_vocab_p_A_or_B": 0.03866275027394295,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.05739693343639374,
+            "raw_full_vocab_p_A_or_B": 0.04994425177574158,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.004250167403370142,
+            "raw_full_vocab_p_A_or_B": 0.05885925516486168,
+            "unrestricted_top_token": "B"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.007563903462141752,
+            "raw_full_vocab_p_A_or_B": 0.044157784432172775,
+            "unrestricted_top_token": "B"
+          }
+        ]
+      }
+    },
+    {
+      "step": 80,
+      "sampled_batch_reward": 0.75,
+      "reference_kl_in_batch_before_step": 0.4469105899333954,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.8220956832170486,
+        "greedy_correct_restricted": 8,
+        "raw_full_vocab_action_mass_mean": 0.0034138831571908666,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.8980154395103455,
+            "raw_full_vocab_p_A_or_B": 0.002046010224148631,
+            "unrestricted_top_token": " in"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.6151398420333862,
+            "raw_full_vocab_p_A_or_B": 0.002256538486108184,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.03937515988945961,
+            "raw_full_vocab_p_A_or_B": 0.005908247083425522,
+            "unrestricted_top_token": "\n"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.06378182768821716,
+            "raw_full_vocab_p_A_or_B": 0.0036769891157746315,
+            "unrestricted_top_token": "-"
+          }
+        ]
+      }
+    },
+    {
+      "step": 100,
+      "sampled_batch_reward": 0.6875,
+      "reference_kl_in_batch_before_step": 0.49428126215934753,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.6217643136158586,
+        "greedy_correct_restricted": 5,
+        "raw_full_vocab_action_mass_mean": 0.001459253646316938,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.9788115620613098,
+            "raw_full_vocab_p_A_or_B": 0.0012137858429923654,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.9432780742645264,
+            "raw_full_vocab_p_A_or_B": 0.0013087824918329716,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.6295307278633118,
+            "raw_full_vocab_p_A_or_B": 0.001206907443702221,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.6339547038078308,
+            "raw_full_vocab_p_A_or_B": 0.0004636847006622702,
+            "unrestricted_top_token": " in"
+          }
+        ]
+      }
+    },
+    {
+      "step": 120,
+      "sampled_batch_reward": 0.75,
+      "reference_kl_in_batch_before_step": 0.3736749291419983,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.789382652938366,
+        "greedy_correct_restricted": 8,
+        "raw_full_vocab_action_mass_mean": 0.0016078125983767678,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.8697691559791565,
+            "raw_full_vocab_p_A_or_B": 0.0005250482354313135,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.05508939549326897,
+            "raw_full_vocab_p_A_or_B": 0.0030430264305323362,
+            "unrestricted_top_token": "-"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.7825138568878174,
+            "raw_full_vocab_p_A_or_B": 0.0007284148596227169,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.021730659529566765,
+            "raw_full_vocab_p_A_or_B": 0.0024950450751930475,
+            "unrestricted_top_token": " the"
+          }
+        ]
+      }
+    },
+    {
+      "step": 140,
+      "sampled_batch_reward": 0.6875,
+      "reference_kl_in_batch_before_step": 0.3831383287906647,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.7106500023975968,
+        "greedy_correct_restricted": 7,
+        "raw_full_vocab_action_mass_mean": 0.003556120838038623,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.974663496017456,
+            "raw_full_vocab_p_A_or_B": 0.002033712575212121,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.6533295512199402,
+            "raw_full_vocab_p_A_or_B": 0.0010717731202021241,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.9765055179595947,
+            "raw_full_vocab_p_A_or_B": 0.0032687524799257517,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.05339949578046799,
+            "raw_full_vocab_p_A_or_B": 0.0016928844852373004,
+            "unrestricted_top_token": " the"
+          }
+        ]
+      }
+    },
+    {
+      "step": 160,
+      "sampled_batch_reward": 0.75,
+      "reference_kl_in_batch_before_step": 0.40865999460220337,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.6497198046185076,
+        "greedy_correct_restricted": 7,
+        "raw_full_vocab_action_mass_mean": 0.008873119862983003,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.9792565107345581,
+            "raw_full_vocab_p_A_or_B": 0.004915532190352678,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.9764102697372437,
+            "raw_full_vocab_p_A_or_B": 0.007293121889233589,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.989630401134491,
+            "raw_full_vocab_p_A_or_B": 0.008339918218553066,
+            "unrestricted_top_token": "s"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.35971295833587646,
+            "raw_full_vocab_p_A_or_B": 0.0011090836487710476,
+            "unrestricted_top_token": " in"
+          }
+        ]
+      }
+    },
+    {
+      "step": 180,
+      "sampled_batch_reward": 0.9375,
+      "reference_kl_in_batch_before_step": 0.43440717458724976,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.6708521954715252,
+        "greedy_correct_restricted": 7,
+        "raw_full_vocab_action_mass_mean": 0.00756579463777598,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.9902459383010864,
+            "raw_full_vocab_p_A_or_B": 0.004247300326824188,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.98969566822052,
+            "raw_full_vocab_p_A_or_B": 0.0065527986735105515,
+            "unrestricted_top_token": " to"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.9940980672836304,
+            "raw_full_vocab_p_A_or_B": 0.007399530149996281,
+            "unrestricted_top_token": "s"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.10636468231678009,
+            "raw_full_vocab_p_A_or_B": 0.0013559091603383422,
+            "unrestricted_top_token": " in"
+          }
+        ]
+      }
+    },
+    {
+      "step": 200,
+      "sampled_batch_reward": 0.875,
+      "reference_kl_in_batch_before_step": 0.4351945221424103,
+      "validation": {
+        "records": 10,
+        "expected_reward_restricted": 0.6664835659787058,
+        "greedy_correct_restricted": 7,
+        "raw_full_vocab_action_mass_mean": 0.0009869602450635283,
+        "full_vocab_greedy_first_token_A_or_B": 0,
+        "examples": [
+          {
+            "number": "03",
+            "expected": "B",
+            "restricted_p_A": 0.9769644737243652,
+            "raw_full_vocab_p_A_or_B": 0.0003246164123993367,
+            "unrestricted_top_token": " of"
+          },
+          {
+            "number": "05",
+            "expected": "B",
+            "restricted_p_A": 0.9838038086891174,
+            "raw_full_vocab_p_A_or_B": 0.00047042808728292584,
+            "unrestricted_top_token": " of"
+          },
+          {
+            "number": "09",
+            "expected": "B",
+            "restricted_p_A": 0.985752522945404,
+            "raw_full_vocab_p_A_or_B": 0.0004306509217713028,
+            "unrestricted_top_token": " of"
+          },
+          {
+            "number": "17",
+            "expected": "B",
+            "restricted_p_A": 0.05161072313785553,
+            "raw_full_vocab_p_A_or_B": 0.00029925830313004553,
+            "unrestricted_top_token": " the"
+          }
+        ]
+      }
+    }
+  ],
+  "selected_step": 80,
+  "selected_validation": {
+    "records": 10,
+    "expected_reward_restricted": 0.8220956832170486,
+    "greedy_correct_restricted": 8,
+    "raw_full_vocab_action_mass_mean": 0.0034138831571908666,
+    "full_vocab_greedy_first_token_A_or_B": 0,
+    "examples": [
+      {
+        "number": "03",
+        "expected": "B",
+        "restricted_p_A": 0.8980154395103455,
+        "raw_full_vocab_p_A_or_B": 0.002046010224148631,
+        "unrestricted_top_token": " in"
+      },
+      {
+        "number": "05",
+        "expected": "B",
+        "restricted_p_A": 0.6151398420333862,
+        "raw_full_vocab_p_A_or_B": 0.002256538486108184,
+        "unrestricted_top_token": "-"
+      },
+      {
+        "number": "09",
+        "expected": "B",
+        "restricted_p_A": 0.03937515988945961,
+        "raw_full_vocab_p_A_or_B": 0.005908247083425522,
+        "unrestricted_top_token": "\n"
+      },
+      {
+        "number": "17",
+        "expected": "B",
+        "restricted_p_A": 0.06378182768821716,
+        "raw_full_vocab_p_A_or_B": 0.0036769891157746315,
+        "unrestricted_top_token": "-"
+      }
+    ]
+  },
+  "checkpoint": "work/runs/c26_binary_v2_balanced_trial/best.pt",
+  "checkpoint_sha256": "4b7a1b54f4d31107509faf0494060c773ce5d6f6b83f024b83d40bfdfe16319e",
+  "peak_gpu_allocated_bytes": 188584448,
+  "test_opened": false
+}

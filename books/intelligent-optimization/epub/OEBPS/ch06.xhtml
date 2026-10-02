@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>6. 为什么不是什么问题都用智能优化算法？</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="6-为什么不是什么问题都用智能优化算法">6. 为什么不是什么问题都用智能优化算法？</h2>
+<p>智能优化算法并不是比传统算法更高级。很多论文喜欢给算法起“狼群算法”“鲸鱼算法”“萤火虫算法”之类的名字，但自然界比喻不会自动带来更好的数学性能。</p>
+<p>如果问题是线性规划：</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>min</mo><msup><mi>c</mi><mo>⊤</mo></msup><mi>x</mi><mi>;</mi><mtext>s.t. </mtext><mi>A</mi><mi>x</mi><mo>≤</mo><mi>b</mi><mo>,</mo></mrow></math></div>
+<p>通常应优先使用成熟的线性规划方法。如果问题是凸优化，传统方法往往收敛快、精度高、理论保证强且结果更容易复现。若组合问题规模尚可，动态规划、分支定界或整数规划还可能给出可验证的最优解与最优性界。</p>
+<p>智能优化更适合：</p>
+<ul>
+<li>目标函数不可导、噪声大或非常不规则；</li>
+<li>存在大量局部最优；</li>
+<li>决策变量同时包含整数、类别和连续量；</li>
+<li>问题是大规模组合优化；</li>
+<li>目标函数只能通过仿真获得；</li>
+<li>精确算法在给定时间内难以求解。</li>
+</ul>
+<p>选择算法之前，真正该问的不是“哪种动物更新颖”，而是：变量是什么类型？约束能否直接编码？一次函数评价有多贵？是否需要最优性证明？可接受多大的随机波动？</p>
+<hr/>
+</body></html>

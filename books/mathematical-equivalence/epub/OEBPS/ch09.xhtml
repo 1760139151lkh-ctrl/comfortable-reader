@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<html xmlns="http://www.w3.org/1999/xhtml"><head><title>第七章　语言签名、项与原子公式</title><link rel="stylesheet" href="style.css"/></head><body><h2 id="第七章-语言签名项与原子公式">第七章　语言签名、项与原子公式</h2>
+<h3 id="71-语言-l">7.1 语言 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>L</mi></mrow></math></span></h3>
+<p>一阶签名列出常项、函数、谓词及其元数，变量和逻辑符号。若采用等号，本书使用带等号的一阶逻辑：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>=</mo></mrow></math></span> 是逻辑符号，始终解释为论域上的真实相等，而不是任意二元谓词。</p>
+<h3 id="72-项">7.2 项</h3>
+<p>项集合 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="normal">T</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo></mrow></math></span> 是最小满足下列规则的集合：</p>
+<ol>
+<li>每个变量是项；</li>
+<li>每个常项符号是项；</li>
+<li>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>f</mi></mrow></math></span> 是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 元函数符号且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>t</mi><mi>n</mi></msub></mrow></math></span> 是项，则</li>
+</ol>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>f</mi><mo stretchy="false">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow></math></div>
+<p>是项；
+4. 除此之外没有项。</p>
+<p>例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>,</mo><mspace width="1em"/><mn>0</mn><mo>,</mo><mspace width="1em"/><mi>x</mi><mo>+</mo><mn>1</mn><mo>,</mo><mspace width="1em"/><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo><mo>×</mo><mi>y</mi></mrow></math></div>
+<p>都是项。项表示对象，其值写作</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>⟦</mi><mi>t</mi><msub><mi>⟧</mi><mrow><mi mathvariant="script">M</mi><mo>,</mo><mi>s</mi></mrow></msub><mo>∈</mo><mi>M</mi><mo>,</mo></mrow></math></div>
+<p>而不是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>T</mi></mrow></math></span> 或 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>F</mi></mrow></math></span>。</p>
+<h3 id="73-原子公式">7.3 原子公式</h3>
+<p>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>R</mi></mrow></math></span> 是 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>n</mi></mrow></math></span> 元谓词符号，<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>t</mi><mi>n</mi></msub></mrow></math></span> 是项，则</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>R</mi><mo stretchy="false">(</mo><msub><mi>t</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>t</mi><mi>n</mi></msub><mo stretchy="false">)</mo></mrow></math></div>
+<p>是原子公式。任意两个项也给出</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><msub><mi>t</mi><mn>1</mn></msub><mo>=</mo><msub><mi>t</mi><mn>2</mn></msub><mo>.</mo></mrow></math></div>
+<p>例如</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mi>x</mi><mo>+</mo><mn>1</mn><mo>&lt;</mo><mi>y</mi><mo>,</mo><mspace width="2em"/><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mn>0</mn><mo>,</mo><mspace width="2em"/><mi>R</mi><mo stretchy="false">(</mo><mi>x</mi><mo>,</mo><mi>c</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>是原子公式。它实现了</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><menclose class="comfortable-math-box" notation="box"><mrow><mtext>对象型的项</mtext><mi>⟶</mi><mtext>真值条件型的公式</mtext><mo>.</mo></mrow></menclose></mrow></math></div>
+<h3 id="74-一般公式">7.4 一般公式</h3>
+<p><span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi></mrow><mo stretchy="false">(</mo><mi>L</mi><mo stretchy="false">)</mo></mrow></math></span> 是满足以下规则的最小集合：</p>
+<ol>
+<li>每个原子公式是公式；</li>
+<li>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi></mrow></math></span> 是公式，则 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>¬</mi><mi>φ</mi></mrow></math></span> 是公式；</li>
+<li>若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi><mo>,</mo><mi>ψ</mi></mrow></math></span> 是公式且 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>∘</mo><mo>∈</mo><mo stretchy="false">{</mo><mo>∧</mo><mo>,</mo><mo>∨</mo><mo>,</mo><mo>→</mo><mo>,</mo><mo>↔</mo><mo stretchy="false">}</mo></mrow></math></span>，则</li>
+</ol>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo stretchy="false">(</mo><mi>φ</mi><mo>∘</mo><mi>ψ</mi><mo stretchy="false">)</mo></mrow></math></div>
+<p>是公式；
+4. 若 <span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mi>φ</mi></mrow></math></span> 是公式，则</p>
+<div class="math-block"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><mrow><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mi>φ</mi><mo>,</mo><mspace width="2em"/><mo>∃</mo><mi>x</mi><mspace width="0.167em"/><mi>φ</mi></mrow></math></div>
+<p>是公式；
+5. 除此之外没有公式。</p>
+<p>量词只能加在公式前：<span class="math-inline"><math xmlns="http://www.w3.org/1998/Math/MathML" display="inline"><mrow><mo>∀</mo><mi>x</mi><mspace width="0.167em"/><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mn>1</mn><mo stretchy="false">)</mo></mrow></math></span> 不是公式。</p>
+</body></html>

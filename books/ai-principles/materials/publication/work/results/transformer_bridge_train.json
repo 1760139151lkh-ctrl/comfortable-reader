@@ -1,0 +1,328 @@
+{
+  "task": "short real-pair architecture training, not WMT14 reproduction or main language-model pretraining",
+  "command": "python work/code/transformer_bridge.py train --train-limit 189037 --val-limit 24015 --epochs 8",
+  "data_manifest_sha256": "a593dfbb42532113302c012613df5a3ee22902d30d146ef2541497f1c7661b02",
+  "train_pair_rows": 189037,
+  "validation_pair_rows": 24015,
+  "test_pair_rows": 23175,
+  "test_opened_only_after_all_epochs_and_validation_checkpoint_selection": true,
+  "train_subset_selection": "seeded permutation of existing training split; no source group crosses train/validation",
+  "seed": 20260924,
+  "device": "cuda",
+  "gpu_name": "NVIDIA GeForce RTX 5090 Laptop GPU",
+  "torch": "2.11.0+cu128",
+  "python": "3.13.14",
+  "model": {
+    "width": 96,
+    "heads": 4,
+    "head_width": 24,
+    "encoder_layers": 2,
+    "decoder_layers": 2,
+    "feed_forward_inner": 192,
+    "post_layer_norm": true,
+    "position": "sinusoidal",
+    "separate_source_target_vocab": true,
+    "trainable_parameters": 2684868
+  },
+  "history": [
+    {
+      "epoch": 1,
+      "train_teacher_nll": 2.8537302790610433,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 2.0239996415521886
+      }
+    },
+    {
+      "epoch": 2,
+      "train_teacher_nll": 1.7039835619556385,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.5739266132306937
+      }
+    },
+    {
+      "epoch": 3,
+      "train_teacher_nll": 1.3516287286034707,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.3735378358652384
+      }
+    },
+    {
+      "epoch": 4,
+      "train_teacher_nll": 1.1752008560815312,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.292481768719834
+      }
+    },
+    {
+      "epoch": 5,
+      "train_teacher_nll": 1.0637056336438047,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.2209998724687658
+      }
+    },
+    {
+      "epoch": 6,
+      "train_teacher_nll": 0.9870276681467308,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.1800351095747927
+      }
+    },
+    {
+      "epoch": 7,
+      "train_teacher_nll": 0.9269668200853546,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.1533679464349695
+      }
+    },
+    {
+      "epoch": 8,
+      "train_teacher_nll": 0.8788599164398886,
+      "train_target_count": 1825820,
+      "validation": {
+        "target_count_including_eos": 232878,
+        "mean_teacher_forced_nll_nats": 1.1355628792012005
+      }
+    }
+  ],
+  "selected_epoch": 8,
+  "test": {
+    "target_count_including_eos": 224375,
+    "mean_teacher_forced_nll_nats": 1.1335903471285254
+  },
+  "fixed_test_examples": [
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "0009b03efbdbe4639a0d92fa6dd3ece355e5f3027b0c8c31e17da7c9c9d62f60",
+      "english_original": "He owns a dishwasher.",
+      "french_first_reference": "Il possède un lave-vaisselle.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1744330 (belgavox) & #861621 (Micsmithel)",
+      "greedy_output": [
+        "il",
+        "possède",
+        "un",
+        "lave",
+        "-",
+        "vaisselle",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "0011ca0179b64dc3f1753d227b0da02acd354dc0fba080fc6ee2c7ccb8c7bbda",
+      "english_original": "Thanks for the advice.",
+      "french_first_reference": "Merci pour le conseil !",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1836198 (Spamster) & #1836503 (sacredceltic)",
+      "greedy_output": [
+        "merci",
+        "pour",
+        "les",
+        "conseils",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "2-5",
+      "source_group_sha256": "00369d9a7d540e9465580550b0ddc582c85f3ec174140d05302c59eb96f7c576",
+      "english_original": "The world is dangerous.",
+      "french_first_reference": "Le monde est dangereux.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3226410 (CK) & #3226622 (Dreamk33)",
+      "greedy_output": [
+        "le",
+        "monde",
+        "est",
+        "dangereux",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "0001912a57755834a793e64fb3be64687ea9f916e86b0b25aff4021b2b56cf2e",
+      "english_original": "Tom made a good suggestion.",
+      "french_first_reference": "Tom a fait une bonne suggestion.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3127984 (CK) & #7677867 (tras)",
+      "greedy_output": [
+        "tom",
+        "a",
+        "fait",
+        "une",
+        "bonne",
+        "suggestion",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "0006a2db0e59e8c890c74de066e9a8f13b1a966c4b9e57792a1f482116ae30fe",
+      "english_original": "Spending time with friends on the beach is fun.",
+      "french_first_reference": "C'est amusant de passer du temps sur la plage avec des copains.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #681043 (Source_VOA) & #1196092 (sacredceltic)",
+      "greedy_output": [
+        "les",
+        "amis",
+        "de",
+        "temps",
+        "avec",
+        "la",
+        "plage",
+        "est",
+        "amusante",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "6-10",
+      "source_group_sha256": "001a6d3d3bca9c9501c6144f6587056fc02528b3b3c974759a5487d5fd21fb70",
+      "english_original": "Is there anything you want to say?",
+      "french_first_reference": "Y a-t-il quoi que ce soit que tu veuilles dire ?",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #2016690 (CK) & #2018669 (sacredceltic)",
+      "greedy_output": [
+        "y",
+        "a",
+        "-",
+        "t",
+        "-",
+        "il",
+        "quelque",
+        "chose",
+        "que",
+        "tu",
+        "veux",
+        "dire",
+        "?",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "0011bf6bd398f7ac096eb5a169a3d392b10f246dc12da787b336b251879f09c2",
+      "english_original": "Next time it'll be my turn to drive.",
+      "french_first_reference": "La prochaine fois ce sera à moi de conduire.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #10089711 (CK) & #487143 (qdii)",
+      "greedy_output": [
+        "la",
+        "prochaine",
+        "fois",
+        "que",
+        "je",
+        "commence",
+        "à",
+        "mon",
+        "tour",
+        "de",
+        "conduire",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "002d1a8e91f2f95a06bc391750a10a99ff12e545173527b4ee245ec5edb1023c",
+      "english_original": "Tom fell off the ladder when he was cleaning out his gutters.",
+      "french_first_reference": "Tom est tombé de l'échelle alors qu'il nettoyait ses gouttières.",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #3433946 (patgfisher) & #8898694 (lbdx)",
+      "greedy_output": [
+        "tom",
+        "est",
+        "tombé",
+        "à",
+        "la",
+        "<unk>",
+        "lorsqu",
+        "'",
+        "il",
+        "était",
+        "en",
+        "train",
+        "de",
+        "nettoyer",
+        "son",
+        "échelle",
+        ".",
+        "<eos>"
+      ]
+    },
+    {
+      "length_bin": "11-18",
+      "source_group_sha256": "00332effd1c70dded3792f9a2ea33959ad12c459fae64fea69d5892bca293aa4",
+      "english_original": "\"Whose cards are these?\" \"They are Fahima's.\"",
+      "french_first_reference": "« À qui sont ces cartes ? » « Elles sont à Fahima. »",
+      "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #1742180 (Amastan) & #11436090 (Micsmithel)",
+      "greedy_output": [
+        "«",
+        "à",
+        "qui",
+        "appartiennent",
+        "ces",
+        "cartes",
+        "de",
+        "nos",
+        "cartes",
+        "de",
+        "<unk>",
+        "?",
+        "»",
+        "«",
+        "ils",
+        "sont",
+        "-",
+        "ils",
+        "appartiennent",
+        "."
+      ]
+    }
+  ],
+  "checkpoint": "results\\transformer_bridge_best.pt",
+  "checkpoint_sha256": "68e481ff855173856f6c6ac267d3a55b483f72ccf6096b349c8b6ea4f62c0ed9",
+  "elapsed_seconds": 154.36169869999867,
+  "peak_cuda_allocated_mib": 398.2578125,
+  "preselected_validation_trace": {
+    "source_row_zero_based": 26766,
+    "english_original": "He wore red pants.",
+    "french_original": "Il portait un pantalon rouge.",
+    "attribution": "CC-BY 2.0 (France) Attribution: tatoeba.org #300587 (CK) & #132782 (Julien_PDC)",
+    "teacher_target": [
+      "il",
+      "portait",
+      "un",
+      "pantalon",
+      "rouge",
+      ".",
+      "<eos>"
+    ],
+    "teacher_target_probabilities": [
+      0.987199604511261,
+      0.809924304485321,
+      0.027210446074604988,
+      0.9675369262695312,
+      0.22181548178195953,
+      0.9889329671859741,
+      0.999958872795105
+    ],
+    "greedy_output": [
+      "il",
+      "portait",
+      "rouge",
+      ".",
+      "<eos>"
+    ]
+  }
+}

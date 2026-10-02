@@ -1,0 +1,163 @@
+{
+  "scope": "test opened once after validation-selected checkpoint; same-template held-out numbers and predeclared paraphrase",
+  "task_manifest_sha256": "851b8f58d03b13db3617c066ed698ce0551bed913bf60abfe4c01f0418d7da13",
+  "start_model_identity": {
+    "c19_checkpoint_sha256": "e6bb405f90d18d8e805d6af30a7d5d8eaf01ce1528f3e3f955821b776f5e339f",
+    "c25_sft_manifest_sha256": "671463ed5f667c1642cf2db45225bf1977ccfe0c2ad025c7ad3c1251c4716dcf",
+    "c25_full_mix_checkpoint_sha256": "a6f4c6fa030b4099ca39a7e99855f35303fa48406fb5adae7d1c82a06855cced"
+  },
+  "selected_checkpoint_sha256": "4b7a1b54f4d31107509faf0494060c773ce5d6f6b83f024b83d40bfdfe16319e",
+  "selected_step": 80,
+  "same_template": {
+    "start": {
+      "records": 20,
+      "expected_reward_restricted": 0.5039588376879692,
+      "greedy_correct_restricted": 10,
+      "raw_full_vocab_action_mass_mean": 0.052876017056405544,
+      "full_vocab_greedy_first_token_A_or_B": 0,
+      "examples": [
+        {
+          "number": "00",
+          "expected": "A",
+          "restricted_p_A": 0.5493135452270508,
+          "raw_full_vocab_p_A_or_B": 0.0551178902387619,
+          "unrestricted_top_token": "2"
+        },
+        {
+          "number": "07",
+          "expected": "B",
+          "restricted_p_A": 0.5368875861167908,
+          "raw_full_vocab_p_A_or_B": 0.044232793152332306,
+          "unrestricted_top_token": "2"
+        },
+        {
+          "number": "10",
+          "expected": "A",
+          "restricted_p_A": 0.5477275252342224,
+          "raw_full_vocab_p_A_or_B": 0.055253736674785614,
+          "unrestricted_top_token": "2"
+        },
+        {
+          "number": "13",
+          "expected": "B",
+          "restricted_p_A": 0.542465329170227,
+          "raw_full_vocab_p_A_or_B": 0.053973570466041565,
+          "unrestricted_top_token": "2"
+        }
+      ]
+    },
+    "trained": {
+      "records": 20,
+      "expected_reward_restricted": 0.6640522339381277,
+      "greedy_correct_restricted": 13,
+      "raw_full_vocab_action_mass_mean": 0.005289801616163459,
+      "full_vocab_greedy_first_token_A_or_B": 0,
+      "examples": [
+        {
+          "number": "00",
+          "expected": "A",
+          "restricted_p_A": 0.9672816395759583,
+          "raw_full_vocab_p_A_or_B": 0.0026431300211697817,
+          "unrestricted_top_token": " of"
+        },
+        {
+          "number": "07",
+          "expected": "B",
+          "restricted_p_A": 0.8341816067695618,
+          "raw_full_vocab_p_A_or_B": 0.0004369338566903025,
+          "unrestricted_top_token": " to"
+        },
+        {
+          "number": "10",
+          "expected": "A",
+          "restricted_p_A": 0.4432865381240845,
+          "raw_full_vocab_p_A_or_B": 0.00429379241541028,
+          "unrestricted_top_token": "-"
+        },
+        {
+          "number": "13",
+          "expected": "B",
+          "restricted_p_A": 0.07474184781312943,
+          "raw_full_vocab_p_A_or_B": 0.009391024708747864,
+          "unrestricted_top_token": "-"
+        }
+      ]
+    }
+  },
+  "different_wording_same_numbers": {
+    "start": {
+      "records": 20,
+      "expected_reward_restricted": 0.5027234002947807,
+      "greedy_correct_restricted": 10,
+      "raw_full_vocab_action_mass_mean": 0.11231956109404564,
+      "full_vocab_greedy_first_token_A_or_B": 0,
+      "examples": [
+        {
+          "number": "00",
+          "expected": "A",
+          "restricted_p_A": 0.672858715057373,
+          "raw_full_vocab_p_A_or_B": 0.11620974540710449,
+          "unrestricted_top_token": "T"
+        },
+        {
+          "number": "07",
+          "expected": "B",
+          "restricted_p_A": 0.6731815934181213,
+          "raw_full_vocab_p_A_or_B": 0.09465701133012772,
+          "unrestricted_top_token": "T"
+        },
+        {
+          "number": "10",
+          "expected": "A",
+          "restricted_p_A": 0.6721563339233398,
+          "raw_full_vocab_p_A_or_B": 0.11577924340963364,
+          "unrestricted_top_token": "T"
+        },
+        {
+          "number": "13",
+          "expected": "B",
+          "restricted_p_A": 0.6650493144989014,
+          "raw_full_vocab_p_A_or_B": 0.11433745920658112,
+          "unrestricted_top_token": "T"
+        }
+      ]
+    },
+    "trained": {
+      "records": 20,
+      "expected_reward_restricted": 0.537155162775889,
+      "greedy_correct_restricted": 10,
+      "raw_full_vocab_action_mass_mean": 0.023079806729219852,
+      "full_vocab_greedy_first_token_A_or_B": 0,
+      "examples": [
+        {
+          "number": "00",
+          "expected": "A",
+          "restricted_p_A": 0.9899028539657593,
+          "raw_full_vocab_p_A_or_B": 0.020734211429953575,
+          "unrestricted_top_token": " is"
+        },
+        {
+          "number": "07",
+          "expected": "B",
+          "restricted_p_A": 0.9766619205474854,
+          "raw_full_vocab_p_A_or_B": 0.0050565763376653194,
+          "unrestricted_top_token": " is"
+        },
+        {
+          "number": "10",
+          "expected": "A",
+          "restricted_p_A": 0.9654375910758972,
+          "raw_full_vocab_p_A_or_B": 0.02832450345158577,
+          "unrestricted_top_token": " is"
+        },
+        {
+          "number": "13",
+          "expected": "B",
+          "restricted_p_A": 0.9308666586875916,
+          "raw_full_vocab_p_A_or_B": 0.029157103970646858,
+          "unrestricted_top_token": " is"
+        }
+      ]
+    }
+  }
+}

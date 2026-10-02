@@ -1,0 +1,1082 @@
+{
+  "test_identity": "ESC-10 source fold 5, 80 five-second clips, first opened after fold-4 selection; one fold, not five-fold mean",
+  "upstream_commit": "33c8ce9eb2cf0b1c2f8bcf322eb349b6be34dbb6",
+  "upstream_archive_sha256": "661183a6f53ef04f12c9bd618fed0ddc1713280d6c94a5a5431e844ba6f6a21f",
+  "feature_manifest_sha256": "2987f369010c029938e27bb613407a2915ddab5abfd264fe0711bda5e2e4cb38",
+  "baseline_train_report_sha256": "a5d9d9a5fc73d9c7c03d681276c7e6eb570b644595a537cd3e8e4f71a254a617",
+  "cnn_train_report_sha256": "7aeb941130ebdd9fa6457e40d95d965d1fbb5b3321e5fba9e2ef8d3919332aec",
+  "class_names": [
+    "chainsaw",
+    "clock_tick",
+    "crackling_fire",
+    "crying_baby",
+    "dog",
+    "helicopter",
+    "rain",
+    "rooster",
+    "sea_waves",
+    "sneezing"
+  ],
+  "baseline": {
+    "correct": 65,
+    "count": 80,
+    "accuracy": 0.8125,
+    "mean_negative_log_probability": 0.6296931868551839,
+    "confusion_true_rows_predicted_columns": [
+      [
+        7,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        1,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        1,
+        5,
+        0,
+        0,
+        1,
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        6,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        1,
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8
+      ]
+    ],
+    "predictions": [
+      {
+        "id": "5-151085-A-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-170338-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-170338-B-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-171653-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-177957-A-40",
+        "reference": "helicopter",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-177957-B-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-C-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-D-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-E-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-181766-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-185579-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-185579-B-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-186924-A-12",
+        "reference": "crackling_fire",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-187979-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-188655-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-189212-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-189237-A-12",
+        "reference": "crackling_fire",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-191131-A-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-193339-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-193473-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-193473-B-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-194533-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-194892-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-194930-A-1",
+        "reference": "rooster",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-194930-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-195710-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-198321-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-198411-A-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-B-20",
+        "reference": "crying_baby",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-198411-C-20",
+        "reference": "crying_baby",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-198411-D-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-E-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-F-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-G-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-200334-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200334-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200339-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200461-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-200461-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-201194-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-201274-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-202220-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-202898-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-203128-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-203128-B-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-203739-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-205898-A-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-208030-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-208624-A-38",
+        "reference": "clock_tick",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-208810-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-208810-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-209698-A-38",
+        "reference": "clock_tick",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-209833-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-210571-A-38",
+        "reference": "clock_tick",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-212181-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-212454-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-213077-A-11",
+        "reference": "sea_waves",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-213802-A-12",
+        "reference": "crackling_fire",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-213855-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-215658-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-215658-B-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-216370-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-216370-B-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-217158-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-219342-A-38",
+        "reference": "clock_tick",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-219379-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-219379-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-219379-C-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-220026-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-220027-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-220955-A-40",
+        "reference": "helicopter",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-221518-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-221593-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-222524-A-41",
+        "reference": "chainsaw",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-231762-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-233160-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-234879-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-234879-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-235671-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-9032-A-0",
+        "reference": "dog",
+        "predicted": "clock_tick"
+      }
+    ]
+  },
+  "cnn": {
+    "correct": 66,
+    "count": 80,
+    "accuracy": 0.825,
+    "mean_negative_log_probability": 0.6903114318847656,
+    "confusion_true_rows_predicted_columns": [
+      [
+        4,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        7,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        5,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        0,
+        0,
+        6,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        7,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        5
+      ]
+    ],
+    "predictions": [
+      {
+        "id": "5-151085-A-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-170338-A-41",
+        "reference": "chainsaw",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-170338-B-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-171653-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-177957-A-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-B-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-C-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-D-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-177957-E-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-181766-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-185579-A-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-185579-B-41",
+        "reference": "chainsaw",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-186924-A-12",
+        "reference": "crackling_fire",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-187979-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-188655-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-189212-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-189237-A-12",
+        "reference": "crackling_fire",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-191131-A-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-193339-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-193473-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-193473-B-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-194533-A-21",
+        "reference": "sneezing",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-194892-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-194930-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-194930-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-195710-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-198321-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-198411-A-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-B-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-C-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-D-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-E-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-F-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-198411-G-20",
+        "reference": "crying_baby",
+        "predicted": "crying_baby"
+      },
+      {
+        "id": "5-200334-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200334-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200339-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-200461-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-200461-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-201194-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-201274-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-202220-A-21",
+        "reference": "sneezing",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-202898-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-203128-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-203128-B-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-203739-A-10",
+        "reference": "rain",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-205898-A-40",
+        "reference": "helicopter",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-208030-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-208624-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-208810-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-208810-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-209698-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-209833-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-210571-A-38",
+        "reference": "clock_tick",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-212181-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-212454-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-213077-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-213802-A-12",
+        "reference": "crackling_fire",
+        "predicted": "chainsaw"
+      },
+      {
+        "id": "5-213855-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-215658-A-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-215658-B-12",
+        "reference": "crackling_fire",
+        "predicted": "crackling_fire"
+      },
+      {
+        "id": "5-216370-A-41",
+        "reference": "chainsaw",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-216370-B-41",
+        "reference": "chainsaw",
+        "predicted": "rain"
+      },
+      {
+        "id": "5-217158-A-0",
+        "reference": "dog",
+        "predicted": "dog"
+      },
+      {
+        "id": "5-219342-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-219379-A-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-219379-B-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-219379-C-11",
+        "reference": "sea_waves",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-220026-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-220027-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-220955-A-40",
+        "reference": "helicopter",
+        "predicted": "helicopter"
+      },
+      {
+        "id": "5-221518-A-21",
+        "reference": "sneezing",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-221593-A-21",
+        "reference": "sneezing",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-222524-A-41",
+        "reference": "chainsaw",
+        "predicted": "sea_waves"
+      },
+      {
+        "id": "5-231762-A-0",
+        "reference": "dog",
+        "predicted": "sneezing"
+      },
+      {
+        "id": "5-233160-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-234879-A-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-234879-B-1",
+        "reference": "rooster",
+        "predicted": "rooster"
+      },
+      {
+        "id": "5-235671-A-38",
+        "reference": "clock_tick",
+        "predicted": "clock_tick"
+      },
+      {
+        "id": "5-9032-A-0",
+        "reference": "dog",
+        "predicted": "clock_tick"
+      }
+    ]
+  },
+  "figure_sha256": "e14e344aacd5b03d2b944a72ba7cc0cae01b85edfbffc4bfbf17ada969399ac5",
+  "limitations": "small ESC-10 fixed categories and 80-clip fold; upstream notes category-related bandlimiting, no general sound captioning or event timing claim"
+}

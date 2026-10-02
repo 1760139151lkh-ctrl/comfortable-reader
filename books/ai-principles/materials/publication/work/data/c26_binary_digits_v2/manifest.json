@@ -1,0 +1,35 @@
+{
+  "purpose": "two-choice result-feedback mechanics, not open-ended math or code",
+  "prompt_rule": "A if units digit even, B if odd; verifier uses integer arithmetic",
+  "prompt_style": "separated_digits",
+  "output_policy": "one sampled BPE token, restricted and renormalized to A/B",
+  "base_model": "C19 random-pretrained then C25 full-mix SFT",
+  "action_text": [
+    "A",
+    "B"
+  ],
+  "action_token_ids": [
+    35,
+    36
+  ],
+  "tokenizer_sha256": "5371bf7ee34002268dabc1676045314ef327d7d7e6c75c15a868b0a531a60cf4",
+  "prompt_lengths_with_bos_min_max": [
+    43,
+    43
+  ],
+  "splits": {
+    "train": {
+      "count": 70,
+      "sha256": "d6e6443de8d1571b1a8290da90e2fe3ae72620b5fe291ec374376f1ce6984b37"
+    },
+    "validation": {
+      "count": 10,
+      "sha256": "ef8800e074cd1d4797788fefc55c6589f152f1b16dd529c1d0895cea29dced4c"
+    },
+    "test": {
+      "count": 20,
+      "sha256": "ebc248fe4a22f34a91c717251fdde314f0dd615bf384be322b33eb64a17708bf"
+    }
+  },
+  "selection": "training samples/validation expected reward only; test and paraphrase after checkpoint fixed"
+}

@@ -1,0 +1,414 @@
+{
+  "prompt_tokens": [
+    "the",
+    "game"
+  ],
+  "sampling_seed": 20260924,
+  "rule": "multinomial from full softmax at temperature 1; stop at EOS or 40 newly sampled units",
+  "checkpoint_sha256": "9895572e4b574d2fa0af68201ad58d4637f8b35969936c63efc2b3dac3913bbe",
+  "vocab_sha256": "f715a5167532a6c35d66ab9f0cc9ea3c6b7db794f5d20d70d2242d3c4cc4923e",
+  "sampled_steps": [
+    {
+      "step": 1,
+      "context_tokens": [
+        "the",
+        "game"
+      ],
+      "sampled_id": 30,
+      "sampled_token": "were",
+      "probability_assigned_at_sampling": 0.007895102724432945
+    },
+    {
+      "step": 2,
+      "context_tokens": [
+        "game",
+        "were"
+      ],
+      "sampled_id": 100,
+      "sampled_token": "some",
+      "probability_assigned_at_sampling": 0.0007766748894937336
+    },
+    {
+      "step": 3,
+      "context_tokens": [
+        "were",
+        "some"
+      ],
+      "sampled_id": 1808,
+      "sampled_token": "prominent",
+      "probability_assigned_at_sampling": 0.0010999938240274787
+    },
+    {
+      "step": 4,
+      "context_tokens": [
+        "some",
+        "prominent"
+      ],
+      "sampled_id": 0,
+      "sampled_token": "<unk>",
+      "probability_assigned_at_sampling": 0.19280068576335907
+    },
+    {
+      "step": 5,
+      "context_tokens": [
+        "prominent",
+        "<unk>"
+      ],
+      "sampled_id": 6,
+      "sampled_token": ".",
+      "probability_assigned_at_sampling": 0.09655500203371048
+    },
+    {
+      "step": 6,
+      "context_tokens": [
+        "<unk>",
+        "."
+      ],
+      "sampled_id": 776,
+      "sampled_token": "Most",
+      "probability_assigned_at_sampling": 0.003600396914407611
+    },
+    {
+      "step": 7,
+      "context_tokens": [
+        ".",
+        "Most"
+      ],
+      "sampled_id": 6500,
+      "sampled_token": "witness",
+      "probability_assigned_at_sampling": 1.3120833500579465e-05
+    },
+    {
+      "step": 8,
+      "context_tokens": [
+        "Most",
+        "witness"
+      ],
+      "sampled_id": 21,
+      "sampled_token": "for",
+      "probability_assigned_at_sampling": 0.0147195253521204
+    },
+    {
+      "step": 9,
+      "context_tokens": [
+        "witness",
+        "for"
+      ],
+      "sampled_id": 1042,
+      "sampled_token": "professional",
+      "probability_assigned_at_sampling": 5.921753836446442e-05
+    },
+    {
+      "step": 10,
+      "context_tokens": [
+        "for",
+        "professional"
+      ],
+      "sampled_id": 6483,
+      "sampled_token": "sailors",
+      "probability_assigned_at_sampling": 0.0011941698612645268
+    },
+    {
+      "step": 11,
+      "context_tokens": [
+        "professional",
+        "sailors"
+      ],
+      "sampled_id": 8,
+      "sampled_token": "and",
+      "probability_assigned_at_sampling": 0.19458885490894318
+    },
+    {
+      "step": 12,
+      "context_tokens": [
+        "sailors",
+        "and"
+      ],
+      "sampled_id": 0,
+      "sampled_token": "<unk>",
+      "probability_assigned_at_sampling": 0.17665500938892365
+    },
+    {
+      "step": 13,
+      "context_tokens": [
+        "and",
+        "<unk>"
+      ],
+      "sampled_id": 10,
+      "sampled_token": "to",
+      "probability_assigned_at_sampling": 0.016490919515490532
+    },
+    {
+      "step": 14,
+      "context_tokens": [
+        "<unk>",
+        "to"
+      ],
+      "sampled_id": 2000,
+      "sampled_token": "La",
+      "probability_assigned_at_sampling": 0.0007348404033109546
+    },
+    {
+      "step": 15,
+      "context_tokens": [
+        "to",
+        "La"
+      ],
+      "sampled_id": 0,
+      "sampled_token": "<unk>",
+      "probability_assigned_at_sampling": 0.927739679813385
+    },
+    {
+      "step": 16,
+      "context_tokens": [
+        "La",
+        "<unk>"
+      ],
+      "sampled_id": 39,
+      "sampled_token": ";",
+      "probability_assigned_at_sampling": 0.005257558077573776
+    },
+    {
+      "step": 17,
+      "context_tokens": [
+        "<unk>",
+        ";"
+      ],
+      "sampled_id": 13,
+      "sampled_token": "\"",
+      "probability_assigned_at_sampling": 0.013307597488164902
+    },
+    {
+      "step": 18,
+      "context_tokens": [
+        ";",
+        "\""
+      ],
+      "sampled_id": 2638,
+      "sampled_token": "1953",
+      "probability_assigned_at_sampling": 2.0646179109462537e-05
+    },
+    {
+      "step": 19,
+      "context_tokens": [
+        "\"",
+        "1953"
+      ],
+      "sampled_id": 5,
+      "sampled_token": ",",
+      "probability_assigned_at_sampling": 0.38626474142074585
+    },
+    {
+      "step": 20,
+      "context_tokens": [
+        "1953",
+        ","
+      ],
+      "sampled_id": 4,
+      "sampled_token": "the",
+      "probability_assigned_at_sampling": 0.17533238232135773
+    },
+    {
+      "step": 21,
+      "context_tokens": [
+        ",",
+        "the"
+      ],
+      "sampled_id": 3860,
+      "sampled_token": "Hokies",
+      "probability_assigned_at_sampling": 0.002086335327476263
+    },
+    {
+      "step": 22,
+      "context_tokens": [
+        "the",
+        "Hokies"
+      ],
+      "sampled_id": 356,
+      "sampled_token": "half",
+      "probability_assigned_at_sampling": 0.005170450545847416
+    },
+    {
+      "step": 23,
+      "context_tokens": [
+        "Hokies",
+        "half"
+      ],
+      "sampled_id": 73,
+      "sampled_token": "over",
+      "probability_assigned_at_sampling": 0.019308749586343765
+    },
+    {
+      "step": 24,
+      "context_tokens": [
+        "half",
+        "over"
+      ],
+      "sampled_id": 4,
+      "sampled_token": "the",
+      "probability_assigned_at_sampling": 0.4573189914226532
+    },
+    {
+      "step": 25,
+      "context_tokens": [
+        "over",
+        "the"
+      ],
+      "sampled_id": 5295,
+      "sampled_token": "bombing",
+      "probability_assigned_at_sampling": 0.0008691907860338688
+    },
+    {
+      "step": 26,
+      "context_tokens": [
+        "the",
+        "bombing"
+      ],
+      "sampled_id": 7,
+      "sampled_token": "of",
+      "probability_assigned_at_sampling": 0.18461407721042633
+    },
+    {
+      "step": 27,
+      "context_tokens": [
+        "bombing",
+        "of"
+      ],
+      "sampled_id": 40,
+      "sampled_token": "their",
+      "probability_assigned_at_sampling": 0.011048388667404652
+    },
+    {
+      "step": 28,
+      "context_tokens": [
+        "of",
+        "their"
+      ],
+      "sampled_id": 54,
+      "sampled_token": "two",
+      "probability_assigned_at_sampling": 0.0031214042101055384
+    },
+    {
+      "step": 29,
+      "context_tokens": [
+        "their",
+        "two"
+      ],
+      "sampled_id": 1728,
+      "sampled_token": "types",
+      "probability_assigned_at_sampling": 0.0014655926497653127
+    },
+    {
+      "step": 30,
+      "context_tokens": [
+        "two",
+        "types"
+      ],
+      "sampled_id": 7,
+      "sampled_token": "of",
+      "probability_assigned_at_sampling": 0.7440440058708191
+    },
+    {
+      "step": 31,
+      "context_tokens": [
+        "types",
+        "of"
+      ],
+      "sampled_id": 40,
+      "sampled_token": "their",
+      "probability_assigned_at_sampling": 0.0068095987662673
+    },
+    {
+      "step": 32,
+      "context_tokens": [
+        "of",
+        "their"
+      ],
+      "sampled_id": 891,
+      "sampled_token": "past",
+      "probability_assigned_at_sampling": 0.0006580417975783348
+    },
+    {
+      "step": 33,
+      "context_tokens": [
+        "their",
+        "past"
+      ],
+      "sampled_id": 1081,
+      "sampled_token": "Central",
+      "probability_assigned_at_sampling": 0.00029780890326946974
+    },
+    {
+      "step": 34,
+      "context_tokens": [
+        "past",
+        "Central"
+      ],
+      "sampled_id": 415,
+      "sampled_token": "America",
+      "probability_assigned_at_sampling": 0.4927566349506378
+    },
+    {
+      "step": 35,
+      "context_tokens": [
+        "Central",
+        "America"
+      ],
+      "sampled_id": 9,
+      "sampled_token": "in",
+      "probability_assigned_at_sampling": 0.0343293771147728
+    },
+    {
+      "step": 36,
+      "context_tokens": [
+        "America",
+        "in"
+      ],
+      "sampled_id": 1017,
+      "sampled_token": "Council",
+      "probability_assigned_at_sampling": 0.00045483303256332874
+    },
+    {
+      "step": 37,
+      "context_tokens": [
+        "in",
+        "Council"
+      ],
+      "sampled_id": 8,
+      "sampled_token": "and",
+      "probability_assigned_at_sampling": 0.1217101514339447
+    },
+    {
+      "step": 38,
+      "context_tokens": [
+        "Council",
+        "and"
+      ],
+      "sampled_id": 0,
+      "sampled_token": "<unk>",
+      "probability_assigned_at_sampling": 0.16866110265254974
+    },
+    {
+      "step": 39,
+      "context_tokens": [
+        "and",
+        "<unk>"
+      ],
+      "sampled_id": 70,
+      "sampled_token": "all",
+      "probability_assigned_at_sampling": 0.0009319924283772707
+    },
+    {
+      "step": 40,
+      "context_tokens": [
+        "<unk>",
+        "all"
+      ],
+      "sampled_id": 5,
+      "sampled_token": ",",
+      "probability_assigned_at_sampling": 0.011934183537960052
+    }
+  ],
+  "joined_normalized_fields": "were some prominent <unk> . Most witness for professional sailors and <unk> to La <unk> ; \" 1953 , the Hokies half over the bombing of their two types of their past Central America in Council and <unk> all ,",
+  "limits": "word-level mapped vocabulary; UNK cannot recover original rare word; two-word context only; generated text is not independent factual or reasoning evidence"
+}

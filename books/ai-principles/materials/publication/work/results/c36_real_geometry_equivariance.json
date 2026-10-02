@@ -1,0 +1,22 @@
+{
+  "source": "C34 ETH3D delivery_area_1s laser reference back-projected partial PLY, not trained GNN",
+  "points_in_source": 22485,
+  "points_sampled": 256,
+  "graph_choice": "8 nearest neighbours by Euclidean distance among sampled positions; PLY itself did not define these edges",
+  "median_neighbour_distance_m": 0.3650267713036559,
+  "rigid_rotation_degrees_xyz": [
+    23,
+    -41,
+    17
+  ],
+  "rigid_translation_m": [
+    0.7,
+    -0.3,
+    1.2
+  ],
+  "same_knn_indices_after_rigid_transform": true,
+  "scalar_message_rotation_translation_invariance_max_error": 2.886579864025407e-15,
+  "vector_message_equivariance_max_error": 3.164135620181696e-15,
+  "doubling_space_coordinates_while_fixing_sigma_scalar_message_mean_change": 0.6228705888931119,
+  "scope": "exact numerical property of this hand-designed distance/difference message; no training, no semantic 3D component recognition"
+}

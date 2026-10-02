@@ -1,0 +1,186 @@
+{
+  "data_identity": "本章人工制作的二维教学卡片；并非历史实验或自然数据",
+  "case": "baseline",
+  "learning_rate": 1.0,
+  "max_epochs": 200,
+  "converged_within_budget": true,
+  "epochs_until_no_update": 4,
+  "updates_by_epoch": [
+    5,
+    2,
+    2,
+    0
+  ],
+  "first_updates": [
+    {
+      "epoch": 1,
+      "features": [
+        2.0,
+        2.0
+      ],
+      "label": 1,
+      "old_score": 0.0,
+      "old_weights": [
+        0.0,
+        0.0
+      ],
+      "old_bias": 0.0,
+      "new_weights": [
+        2.0,
+        2.0
+      ],
+      "new_bias": 1.0,
+      "new_score_on_same_record": 9.0
+    },
+    {
+      "epoch": 1,
+      "features": [
+        0.0,
+        0.0
+      ],
+      "label": -1,
+      "old_score": 1.0,
+      "old_weights": [
+        2.0,
+        2.0
+      ],
+      "old_bias": 1.0,
+      "new_weights": [
+        2.0,
+        2.0
+      ],
+      "new_bias": 0.0,
+      "new_score_on_same_record": 0.0
+    },
+    {
+      "epoch": 1,
+      "features": [
+        1.0,
+        1.0
+      ],
+      "label": -1,
+      "old_score": 4.0,
+      "old_weights": [
+        2.0,
+        2.0
+      ],
+      "old_bias": 0.0,
+      "new_weights": [
+        1.0,
+        1.0
+      ],
+      "new_bias": -1.0,
+      "new_score_on_same_record": 1.0
+    },
+    {
+      "epoch": 1,
+      "features": [
+        2.0,
+        0.0
+      ],
+      "label": -1,
+      "old_score": 1.0,
+      "old_weights": [
+        1.0,
+        1.0
+      ],
+      "old_bias": -1.0,
+      "new_weights": [
+        -1.0,
+        1.0
+      ],
+      "new_bias": -2.0,
+      "new_score_on_same_record": -4.0
+    }
+  ],
+  "trained_weights": [
+    1.0,
+    1.0
+  ],
+  "trained_bias": -3.0,
+  "training_rows": [
+    {
+      "features": [
+        2.0,
+        2.0
+      ],
+      "label": 1,
+      "score": 1.0,
+      "prediction": 1
+    },
+    {
+      "features": [
+        1.0,
+        3.0
+      ],
+      "label": 1,
+      "score": 1.0,
+      "prediction": 1
+    },
+    {
+      "features": [
+        3.0,
+        1.0
+      ],
+      "label": 1,
+      "score": 1.0,
+      "prediction": 1
+    },
+    {
+      "features": [
+        0.0,
+        0.0
+      ],
+      "label": -1,
+      "score": -3.0,
+      "prediction": -1
+    },
+    {
+      "features": [
+        1.0,
+        1.0
+      ],
+      "label": -1,
+      "score": -1.0,
+      "prediction": -1
+    },
+    {
+      "features": [
+        2.0,
+        0.0
+      ],
+      "label": -1,
+      "score": -1.0,
+      "prediction": -1
+    },
+    {
+      "features": [
+        0.0,
+        2.0
+      ],
+      "label": -1,
+      "score": -1.0,
+      "prediction": -1
+    }
+  ],
+  "unseen_rows": [
+    {
+      "features": [
+        3.0,
+        2.0
+      ],
+      "lookup": null,
+      "score": 2.0,
+      "prediction": 1
+    },
+    {
+      "features": [
+        0.0,
+        1.0
+      ],
+      "lookup": null,
+      "score": -2.0,
+      "prediction": -1
+    }
+  ]
+}
